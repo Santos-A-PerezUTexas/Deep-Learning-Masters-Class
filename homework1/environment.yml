@@ -1,0 +1,10 @@
+name: dl_hw_01
+channels:
+  - pytorch
+  - defaults
+dependencies:
+- pillow
+- matplotlib
+- numpy
+- "pytorch>=1.6.0"
+- "torchvision>=0.7.0"
