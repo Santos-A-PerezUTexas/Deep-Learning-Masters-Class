@@ -6,7 +6,7 @@ from torchvision import transforms
 
 """
 
-This change made DIRECTLY on Github.
+This change made DIRECTLY on Github.  THIS change 9/1/2021
 
 As a first step, we will need to implement a data loader for the SuperTuxKart dataset. Complete the __init__, __len__, and the __getitem__ of the SuperTuxDataset class in the utils.py.
 
