@@ -99,7 +99,7 @@ class SuperTuxDataset(Dataset):
 
         
         
-   def __getitem__(self, idx):     #Get image idx
+    def __getitem__(self, idx):     #Get image idx
         """
         Your code here
         
