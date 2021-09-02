@@ -23,19 +23,27 @@ class LinearClassifier(torch.nn.Module):
     def __init__(self):
         super().__init__()
 
+        print ("Wandavision, you're inside LinearClassifier init constructor")
+        
         """
         Your code here
         """
-        raise NotImplementedError('LinearClassifier.__init__')
+        #raise NotImplementedError('LinearClassifier.__init__')
 
+        
+        
     def forward(self, x):
+        
+        
+        print ("Wandavision, you're inside LinearClassifier forward")
+        
         """
         Your code here
 
         @x: torch.Tensor((B,3,64,64))
         @return: torch.Tensor((B,6))
         """
-        raise NotImplementedError('LinearClassifier.forward')
+        #raise NotImplementedError('LinearClassifier.forward')
 
 
 class MLPClassifier(torch.nn.Module):
