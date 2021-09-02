@@ -60,14 +60,16 @@ def train(args):
     Your code here
 
     """
+
+
     #raise NotImplementedError('train')
      
     x= torch.tensor([[1., -1.], [1., -1.]])
+    
     model.forward(x)
     
     save_model(model)
 
-     
 
 if __name__ == '__main__':
     import argparse
