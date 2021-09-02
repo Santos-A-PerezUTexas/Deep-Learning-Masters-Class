@@ -16,7 +16,7 @@ The __len__ function should return the size of the dataset.
 
 The __getitem__ function should return a tuple of image, label. The image should be a torch.Tensor of size (3,64,64) with range [0,1], and the label should be int.
 
-Labels and the corresponding image paths are saved in labels.csv, their headers are file and label. 
+Labels and the corresponding image paths are saved in labels.csv, their headers are *file* and *label*. 
 There are 6 classes of objects. Make sure label background corresponds to 0, kart is 1, pickup is 2, nitro is 3, bomb is 4 and projectile 5.
 
 
@@ -47,15 +47,43 @@ class SuperTuxDataset(Dataset):
         
         
         Your code here
-        Hint: Use the python csv library to parse labels.csv
+        *****Hint: Use the python csv library to parse labels.csv
         https://docs.python.org/3/library/csv.html#module-csv
 
        ****Were is labels.csv???????????????????????
 
         WARNING: Do not perform data normalization here. 
-        """
-        raise NotImplementedError('SuperTuxDataset.__init__')
+        
+        STDataset = pd.read_csv('data/labels.csv')
 
+        
+        """
+        
+        #raise NotImplementedError('SuperTuxDataset.__init__')
+
+        
+        """               SAMPLE CODE*************************************
+        landmarks_frame = pd.read_csv('data/faces/face_landmarks.csv')
+
+         n = 65
+        img_name = landmarks_frame.iloc[n, 0]
+        landmarks = landmarks_frame.iloc[n, 1:]
+        landmarks = np.asarray(landmarks)
+        landmarks = landmarks.astype('float').reshape(-1, 2)
+
+        print('Image name: {}'.format(img_name))
+        print('Landmarks shape: {}'.format(landmarks.shape))
+        print('First 4 Landmarks: {}'.format(landmarks[:4]))
+        
+        """
+        
+        
+        
+        
+        
+        
+        
+        
     def __len__(self):
         """
         
@@ -65,13 +93,37 @@ class SuperTuxDataset(Dataset):
         """
         raise NotImplementedError('SuperTuxDataset.__len__')
 
-    def __getitem__(self, idx):
+
+        
+        
+   def __getitem__(self, idx):     #Get image idx
         """
         Your code here
         
+        __getitem__ to support the indexing such that dataset[idx] can be used to get idx-th sample.
+        
+        
         You can load all images in the __init__ function, or you can lazily load them in __getitem__.
         
-        return a tuple: img, label
+        return------> a tuple: img, label   #https://www.freecodecamp.org/news/python-returns-multiple-values-how-to-return-a-tuple-list-dictionary/
+
+        Labels and the corresponding image paths are saved in labels.csv, their headers are *file* and *label*. 
+        img is a tensor???????
+        Pil image to tensor:  https://discuss.pytorch.org/t/pytorch-pil-to-tensor-and-vice-versa/6312
+        
+            print("t is: ", t.size()) 
+            from torchvision import transforms
+            img = transforms.ToPILImage()(t).convert("RGB")
+            display(img)
+            print(img)
+            print(img.size)
+        
+        
+        
+        
+        def person():
+            return "bob", 32, "boston"
+   
         https://stackoverflow.com/questions/62660486/using-image-label-dataset-take2-returns-two-tuples-instead-of-a-single-one
         
         
