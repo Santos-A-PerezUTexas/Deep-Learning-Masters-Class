@@ -4,6 +4,8 @@ import torch
 """
 ********models.py has these classes:
 
+-----ADDED THIS COMMENT 9/2/2021-------------
+
 ClassificationLoss(torch.nn.Module)
   forward(self, input, target)
 
