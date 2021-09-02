@@ -1,4 +1,4 @@
-from .models import ClassificationLoss, model_factory, save_model
+from .models import ClassificationLoss, model_factory, save_model, LinearClassifier, MLPClassifier
 from .utils import accuracy, load_data
 
 
