@@ -8,6 +8,8 @@ import torch
 
 -----ALSO ADDED THIS COMMENT 9/2/2021, BUT LATER-------------
 
+Added this directly on Github will it appear locally.
+
 
 ClassificationLoss(torch.nn.Module)
   forward(self, input, target)
