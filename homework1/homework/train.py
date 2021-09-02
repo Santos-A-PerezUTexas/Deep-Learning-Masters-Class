@@ -1,6 +1,6 @@
 from .models import ClassificationLoss, model_factory, save_model, LinearClassifier, MLPClassifier
 from .utils import accuracy, load_data
-
+import torch
 
 def train(args):
     model = model_factory[args.model]()
@@ -9,10 +9,14 @@ def train(args):
     Your code here
 
     """
-    raise NotImplementedError('train')
-
+    #raise NotImplementedError('train')
+     
+    x= torch.tensor([[1., -1.], [1., -1.]])
+    model.forward(x)
+    
     save_model(model)
 
+     
 
 if __name__ == '__main__':
     import argparse
