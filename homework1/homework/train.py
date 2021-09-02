@@ -2,7 +2,9 @@ from .models import ClassificationLoss, model_factory, save_model, LinearClassif
 from .utils import accuracy, load_data
 import torch
 """
-********models.py has these classes:
+********models.py has these classes:*******************************
+
+-----ADDED THIS COMMENT 9/2/2021-------------
 
 ClassificationLoss(torch.nn.Module)
   forward(self, input, target)
@@ -20,7 +22,7 @@ models.py defines these functions:
 save_model(model)
 load_model(model)
 
-***************************utils.py has these classes/functions
+***************************utils.py has these classes/functions*******************
 
 class SuperTuxDataset(Dataset)
     def __init__(self, dataset_path)
