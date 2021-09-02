@@ -2,55 +2,61 @@ from .models import ClassificationLoss, model_factory, save_model, LinearClassif
 from .utils import accuracy, load_data
 import torch
 """
-********models.py has these classes:*******************************
 
------ADDED THIS COMMENT 9/2/2021-------------
-
------ALSO ADDED THIS COMMENT 9/2/2021, BUT LATER-------------
-
-Added this directly on Github will it appear locally.
+train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py 
+train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py 
+train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py 
 
 
-ClassificationLoss(torch.nn.Module)
-  forward(self, input, target)
 
-LinearClassifier(torch.nn.Module), 
-  __init__, 
-   forward(self, x)
+11111111********models.py has these classes:*******************************
+11111111********models.py has these classes:*******************************
 
-MLPClassifier(torch.nn.Module), 
-  __init__, 
-  forward(self, x)
+      ClassificationLoss(torch.nn.Module)
+        forward(self, input, target)
 
-models.py defines these functions:
+      LinearClassifier(torch.nn.Module), 
+        __init__, 
+         forward(self, x)
 
-save_model(model)
-load_model(model)
+      MLPClassifier(torch.nn.Module), 
+        __init__, 
+        forward(self, x)
 
-***************************utils.py has these classes/functions*******************
+      save_model(model)
+      load_model(model)
 
-class SuperTuxDataset(Dataset)
-    def __init__(self, dataset_path)
-    def __len__(self)
-    def __getitem__(self, idx)
-    
-def load_data(dataset_path, num_workers=0, batch_size=128)
-def accuracy(outputs, labels)
+      model_factory = {'linear': LinearClassifier, 'mlp': MLPClassifier }
 
-ANd utils.py defines this (dictionary), which is imported above:
 
-model_factory = {
-    'linear': LinearClassifier,
-    'mlp': MLPClassifier,
-}
+22222222***************************utils.py has these classes/functions*******************
+22222222***************************utils.py has these classes/functions*******************
+
+      class SuperTuxDataset(Dataset)
+          def __init__(self, dataset_path)
+          def __len__(self)
+          def __getitem__(self, idx)
+          
+      def load_data(dataset_path, num_workers=0, batch_size=128)
+      def accuracy(outputs, labels)
+
 
 
 
 """
 def train(args):
+
     model = model_factory[args.model]()
 
     """
+
+      Loop:
+        Forward Pass
+        Loss
+        Backward Pass - get gradients
+        Update Weights
+
+
     Your code here
 
     """

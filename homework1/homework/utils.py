@@ -4,6 +4,34 @@ from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 
 
+
+"""
+UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY  UTILS.PY 
+UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY  UTILS.PY
+UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY  UTILS.PY
+UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY  UTILS.PY
+
+
+class SuperTuxDataset(Dataset):
+    def __init__(self, dataset_path)
+    def __len__(self):
+    def __getitem__(self, idx): 
+
+
+
+def load_data(dataset_path, num_workers=0, batch_size=128):
+    dataset = SuperTuxDataset(dataset_path)
+    return DataLoader(dataset, num_workers=num_workers, batch_size=batch_size, shuffle=True, drop_last=False)
+
+def accuracy(outputs, labels):
+    outputs_idx = outputs.max(1)[1].type_as(labels)
+    return outputs_idx.eq(labels).float().mean()
+
+LABEL_NAMES = ['background', 'kart', 'pickup', 'nitro', 'bomb', 'projectile']
+    
+
+"""
+
 """
 
 https://towardsdatascience.com/how-to-train-an-image-classifier-in-pytorch-and-use-it-to-perform-basic-inference-on-single-images-99465a1e9bf5
@@ -99,7 +127,7 @@ class SuperTuxDataset(Dataset):
 
         
         
-    def __getitem__(self, idx):     #Get image idx
+    def __getitem__(self, idx):     
         """
         Your code here
         

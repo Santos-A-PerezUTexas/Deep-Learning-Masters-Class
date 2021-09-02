@@ -1,6 +1,34 @@
 import torch
 import torch.nn.functional as F
 
+"""
+
+
+models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py 
+models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py 
+models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py 
+
+
+class ClassificationLoss(torch.nn.Module):
+    def forward(self, input, target):
+    
+class LinearClassifier(torch.nn.Module):
+    def __init__(self):
+    def forward(self, x):
+    
+class MLPClassifier(torch.nn.Module):
+    def __init__(self):
+    def forward(self, x):
+
+model_factory = {'linear': LinearClassifier,    'mlp': MLPClassifier, }
+
+def save_model(model)
+
+def load_model(model)
+
+
+
+"""
 
 class ClassificationLoss(torch.nn.Module):
     def forward(self, input, target):
