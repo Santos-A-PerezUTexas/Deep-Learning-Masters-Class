@@ -23,7 +23,7 @@ class LinearClassifier(torch.nn.Module):
     def __init__(self):
         super().__init__()
 
-        print ("Wandavision, you're inside LinearClassifier init constructor")
+       print ("Wandavision, you're inside LinearClassifier class, __init_ constructor, models.py")
         
         """
         Your code here
@@ -35,7 +35,7 @@ class LinearClassifier(torch.nn.Module):
     def forward(self, x):
         
         
-        print ("Wandavision, you're inside LinearClassifier forward")
+        print ("Wandavision, you're inside LinearClassifier class, forward method, models.py")
         
         """
         Your code here
