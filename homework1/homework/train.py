@@ -46,8 +46,6 @@ train.py train.py train.py train.py train.py train.py train.py train.py train.py
 """
 def train(args):
 
-    model = model_factory[args.model]()
-
     """
 
       Loop:
@@ -61,12 +59,22 @@ def train(args):
 
     """
 
-
+    model = model_factory[args.model]()
+    
     #raise NotImplementedError('train')
      
-    x= torch.tensor([[1., -1.], [1., -1.]])
+    x = torch.rand([25,2]) 
+    True_y = ((x**2).sum(1) < 1)
+    
     
     model.forward(x)
+    #defaults to linear
+    
+    
+    model_loss = ClassificationLoss(p_y)
+    
+    model_loss.backward()
+    
     
     save_model(model)
 
