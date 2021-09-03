@@ -42,14 +42,23 @@ class ClassificationLoss(torch.nn.Module):
 
         @return:  torch.Tensor((,))
 
+https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html
+torch.nn.CrossEntropyLoss(weight=None, size_average=None, ignore_index=-100, reduce=None, reduction='mean')
+
+
+
         Hint: Don't be too fancy, this is a one-liner
         """
-        raise NotImplementedError('ClassificationLoss.forward')
+         return -(target.float() * (input+1e-10).log() +(1-target.float()) * (1-input+1e-10).log() ).mean()
+             
+        #raise NotImplementedError('ClassificationLoss.forward')
 
 
 class LinearClassifier(torch.nn.Module):
-    def __init__(self):
+    def __init__(self, input_dim):        #input_dim parameter not needed for homework!
         super().__init__()
+        self.w = Parameter(torch.zeros(input_dim))
+        self.b = Parameter(-torch.zeros(1))
 
        print ("Wandavision, you're inside LinearClassifier class, __init_ constructor, models.py")
         
@@ -71,6 +80,10 @@ class LinearClassifier(torch.nn.Module):
         @x: torch.Tensor((B,3,64,64))
         @return: torch.Tensor((B,6))
         """
+        
+        
+        return (x * self.w[None,:]).sum(dim=1) + self.b 
+        
         #raise NotImplementedError('LinearClassifier.forward')
 
 

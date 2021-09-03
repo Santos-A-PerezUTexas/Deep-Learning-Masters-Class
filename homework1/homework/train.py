@@ -54,29 +54,32 @@ def train(args):
         Backward Pass - get gradients
         Update Weights
 
-
     Your code here
 
     """
 
-    model = model_factory[args.model]()
+    linear_Classifier_model = model_factory[args.model](2)  
+      #defaults to linear
+      #OR   linear_Classifier_model = LinearClassifier(2)
+      #dimension of weights is 2 just example...
     
     #raise NotImplementedError('train')
      
     x = torch.rand([25,2]) 
-    True_y = ((x**2).sum(1) < 1)
+    true_y = ((x**2).sum(1) < 1)
     
+    for iteration in range(100): 
     
-    model.forward(x)
-    #defaults to linear
+      prediction_logit = linear_Classifier_model.forward(x)
+      model_loss = ClassificationLoss(prediction_logit, true_y)
+      model_loss.backward()
     
+      for p in linear_Classifier_model.parameters():                                       
     
-    model_loss = ClassificationLoss(p_y)
+        p.data[:] -= 0.5 * p.grad                    
+        p.grad.zero_()
     
-    model_loss.backward()
-    
-    
-    save_model(model)
+    #save_model(model)
 
 
 if __name__ == '__main__':
@@ -88,4 +91,6 @@ if __name__ == '__main__':
     # Put custom arguments here
 
     args = parser.parse_args()
+    
+    
     train(args)
