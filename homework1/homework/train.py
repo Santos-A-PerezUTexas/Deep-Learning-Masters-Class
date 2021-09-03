@@ -7,6 +7,13 @@ train.py train.py train.py train.py train.py train.py train.py train.py train.py
 train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py 
 train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py 
 
+Train your linear model in train.py. You should implement the full training procedure:
+
+      1. create a model, loss, optimizer
+      2. load the data: train and valid
+      3. Run SGD for several epochs
+      4. Save your final model, using save_model()
+
 
 
 11111111********models.py has these classes:*******************************
@@ -21,7 +28,7 @@ train.py train.py train.py train.py train.py train.py train.py train.py train.py
 
       MLPClassifier(torch.nn.Module), 
         __init__, 
-        forward(self, x)
+        forward(self, x)d
 
       save_model(model)
       load_model(model)
@@ -47,6 +54,29 @@ train.py train.py train.py train.py train.py train.py train.py train.py train.py
 def train(args):
 
     """
+
+     https://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html
+     https://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html
+     Training a NN happens in two steps:
+
+Forward Propagation: In forward prop, the NN makes its best guess about the correct output. It runs the input data through each of its functions to make this guess.
+
+Backward Propagation: In backprop, the NN adjusts its parameters proportionate to the error in its guess. It does this by traversing backwards from the output, collecting the derivatives of the error with respect to the parameters of the functions (gradients), and optimizing the parameters using *gradient descent*.
+     
+        import torch, torchvision
+        model = torchvision.models.resnet18(pretrained=True)
+        data = torch.rand(1, 3, 64, 64)
+        labels = torch.rand(1, 1000)
+        
+        prediction = model(data)        # forward pass
+        loss = (prediction - labels).sum()
+        loss.backward()
+        optim = torch.optim.SGD(model.parameters(), lr=1e-2, momentum=0.9)
+        
+        #Finally, we call .step() to initiate gradient descent. 
+        #The optimizer adjusts each parameter by its gradient stored in .grad.
+
+        optim.step() #gradient descent
 
       Loop:
         Forward Pass
@@ -94,3 +124,6 @@ if __name__ == '__main__':
     
     
     train(args)
+    
+     #Now implement MLPClassifier class. The inputs and outputs to same as the linear classifier. 
+     #Try to move most modifications to command-line arguments  in ArgumentParser.

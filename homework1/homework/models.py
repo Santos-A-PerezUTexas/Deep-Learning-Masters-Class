@@ -33,7 +33,8 @@ def load_model(model)
 class ClassificationLoss(torch.nn.Module):
     def forward(self, input, target):
         """
-        Your code here
+        
+        Implement the log-likelihood of a softmax classifier.
 
         Compute mean(-log(softmax(input)_label))
 
@@ -92,7 +93,31 @@ class MLPClassifier(torch.nn.Module):
         super().__init__()
 
         """
-        Your code here
+        MLPClassifier class. The inputs and outputs to same as the linear classifier. 
+        However, now you’re learning a non-linear function.
+
+        You can train your network using python3 -m homework.train -m mlp
+          
+    Hint: Some tuning of your training code. Try to move most modifications to command-line arguments 
+    in ArgumentParser
+
+    Hint: Use ReLU layers as non-linearities.
+
+    Hint: Two layers are sufficient.
+
+    Hint: Keep the first layer small to save parameters.
+
+    You can test your trained model using python3 -m grader homework -v
+        
+        SUMMARY:
+        
+      
+        MLPClassifier class. The inputs and outputs to same as the linear classifier. 
+        Some tuning of your training code. Use ArgumentParser
+        Use ReLU layers as non-linearities.
+        Two layers are sufficient.
+        Keep the first layer small to save parameters.
+        
         """
         raise NotImplementedError('MLPClassifier.__init__')
 
