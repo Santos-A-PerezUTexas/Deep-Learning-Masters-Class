@@ -96,7 +96,7 @@ class MLPClassifier(torch.nn.Module):
         MLPClassifier class. The inputs and outputs to same as the linear classifier. 
         However, now you’re learning a non-linear function.
 
-        You can train your network using python3 -m homework.train -m mlp
+        You cann train your network using python3 -m homework.train -m mlp
           
     Hint: Some tuning of your training code. Try to move most modifications to command-line arguments 
     in ArgumentParser

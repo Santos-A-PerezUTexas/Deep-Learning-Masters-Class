@@ -51,7 +51,7 @@ Labels and the corresponding image paths are saved in labels.csv, their headers 
 There are 6 classes of objects. Make sure label background corresponds to 0, kart is 1, pickup is 2, nitro is 3, bomb is 4 and projectile 5.
 
 
-Hint: We recommend using the csv package to read csv files and the PIL library (Pillow fork) to read images in Python.
+Hint: We recommendd using the csv package to read csv files and the PIL library (Pillow fork) to read images in Python.
 
 Hint: Use torchvision.transforms.ToTensor() to convert the PIL image to a pytorch tensor.
 
