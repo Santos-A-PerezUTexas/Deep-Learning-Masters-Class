@@ -1,4 +1,4 @@
-from .models import ClassificationLoss, model_factory, save_model, LinearClassifier, MLPClassifier
+from .models import LossFunction, ClassificationLoss, model_factory, save_model, LinearClassifier, MLPClassifier
 from .utils import accuracy, load_data
 import torch
 """
@@ -89,19 +89,35 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     """
 
     linear_Classifier_model = model_factory[args.model](2)  
+    
       #defaults to linear
       #OR   linear_Classifier_model = LinearClassifier(2)
       #dimension of weights is 2 just example...
     
     #raise NotImplementedError('train')
      
-    x = torch.rand([25,2]) 
+    x = torch.rand([10,2]) 
     true_y = ((x**2).sum(1) < 1)
     
-    for iteration in range(100): 
+    for iteration in range(10): 
     
-      prediction_logit = linear_Classifier_model.forward(x)
-      model_loss = ClassificationLoss(prediction_logit, true_y)
+      Y_hat = linear_Classifier_model.forward(x)
+      
+      #model_loss = ClassificationLoss.forward(prediction_logit, true_y)
+      
+      #Y_hat_sigmoid_of_logit = 1/(1+(-prediction_logit).exp())  
+      
+      model_loss = LossFunction(Y_hat, true_y)
+      
+      print ("Model LOSS:", model_loss)
+      print ("Truth Value of Logits", Y_hat > .5 )
+
+      print (f'model loss at iteration {iteration} is {model_loss} and the prediction y_hat is {Y_hat}, while the y is {true_y}')
+
+    
+      print (f'the prediction logit converted ')
+    pred_y = p_y > 0.5
+    
       model_loss.backward()
     
       for p in linear_Classifier_model.parameters():                                       

@@ -1,5 +1,7 @@
 import torch
 import torch.nn.functional as F
+from torch.nn.parameter import Parameter
+#https://pytorch.org/docs/stable/generated/torch.nn.parameter.Parameter.html
 
 """
 
@@ -26,13 +28,24 @@ def save_model(model)
 
 def load_model(model)
 
-
+def LossFunction(Y_hat_Vector, y_vector):
+  
+    return -(y_vector.float() * (Y_hat_Vector+1e-10).log() +(1-y_vector.float()) * (1-Y_hat_Vector+1e-10).log() ).mean()
+      
 
 """
 
-class ClassificationLoss(torch.nn.Module):
-    def forward(self, Y_hat_Vector, y_vector):
+def LossFunction (prediction_logit, y_vector):
+  
+  Y_hat_Vector = 1/(1+(-prediction_logit).exp()) 
+  
+  return -(y_vector.float() * (Y_hat_Vector+1e-10).log() +(1-y_vector.float()) * (1-Y_hat_Vector+1e-10).log() ).mean()
       
+
+class ClassificationLoss(torch.nn.Module):
+
+    
+    def forward(Y_hat_Vector, y_vector):   #OLD: def forward(self, Y_hat_Vector, y_vector):
         
       return -(y_vector.float() * (Y_hat_Vector+1e-10).log() +(1-y_vector.float()) * (1-Y_hat_Vector+1e-10).log() ).mean()
       
@@ -41,7 +54,7 @@ class ClassificationLoss(torch.nn.Module):
       #a vector of "i" scalars.  In Softmax, this would return a vector (tensor) of "i" vectors - not scalars).
         
         
-        """
+"""
         
         Implement the log-likelihood of a softmax classifier.
 
@@ -58,42 +71,41 @@ torch.nn.CrossEntropyLoss(weight=None, size_average=None, ignore_index=-100, red
 
 
         Hint: Don't be too fancy, this is a one-liner
-        """
+"""
          
              
         #raise NotImplementedError('ClassificationLoss.forward')
 
 
 class LinearClassifier(torch.nn.Module):
-    def __init__(self, input_dim):        #input_dim parameter not needed for homework!
-        super().__init__()
-        self.w = Parameter(torch.zeros(input_dim))
-        self.b = Parameter(-torch.zeros(1))
 
-       print ("Wandavision, you're inside LinearClassifier class, __init_ constructor, models.py")
+ def __init__(self, input_dim):        #input_dim parameter not needed for homework!
+      
+      super().__init__()
+      self.w = Parameter(torch.zeros(input_dim))
+      self.b = Parameter(-torch.zeros(1))
+      print ("Wandavision, you're inside LinearClassifier class, __init_ constructor, models.py")
+
+  def forward(self, x):      
         
-        """
+      print ("Wandavision, you're inside LinearClassifier class, forward method, models.py")      
+      return (x * self.w[None,:]).sum(dim=1) + self.b 
+
+"""
         Your code here
-        """
-        #raise NotImplementedError('LinearClassifier.__init__')
+"""
+#raise NotImplementedError('LinearClassifier.__init__')
 
         
         
-    def forward(self, x):
         
-        
-        print ("Wandavision, you're inside LinearClassifier class, forward method, models.py")
-        
-        """
+"""
         Your code here
 
         @x: torch.Tensor((B,3,64,64))
         @return: torch.Tensor((B,6))
-        """
-        
-        
-        return (x * self.w[None,:]).sum(dim=1) + self.b 
-        
+"""
+        #raise NotImplementedError('LinearClassifier.__init__')        
         #raise NotImplementedError('LinearClassifier.forward')
 
 
