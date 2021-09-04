@@ -97,7 +97,7 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     
     My_DataSet = SuperTuxDataset('c:\fakepath')   
     
-    image2 = My_DataSet.get_item(2)
+    image_dataSET = My_DataSet.get_item(2)
     
     linear_Classifier_model = model_factory[args.model](2)  
     
@@ -134,7 +134,14 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
         p.grad.zero_()
 
 
-    print (f'*********The image:  {image}, the tuple {tuple1}')
+    print (f'*********The local random image:  {image}, the local tuple {tuple1}')
+    
+    print (f'22222222222222222---->The  image DATASET tuple {image_dataSET}')
+    
+    One_Image = My_DataSet.get_image(1)
+    
+    print (f'33333333333333333333---->A specific image {One_Image}')
+    
     #save_model(model)
 
 

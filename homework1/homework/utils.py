@@ -70,16 +70,20 @@ LABEL_NAMES = ['background', 'kart', 'pickup', 'nitro', 'bomb', 'projectile']
 class SuperTuxDataset(Dataset):
 
   def __init__(self, dataset_path):
-    self.image = torch.rand([3,64,64]) 
+    self.imageDATASET = torch.rand([2,3,64,64]) 
         
   def __len__(self):
     return (3000)  
          
   def __getitem__(self, idx):     
-    return (self.image, LABEL_NAMES[idx])
+    return (self.imageDATASET, LABEL_NAMES[idx])
   
   def get_item(self, idx):     
     return(self.__getitem__(idx))
+    
+  def get_image(self, idx):     
+    return(self.imageDATASET[idx])
+
     
         
   """
