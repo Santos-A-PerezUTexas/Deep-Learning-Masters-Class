@@ -78,18 +78,18 @@ torch.nn.CrossEntropyLoss(weight=None, size_average=None, ignore_index=-100, red
 
 
 class LinearClassifier(torch.nn.Module):
-
- def __init__(self, input_dim):        #input_dim parameter not needed for homework!
+  def __init__(self, input_dim):        #input_dim parameter not needed for homework!
       
-      super().__init__()
-      self.w = Parameter(torch.zeros(input_dim))
-      self.b = Parameter(-torch.zeros(1))
-      print ("Wandavision, you're inside LinearClassifier class, __init_ constructor, models.py")
+    super().__init__()
+    self.w = Parameter(torch.zeros(input_dim))
+    self.b = Parameter(-torch.zeros(1))
+    print ("Wandavision, you're inside LinearClassifier class, __init_ constructor, models.py")
 
   def forward(self, x):      
         
-      print ("Wandavision, you're inside LinearClassifier class, forward method, models.py")      
-      return (x * self.w[None,:]).sum(dim=1) + self.b 
+    print ("Wandavision, you're inside LinearClassifier class, forward method, models.py")      
+    return (x * self.w[None,:]).sum(dim=1) + self.b 
+
 
 """
         Your code here

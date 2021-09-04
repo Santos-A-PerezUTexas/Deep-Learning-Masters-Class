@@ -97,6 +97,8 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     
     My_DataSet = SuperTuxDataset('c:\fakepath')   
     
+    image2 = My_DataSet.get_item(2)
+    
     linear_Classifier_model = model_factory[args.model](2)  
     
       #defaults to linear
@@ -123,10 +125,7 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
 
       print (f'model loss at iteration {iteration} is {model_loss} and the prediction y_hat is {Y_hat}, while the y is {true_y}')
 
-    
-      print (f'the prediction logit converted ')
-    pred_y = p_y > 0.5
-    
+     
       model_loss.backward()
     
       for p in linear_Classifier_model.parameters():                                       

@@ -68,16 +68,22 @@ LABEL_NAMES = ['background', 'kart', 'pickup', 'nitro', 'bomb', 'projectile']
 
 
 class SuperTuxDataset(Dataset):
+
   def __init__(self, dataset_path):
     self.image = torch.rand([3,64,64]) 
         
-    def __len__(self):
-      return (3000)  
+  def __len__(self):
+    return (3000)  
          
-    def __getitem__(self, idx):     
-      return (self.image, LABEL_NAMES[idx])
+  def __getitem__(self, idx):     
+    return (self.image, LABEL_NAMES[idx])
+  
+  def get_item(self, idx):     
+    return(self.__getitem__(idx))
+    
         
   """
+  
   You can load all images in the __init__ function, or you can lazily load them in __getitem__.
         If you load all images in __init__, make sure you convert the image to a tensor in the constructor      
         https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
