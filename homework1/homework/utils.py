@@ -2,6 +2,7 @@ from PIL import Image
 
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
+import torch
 
 
 
@@ -67,33 +68,30 @@ LABEL_NAMES = ['background', 'kart', 'pickup', 'nitro', 'bomb', 'projectile']
 
 
 class SuperTuxDataset(Dataset):
-    def __init__(self, dataset_path):
-        """
+  def __init__(self, dataset_path):
+    self.image = torch.rand([3,64,64]) 
         
-        You can load all images in the __init__ function, or you can lazily load them in __getitem__.
-        If you load all images in __init__, make sure you convert the image to a tensor in the constructor, otherwise, 
-        you might get an OSError: [Errno 24] Too many open files
+    def __len__(self):
+      return (3000)  
+         
+    def __getitem__(self, idx):     
+      return (self.image, LABEL_NAMES[idx])
         
+  """
+  You can load all images in the __init__ function, or you can lazily load them in __getitem__.
+        If you load all images in __init__, make sure you convert the image to a tensor in the constructor      
         https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
         
-        
-        Your code here
-        *****Hint: Use the python csv library to parse labels.csv
+       *****Hint: Use the python csv library to parse labels.csv
         https://docs.python.org/3/library/csv.html#module-csv
-
-       ****Were is labels.csv???????????????????????
 
         WARNING: Do not perform data normalization here. 
         
         STDataset = pd.read_csv('data/labels.csv')
 
         
-        """
         
-        #raise NotImplementedError('SuperTuxDataset.__init__')
-
-        
-        """               SAMPLE CODE*************************************
+       ********* SAMPLE CODE*************************************
         landmarks_frame = pd.read_csv('data/faces/face_landmarks.csv')
 
          n = 65
@@ -106,31 +104,18 @@ class SuperTuxDataset(Dataset):
         print('Landmarks shape: {}'.format(landmarks.shape))
         print('First 4 Landmarks: {}'.format(landmarks[:4]))
         
-        """
-        
-        
-        
-        
-        
-        
-        
-        
-    def __len__(self):
-        """
-        
-        The __len__ function should return the size of the dataset.
-        
-        Your code here
-        """
-        raise NotImplementedError('SuperTuxDataset.__len__')
-
-
-        
-        
-    def __getitem__(self, idx):     
-        """
         The __getitem__ function should return a tuple of image, label. The image should be a torch.Tensor of size (3,64,64) with range [0,1], and the label should be int.
+        Make sure label background corresponds to 0, kart is 1, pickup is 2, nitro is 3, bomb is 4 and projectile 5.
+LABEL_NAMES = ['background', 'kart', 'pickup', 'nitro', 'bomb', 'projectile']
         
+         image_index = 1
+         image = torch.rand([3,64,64]) 
+         tuple1=(image, image_index)
+         
+         Torch.rand:
+         Returns a tensor filled with random numbers from a uniform distribution on the interval [0, 1)
+         https://pytorch.org/docs/stable/generated/torch.rand.html
+         
         __getitem__ to support the indexing such that dataset[idx] can be used to get idx-th sample.
         
         
@@ -155,14 +140,11 @@ class SuperTuxDataset(Dataset):
         def person():
             return "bob", 32, "boston"
    
-        https://stackoverflow.com/questions/62660486/using-image-label-dataset-take2-returns-two-tuples-instead-of-a-single-one
-        
-        
-        
+        https://stackoverflow.com/questions/62660486/using-image-label-dataset-take2-returns-two-tuples-instead-of-a-single-one          
         
         """
-        raise NotImplementedError('SuperTuxDataset.__getitem__')
-
+        
+        
 
 def load_data(dataset_path, num_workers=0, batch_size=128):
     dataset = SuperTuxDataset(dataset_path)

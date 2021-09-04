@@ -1,7 +1,10 @@
 from .models import LossFunction, ClassificationLoss, model_factory, save_model, LinearClassifier, MLPClassifier
-from .utils import accuracy, load_data
+from .utils import accuracy, load_data, SuperTuxDataset
 import torch
+
 """
+
+Original: from .utils import accuracy, load_data
 
 train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py 
 train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py 
@@ -88,6 +91,12 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
 
     """
 
+    image_index = 1
+    image = torch.rand([3,64,64]) 
+    tuple1=(image, image_index)
+    
+    My_DataSet = SuperTuxDataset('c:\fakepath')   
+    
     linear_Classifier_model = model_factory[args.model](2)  
     
       #defaults to linear
@@ -99,7 +108,7 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     x = torch.rand([10,2]) 
     true_y = ((x**2).sum(1) < 1)
     
-    for iteration in range(10): 
+    for iteration in range(100): 
     
       Y_hat = linear_Classifier_model.forward(x)
       
@@ -124,7 +133,9 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     
         p.data[:] -= 0.5 * p.grad                    
         p.grad.zero_()
-    
+
+
+    print (f'*********The image:  {image}, the tuple {tuple1}')
     #save_model(model)
 
 
