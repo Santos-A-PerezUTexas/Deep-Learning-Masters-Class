@@ -129,7 +129,7 @@ class SuperTuxDataset(Dataset):
         
     def __getitem__(self, idx):     
         """
-        Your code here
+        The __getitem__ function should return a tuple of image, label. The image should be a torch.Tensor of size (3,64,64) with range [0,1], and the label should be int.
         
         __getitem__ to support the indexing such that dataset[idx] can be used to get idx-th sample.
         
@@ -158,7 +158,7 @@ class SuperTuxDataset(Dataset):
         https://stackoverflow.com/questions/62660486/using-image-label-dataset-take2-returns-two-tuples-instead-of-a-single-one
         
         
-        The __getitem__ function should return a tuple of image, label. The image should be a torch.Tensor of size (3,64,64) with range [0,1], and the label should be int.
+        
         
         """
         raise NotImplementedError('SuperTuxDataset.__getitem__')

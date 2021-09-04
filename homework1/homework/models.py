@@ -31,7 +31,16 @@ def load_model(model)
 """
 
 class ClassificationLoss(torch.nn.Module):
-    def forward(self, input, target):
+    def forward(self, Y_hat_Vector, y_vector):
+      
+        
+      return -(y_vector.float() * (Y_hat_Vector+1e-10).log() +(1-y_vector.float()) * (1-Y_hat_Vector+1e-10).log() ).mean()
+      
+      #This is the negative log likelihood for logistic regression, need softmax instead.
+      #In Logistic Regression, Y_hat_vector is a prediction for ALL x(i) in the data set, so it returns
+      #a vector of "i" scalars.  In Softmax, this would return a vector (tensor) of "i" vectors - not scalars).
+        
+        
         """
         
         Implement the log-likelihood of a softmax classifier.
@@ -50,7 +59,7 @@ torch.nn.CrossEntropyLoss(weight=None, size_average=None, ignore_index=-100, red
 
         Hint: Don't be too fancy, this is a one-liner
         """
-         return -(target.float() * (input+1e-10).log() +(1-target.float()) * (1-input+1e-10).log() ).mean()
+         
              
         #raise NotImplementedError('ClassificationLoss.forward')
 
