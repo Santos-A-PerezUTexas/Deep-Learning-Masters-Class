@@ -42,6 +42,9 @@ This change made DIRECTLY on Github.  THIS change 9/1/2021
 
 As a first step, we will need to implement a data loader for the SuperTuxKart dataset. Complete the __init__, __len__, and the __getitem__ of the SuperTuxDataset class in the utils.py.
 https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
+https://pillow.readthedocs.io/en/stable/reference/Image.html
+https://pillow.readthedocs.io/en/stable/reference/Image.html
+https://www.geeksforgeeks.org/python-pil-image-open-method/
 
 
 The __len__ function should return the size of the dataset.
@@ -70,7 +73,11 @@ LABEL_NAMES = ['background', 'kart', 'pickup', 'nitro', 'bomb', 'projectile']
 class SuperTuxDataset(Dataset):
 
   def __init__(self, dataset_path):
+  
     self.imageDATASET = torch.rand([2,3,64,64]) 
+    self.size = 64,64
+    self.one_image = Image.open(r"C:\Users\spere\cs342\homework1\homework\sample_image.jpg")
+    self.one_image.show()
         
   def __len__(self):
     return (3000)  
