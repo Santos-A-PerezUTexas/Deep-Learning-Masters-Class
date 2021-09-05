@@ -88,9 +88,11 @@ class SuperTuxDataset(Dataset):
   def get_item(self, idx):     
     return(self.__getitem__(idx))
     
-  def get_image(self, idx):     
+  def get_fake_image(self, idx):     
     return(self.imageDATASET[idx])
 
+  def get_real_image(self, idx):     
+    return (self.one_image)
     
         
   """

@@ -138,9 +138,12 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     
     print (f'22222222222222222---->The  image DATASET tuple {image_dataSET}')
     
-    One_Image = My_DataSet.get_image(1)
+    fake_Image = My_DataSet.get_fake_image(1)
+    real_Image = My_DataSet.get_real_image(1)
     
-    print (f'33333333333333333333---->A specific image {One_Image}')
+
+    print (f'33333333333333333333---->A fake image {fake_Image}')
+    print (f'44444444444444444444---->A real image {real_Image}')
     
     #save_model(model)
 
