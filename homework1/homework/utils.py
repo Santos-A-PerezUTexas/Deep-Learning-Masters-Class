@@ -76,7 +76,7 @@ class SuperTuxDataset(Dataset):
   
     self.imageDATASET = torch.rand([2,3,64,64]) 
     self.size = 64,64
-    self.one_image = Image.open(r"C:\Users\spere\cs342\homework1\homework\sample_image.jpg")
+    self.one_image = Image.open(r"./homework/sample_image.jpg")
     self.one_image.show()
         
   def __len__(self):
