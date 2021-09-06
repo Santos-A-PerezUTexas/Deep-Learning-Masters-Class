@@ -80,7 +80,7 @@ class SuperTuxDataset(Dataset):
     self.size = 64,64
     self.one_image = Image.open(r"sample_image.jpg")
     print ("Just opened the sample image, about to show it to you.")
-    #self.one_image.show()
+    self.one_image.show()
   
   
     #LOAD THE DATA-----------------------------------------
@@ -348,7 +348,7 @@ class MLPClassifier(torch.nn.Module):
 
   def __init__(self):
     super().__init__()
-  def forward(self, x):
+  #def forward(self, x):
  
    #https://medium.com/biaslyai/pytorch-introduction-to-neural-network-feedforward-neural-network-model-e7231cff47cb
       
