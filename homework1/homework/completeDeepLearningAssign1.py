@@ -4,6 +4,7 @@ from torch.nn.parameter import Parameter
 from PIL import Image
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
+import csv     #utils.py
 
 iterations_for_sgd = 10
 
@@ -79,7 +80,16 @@ class SuperTuxDataset(Dataset):
     self.size = 64,64
     self.one_image = Image.open(r"sample_image.jpg")
     print ("Just opened the sample image, about to show it to you.")
-    self.one_image.show()
+    #self.one_image.show()
+  
+  
+    #LOAD THE DATA-----------------------------------------
+    
+    #Can't use this because load_data makes a new Dataset, calls the Constructor, and recurses!
+    #temp_data = load_data('../data/train', num_workers=0, batch_size=128)
+    
+    #convert to tensor and return tensor
+    
         
   def __len__(self):
     return (3000)  
@@ -170,6 +180,9 @@ LABEL_NAMES = ['background', 'kart', 'pickup', 'nitro', 'bomb', 'projectile']
 def load_data(dataset_path, num_workers=0, batch_size=128):
     dataset = SuperTuxDataset(dataset_path)
     return DataLoader(dataset, num_workers=num_workers, batch_size=batch_size, shuffle=True, drop_last=False)
+    #https://pytorch.org/docs/stable/data.html  ,,,, defines DataLoader
+    #https://docs.python.org/3/library/csv.html#module-csv
+    #STDataset = pd.read_csv('data/labels.csv')
 
 
 def accuracy(outputs, labels):
@@ -448,7 +461,13 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     print (f'33333333333333333333---->A fake image {fake_Image}')
     print (f'44444444444444444444---->A real image {real_Image}')
     
-    print (f'Just did {iterations_for_sgd} Gradient Descent iterations')
+    print (f'Just did {iterations_for_sgd} Gradient Descent iterations with ten UNIT CIRCLE points ONLY!!!')
+    
+    
+    #GRADIENT DESCENT USING THE  IMAGES----------------------------------------------------
+    #LOAD THE 250 IMAGES 
+    
+    
     
     #save_model(model)
 
