@@ -77,18 +77,24 @@ class SuperTuxDataset(Dataset):
 
   def __init__(self, dataset_path):
   
-    self.imageDATASET = torch.zeroes([2,3,64,64]) 
+    self.X_imageDATASET = torch.zeros([2,3,64,64]) 
     self.size = 64,64
     self.one_image = Image.open(r"sample_image.jpg")
+    
+    print(f'Behold, the EMPTY DATASET:  {self.X_imageDATASET[0:, ]}') 
     
     #convert image to tensor 
      
     self.Image_To_Tensor = Image_Transformer.transforms.ToTensor()
     
     self.Image_tensor = self.Image_To_Tensor(self.one_image)
+    self.X_imageDATASET[0] = self.Image_To_Tensor(self.one_image)
+    
     
     print(f'Behold, the image tensor:  {self.Image_tensor}') 
     
+    #print(f'Behold, the image tensor in DATASET:  {self.X_imageDATASET[0:, ]}') shows entire tensor
+    print(f'Behold, the image tensor in DATASET:  {self.X_imageDATASET[0]}')
     
     print ("Just opened the sample image, about to show it to you.")
     self.one_image.show()
