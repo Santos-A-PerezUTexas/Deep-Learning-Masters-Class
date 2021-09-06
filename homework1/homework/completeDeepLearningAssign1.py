@@ -77,7 +77,8 @@ class SuperTuxDataset(Dataset):
 
   def __init__(self, dataset_path):
   
-    self.X_imageDATASET = torch.zeros([2,3,64,64]) 
+    self.BatchSize = 20
+    self.X_imageDATASET = torch.zeros([self.BatchSize,3,64,64]) 
     self.size = 64,64
     self.one_image = Image.open(r"sample_image.jpg")
     
@@ -117,13 +118,13 @@ class SuperTuxDataset(Dataset):
     return (3000)  
          
   def __getitem__(self, idx):     
-    return (self.imageDATASET, LABEL_NAMES[idx])
+    return (self.X_imageDATASET[idx], LABEL_NAMES[idx])
   
   def get_item(self, idx):     
     return(self.__getitem__(idx))
     
   def get_fake_image(self, idx):     
-    return(self.imageDATASET[idx])
+    return(self.X_imageDATASET[idx])
 
   def get_real_image(self, idx):     
     return (self.one_image)
@@ -560,8 +561,8 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     
     print (f'22222222222222222---->The  image DATASET tuple {image_dataSET}')
     
-    fake_Image = My_DataSet.get_fake_image(1)
-    real_Image = My_DataSet.get_real_image(1)
+    fake_Image = My_DataSet.get_fake_image(0)
+    real_Image = My_DataSet.get_real_image(0)
     
 
     print (f'33333333333333333333---->A fake image {fake_Image}')
