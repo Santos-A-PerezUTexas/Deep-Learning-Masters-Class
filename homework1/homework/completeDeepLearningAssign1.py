@@ -177,14 +177,27 @@ LABEL_NAMES = ['background', 'kart', 'pickup', 'nitro', 'bomb', 'projectile']
         
         
 
-def load_data(dataset_path, num_workers=0, batch_size=128):
+def load_data(dataset_path, num_workers=0, batch_size=128):     #use this in train.py
+    
     dataset = SuperTuxDataset(dataset_path)
+    #https://medium.com/bivek-adhikari/creating-custom-datasets-and-dataloaders-with-pytorch-7e9d2f06b660
+    #https://medium.com/bivek-adhikari/creating-custom-datasets-and-dataloaders-with-pytorch-7e9d2f06b660
+    
+    #https://docs.python.org/3/library/csv.html#module-csv
+    #STDataset = pd.read_csv('data/labels.csv')  #pandas, can't use
+    with open('labels.csv', newline='') as csvfile:
+      ImageReader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+      #cvs.reader returns a reader object which will iterate over lines in the given csvfile
+      for row in ImageReader:
+        print(', '.join(row))
+        print (f'ROW IS -------------------{row}')
+      #for row in range(1, 250):
+        #print(', '.join(row))
+    
     return DataLoader(dataset, num_workers=num_workers, batch_size=batch_size, shuffle=True, drop_last=False)
     #https://pytorch.org/docs/stable/data.html  ,,,, defines DataLoader
-    #https://docs.python.org/3/library/csv.html#module-csv
-    #STDataset = pd.read_csv('data/labels.csv')
-
-
+    
+    
 def accuracy(outputs, labels):
     outputs_idx = outputs.max(1)[1].type_as(labels)
     return outputs_idx.eq(labels).float().mean()
@@ -411,6 +424,10 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     tuple1=(image, image_index)
     
     My_DataSet = SuperTuxDataset('c:\fakepath')   
+    
+    
+    My_Real_DataSet = load_data('../data/train', num_workers=0, batch_size=128)
+    
     
     image_dataSET = My_DataSet.get_item(2)
     
