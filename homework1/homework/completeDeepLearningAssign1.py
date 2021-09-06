@@ -3,7 +3,7 @@ import torch.nn.functional as F
 from torch.nn.parameter import Parameter
 from PIL import Image
 from torch.utils.data import Dataset, DataLoader
-from torchvision import transforms
+from torchvision import transforms as Image_Transformer
 import csv     #utils.py
 
 iterations_for_sgd = 10
@@ -60,6 +60,7 @@ There are 6 classes of objects. Make sure label background corresponds to 0, kar
 Hint: We recommendd using the csv package to read csv files and the PIL library (Pillow fork) to read images in Python.
 
 Hint: Use torchvision.transforms.ToTensor() to convert the PIL image to a pytorch tensor.
+img = transforms.ToPILImage()(t).convert("RGB")
 
 Hint: You have (at least) two options on how to load the dataset. 
 You can load all images in the __init__ function, or you can lazily load them in __getitem__.
@@ -79,9 +80,24 @@ class SuperTuxDataset(Dataset):
     self.imageDATASET = torch.rand([2,3,64,64]) 
     self.size = 64,64
     self.one_image = Image.open(r"sample_image.jpg")
+    
+    #convert image to tensor 
+     
+    self.Image_To_Tensor = Image_Transformer.transforms.ToTensor()
+    
+    self.Image_tensor = self.Image_To_Tensor(self.one_image)
+    
+    print(f'Behold, the image tensor:  {self.Image_tensor}') 
+    
+    
     print ("Just opened the sample image, about to show it to you.")
     self.one_image.show()
-  
+    
+     
+    #Hint: Use torchvision.transforms.ToTensor() to convert the PIL image to a pytorch tensor.
+    #img = transforms.ToPILImage()(t).convert("RGB")
+    
+      
   
     #LOAD THE DATA-----------------------------------------
     
@@ -248,19 +264,26 @@ def LossFunction(Y_hat_Vector, y_vector):
   
 
 def LossFunction (prediction_logit, y_vector):
-  Y_hat_Vector = 1/(1+(-prediction_logit).exp()) 
+ 
+ #this is not part of the original???
+ 
+  Y_hat_Vector = 1/(1+(-prediction_logit).exp())   #Take the sigmoid of the logit
+  
   return -(y_vector.float() * (Y_hat_Vector+1e-10).log() +(1-y_vector.float()) * (1-Y_hat_Vector+1e-10).log() ).mean()
       
 
 class ClassificationLoss(torch.nn.Module):
- 
-    #cOMMENT FIX https://stackoverflow.com/questions/17986978/python-error-when-trying-to-add-comments 
-    #You should implement the log-likelihood of a softmax classifier.
-    #https://pytorch.org/docs/master/generated/torch.nn.LogSoftmax.html#torch.nn.LogSoftmax
+  
+    #https://github.com/Tencent/NeuralNLP-NeuralClassifier/blob/master/model/loss.py
+    
+    #**You should implement the log-likelihood of a softmax classifier.
+    #https://pytorch.org/docs/master/nn.html#torch.nn.LogSoftmax
     #https://pytorch.org/docs/master/generated/torch.nn.NLLLoss.html#torch.nn.NLLLoss    (NEGATIVE LOSS 
     #LIKELIHOOD use with LOG-softmax.)
     
-   
+    
+    #https://pytorch.org/docs/master/generated/torch.nn.LogSoftmax.html#torch.nn.LogSoftmax
+      
     #https://pytorch.org/docs/master/nn.html#torch.nn.LogSoftmax
     #https://discuss.pytorch.org/t/does-nllloss-handle-log-softmax-and-softmax-in-the-same-way/8835
     #https://discuss.pytorch.org/t/difference-between-cross-entropy-loss-or-log-likelihood-loss/38816
@@ -275,19 +298,25 @@ class ClassificationLoss(torch.nn.Module):
     #torch.nn.functional.cross_entropy takes logits as inputs (performs log_softmax internally)
     #NEED THIS***********torch.nn.functional.nll_loss is like cross_entropy but takes log-probabilities (log-softmax) values as inputs
        
-        
+       
+  
     
-    
-  def forward(Y_hat_Vector, y_vector):   #OLD: def forward(self, Y_hat_Vector, y_vector):
+  def forward(self, Y_hat_Vector, y_vector):   #OLD: def forward(self, input, target):
+  
+    #Why forward method:  https://discuss.pytorch.org/t/about-the-nn-module-forward/20858
+ 
+    m = nn.LogSoftmax()
+    input = torch.randn(2, 3)
+    output = m(input)
         
     return -(y_vector.float() * (Y_hat_Vector+1e-10).log() +(1-y_vector.float()) * (1-Y_hat_Vector+1e-10).log() ).mean()
       
-      #This is the negative log likelihood for logistic regression, need SOFTMAX instead.
-      #In Logistic Regression, Y_hat_vector is a prediction for ALL x(i) in the data set, so it returns
-      #a vector of "i" scalars.  In Softmax, this would return a vector (tensor) of "i" vectors - not scalars).
+    #This is the negative log likelihood for logistic regression, need SOFTMAX instead.
+    #In Logistic Regression, Y_hat_vector is a prediction for ALL x(i) in the data set, so it returns
+    #a vector of i scalars.  In Softmax, this would return a vector (tensor) of i vectors - not scalars).
         
         
-"""
+    """
         
         Implement the log-likelihood of a softmax classifier.
 
@@ -298,16 +327,14 @@ class ClassificationLoss(torch.nn.Module):
 
         @return:  torch.Tensor((,))
 
-https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html
-torch.nn.CrossEntropyLoss(weight=None, size_average=None, ignore_index=-100, reduce=None, reduction='mean')
-
-
+    https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html
+    torch.nn.CrossEntropyLoss(weight=None, size_average=None, ignore_index=-100, reduce=None, reduction='mean')
 
         Hint: Don't be too fancy, this is a one-liner
-"""
+    """
          
              
-        #raise NotImplementedError('ClassificationLoss.forward')
+    #raise NotImplementedError('ClassificationLoss.forward')
 
 
 class LinearClassifier(torch.nn.Module):
