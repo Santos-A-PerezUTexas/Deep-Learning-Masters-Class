@@ -127,7 +127,7 @@ class SuperTuxDataset(Dataset):
     return(self.X_imageDATASET[idx])
 
   def get_real_image(self, idx):     
-    return (self.one_image)
+    return (self.X_imageDATASET[idx])
     
         
   """
