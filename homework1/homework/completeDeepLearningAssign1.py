@@ -220,7 +220,18 @@ class LinearClassifier(torch.nn.Module):
 class MLPClassifier(torch.nn.Module):
     def __init__(self):
     def forward(self, x):
-
+    #https://medium.com/biaslyai/pytorch-introduction-to-neural-network-feedforward-neural-network-model-e7231cff47cb
+    
+    class Perceptron(torch.nn.Module):
+    def __init__(self):
+        super(Perceptron, self).__init__()
+        self.fc = nn.Linear(1,1)
+        self.relu = torch.nn.ReLU() # instead of Heaviside step fn
+    def forward(self, x):
+        output = self.fc(x)
+        output = self.relu(x) # instead of Heaviside step fn
+        return output
+        
 model_factory = {'linear': LinearClassifier,    'mlp': MLPClassifier, }
 
 def save_model(model)
@@ -242,12 +253,36 @@ def LossFunction (prediction_logit, y_vector):
       
 
 class ClassificationLoss(torch.nn.Module):
+ 
+    #cOMMENT FIX https://stackoverflow.com/questions/17986978/python-error-when-trying-to-add-comments 
+    #You should implement the log-likelihood of a softmax classifier.
+    #https://pytorch.org/docs/master/generated/torch.nn.LogSoftmax.html#torch.nn.LogSoftmax
+    #https://pytorch.org/docs/master/generated/torch.nn.NLLLoss.html#torch.nn.NLLLoss    (NEGATIVE LOSS 
+    #LIKELIHOOD use with LOG-softmax.)
+    
+   
+    #https://pytorch.org/docs/master/nn.html#torch.nn.LogSoftmax
+    #https://discuss.pytorch.org/t/does-nllloss-handle-log-softmax-and-softmax-in-the-same-way/8835
+    #https://discuss.pytorch.org/t/difference-between-cross-entropy-loss-or-log-likelihood-loss/38816
+    #https://github.com/rasbt/stat479-deep-learning-ss19/blob/master/other/pytorch-lossfunc-cheatsheet.md
+    
+    #If you apply Pytorch's CrossEntropyLoss to your output layer
+    #you get the same result as applying Pytorch's NLLLoss to a
+    #LogSoftmax layer added after your original output layer.
+    
+    #torch.nn.functional.binary_cross_entropy takes logistic sigmoid values as inputs
+    #torch.nn.functional.binary_cross_entropy_with_logits takes logits as inputs
+    #torch.nn.functional.cross_entropy takes logits as inputs (performs log_softmax internally)
+    #NEED THIS***********torch.nn.functional.nll_loss is like cross_entropy but takes log-probabilities (log-softmax) values as inputs
+       
+        
+    
     
   def forward(Y_hat_Vector, y_vector):   #OLD: def forward(self, Y_hat_Vector, y_vector):
         
     return -(y_vector.float() * (Y_hat_Vector+1e-10).log() +(1-y_vector.float()) * (1-Y_hat_Vector+1e-10).log() ).mean()
       
-      #This is the negative log likelihood for logistic regression, need softmax instead.
+      #This is the negative log likelihood for logistic regression, need SOFTMAX instead.
       #In Logistic Regression, Y_hat_vector is a prediction for ALL x(i) in the data set, so it returns
       #a vector of "i" scalars.  In Softmax, this would return a vector (tensor) of "i" vectors - not scalars).
         
@@ -276,6 +311,10 @@ torch.nn.CrossEntropyLoss(weight=None, size_average=None, ignore_index=-100, red
 
 
 class LinearClassifier(torch.nn.Module):
+
+#Your forward function receives a (B,3,64,64) tensor as an input and should return a (B,6) torch.Tensor (one value per class).
+#B is the batch size, it's a hyper parameter we can set.
+
   def __init__(self, input_dim):        #input_dim parameter not needed for homework!
       
     super().__init__()
@@ -287,9 +326,7 @@ class LinearClassifier(torch.nn.Module):
         
     print ("Wandavision, you're inside LinearClassifier class, forward method, models.py")      
     return (x * self.w[None,:]).sum(dim=1) + self.b 
-
-      
-        
+   
 """
         Your code here
 
@@ -302,15 +339,31 @@ class LinearClassifier(torch.nn.Module):
 
 class MLPClassifier(torch.nn.Module):
 
+  #Your forward function receives a (B,3,64,64) tensor as an input and should return a (B,6) torch.Tensor (one value per class).
+  #Two layers are sufficient.
+  #Keep the first layer small to save parameters.
+  #Use ReLU layers as non-linearities.
+  #Might require some tuning of your training code. Try to move most modifications to command-line arguments 
+  #in  ArgumentParser
+
   def __init__(self):
     super().__init__()
-    
-  #def forward(self, x):
+  def forward(self, x):
+ 
+   #https://medium.com/biaslyai/pytorch-introduction-to-neural-network-feedforward-neural-network-model-e7231cff47cb
+      
+  #    class Perceptron(torch.nn.Module):
+  #   def __init__(self):
+  #      super(Perceptron, self).__init__()
+  #      self.fc = nn.Linear(1,1)
+  #      self.relu = torch.nn.ReLU() # instead of Heaviside step fn
+  #   
+  #    def forward(self, x):
+  #       output = self.fc(x)
+  #       output = self.relu(x) # instead of Heaviside step fn
+  #       return output
 
-model_factory = {
-    'linear': LinearClassifier,
-    'mlp': MLPClassifier,
-}
+
 
 def save_model(model):
   from torch import save
@@ -327,6 +380,9 @@ def load_model(model):
   r = model_factory[model]()
   r.load_state_dict(load(path.join(path.dirname(path.abspath(__file__)), '%s.th' % model), map_location='cpu'))
   return r
+
+
+model_factory = { 'linear': LinearClassifier, 'mlp': MLPClassifier, }
   
   
   
