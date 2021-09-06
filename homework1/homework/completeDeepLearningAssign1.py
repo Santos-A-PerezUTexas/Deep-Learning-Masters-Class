@@ -5,6 +5,7 @@ from PIL import Image
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 
+iterations_for_sgd = 10
 
 """
 UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY  UTILS.PY 
@@ -76,7 +77,8 @@ class SuperTuxDataset(Dataset):
   
     self.imageDATASET = torch.rand([2,3,64,64]) 
     self.size = 64,64
-    self.one_image = Image.open(r"./homework/sample_image.jpg")
+    self.one_image = Image.open(r"sample_image.jpg")
+    print ("Just opened the sample image, about to show it to you.")
     self.one_image.show()
         
   def __len__(self):
@@ -399,7 +401,7 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     
     image_dataSET = My_DataSet.get_item(2)
     
-    linear_Classifier_model = model_factory[args.model](2)  
+    linear_Classifier_model = model_factory[args.model](2)     #DEFINING THE CLASSIFIER HERE
     
       #defaults to linear
       #OR   linear_Classifier_model = LinearClassifier(2)
@@ -410,7 +412,8 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     x = torch.rand([10,2]) 
     true_y = ((x**2).sum(1) < 1)
     
-    for iteration in range(100): 
+    #iterations_for_sgd defined at the beggining
+    for iteration in range(iterations_for_sgd): 
     
       Y_hat = linear_Classifier_model.forward(x)
       
@@ -444,6 +447,8 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
 
     print (f'33333333333333333333---->A fake image {fake_Image}')
     print (f'44444444444444444444---->A real image {real_Image}')
+    
+    print (f'Just did {iterations_for_sgd} Gradient Descent iterations')
     
     #save_model(model)
 
