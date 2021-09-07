@@ -358,13 +358,22 @@ class LinearClassifier(torch.nn.Module):
 
   def __init__(self, input_dim):        #input_dim parameter not needed for homework!
       
-    super().__init__()
-    self.w = Parameter(torch.zeros(input_dim))
-    self.b = Parameter(-torch.zeros(1))
+    super().__init__()   #original
+    self.w = Parameter(torch.zeros(input_dim))  #added
+    self.b = Parameter(-torch.zeros(1))         #added
     print ("Wandavision, you're inside LinearClassifier class, __init_ constructor, models.py")
 
   def forward(self, x):      
+    
+    # x is a (B,3,64,64) tensor, so x[i] is one image
+    #x: torch.Tensor((B,3,64,64))
+    #return: torch.Tensor((B,6))
         
+    #Multinomial Logistic Regression?  https://aaronkub.com/2020/02/12/logistic-regression-with-pytorch.html
+    #https://towardsdatascience.com/logistic-regression-on-mnist-with-pytorch-b048327f8d19
+    #torch.nn.Linear(input_dim, output_dim)
+    #https://pytorch.org/docs/stable/generated/torch.nn.Linear.html
+       
     print ("Wandavision, you're inside LinearClassifier class, forward method, models.py")      
     return (x * self.w[None,:]).sum(dim=1) + self.b 
    
@@ -572,8 +581,8 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     real_Image = My_DataSet.get_real_image(0)
     
 
-    print (f'33333333333333333333---->A fake image {fake_Image}')
-    print (f'44444444444444444444---->A real image {real_Image}')
+    print (f'33333333333333333333---->A fake image {fake_Image}')   #Image with Label
+    print (f'44444444444444444444---->A real image {real_Image[0]}')  #Image without label
     
     print (f'Just did {iterations_for_sgd} Gradient Descent iterations with ten UNIT CIRCLE points ONLY!!!')
     
