@@ -356,14 +356,28 @@ class LinearClassifier(torch.nn.Module):
 #Your forward function receives a (B,3,64,64) tensor as an input and should return a (B,6) torch.Tensor (one value per class).
 #B is the batch size, it's a hyper parameter we can set.
 
-  def __init__(self, input_dim):        #input_dim parameter not needed for homework!
+  def __init__(self, input_dim):        #input_dim parameter not needed for homework, I added thiS!
       
     super().__init__()   #original
+    
+    #https://www.programcreek.com/python/example/107699/torch.nn.Linear
+    #https://www.programcreek.com/python/example/107699/torch.nn.Linear
+    
+    #self.linear = torch.nn.Linear(4096, 6)  
+    
+    
     self.w = Parameter(torch.zeros(input_dim))  #added
     self.b = Parameter(-torch.zeros(1))         #added
+    
+    
+                
     print ("Wandavision, you're inside LinearClassifier class, __init_ constructor, models.py")
 
   def forward(self, x):      
+    
+    #DOES NOT USE SIGMOID
+    #DOES NOT USE SIGMOID
+    #DOES NOT USE SIGMOID  CONFIRMED.  (MLP Uses Relu).
     
     # x is a (B,3,64,64) tensor, so x[i] is one image
     #x: torch.Tensor((B,3,64,64))
@@ -392,12 +406,20 @@ class MLPClassifier(torch.nn.Module):
   #Your forward function receives a (B,3,64,64) tensor as an input and should return a (B,6) torch.Tensor (one value per class).
   #Two layers are sufficient.
   #Keep the first layer small to save parameters.
-  #Use ReLU layers as non-linearities.
+  #PROFESSOR: The inputs and OUTPUTS to the multi-layer perceptron ARE THE SAME as the linear classifier.
+  #Use ReLU layers as non-linearities.  Just "Add" a Relu Layer ONE LINE.
+  #Use ReLU layers as non-linearities.  (USE  SIGMOID OR SOFTMAX GOOD ENOUGH????)
+  #PER PROF ITS THE SAME, BUT W/ RELU (I GUESS ALSO SOFTMAX!)
   #Might require some tuning of your training code. Try to move most modifications to command-line arguments 
   #in  ArgumentParser
 
-  def __init__(self):
+  def __init__(self, input_dim):   #I added input_dim, not in original
     super().__init__()
+    self.W_o = nn.Sequential( 
+                nn.Linear(input_dim, hidden_size),   #keep this small???
+                nn.ReLU(),                                               #THIS IS FOR THE MLP!!!
+                nn.LogSoftmax(), nn.NLLLoss())
+                
   #def forward(self, x):
  
    #https://medium.com/biaslyai/pytorch-introduction-to-neural-network-feedforward-neural-network-model-e7231cff47cb
@@ -565,9 +587,9 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
       print (f'model loss at iteration {iteration} is {model_loss} and the prediction y_hat is {Y_hat}, while the y is {true_y}')
 
      
-      model_loss.backward()
+      model_loss.backward()   #get the gradients with the computation graph
     
-      for p in linear_Classifier_model.parameters():                                       
+      for p in linear_Classifier_model.parameters():                       #update parameters                
     
         p.data[:] -= 0.5 * p.grad                    
         p.grad.zero_()
