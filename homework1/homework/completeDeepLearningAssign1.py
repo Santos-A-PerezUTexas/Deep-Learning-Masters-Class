@@ -405,8 +405,8 @@ class LinearClassifier(torch.nn.Module):
 class MLPClassifier(torch.nn.Module):
 
   #Your forward function receives a (B,3,64,64) tensor as an input and should return a (B,6) torch.Tensor (one value per class).
-  #Two layers are sufficient.
-  #Keep the first layer small to save parameters.
+  #Two layers are sufficient.  TWO LAYERS - OUTPUT LAYER, AND INPUT LAYER?  IS RELU A LAYER?, so INPUT L, RELU L
+  #Keep the first layer small to save parameters. (12K bits??? small?)
   #PROFESSOR: The inputs and OUTPUTS to the multi-layer perceptron ARE THE SAME as the linear classifier.
   #Use ReLU layers as non-linearities.  Just "Add" a Relu Layer ONE LINE.
   #Use ReLU layers as non-linearities.  (USE  SIGMOID OR SOFTMAX GOOD ENOUGH????)
@@ -418,12 +418,21 @@ class MLPClassifier(torch.nn.Module):
     super().__init__()
     
      #flatten t0 12K features (input_dim = 3*64*64)
+     #https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html
+     #https://gluon.mxnet.io/chapter03_deep-neural-networks/mlp-scratch.html  READ THIS!!!!!!
+     #https://discuss.pytorch.org/t/multi-class-cross-entropy-loss-and-softmax-in-pytorch/24920/5
+     #model.eval()
+     #output = net(input)
+     #sm = torch.nn.Softmax()
+     #probabilities = sm(output)
+     #print(probabilities )
+     
      
     self.W_o = nn.Sequential( 
                 nn.Linear(input_dim, hidden_size),   #keep this small???
                 nn.ReLU(),                                               #THIS IS FOR THE MLP!!!
-                nn.Linear(input_dim, hidden_size)  #this later has 6 neurons, fed to softmax
-                #cross entropy
+                nn.Linear(hidden_size, 6),  #this later has 6 neurons, fed to softmax
+                #nn.CrossEntropyLoss()
                 #, nn.LogSoftmax(), nn.NLLLoss()  #can use cross-entropy
                 )
                 
