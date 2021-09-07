@@ -420,6 +420,40 @@ class MLPClassifier(torch.nn.Module):
                 nn.ReLU(),                                               #THIS IS FOR THE MLP!!!
                 nn.LogSoftmax(), nn.NLLLoss())
                 
+     #SEPTEMBER 6, 2021
+     #https://www.machinecurve.com/index.php/2021/01/26/creating-a-multilayer-perceptron-with-pytorch-and-lightning/
+     #https://majianglin2003.medium.com/create-neural-network-with-pytorch-1f91054fe229
+     """
+     nn.Sequential(nn.Linear(input_size, hidden_sizes[0]),
+                      nn.ReLU(),
+                      nn.Linear(hidden_sizes[0], hidden_sizes[1]),
+                      nn.ReLU(),
+                      nn.Linear(hidden_sizes[1], output_size),
+                      nn.Softmax(dim=1))                   
+                       
+     """
+     
+     """
+     
+     def __init__(self):
+    super().__init__()
+    self.layers = nn.Sequential(
+      nn.Flatten(),
+      nn.Linear(32 * 32 * 3, 64),
+      nn.ReLU(),
+      nn.Linear(64, 32),
+      nn.ReLU(),
+      nn.Linear(32, 10)
+    )
+
+
+  def forward(self, x):
+    '''Forward pass'''
+    return self.layers(x)
+  
+     
+     """
+                
   #def forward(self, x):
  
    #https://medium.com/biaslyai/pytorch-introduction-to-neural-network-feedforward-neural-network-model-e7231cff47cb
