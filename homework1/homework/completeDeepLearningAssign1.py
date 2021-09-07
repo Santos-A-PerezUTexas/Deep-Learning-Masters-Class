@@ -353,6 +353,7 @@ class ClassificationLoss(torch.nn.Module):
 
 class LinearClassifier(torch.nn.Module):
 
+#multinomonial logistic regression  - NO SIGMOID, SOFTMAX LAYER INSTEAD
 #Your forward function receives a (B,3,64,64) tensor as an input and should return a (B,6) torch.Tensor (one value per class).
 #B is the batch size, it's a hyper parameter we can set.
 
@@ -415,10 +416,16 @@ class MLPClassifier(torch.nn.Module):
 
   def __init__(self, input_dim):   #I added input_dim, not in original
     super().__init__()
+    
+     #flatten t0 12K features (input_dim = 3*64*64)
+     
     self.W_o = nn.Sequential( 
                 nn.Linear(input_dim, hidden_size),   #keep this small???
                 nn.ReLU(),                                               #THIS IS FOR THE MLP!!!
-                nn.LogSoftmax(), nn.NLLLoss())
+                nn.Linear(input_dim, hidden_size)  #this later has 6 neurons, fed to softmax
+                #cross entropy
+                #, nn.LogSoftmax(), nn.NLLLoss()  #can use cross-entropy
+                )
                 
      #SEPTEMBER 6, 2021
      #https://www.machinecurve.com/index.php/2021/01/26/creating-a-multilayer-perceptron-with-pytorch-and-lightning/
