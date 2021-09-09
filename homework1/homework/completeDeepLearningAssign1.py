@@ -73,7 +73,8 @@ If you load all images in __init__, make sure you convert the image to a tensor 
 
 
 LABEL_NAMES = ['background', 'kart', 'pickup', 'nitro', 'bomb', 'projectile']
-
+input_dim = 3*64*64
+hidden_size=5
 
 class SuperTuxDataset(Dataset):
 
@@ -422,7 +423,8 @@ class MLPClassifier(torch.nn.Module):  #***************MLP MLP MLP MLP MLP MLP M
   #Might require some tuning of your training code. Try to move most modifications to command-line arguments 
   #in  ArgumentParser
 
-  def __init__(self, input_dim):   #I added input_dim, not in original
+  def __init__(self):   #I added input_dim, not in original   MLP CONSTRUCTOR MLP CONSTRUCTOR MLP CONSTRUCTOR MLP CONSTRUCTOR MLP CONSTRUCTOR MLP CONSTRUCTOR 
+   
     super().__init__()
     
      #flatten t0 12K features (input_dim = 3*64*64)
@@ -436,15 +438,34 @@ class MLPClassifier(torch.nn.Module):  #***************MLP MLP MLP MLP MLP MLP M
      #print(probabilities )
      
      
-    self.W_o = nn.Sequential( 
-                nn.Linear(input_dim, hidden_size),   #keep this small???
-                nn.ReLU(),                                               #THIS IS FOR THE MLP!!!
-                nn.Linear(hidden_size, 6)  
+    print(f'The input_dimension is --------------------->{input_dim}')
+    print(f'The hidden size is --------------------->{hidden_size}')
+     
+    self.layer1=torch.nn.Linear(input_dim, hidden_size)
+    self.REluLayer =  torch.nn.ReLU(inplace=False)
+    self.layer2=torch.nn.Linear(hidden_size, 6)
+     
+    self.network = torch.nn.Sequential( 
+                torch.nn.Linear(input_dim, hidden_size),   #keep this small???
+                torch.nn.ReLU(inplace=False),                                               #THIS IS FOR THE MLP!!!
+                torch.nn.Linear(hidden_size, 6)  
                 )
                 
-                 #this later has 6 neurons, fed to softmax
+                #this later has 6 neurons, fed to softmax
                 #nn.CrossEntropyLoss()
                 #nn.LogSoftmax(), nn.NLLLoss()  -----can use cross-entropy
+                
+  def forward(self, flat_image):   
+    return self.network(flat_image)
+  
+  #def forward(self, multiple_image_tensor):   
+  #receives a (B,3,64,64) tensor as an input and should return a (B,6) torch.Tensor
+         
+  #  return self.network(multiple_image_tensor.view(multiple_image_tensor.size(0), -1))
+    #    return self.network(multiple_image_tensor.view(multiple_image_tensor.size(0), -1)).view(-1)
+  
+  
+  
                 
      #SEPTEMBER 6, 2021
      #https://www.machinecurve.com/index.php/2021/01/26/creating-a-multilayer-perceptron-with-pytorch-and-lightning/
@@ -474,8 +495,7 @@ class MLPClassifier(torch.nn.Module):  #***************MLP MLP MLP MLP MLP MLP M
     #Forward pass
     return self.layers(x)    """
                 
-  #def forward(self, x):
- 
+           
    #https://medium.com/biaslyai/pytorch-introduction-to-neural-network-feedforward-neural-network-model-e7231cff47cb
       
   #    class Perceptron(torch.nn.Module):
@@ -653,11 +673,18 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     
     print (f'22222222222222222---->The  image DATASET tuple {image_dataSET}')
     
+    val = input("Enter your value: ")
+    print(val)
+
     fake_Image = My_DataSet.get_fake_image(0)
     real_Image = My_DataSet.get_real_image(0)
     
 
     print (f'33333333333333333333---->A fake image {fake_Image}')   #Image with Label
+    
+    val = input("Enter your value: ")
+    print(val)
+
     print (f'44444444444444444444---->A real image {real_Image[0]}')  #Image without label
     
     print (f'Just did {iterations_for_sgd} Gradient Descent iterations with ten UNIT CIRCLE points ONLY!!!')
@@ -666,6 +693,29 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     #GRADIENT DESCENT USING THE  IMAGES----------------------------------------------------
     #LOAD THE 250 IMAGES 
     
+    
+    print (f'HERE I GO - ABOUT TO CREATE A MLP.................., these are the image dimensions:  {real_Image[0].size()}')
+    
+    val = input("Enter your value, then I will print th flattened image: ")
+    print(val)
+
+    MLPx = MLPClassifier()
+    
+    empty_tensor = torch.zeros(6)
+    
+    flatened_Image = real_Image[0].view(real_Image[0].size(0), -1).view(-1)
+    
+    
+    print (f'This is the flattened image {flatened_Image}')
+    print (f'This is the Zero 6-tensor Before taking the output from my neural network: {empty_tensor}')
+    
+     
+    val = input("Just printed the flattaned image.  Enter your value: ")
+    print(val)
+    
+    empty_tensor = MLPx(flatened_Image)
+    
+    print (f'You rock man.  Here is the 6-tensor you stud: {empty_tensor}')
     
     
     #save_model(model)
