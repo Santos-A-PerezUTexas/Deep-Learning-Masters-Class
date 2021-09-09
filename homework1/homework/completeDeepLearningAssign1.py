@@ -7,6 +7,8 @@ from torchvision import transforms as Image_Transformer
 import csv     #utils.py
 
 iterations_for_sgd = 10
+#http://www.philkr.net/dl_class/lectures/deep_networks/10.html
+#http://www.philkr.net/dl_class/lectures/deep_networks/10.html    FOLLOW THIS CODE!
 
 """
 UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY  UTILS.PY 
@@ -402,7 +404,13 @@ class LinearClassifier(torch.nn.Module):
         #raise NotImplementedError('LinearClassifier.forward')
 
 
-class MLPClassifier(torch.nn.Module):
+#*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP 
+#*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP 
+#*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP 
+#*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP 
+#*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP 
+
+class MLPClassifier(torch.nn.Module):  #***************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP 
 
   #Your forward function receives a (B,3,64,64) tensor as an input and should return a (B,6) torch.Tensor (one value per class).
   #Two layers are sufficient.  TWO LAYERS - OUTPUT LAYER, AND INPUT LAYER?  IS RELU A LAYER?, so INPUT L, RELU L
@@ -431,26 +439,25 @@ class MLPClassifier(torch.nn.Module):
     self.W_o = nn.Sequential( 
                 nn.Linear(input_dim, hidden_size),   #keep this small???
                 nn.ReLU(),                                               #THIS IS FOR THE MLP!!!
-                nn.Linear(hidden_size, 6),  #this later has 6 neurons, fed to softmax
-                #nn.CrossEntropyLoss()
-                #, nn.LogSoftmax(), nn.NLLLoss()  #can use cross-entropy
+                nn.Linear(hidden_size, 6)  
                 )
+                
+                 #this later has 6 neurons, fed to softmax
+                #nn.CrossEntropyLoss()
+                #nn.LogSoftmax(), nn.NLLLoss()  -----can use cross-entropy
                 
      #SEPTEMBER 6, 2021
      #https://www.machinecurve.com/index.php/2021/01/26/creating-a-multilayer-perceptron-with-pytorch-and-lightning/
      #https://majianglin2003.medium.com/create-neural-network-with-pytorch-1f91054fe229
-     """
-     nn.Sequential(nn.Linear(input_size, hidden_sizes[0]),
+     
+     
+""" nn.Sequential(nn.Linear(input_size, hidden_sizes[0]),
                       nn.ReLU(),
                       nn.Linear(hidden_sizes[0], hidden_sizes[1]),
                       nn.ReLU(),
                       nn.Linear(hidden_sizes[1], output_size),
-                      nn.Softmax(dim=1))                   
-                       
-     """
-     
-     """
-     
+                      nn.Softmax(dim=1))                                         
+
      def __init__(self):
     super().__init__()
     self.layers = nn.Sequential(
@@ -464,11 +471,8 @@ class MLPClassifier(torch.nn.Module):
 
 
   def forward(self, x):
-    '''Forward pass'''
-    return self.layers(x)
-  
-     
-     """
+    #Forward pass
+    return self.layers(x)    """
                 
   #def forward(self, x):
  
