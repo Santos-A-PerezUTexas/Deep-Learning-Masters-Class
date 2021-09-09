@@ -701,21 +701,21 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
 
     MLPx = MLPClassifier()
     
-    empty_tensor = torch.zeros(6)
+    empty_tensor = torch.zeros(125,6)
     
     flatened_Image = real_Image[0].view(real_Image[0].size(0), -1).view(-1)
     
     
     print (f'This is the flattened image {flatened_Image}')
-    print (f'This is the Zero 6-tensor Before taking the output from my neural network: {empty_tensor}')
+    print (f'This is the Zero 6-tensor Before taking the output from my neural network: {empty_tensor[0]}')
     
      
     val = input("Just printed the flattaned image.  Enter your value: ")
     print(val)
     
-    empty_tensor = MLPx(flatened_Image)
+    empty_tensor[0] = MLPx(flatened_Image)
     
-    print (f'You rock man.  Here is the 6-tensor you stud: {empty_tensor}')
+    print (f'You rock man.  Here is the 6-tensor you stud: {empty_tensor[0]}')
     
     
     #save_model(model)
