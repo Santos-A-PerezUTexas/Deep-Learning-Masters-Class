@@ -6,7 +6,7 @@ from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms as Image_Transformer
 import csv     #utils.py
 
-iterations_for_sgd = 10
+
 #http://www.philkr.net/dl_class/lectures/deep_networks/10.html
 #http://www.philkr.net/dl_class/lectures/deep_networks/10.html    FOLLOW THIS CODE!
 
@@ -280,13 +280,12 @@ def LossFunction(Y_hat_Vector, y_vector):
 
   
 
-def LossFunction (prediction_logit, y_vector):
- 
- #this is not part of the original???
- 
+def LossFunction (prediction_logit, y_vector):      #FOR TESTING UNIT CIRCLE ERASE
+  
   Y_hat_Vector = 1/(1+(-prediction_logit).exp())   #Take the sigmoid of the logit
   
   return -(y_vector.float() * (Y_hat_Vector+1e-10).log() +(1-y_vector.float()) * (1-Y_hat_Vector+1e-10).log() ).mean()
+  
       
 
 class ClassificationLoss(torch.nn.Module):
@@ -348,11 +347,7 @@ class ClassificationLoss(torch.nn.Module):
     torch.nn.CrossEntropyLoss(weight=None, size_average=None, ignore_index=-100, reduce=None, reduction='mean')
 
         Hint: Don't be too fancy, this is a one-liner
-    """
-         
-             
-    #raise NotImplementedError('ClassificationLoss.forward')
-
+    """                   
 
 class LinearClassifier(torch.nn.Module):
 
@@ -628,26 +623,55 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
 
     """
 
-    image_index = 1
-    image = torch.rand([3,64,64]) 
-    tuple1=(image, image_index)
+    image_index = 1                   #test code
+    image = torch.rand([3,64,64])    #test code
+    tuple1=(image, image_index)       #test code
+    empty_tensor = torch.zeros(125,6)  #test code to test output from network
+        
+    n_epochs = 100
+    batch_size = 128
+    input_size = 64*64*3
+    iterations_for_sgd = 10    
     
-    My_DataSet = SuperTuxDataset('c:\fakepath')    
+    x = torch.rand([10,2])          #for testing unit circle SGD
+    true_y = ((x**2).sum(1) < 1)    #for testing unit circle SGD
     
-    image_dataSET = My_DataSet.get_item(2)
     
-    linear_Classifier_model = model_factory[args.model](2)     #DEFINING THE CLASSIFIER HERE
     
-      #defaults to linear
-      #OR   linear_Classifier_model = LinearClassifier(2)
-      #dimension of weights is 2 just example...
+#LOAD DATA LOAD LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA
     
-    #raise NotImplementedError('train')
-     
-    x = torch.rand([10,2]) 
-    true_y = ((x**2).sum(1) < 1)
     
-    #iterations_for_sgd defined at the beggining
+    My_DataSet = SuperTuxDataset('c:\fakepath')      #This should load the data un the constructor using load_data function
+        
+    image_dataSET = My_DataSet.get_item(2)   #this should mean get image #2, BUT GET ITEM SHOULD BE PRIVATE????
+    
+    
+    #train_data, train_label = load.get_dogs_and_cats_data(resize=(32,32))
+    #valid_data, valid_label = load.get_dogs_and_cats_data(split='valid', resize=(32,32))    
+    #Tranform image to tensor    
+    #to_image = load.to_image_transform()
+    #Put data in GPU
+    #train_data, train_label = train_data.to(device), train_label.to(device)
+    #valid_data, valid_label = valid_data.to(device), valid_label.to(device)
+
+    #http://www.philkr.net/dl_class/lectures/deep_networks/10.html
+    #http://www.philkr.net/dl_class/lectures/deep_networks/10.html
+    
+    #create the network
+    linear_Classifier_model = model_factory[args.model](2)     #LINEAR CLASSIFIER BY DEFAULT IN THE COMMAND LINE, USED FOR GRADING
+    MLPx = MLPClassifier()                                     #Used for Testing, Erase
+    
+    #create the optimizer for MLP (change to use args)
+    #optimizer = torch.optim.SGD(MLPClassifier.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4)      
+    
+    # Create the loss - For these batch_size images, the network predicted the labels as set forth by y_hat_vector (change to tensor!!!)
+    loss_object = ClassificationLoss()   #call it with Y_hat_Vector, y_vector... input (y_hat predicted labels) and target (y_vector actual image label)
+  
+    #now I can call it as such, model_loss = loss_object (y_hat_tensor, y_tensor) where y_tensor has actual values.. or is it tuples???  
+    
+
+    #BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD 
+    
     for iteration in range(iterations_for_sgd): 
     
       Y_hat = linear_Classifier_model.forward(x)
@@ -702,9 +726,7 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     val = input("Enter your value, then I will print th flattened image: ")
     print(val)
 
-    MLPx = MLPClassifier()
     
-    empty_tensor = torch.zeros(125,6)
     
     flatened_Image = real_Image[0].view(real_Image[0].size(0), -1).view(-1)
     
@@ -725,16 +747,14 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
 
 
 if __name__ == '__main__':
+
     import argparse
-
     parser = argparse.ArgumentParser()
-
-    parser.add_argument('-m', '--model', choices=['linear', 'mlp'], default='linear')
+    parser.add_argument('-m', '--model', choices=['linear', 'mlp'], default='linear')     #calls the linear model by default
     # Put custom arguments here
 
-    args = parser.parse_args()
-    
-    
+    args = parser.parse_args()   
+     
     train(args)
     
      #Now implement MLPClassifier class. The inputs and outputs to same as the linear classifier. 
