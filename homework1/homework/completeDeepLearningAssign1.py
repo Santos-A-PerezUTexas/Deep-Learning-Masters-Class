@@ -584,6 +584,13 @@ Train your linear model in train.py. You should implement the full training proc
 
 
 """
+
+
+#TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN 
+#TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN 
+#TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN 
+
+
 def train(args):
 
     """
@@ -625,11 +632,7 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     image = torch.rand([3,64,64]) 
     tuple1=(image, image_index)
     
-    My_DataSet = SuperTuxDataset('c:\fakepath')   
-    
-    
-    My_Real_DataSet = load_data('../data/train', num_workers=0, batch_size=128)
-    
+    My_DataSet = SuperTuxDataset('c:\fakepath')    
     
     image_dataSET = My_DataSet.get_item(2)
     
