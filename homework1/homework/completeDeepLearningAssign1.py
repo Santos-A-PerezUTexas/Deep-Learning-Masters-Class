@@ -641,7 +641,7 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     
     x = torch.rand([10,2])          #for testing unit circle SGD
     true_y = ((x**2).sum(1) < 1)    #for testing unit circle SGD
-    Fake_Images = torch.rand([batch_size,3,64,64])
+    Fake_Images = torch.rand([batch_size,3,64,64])  #no labels
     
     
 #LOAD DATA LOAD LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA
@@ -688,6 +688,13 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     
     for epoch in range(n_epochs): 
     
+    
+      # Shuffle the data
+      permutation = torch.randperm(Fake_Images.size(0))  #generate batch_size numers from 0 to batch_size-1
+      
+      
+    
+    
       #iteration of unit circle
       Y_hat = linear_Classifier_model.forward(x)    # unit circle erase
       model_loss = LossFunction(Y_hat, true_y)     #unit circle
@@ -702,20 +709,23 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
            
       model_loss.backward()   #get the gradients with the computation graph
     
+      train_accuracy = []
+      
       for p in linear_Classifier_model.parameters():                       #update parameters, replace with optimizer step                
     
         p.data[:] -= 0.5 * p.grad                    
         p.grad.zero_()
 
 #*********************************************************END TRAINING*************************************************************
-#*********************************************************BEGIN TRAINING*************************************************************
-    #*********************************************************BEGIN TRAINING*************************************************************
-    #*********************************************************BEGIN TRAINING*************************************************************
-        
+#*********************************************************END TRAINING*************************************************************
+#*********************************************************END TRAINING*************************************************************
+#*********************************************************END TRAINING*************************************************************
 
     print (f'*********A sample fake image created with tensor fx:  {fake_image}, the local tuple {tuple1}')
     print (f'22222222222222222---->The  image DATASET tuple {image_dataSET}')
     print (f'One image from image_dataSET {image_dataSET[0]}')
+    print (f'Here is the Fake_Images.size, {Fake_Images.size(0)}  and  the permutation data set {[permutation]}')
+    print (f'Here is the permutation iterative which goes in the for loop, len(permutation)-batch_size+1 = {len(permutation)} minus {batch_size+1}')
     
     val = input("Enter your value: ")
     print(val)
