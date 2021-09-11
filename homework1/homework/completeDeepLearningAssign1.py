@@ -623,10 +623,9 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
 
     """
 
-    n_epochs = 100
+    n_epochs = 10                   #CHANGE EPOCHS to 100 !!!!!!!!
     batch_size = 128
     input_size = 64*64*3
-    iterations_for_sgd = 10    
     
     image_index = 1                   #test code
     fake_image = torch.rand([3,64,64])    #test code
@@ -647,8 +646,7 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     
 #LOAD DATA LOAD LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA
     
-    
-    
+     
         
     
     #train_data, train_label = load.get_dogs_and_cats_data(resize=(32,32))
@@ -662,13 +660,15 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     #http://www.philkr.net/dl_class/lectures/deep_networks/10.html
     #http://www.philkr.net/dl_class/lectures/deep_networks/10.html
     
+    
+    
+    
     #create the network
     linear_Classifier_model = model_factory[args.model](2)     #LINEAR CLASSIFIER BY DEFAULT IN THE COMMAND LINE, USED FOR GRADING
-    MLPx = MLPClassifier()                                     #Used for Testing, Erase
+    MLPx = MLPClassifier()                                     #MLP Used for Testing, Erase - use command line args to call this
     
     #create the optimizer for MLP (change to use args)
-    
-    optimizer = torch.optim.SGD(MLPx.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4)      
+    optimizer = torch.optim.SGD(MLPx.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4)        #just defining the optimizer, call it w/ step to update weights which are obtained w/ backward
     
     # Create the loss - For these batch_size images, the network predicted the labels as set forth by y_hat_vector (change to tensor!!!)
     loss_object = ClassificationLoss()   #call it with Y_hat_Vector, y_vector... input (y_hat predicted labels) and target (y_vector actual image label)
@@ -677,15 +677,23 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     
 
     #BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD 
+
+    global_step = 0
     
-    for iteration in range(iterations_for_sgd): 
+    
+    #*********************************************************BEGIN TRAINING*************************************************************
+    #*********************************************************BEGIN TRAINING*************************************************************
+    #*********************************************************BEGIN TRAINING*************************************************************
+    #*********************************************************BEGIN TRAINING*************************************************************
+    
+    for epoch in range(n_epochs): 
     
       #iteration of unit circle
       Y_hat = linear_Classifier_model.forward(x)    # unit circle erase
       model_loss = LossFunction(Y_hat, true_y)     #unit circle
       print ("UNIT CIRCLE Model LOSS:", model_loss) #unit circle
       print ("UNIT CIRCLE Truth Value of Logits", Y_hat > .5 )  #unit circle
-      print (f'UNIT CIRCLE model loss at iteration {iteration} is {model_loss} and the prediction y_hat is {Y_hat}, while the y is {true_y}')
+      print (f'UNIT CIRCLE model loss at epoch {epoch} is {model_loss} and the prediction y_hat is {Y_hat}, while the y is {true_y}')
 
       #model_loss = ClassificationLoss.forward(prediction_logit, true_y)
       
@@ -694,11 +702,16 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
            
       model_loss.backward()   #get the gradients with the computation graph
     
-      for p in linear_Classifier_model.parameters():                       #update parameters                
+      for p in linear_Classifier_model.parameters():                       #update parameters, replace with optimizer step                
     
         p.data[:] -= 0.5 * p.grad                    
         p.grad.zero_()
 
+#*********************************************************END TRAINING*************************************************************
+#*********************************************************BEGIN TRAINING*************************************************************
+    #*********************************************************BEGIN TRAINING*************************************************************
+    #*********************************************************BEGIN TRAINING*************************************************************
+        
 
     print (f'*********A sample fake image created with tensor fx:  {fake_image}, the local tuple {tuple1}')
     print (f'22222222222222222---->The  image DATASET tuple {image_dataSET}')
@@ -707,7 +720,7 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     val = input("Enter your value: ")
     print(val)
     
-    print (f'Just did {iterations_for_sgd} Gradient Descent iterations with ten UNIT CIRCLE points ONLY!!!')
+    print (f'Just did {n_epochs} Gradient Descent iterations with ten UNIT CIRCLE points ONLY!!!')
     
     
     #GRADIENT DESCENT USING THE  IMAGES----------------------------------------------------
