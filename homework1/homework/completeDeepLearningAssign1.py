@@ -623,28 +623,33 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
 
     """
 
-    image_index = 1                   #test code
-    image = torch.rand([3,64,64])    #test code
-    tuple1=(image, image_index)       #test code
-    empty_tensor = torch.zeros(125,6)  #test code to test output from network
-        
     n_epochs = 100
     batch_size = 128
     input_size = 64*64*3
     iterations_for_sgd = 10    
     
+    image_index = 1                   #test code
+    fake_image = torch.rand([3,64,64])    #test code
+    tuple1=(fake_image, image_index)       #test code
+    
+    empty_tensor = torch.zeros(125,6)  #test code to test output from network
+    My_DataSet = SuperTuxDataset('c:\fakepath')      #This should load the data un the constructor using load_data function    
+        
+    sample_Image = My_DataSet.get_real_image(0)
+    image_dataSET = My_DataSet.get_item(2)   #this should mean get image #2, BUT GET ITEM SHOULD BE PRIVATE????
+    
+     #SOME FAKE TEST DATA
+    
     x = torch.rand([10,2])          #for testing unit circle SGD
     true_y = ((x**2).sum(1) < 1)    #for testing unit circle SGD
-    
+    Fake_Images = torch.rand([batch_size,3,64,64])
     
     
 #LOAD DATA LOAD LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA
     
     
-    My_DataSet = SuperTuxDataset('c:\fakepath')      #This should load the data un the constructor using load_data function
-        
-    image_dataSET = My_DataSet.get_item(2)   #this should mean get image #2, BUT GET ITEM SHOULD BE PRIVATE????
     
+        
     
     #train_data, train_label = load.get_dogs_and_cats_data(resize=(32,32))
     #valid_data, valid_label = load.get_dogs_and_cats_data(split='valid', resize=(32,32))    
@@ -662,7 +667,8 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     MLPx = MLPClassifier()                                     #Used for Testing, Erase
     
     #create the optimizer for MLP (change to use args)
-    #optimizer = torch.optim.SGD(MLPClassifier.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4)      
+    
+    optimizer = torch.optim.SGD(MLPx.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4)      
     
     # Create the loss - For these batch_size images, the network predicted the labels as set forth by y_hat_vector (change to tensor!!!)
     loss_object = ClassificationLoss()   #call it with Y_hat_Vector, y_vector... input (y_hat predicted labels) and target (y_vector actual image label)
@@ -674,20 +680,18 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     
     for iteration in range(iterations_for_sgd): 
     
-      Y_hat = linear_Classifier_model.forward(x)
-      
+      #iteration of unit circle
+      Y_hat = linear_Classifier_model.forward(x)    # unit circle erase
+      model_loss = LossFunction(Y_hat, true_y)     #unit circle
+      print ("UNIT CIRCLE Model LOSS:", model_loss) #unit circle
+      print ("UNIT CIRCLE Truth Value of Logits", Y_hat > .5 )  #unit circle
+      print (f'UNIT CIRCLE model loss at iteration {iteration} is {model_loss} and the prediction y_hat is {Y_hat}, while the y is {true_y}')
+
       #model_loss = ClassificationLoss.forward(prediction_logit, true_y)
       
       #Y_hat_sigmoid_of_logit = 1/(1+(-prediction_logit).exp())  
       
-      model_loss = LossFunction(Y_hat, true_y)
-      
-      print ("Model LOSS:", model_loss)
-      print ("Truth Value of Logits", Y_hat > .5 )
-
-      print (f'model loss at iteration {iteration} is {model_loss} and the prediction y_hat is {Y_hat}, while the y is {true_y}')
-
-     
+           
       model_loss.backward()   #get the gradients with the computation graph
     
       for p in linear_Classifier_model.parameters():                       #update parameters                
@@ -696,23 +700,12 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
         p.grad.zero_()
 
 
-    print (f'*********The local random image:  {image}, the local tuple {tuple1}')
-    
+    print (f'*********A sample fake image created with tensor fx:  {fake_image}, the local tuple {tuple1}')
     print (f'22222222222222222---->The  image DATASET tuple {image_dataSET}')
+    print (f'One image from image_dataSET {image_dataSET[0]}')
     
     val = input("Enter your value: ")
     print(val)
-
-    fake_Image = My_DataSet.get_fake_image(0)
-    real_Image = My_DataSet.get_real_image(0)
-    
-
-    print (f'33333333333333333333---->A fake image {fake_Image}')   #Image with Label
-    
-    val = input("Enter your value: ")
-    print(val)
-
-    print (f'44444444444444444444---->A real image {real_Image[0]}')  #Image without label
     
     print (f'Just did {iterations_for_sgd} Gradient Descent iterations with ten UNIT CIRCLE points ONLY!!!')
     
@@ -721,14 +714,14 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     #LOAD THE 250 IMAGES 
     
     
-    print (f'HERE I GO - ABOUT TO CREATE A MLP.................., these are the image dimensions:  {real_Image[0].size()}')
+    print (f'HERE I GO - ABOUT TO CREATE A MLP.................., these are the image dimensions:  {image_dataSET[0].size()}')
     
     val = input("Enter your value, then I will print th flattened image: ")
     print(val)
 
     
     
-    flatened_Image = real_Image[0].view(real_Image[0].size(0), -1).view(-1)
+    flatened_Image = sample_Image[0].view(sample_Image[0].size(0), -1).view(-1)
     
     
     print (f'This is the flattened image {flatened_Image}')
@@ -742,6 +735,7 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     
     print (f'You rock man.  Here is the 6-tensor you stud: {empty_tensor[0]}')
     
+    print(f'Here is the 7th and 110th fake images {Fake_Images[7]}, {Fake_Images[110]}')
     
     #save_model(model)
 
