@@ -632,7 +632,17 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     fake_image = torch.rand([3,64,64])    #test code
     tuple1=(fake_image, LABEL_NAMES[image_index])       #test code
     
-    empty_tensor = torch.zeros(125,6)  #test code to test output from network
+    Batch_Size_Sixtensors = torch.zeros(batch_size,6)  #test code to test output from network
+       
+ 
+    y_labels_tensor = torch.ones(batch_size,6)  #this is y, used to compute softmax loss, e.g,  [0,1,0,0,0,0]
+    #y_labels is populated during pre-processing w/ actual labels
+    
+    y_hat_tensor = torch.ones(batch_size,6)  #this is going to change when put through network
+    
+      
+    
+    
     My_DataSet = SuperTuxDataset('c:\fakepath')      #This should load the data un the constructor using load_data function    
         
     sample_Image = My_DataSet.get_real_image(0)
@@ -752,15 +762,15 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     
     
     print (f'This is the flattened image {flatened_Image}')
-    print (f'This is the Zero 6-tensor Before taking the output from my neural network: {empty_tensor[0]}')
+    print (f'This is the Zero-th 6-tensor Before taking the output from my neural network: {Batch_Size_Sixtensors[0]}')
     
      
     val = input("Just printed the flattened image (before above 6-tensor).  Enter your value: ")
     print(val)
     
-    empty_tensor[0] = MLPx(flatened_Image)
+    Batch_Size_Sixtensors[0] = MLPx(flatened_Image)
     
-    print (f'Here is the 6-tensor AFTER putting it through the MLPx Network: {empty_tensor[0]}')
+    print (f'Here is the zero-th 6-tensor AFTER putting it through the MLPx Network: {Batch_Size_Sixtensors[0]}')
     
     print(f'Here is the 7th and 110th fake images {Fake_Images[7]}, {Fake_Images[110]}')
     
