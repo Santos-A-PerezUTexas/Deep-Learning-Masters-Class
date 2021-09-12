@@ -80,27 +80,27 @@ class SuperTuxDataset(Dataset):
 
   def __init__(self, dataset_path):
   
-    self.BatchSize = 20
-    self.X_imageDATASET = torch.zeros([self.BatchSize,3,64,64]) 
+    
+    self.BatchSize = batch_size
+    self.X_imageDATASET = torch.rand([self.BatchSize,3,64,64]) 
     self.size = 64,64
     self.one_image = Image.open(r"sample_image.jpg")
     
-    print(f'Behold, the EMPTY DATASET:  {self.X_imageDATASET[0:, ]}') 
+    print(f'This is the FAKE RAND DATA SET:  {self.X_imageDATASET[0:, ]}')
     
-    #convert image to tensor 
+    print ("Tensor above is the fake RAND Data Set  - does NOT need to be converted to Tensor!") 
+    
+    #convert the REAL image to tensor 
      
     self.Image_To_Tensor = Image_Transformer.transforms.ToTensor()
-    
     self.Image_tensor = self.Image_To_Tensor(self.one_image)
-    self.X_imageDATASET[0] = self.Image_To_Tensor(self.one_image)
     
     
-    print(f'Behold, the image tensor:  {self.Image_tensor}') 
+    print(f'This is the tensor conversion of an actual REAL image:  {self.Image_tensor}') 
     
-    #print(f'Behold, the image tensor in DATASET:  {self.X_imageDATASET[0:, ]}') shows entire tensor
-    print(f'Behold, the image tensor in DATASET:  {self.X_imageDATASET[0]}')
+    print(f'This is ONE image tensor in RAND DATASET:  {self.X_imageDATASET[0]}')
     
-    print ("Just opened the sample image, about to show it to you.")
+    print ("Finally, I will now display the REAL image:")
     self.one_image.show()
     
      
@@ -123,7 +123,7 @@ class SuperTuxDataset(Dataset):
   def __getitem__(self, idx):     
     return (self.X_imageDATASET[idx], LABEL_NAMES[idx])
   
-  def get_item(self, idx):     
+  def get_one_tuple_from_dataset(self, idx):     
     return(self.__getitem__(idx))
     
   def get_fake_image(self, idx):     
@@ -585,6 +585,9 @@ Train your linear model in train.py. You should implement the full training proc
 #TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN 
 #TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN 
 
+n_epochs = 10                   #CHANGE EPOCHS to 100 !!!!!!!!
+batch_size = 128
+input_size = 64*64*3
 
 def train(args):
 
@@ -623,19 +626,17 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
 
     """
 
-    n_epochs = 10                   #CHANGE EPOCHS to 100 !!!!!!!!
-    batch_size = 128
-    input_size = 64*64*3
+   
     
     image_index = 1                   #test code
     fake_image = torch.rand([3,64,64])    #test code
-    tuple1=(fake_image, image_index)       #test code
+    tuple1=(fake_image, LABEL_NAMES[image_index])       #test code
     
     empty_tensor = torch.zeros(125,6)  #test code to test output from network
     My_DataSet = SuperTuxDataset('c:\fakepath')      #This should load the data un the constructor using load_data function    
         
     sample_Image = My_DataSet.get_real_image(0)
-    image_dataSET = My_DataSet.get_item(2)   #this should mean get image #2, BUT GET ITEM SHOULD BE PRIVATE????
+    Dataset_tuple = My_DataSet.get_one_tuple_from_dataset(2)   #this should mean get image #2, BUT GET ITEM SHOULD BE PRIVATE????
     
      #SOME FAKE TEST DATA
     
@@ -685,6 +686,8 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     #*********************************************************BEGIN TRAINING*************************************************************
     #*********************************************************BEGIN TRAINING*************************************************************
     #*********************************************************BEGIN TRAINING*************************************************************
+
+    print ("--------------------------------STARTING TRAINING---------------------------------")
     
     for epoch in range(n_epochs): 
     
@@ -721,9 +724,10 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
 #*********************************************************END TRAINING*************************************************************
 #*********************************************************END TRAINING*************************************************************
 
-    print (f'*********A sample fake image created with tensor fx:  {fake_image}, the local tuple {tuple1}')
-    print (f'22222222222222222---->The  image DATASET tuple {image_dataSET}')
-    print (f'One image from image_dataSET {image_dataSET[0]}')
+    print ("--------------------------------FINISHED TRAINING---------------------------------")
+    print (f'*********A sample fake image created with tensor RAND, this is NOT from the Dataset!:  {fake_image}, the local tuple {tuple1}')
+    print (f'22222222222222222---->Item 2 FROM THE OBJECT DATASET, which was created w/ RAND, this SHOULD BE A TUPLE: {Dataset_tuple }')
+    print (f'One image from Dataset_tuple, which I got from getitem method {Dataset_tuple[0]}')
     print (f'Here is the Fake_Images.size, {Fake_Images.size(0)}  and  the permutation data set {[permutation]}')
     print (f'Here is the permutation iterative which goes in the for loop, len(permutation)-batch_size+1 = {len(permutation)} minus {batch_size+1}')
     
@@ -737,9 +741,9 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     #LOAD THE 250 IMAGES 
     
     
-    print (f'HERE I GO - ABOUT TO CREATE A MLP.................., these are the image dimensions:  {image_dataSET[0].size()}')
+    print (f'HERE I GO - ABOUT TO CREATE A MLP.................., these are the image dimensions:  {Dataset_tuple[0].size()}')
     
-    val = input("Enter your value, then I will print th flattened image: ")
+    val = input("Enter your value, then I will print the flattened image: ")
     print(val)
 
     
@@ -751,14 +755,15 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     print (f'This is the Zero 6-tensor Before taking the output from my neural network: {empty_tensor[0]}')
     
      
-    val = input("Just printed the flattaned image.  Enter your value: ")
+    val = input("Just printed the flattened image (before above 6-tensor).  Enter your value: ")
     print(val)
     
     empty_tensor[0] = MLPx(flatened_Image)
     
-    print (f'You rock man.  Here is the 6-tensor you stud: {empty_tensor[0]}')
+    print (f'Here is the 6-tensor AFTER putting it through the MLPx Network: {empty_tensor[0]}')
     
     print(f'Here is the 7th and 110th fake images {Fake_Images[7]}, {Fake_Images[110]}')
+    
     
     #save_model(model)
 
