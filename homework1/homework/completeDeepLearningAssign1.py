@@ -635,10 +635,14 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     Batch_Size_Sixtensors = torch.zeros(batch_size,6)  #test code to test output from network
        
  
-    y_labels_tensor = torch.ones(batch_size,6)  #this is y, used to compute softmax loss, e.g,  [0,1,0,0,0,0]
-    #y_labels is populated during pre-processing w/ actual labels
+    #y_labels_tensor = torch.ones(batch_size,6)  #Actual Y to compute softmax loss, [0,1,0,0,0,0], NEEDS pre-processing
+    #y_labels_tensor = (torch.rand(size=(batch_size,6)) < 0.25).int()  #Actual Y to compute softmax loss, e.g,  [0,1,0,0,0,0]
     
-    y_hat_tensor = torch.ones(batch_size,6)  #this is going to change when put through network
+    rand_mat = torch.rand(batch_size, 6)
+    k_th_quant = torch.topk(rand_mat, 1, largest = False)[0][:,-1:]
+     
+    y_labels_tensor = torch.where((rand_mat <= k_th_quant),torch.tensor(1),torch.tensor(0))
+    y_hat_tensor = torch.rand(batch_size,6)  #this is going to change when put through network
     
       
     
@@ -773,6 +777,15 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     print (f'Here is the zero-th 6-tensor AFTER putting it through the MLPx Network: {Batch_Size_Sixtensors[0]}')
     
     print(f'Here is the 7th and 110th fake images {Fake_Images[7]}, {Fake_Images[110]}')
+    
+    
+    val = input("Just printed The 7th and 110th fake images.  Press enter to see y_labels_tensor and y_hat_tensor")
+    print(val)
+    
+    print (f'Thank you, here they are, the y_labels_tensor is {y_labels_tensor}, and the y_hat_tensor is {y_hat_tensor}')
+    
+    
+    print ("Now you need to figure out how to populate y_labels_tensor using labels.csv file")
     
     
     #save_model(model)
