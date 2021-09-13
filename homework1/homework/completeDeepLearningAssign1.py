@@ -121,7 +121,29 @@ class SuperTuxDataset(Dataset):
     return (3000)  
          
   def __getitem__(self, idx):     
-    return (self.X_imageDATASET[idx], LABEL_NAMES[idx])
+    return (self.X_imageDATASET[idx], LABEL_NAMES[idx]) #This is wrong, should return a label INT 0-5
+    
+    """
+    PER PROFFESOR:
+    return tuple of image, label. 
+    The image should be a torch.Tensor of size (3,64,64) with range [0,1], 
+    and the label should be int  (0-5).  Labels are in labels.csv:
+    LABEL_NAMES = ['background', 'kart', 'pickup', 'nitro', 'bomb', 'projectile']
+    
+    Labels.csv file
+    00001.jpg,   background,    abyss <---The second entry is the label  (background)
+    When you read the image, the tuple will say "image[0], background).  Then you change background label to 0.
+    __getitem__, then, returns the actual image tensor (so there must be a transform here), and the number of label.
+    E.g. imageDataSet[0][0] for the image tensor (transform it), and imageDataSet[0][1] for the label string - transform that to 
+    a number too.
+    
+    Returns Tuple (image_tensor, label_number).
+    
+    
+    
+    
+    
+    """
   
   def get_one_tuple_from_dataset(self, idx):     
     return(self.__getitem__(idx))
