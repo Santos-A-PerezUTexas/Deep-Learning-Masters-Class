@@ -59,9 +59,38 @@ class SuperTuxDataset(Dataset):
     
     print(f'This is the second fake image tensor in RAND DATASET:  {self.imageDATASET[1]}')
     
-    print ("Finally, I will now display the REAL image:")
+    print ("Finally, I will now iterate over labels.cvs file.........")
+    
+    val = input("PRESS ANY KEY to iteraTE over labels.csv and load ALL DATA")
+    print(val) 
+    
+    
+    image_index = 0
+  
+    with open('labels.csv', newline='') as csvfile:
+    
+      ImageReader = csv.reader(csvfile) 
+      #ImageReader = csv.reader(csvfile, delimiter=' ', quotechar='|') 
+      #https://www.geeksforgeeks.org/working-csv-files-python/     
+      
+      for row in ImageReader:
+        
+        #print(', '.join(row))
+        #print (f'File names ONLY-------------------{row[0]}')
+        #print (f'Label names only=================={row[1]}')
+        
+        if image_index > 0:
+          self.one_image = Image.open(row[0])
+          self.Image_To_Tensor = Image_Transformer.transforms.ToTensor()
+          self.Image_tensor = self.Image_To_Tensor(self.one_image)
+          self.imageDATASET[image_index] = self.Image_tensor
+          
+        image_index += 1   
+    
 
     
+    val = input("There!  I just LOADED ALL DATA")
+    print(val) 
     
          
         
@@ -74,20 +103,12 @@ class SuperTuxDataset(Dataset):
         
 
 def load_data(dataset_path, num_workers=0, batch_size=128):     #use this in train.py
+    #all this does is return the data_loader to use in SGD?
+  
+    #https://machinelearningknowledge.ai/pytorch-dataloader-tutorial-with-example/
     
     dataset = SuperTuxDataset(dataset_path)   #In Orginal
-    
-    Y_labels = full_set_accuracy = [0] * batch_size  #I added this
-    
-    with open('labels.csv', newline='') as csvfile:
-    
-      ImageReader = csv.reader(csvfile, delimiter=' ', quotechar='|')
-    
-      for row in ImageReader:
-        print(', '.join(row))
-        print (f'ROW IS -------------------{row}')
-    
-    
+        
     return DataLoader(dataset, num_workers=num_workers, batch_size=batch_size, shuffle=True, drop_last=False)  
     
     
@@ -268,8 +289,9 @@ def train(args):
     
 #LOAD DATA LOAD LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA 
 #Use load_data() function, somethhing like my_loader = load_data("path"). 
-             
-    
+#https://machinelearningknowledge.ai/pytorch-dataloader-tutorial-with-example/
+#trainset = datasets.MNIST('~/.pytorch/MNIST_data/', download=True, train=True, transform=transform)
+#trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
     
     
     #create the network
