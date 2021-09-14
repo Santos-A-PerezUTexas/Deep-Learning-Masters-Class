@@ -82,11 +82,10 @@ class SuperTuxDataset(Dataset):
   
   
     self.BatchSize = batch_size
+    
     self.imageDATASET = torch.rand([self.BatchSize,3,64,64])   #COMPLETE BUT RANDOM DATA SET
     self.labels = torch.randint(0, 5, (self.BatchSize, ))
      
-    self.size = 3,64,64
-    
     self.one_image = Image.open(r"sample_image.jpg")
     
     print(f'This is the FAKE RAND DATA SET TENSORS:  {self.imageDATASET[0:, ]}')

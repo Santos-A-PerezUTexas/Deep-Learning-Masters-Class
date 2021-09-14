@@ -4,73 +4,7 @@ from torch.nn.parameter import Parameter
 from PIL import Image
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms as Image_Transformer
-import csv     #utils.py
-
-
-#http://www.philkr.net/dl_class/lectures/deep_networks/10.html
-#http://www.philkr.net/dl_class/lectures/deep_networks/10.html    FOLLOW THIS CODE!
-
-"""
-UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY  UTILS.PY 
-UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY  UTILS.PY
-UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY  UTILS.PY
-UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY UTILS.PY  UTILS.PY
-
-
-class SuperTuxDataset(Dataset):
-    def __init__(self, dataset_path)
-    def __len__(self):
-    def __getitem__(self, idx): 
-
-
-
-def load_data(dataset_path, num_workers=0, batch_size=128):
-    dataset = SuperTuxDataset(dataset_path)
-    return DataLoader(dataset, num_workers=num_workers, batch_size=batch_size, shuffle=True, drop_last=False)
-
-def accuracy(outputs, labels):
-    outputs_idx = outputs.max(1)[1].type_as(labels)
-    return outputs_idx.eq(labels).float().mean()
-
-LABEL_NAMES = ['background', 'kart', 'pickup', 'nitro', 'bomb', 'projectile']
-    
-
-"""
-
-"""
-
-https://towardsdatascience.com/how-to-train-an-image-classifier-in-pytorch-and-use-it-to-perform-basic-inference-on-single-images-99465a1e9bf5
-https://towardsdatascience.com/how-to-train-an-image-classifier-in-pytorch-and-use-it-to-perform-basic-inference-on-single-images-99465a1e9bf5
-
-This change made DIRECTLY on Github.  THIS change 9/1/2021
-
-As a first step, we will need to implement a data loader for the SuperTuxKart dataset. Complete the __init__, __len__, and the __getitem__ of the SuperTuxDataset class in the utils.py.
-https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
-https://pillow.readthedocs.io/en/stable/reference/Image.html
-https://pillow.readthedocs.io/en/stable/reference/Image.html
-https://www.geeksforgeeks.org/python-pil-image-open-method/
-
-
-The __len__ function should return the size of the dataset.
-
-The __getitem__ function should return a tuple of image, label. The image should be a torch.Tensor of size (3,64,64) with range [0,1], and the label should be int.
-
-Labels and the corresponding image paths are saved in labels.csv, their headers are *file* and *label*. 
-There are 6 classes of objects. Make sure label background corresponds to 0, kart is 1, pickup is 2, nitro is 3, bomb is 4 and projectile 5.
-
-
-Hint: We recommendd using the csv package to read csv files and the PIL library (Pillow fork) to read images in Python.
-
-Hint: Use torchvision.transforms.ToTensor() to convert the PIL image to a pytorch tensor.
-img = transforms.ToPILImage()(t).convert("RGB")
-
-Hint: You have (at least) two options on how to load the dataset. 
-You can load all images in the __init__ function, or you can lazily load them in __getitem__.
-If you load all images in __init__, make sure you convert the image to a tensor in the constructor, otherwise, you might get an OSError: [Errno 24] Too many open files.
-
-
-"""
-
+import csv     
 
 LABEL_NAMES = ['background', 'kart', 'pickup', 'nitro', 'bomb', 'projectile']
 input_dim = 3*64*64
@@ -83,17 +17,24 @@ class SuperTuxDataset(Dataset):
   
     self.BatchSize = batch_size
     self.imageDATASET = torch.rand([self.BatchSize,3,64,64])   #COMPLETE BUT RANDOM DATA SET
-    self.labels = torch.randint(0, 5, (self.BatchSize, ))
-     
-    self.size = 3,64,64
+ 
+    #self.labels = torch.randint(0, 5, (self.BatchSize, ))  
+    self.labels = torch.tensor([3, 1, 0, 4, 4, 2, 2, 0, 3, 1, 3, 2, 4, 4, 4, 4, 2, 0, 4, 3, 1, 3, 4, 0,
+        3, 1, 2, 4, 4, 1, 4, 3, 3, 0, 0, 3, 4, 4, 1, 2, 2, 2, 4, 1, 0, 1, 1, 4,
+        4, 2, 1, 3, 0, 1, 0, 2, 0, 1, 1, 4, 0, 1, 0, 3, 4, 2, 2, 0, 0, 0, 2, 2,
+        2, 3, 1, 4, 4, 4, 4, 0, 3, 4, 3, 4, 3, 3, 0, 2, 2, 4, 0, 0, 1, 1, 4, 2,
+        2, 2, 0, 3, 3, 4, 1, 1, 0, 2, 1, 1, 2, 3, 0, 2, 0, 4, 4, 1, 1, 0, 2, 0,
+        3, 4, 3, 2, 0, 0, 0, 2])
+ 
+    file_names = ['sample_image.jpg', 'sally.jpg', 'joe.jpg']
     
-    self.one_image = Image.open(r"sample_image.jpg")
+    self.one_image = Image.open(file_names[0])
+    
+    for i in file_names:
+      print (f'SEPTEMBER 13, 2021 LOOOK HERE.  File names iterative i is {i}')
     
     print(f'This is the FAKE RAND DATA SET TENSORS:  {self.imageDATASET[0:, ]}')
     
-      
-    #convert the REAL image to tensor 
-     
     self.Image_To_Tensor = Image_Transformer.transforms.ToTensor()
     self.Image_tensor = self.Image_To_Tensor(self.one_image)
     
@@ -101,8 +42,11 @@ class SuperTuxDataset(Dataset):
     
     
     print(f'This is the tensor conversion of an actual REAL image:  {self.Image_tensor}')
-    
+   
     print(f'I am in the constructor for SuperTuxt, just assigned image tensor above to DATASET zero, this is dataset 0: {self.imageDATASET[0]}')
+    
+    print (f'These are the fake labels, {self.labels}')
+    print (f'These are the file names  {file_names}')
     
     
     val = input("PRESS ANY KEY AND BE BOLD")
@@ -111,138 +55,17 @@ class SuperTuxDataset(Dataset):
     print(f'This is the second fake image tensor in RAND DATASET:  {self.imageDATASET[1]}')
     
     print ("Finally, I will now display the REAL image:")
+
     self.one_image.show()
     
-     
-    #Hint: Use torchvision.transforms.ToTensor() to convert the PIL image to a pytorch tensor.
-    #img = transforms.ToPILImage()(t).convert("RGB")
-    
-      
-  
-    #LOAD THE DATA-----------------------------------------
-    
-    #Can't use this because load_data makes a new Dataset, calls the Constructor, and recurses!
-    #temp_data = load_data('../data/train', num_workers=0, batch_size=128)
-    
-    #convert to tensor and return tensor
-    
+         
         
   def __len__(self):
     return (self.imageDATASET.size(0))  
          
   def __getitem__(self, idx):     
-    return (self.imageDATASET[idx], self.labels[idx]) 
+    return (self.imageDATASET[idx], self.labels[idx]) #image Tensor size (3,64,64) range [0,1], label is int.
     
-    """
-    PER PROFFESOR:
-    return tuple of image, label. 
-    The image should be a torch.Tensor of size (3,64,64) with range [0,1], 
-    and the label should be int  (0-5).  Labels are in labels.csv:
-    LABEL_NAMES = ['background', 'kart', 'pickup', 'nitro', 'bomb', 'projectile']
-    
-    Labels.csv file
-    00001.jpg,   background,    abyss <---The second entry is the label  (background)
-    
-    
-    
-    
-    When you read the image, the tuple will say "image[0], background).  Then you change background label to 0.
-    __getitem__, then, returns the actual image tensor (so there must be a transform here), and the number of label.
-    E.g. imageDataSet[0][0] for the image tensor (transform it), and imageDataSet[0][1] for the label string - transform that to 
-    a number too.
-    
-    Returns Tuple (image_tensor, label_number).
-    
-    CODE:  (https://github.com/pytorch/vision/blob/master/torchvision/datasets/cifar.py)
-    
-    img, target = self.data[index], self.targets[index]  <-------e.g. 0001.jpg image format, 'background'
-    
-    img = Image.fromarray(img)  
-    
-    if self.transform is not None:
-       img = self.transform(img)
-
-    if self.target_transform is not None:
-       target = self.target_transform(target)
-
-        return img, target
-    
-    
-    
-    
-    
-    """
-  
-    
-        
-  """
-  
-  You can load all images in the __init__ function, or you can lazily load them in __getitem__.
-        If you load all images in __init__, make sure you convert the image to a tensor in the constructor      
-        https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
-        
-       *****Hint: Use the python csv library to parse labels.csv
-        https://docs.python.org/3/library/csv.html#module-csv
-
-        WARNING: Do not perform data normalization here. 
-        
-        STDataset = pd.read_csv('data/labels.csv')
-
-        
-        
-       ********* SAMPLE CODE*************************************
-        landmarks_frame = pd.read_csv('data/faces/face_landmarks.csv')
-
-         n = 65
-        img_name = landmarks_frame.iloc[n, 0]
-        landmarks = landmarks_frame.iloc[n, 1:]
-        landmarks = np.asarray(landmarks)
-        landmarks = landmarks.astype('float').reshape(-1, 2)
-
-        print('Image name: {}'.format(img_name))
-        print('Landmarks shape: {}'.format(landmarks.shape))
-        print('First 4 Landmarks: {}'.format(landmarks[:4]))
-        
-        The __getitem__ function should return a tuple of image, label. The image should be a torch.Tensor of size (3,64,64) with range [0,1], and the label should be int.
-        Make sure label background corresponds to 0, kart is 1, pickup is 2, nitro is 3, bomb is 4 and projectile 5.
-LABEL_NAMES = ['background', 'kart', 'pickup', 'nitro', 'bomb', 'projectile']
-        
-         image_index = 1
-         image = torch.rand([3,64,64]) 
-         local_tuple=(image, image_index)
-         
-         Torch.rand:
-         Returns a tensor filled with random numbers from a uniform distribution on the interval [0, 1)
-         https://pytorch.org/docs/stable/generated/torch.rand.html
-         
-        __getitem__ to support the indexing such that dataset[idx] can be used to get idx-th sample.
-        
-        
-        You can load all images in the __init__ function, or you can lazily load them in __getitem__.
-        
-        return------> a tuple: img, label   #https://www.freecodecamp.org/news/python-returns-multiple-values-how-to-return-a-tuple-list-dictionary/
-
-        Labels and the corresponding image paths are saved in labels.csv, their headers are *file* and *label*. 
-        img is a tensor???????
-        Pil image to tensor:  https://discuss.pytorch.org/t/pytorch-pil-to-tensor-and-vice-versa/6312
-        
-            print("t is: ", t.size()) 
-            from torchvision import transforms
-            img = transforms.ToPILImage()(t).convert("RGB")
-            display(img)
-            print(img)
-            print(img.size)
-        
-        
-        
-        
-        def person():
-            return "bob", 32, "boston"
-   
-        https://stackoverflow.com/questions/62660486/using-image-label-dataset-take2-returns-two-tuples-instead-of-a-single-one          
-        
-        """
-        
         
 
 def load_data(dataset_path, num_workers=0, batch_size=128):     #use this in train.py
@@ -251,31 +74,16 @@ def load_data(dataset_path, num_workers=0, batch_size=128):     #use this in tra
     
     Y_labels = full_set_accuracy = [0] * batch_size  #I added this
     
-    #https://medium.com/bivek-adhikari/creating-custom-datasets-and-dataloaders-with-pytorch-7e9d2f06b660
-    #https://medium.com/bivek-adhikari/creating-custom-datasets-and-dataloaders-with-pytorch-7e9d2f06b660
-    
-    #https://docs.python.org/3/library/csv.html#module-csv
-    #STDataset = pd.read_csv('data/labels.csv')  #pandas, can't use
-    
     with open('labels.csv', newline='') as csvfile:
     
       ImageReader = csv.reader(csvfile, delimiter=' ', quotechar='|')
-      #cvs.reader returns a reader object which will iterate over lines in the given csvfile
     
       for row in ImageReader:
         print(', '.join(row))
         print (f'ROW IS -------------------{row}')
     
-      #for row in range(1, 250):
-        #print(', '.join(row))
     
     return DataLoader(dataset, num_workers=num_workers, batch_size=batch_size, shuffle=True, drop_last=False)  
-    #original
-    #Sept 13, 2021: In DataLoader the dataset object is passed as well as the batch size. 
-    #Sept 13, 2021: : The DataLoader object then uses the __len__ function of the Dataset to create the batches. 
-    
-    #https://stackoverflow.com/questions/48608585/where-is-the-len-function-used-in-pytorch-dataset
-    #https://pytorch.org/docs/stable/data.html  ,,,, defines DataLoader
     
     
 def accuracy(outputs, labels):
@@ -283,91 +91,29 @@ def accuracy(outputs, labels):
     return outputs_idx.eq(labels).float().mean()
 
 """
-
-
 models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py 
 models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py 
 models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py 
-
-
-class ClassificationLoss(torch.nn.Module):
-    def forward(self, input, target):
-    
-class LinearClassifier(torch.nn.Module):
-    def __init__(self):
-    def forward(self, x):
-    
-class MLPClassifier(torch.nn.Module):
-    def __init__(self):
-    def forward(self, x):
-    #https://medium.com/biaslyai/pytorch-introduction-to-neural-network-feedforward-neural-network-model-e7231cff47cb
-    
-    class Perceptron(torch.nn.Module):
-    def __init__(self):
-        super(Perceptron, self).__init__()
-        self.fc = nn.Linear(1,1)
-        self.relu = torch.nn.ReLU() # instead of Heaviside step fn
-    def forward(self, x):
-        output = self.fc(x)
-        output = self.relu(x) # instead of Heaviside step fn
-        return output
-        
-model_factory = {'linear': LinearClassifier,    'mlp': MLPClassifier, }
-
-def save_model(model)
-
-def load_model(model)
-
-def LossFunction(Y_hat_Vector, y_vector):
-  
-    return -(y_vector.float() * (Y_hat_Vector+1e-10).log() +(1-y_vector.float()) * (1-Y_hat_Vector+1e-10).log() ).mean()
-      
-
 """
-
-  
 
 def LossFunction (prediction_logit, y_vector):      #FOR TESTING UNIT CIRCLE ERASE
   
-  Y_hat_Vector = 1/(1+(-prediction_logit).exp())   #Take the sigmoid of the logit
-  
+  Y_hat_Vector = 1/(1+(-prediction_logit).exp())   #Take the sigmoid of the logit  
   return -(y_vector.float() * (Y_hat_Vector+1e-10).log() +(1-y_vector.float()) * (1-Y_hat_Vector+1e-10).log() ).mean()
-  
+ 
       
 
 class ClassificationLoss(torch.nn.Module):
   
-    #https://github.com/Tencent/NeuralNLP-NeuralClassifier/blob/master/model/loss.py
     
     #**You should implement the log-likelihood of a softmax classifier.
     #https://pytorch.org/docs/master/nn.html#torch.nn.LogSoftmax
     #https://pytorch.org/docs/master/generated/torch.nn.NLLLoss.html#torch.nn.NLLLoss    (NEGATIVE LOSS 
-    #LIKELIHOOD use with LOG-softmax.)
-    
-    
+    #LIKELIHOOD use with LOG-softmax.)   
     #https://pytorch.org/docs/master/generated/torch.nn.LogSoftmax.html#torch.nn.LogSoftmax
-      
-    #https://pytorch.org/docs/master/nn.html#torch.nn.LogSoftmax
-    #https://discuss.pytorch.org/t/does-nllloss-handle-log-softmax-and-softmax-in-the-same-way/8835
-    #https://discuss.pytorch.org/t/difference-between-cross-entropy-loss-or-log-likelihood-loss/38816
-    #https://github.com/rasbt/stat479-deep-learning-ss19/blob/master/other/pytorch-lossfunc-cheatsheet.md
-    
-    #If you apply Pytorch's CrossEntropyLoss to your output layer
-    #you get the same result as applying Pytorch's NLLLoss to a
-    #LogSoftmax layer added after your original output layer.
-    
-    #torch.nn.functional.binary_cross_entropy takes logistic sigmoid values as inputs
-    #torch.nn.functional.binary_cross_entropy_with_logits takes logits as inputs
-    #torch.nn.functional.cross_entropy takes logits as inputs (performs log_softmax internally)
-    #NEED THIS***********torch.nn.functional.nll_loss is like cross_entropy but takes log-probabilities (log-softmax) values as inputs
-       
-       
-  
-    
+          
   def forward(self, Y_hat_Vector, y_vector):   #OLD: def forward(self, input, target):
-  
-    #Why forward method:  https://discuss.pytorch.org/t/about-the-nn-module-forward/20858
- 
+      
     m = nn.LogSoftmax()
     input = torch.randn(2, 3)
     output = m(input)
@@ -377,95 +123,36 @@ class ClassificationLoss(torch.nn.Module):
     #This is the negative log likelihood for logistic regression, need SOFTMAX instead.
     #In Logistic Regression, Y_hat_vector is a prediction for ALL x(i) in the data set, so it returns
     #a vector of i scalars.  In Softmax, this would return a vector (tensor) of i vectors - not scalars).
+      
+      
+      
         
-        
-    """
-        
-        Implement the log-likelihood of a softmax classifier.
-
-        Compute mean(-log(softmax(input)_label))
-
-        @input:  torch.Tensor((B,C))
-        @target: torch.Tensor((B,), dtype=torch.int64)
-
-        @return:  torch.Tensor((,))
-
-    https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html
-    torch.nn.CrossEntropyLoss(weight=None, size_average=None, ignore_index=-100, reduce=None, reduction='mean')
-
-        Hint: Don't be too fancy, this is a one-liner
-    """                   
-
 class LinearClassifier(torch.nn.Module):
-
-#multinomonial logistic regression  - NO SIGMOID, SOFTMAX LAYER INSTEAD
-#Your forward function receives a (B,3,64,64) tensor as an input and should return a (B,6) torch.Tensor (one value per class).
-#B is the batch size, it's a hyper parameter we can set.
 
   def __init__(self, input_dim):        #input_dim parameter not needed for homework, I added thiS!
       
     super().__init__()   #original
-    
-    #https://www.programcreek.com/python/example/107699/torch.nn.Linear
-    #https://www.programcreek.com/python/example/107699/torch.nn.Linear
-    
-    #self.linear = torch.nn.Linear(4096, 6)  
-    
+       
     
     self.w = Parameter(torch.zeros(input_dim))  #added
     self.b = Parameter(-torch.zeros(1))         #added
     
-    
-                
-    print ("Wandavision, you're inside LinearClassifier class, __init_ constructor, models.py")
-
+   
   def forward(self, x):      
     
-    #DOES NOT USE SIGMOID
-    #DOES NOT USE SIGMOID
-    #DOES NOT USE SIGMOID  CONFIRMED.  (MLP Uses Relu).
-    
-    # x is a (B,3,64,64) tensor, so x[i] is one image
-    #x: torch.Tensor((B,3,64,64))
-    #return: torch.Tensor((B,6))
-        
-    #Multinomial Logistic Regression?  https://aaronkub.com/2020/02/12/logistic-regression-with-pytorch.html
-    #https://towardsdatascience.com/logistic-regression-on-mnist-with-pytorch-b048327f8d19
-    #torch.nn.Linear(input_dim, output_dim)
-    #https://pytorch.org/docs/stable/generated/torch.nn.Linear.html
-       
-    print ("Wandavision, you're inside LinearClassifier class, forward method, models.py")      
     return (x * self.w[None,:]).sum(dim=1) + self.b 
    
-"""
-        Your code here
-
-        @x: torch.Tensor((B,3,64,64))
-        @return: torch.Tensor((B,6))
-"""
-        #raise NotImplementedError('LinearClassifier.__init__')        
-        #raise NotImplementedError('LinearClassifier.forward')
 
 
-#*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP 
-#*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP 
-#*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP 
-#*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP 
-#*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP 
+#*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP*************
+#*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP*************
+#*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP*************
 
-class MLPClassifier(torch.nn.Module):  #***************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP 
 
-  #Your forward function receives a (B,3,64,64) tensor as an input and should return a (B,6) torch.Tensor (one value per class).
-  #Two layers are sufficient.  TWO LAYERS - OUTPUT LAYER, AND INPUT LAYER?  IS RELU A LAYER?, so INPUT L, RELU L
-  #Keep the first layer small to save parameters. (12K bits??? small?)
-  #PROFESSOR: The inputs and OUTPUTS to the multi-layer perceptron ARE THE SAME as the linear classifier.
-  #Use ReLU layers as non-linearities.  Just "Add" a Relu Layer ONE LINE.
-  #Use ReLU layers as non-linearities.  (USE  SIGMOID OR SOFTMAX GOOD ENOUGH????)
-  #PER PROF ITS THE SAME, BUT W/ RELU (I GUESS ALSO SOFTMAX!)
-  #Might require some tuning of your training code. Try to move most modifications to command-line arguments 
-  #in  ArgumentParser
 
-  def __init__(self):   #I added input_dim, not in original   MLP CONSTRUCTOR MLP CONSTRUCTOR MLP CONSTRUCTOR MLP CONSTRUCTOR MLP CONSTRUCTOR MLP CONSTRUCTOR 
+class MLPClassifier(torch.nn.Module):  
+
+  def __init__(self):   
    
     super().__init__()
     
@@ -493,65 +180,13 @@ class MLPClassifier(torch.nn.Module):  #***************MLP MLP MLP MLP MLP MLP M
                 torch.nn.Linear(hidden_size, 6)  
                 )
                 
-                #this later has 6 neurons, fed to softmax
-                #nn.CrossEntropyLoss()
-                #nn.LogSoftmax(), nn.NLLLoss()  -----can use cross-entropy
-                
   def forward(self, flat_image):   
     return self.network(flat_image)
   
   #def forward(self, multiple_image_tensor):   
   #receives a (B,3,64,64) tensor as an input and should return a (B,6) torch.Tensor
-         
-  #  return self.network(multiple_image_tensor.view(multiple_image_tensor.size(0), -1))
-    #    return self.network(multiple_image_tensor.view(multiple_image_tensor.size(0), -1)).view(-1)
+       
   
-  
-  
-                
-     #SEPTEMBER 6, 2021
-     #https://www.machinecurve.com/index.php/2021/01/26/creating-a-multilayer-perceptron-with-pytorch-and-lightning/
-     #https://majianglin2003.medium.com/create-neural-network-with-pytorch-1f91054fe229
-     
-     
-""" nn.Sequential(nn.Linear(input_size, hidden_sizes[0]),
-                      nn.ReLU(),
-                      nn.Linear(hidden_sizes[0], hidden_sizes[1]),
-                      nn.ReLU(),
-                      nn.Linear(hidden_sizes[1], output_size),
-                      nn.Softmax(dim=1))                                         
-
-     def __init__(self):
-    super().__init__()
-    self.layers = nn.Sequential(
-      nn.Flatten(),
-      nn.Linear(32 * 32 * 3, 64),
-      nn.ReLU(),
-      nn.Linear(64, 32),
-      nn.ReLU(),
-      nn.Linear(32, 10)
-    )
-
-
-  def forward(self, x):
-    #Forward pass
-    return self.layers(x)    """
-                
-           
-   #https://medium.com/biaslyai/pytorch-introduction-to-neural-network-feedforward-neural-network-model-e7231cff47cb
-      
-  #    class Perceptron(torch.nn.Module):
-  #   def __init__(self):
-  #      super(Perceptron, self).__init__()
-  #      self.fc = nn.Linear(1,1)
-  #      self.relu = torch.nn.ReLU() # instead of Heaviside step fn
-  #   
-  #    def forward(self, x):
-  #       output = self.fc(x)
-  #       output = self.relu(x) # instead of Heaviside step fn
-  #       return output
-
-
 
 def save_model(model):
   from torch import save
@@ -574,65 +209,9 @@ model_factory = { 'linear': LinearClassifier, 'mlp': MLPClassifier, }
   
   
   
-"""
-
-Original: from .utils import accuracy, load_data
-
-train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py 
-train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py 
-train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py train.py 
-
-Train your linear model in train.py. You should implement the full training procedure:
-
-      1. create a model, loss, optimizer
-      2. load the data: train and valid
-      3. Run SGD for several epochs
-      4. Save your final model, using save_model()
-
-
-
-11111111********models.py has these classes:*******************************
-11111111********models.py has these classes:*******************************
-
-      ClassificationLoss(torch.nn.Module)
-        forward(self, input, target)
-
-      LinearClassifier(torch.nn.Module), 
-        __init__, 
-         forward(self, x)
-
-      MLPClassifier(torch.nn.Module), 
-        __init__, 
-        forward(self, x)d
-
-      save_model(model)
-      load_model(model)
-
-      model_factory = {'linear': LinearClassifier, 'mlp': MLPClassifier }
-
-
-22222222***************************utils.py has these classes/functions*******************
-22222222***************************utils.py has these classes/functions*******************
-
-      class SuperTuxDataset(Dataset)
-          def __init__(self, dataset_path)
-          def __len__(self)
-          def __getitem__(self, idx)
-          
-      def load_data(dataset_path, num_workers=0, batch_size=128)
-      def accuracy(outputs, labels)
-
-
-
-
-"""
-
 
 #TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN 
 #TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN 
-#TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN 
-#TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN 
-#kel76y
 
 n_epochs = 10                   #CHANGE EPOCHS to 100 !!!!!!!!
 batch_size = 128
@@ -640,42 +219,6 @@ input_size = 64*64*3
 
 def train(args):
 
-    """
-
-     https://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html
-     https://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html
-     Training a NN happens in two steps:
-
-Forward Propagation: In forward prop, the NN makes its best guess about the correct output. It runs the input data through each of its functions to make this guess.
-
-Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate to the error in its guess. It does this by traversing backwards from the output, collecting the derivatives of the error with respect to the parameters of the functions (gradients), and optimizing the parameters using *gradient descent*.
-     
-        import torch, torchvision
-        model = torchvision.models.resnet18(pretrained=True)
-        data = torch.rand(1, 3, 64, 64)
-        labels = torch.rand(1, 1000)
-        
-        prediction = model(data)        # forward pass
-        loss = (prediction - labels).sum()
-        loss.backward()
-        optim = torch.optim.SGD(model.parameters(), lr=1e-2, momentum=0.9)
-        
-        #Finally, we call .step() to initiate gradient descent. 
-        #The optimizer adjusts each parameter by its gradient stored in .grad.
-
-        optim.step() #gradient descent
-
-      Loop:
-        Forward Pass
-        Loss
-        Backward Pass - get gradients
-        Update Weights
-
-    Your code here
-
-    """
-
-   
     
     image_index = 1                   #test code
     local_fake_image = torch.rand([3,64,64])    #test code
@@ -721,16 +264,6 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
 #LOAD DATA LOAD LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA 
  
              
-    #train_data, train_label = load.get_dogs_and_cats_data(resize=(32,32))
-    #valid_data, valid_label = load.get_dogs_and_cats_data(split='valid', resize=(32,32))    
-    #Tranform image to tensor    
-    #to_image = load.to_image_transform()
-    #Put data in GPU
-    #train_data, train_label = train_data.to(device), train_label.to(device)
-    #valid_data, valid_label = valid_data.to(device), valid_label.to(device)
-    #http://www.philkr.net/dl_class/lectures/deep_networks/10.html
-    #http://www.philkr.net/dl_class/lectures/deep_networks/10.html
-    
     
     
     
@@ -758,11 +291,8 @@ Backward Propagation: Inn backprop, the NN adjusts its parameters proportionate 
     global_step = 0
     
     
-    #*******************************************BEGIN TRAINING*************************************************************
-    #*******************************************BEGIN TRAINING*************************************************************
-    #*******************************************BEGIN TRAINING*************************************************************
-    #*******************************************BEGIN TRAINING*************************************************************
-    
+    #*******************************************BEGIN  UNIT CIRCLE TRAINING*********************************************
+    #*******************************************BEGIN  UNIT CIRCLE TRAINING*********************************************
     
     print ("--------------------------------STARTING TRAINING---------------------------------")
     
