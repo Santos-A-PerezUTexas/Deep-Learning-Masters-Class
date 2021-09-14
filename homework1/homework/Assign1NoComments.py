@@ -18,14 +18,16 @@ class SuperTuxDataset(Dataset):
     self.BatchSize = batch_size
     self.imageDATASET = torch.rand([self.BatchSize,3,64,64])   #COMPLETE BUT RANDOM DATA SET
  
-    #self.labels = torch.randint(0, 5, (self.BatchSize, ))  
+    self.labels = torch.randint(0, 5, (self.BatchSize, ))  
+    
+    """
     self.labels = torch.tensor([3, 1, 0, 4, 4, 2, 2, 0, 3, 1, 3, 2, 4, 4, 4, 4, 2, 0, 4, 3, 1, 3, 4, 0,
         3, 1, 2, 4, 4, 1, 4, 3, 3, 0, 0, 3, 4, 4, 1, 2, 2, 2, 4, 1, 0, 1, 1, 4,
         4, 2, 1, 3, 0, 1, 0, 2, 0, 1, 1, 4, 0, 1, 0, 3, 4, 2, 2, 0, 0, 0, 2, 2,
         2, 3, 1, 4, 4, 4, 4, 0, 3, 4, 3, 4, 3, 3, 0, 2, 2, 4, 0, 0, 1, 1, 4, 2,
         2, 2, 0, 3, 3, 4, 1, 1, 0, 2, 1, 1, 2, 3, 0, 2, 0, 4, 4, 1, 1, 0, 2, 0,
         3, 4, 3, 2, 0, 0, 0, 2])
- 
+    """
     
     file_names = ['00001.jpg', '00002.jpg', '00003.jpg', '00004.jpg', '00005.jpg', '00006.jpg', '00007.jpg', '00008.jpg', '00009.jpg', '00010.jpg']
     
@@ -80,19 +82,27 @@ class SuperTuxDataset(Dataset):
         #print (f'Label names only=================={row[1]}')
         
         if image_index > 0:
-          
+                  
           image_file_name = "..\data\\train\\"+row[0] 
           print(image_file_name)
           self.one_image = Image.open(image_file_name)
           self.Image_To_Tensor = Image_Transformer.transforms.ToTensor()
           self.Image_tensor = self.Image_To_Tensor(self.one_image)
           self.imageDATASET[image_index] = self.Image_tensor
+          #self.labels[image_index] = row[1] ->row[1] is a string, e.g. background. Convert to int...
+          counter_labels = 0
+          for i in LABEL_NAMES:
+            if i==row[1]:
+              self.labels[image_index] = counter_labels
+            counter_labels += 1 
+          print (f'I just assigned self.labels[{image_index}] the value {self.labels[image_index]} which corresponds to label {row[1]}')
           
         image_index += 1 
         if image_index == self.BatchSize:
             break
     
 
+    print(f'The size of this data set is ==================={self.imageDATASET.size(0)}')
     
     val = input("There!  I just LOADED ALL DATA up to Batch size!")
     print(val) 
