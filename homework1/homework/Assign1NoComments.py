@@ -80,16 +80,21 @@ class SuperTuxDataset(Dataset):
         #print (f'Label names only=================={row[1]}')
         
         if image_index > 0:
-          self.one_image = Image.open(row[0])
+          
+          image_file_name = "..\data\\train\\"+row[0] 
+          print(image_file_name)
+          self.one_image = Image.open(image_file_name)
           self.Image_To_Tensor = Image_Transformer.transforms.ToTensor()
           self.Image_tensor = self.Image_To_Tensor(self.one_image)
           self.imageDATASET[image_index] = self.Image_tensor
           
-        image_index += 1   
+        image_index += 1 
+        if image_index == self.BatchSize:
+            break
     
 
     
-    val = input("There!  I just LOADED ALL DATA")
+    val = input("There!  I just LOADED ALL DATA up to Batch size!")
     print(val) 
     
          
