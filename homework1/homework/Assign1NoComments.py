@@ -26,21 +26,26 @@ class SuperTuxDataset(Dataset):
         2, 2, 0, 3, 3, 4, 1, 1, 0, 2, 1, 1, 2, 3, 0, 2, 0, 4, 4, 1, 1, 0, 2, 0,
         3, 4, 3, 2, 0, 0, 0, 2])
  
-    file_names = ['sample_image.jpg', 'sally.jpg', 'joe.jpg']
+    
+    file_names = ['00001.jpg', '00002.jpg', '00003.jpg', '00004.jpg', '00005.jpg', '00006.jpg', '00007.jpg', '00008.jpg', '00009.jpg', '00010.jpg']
     
     self.one_image = Image.open(file_names[0])
     
-    for i in file_names:
-      print (f'SEPTEMBER 13, 2021 LOOOK HERE.  File names iterative i is {i}')
+    image_index = 0
     
+    for this_image in file_names:
+      self.one_image = Image.open(this_image)
+      self.Image_To_Tensor = Image_Transformer.transforms.ToTensor()
+      self.Image_tensor = self.Image_To_Tensor(self.one_image)
+      self.imageDATASET[image_index] = self.Image_tensor
+      #self.one_image.show()
+      image_index += 1   
+  
+    #Now just open labels.cv, loop until the file ends, populate file_names, the iterate over file names.
+    #OR, iterate through labels until it ends, grab the file name, open, convert, etc.  
+
     print(f'This is the FAKE RAND DATA SET TENSORS:  {self.imageDATASET[0:, ]}')
-    
-    self.Image_To_Tensor = Image_Transformer.transforms.ToTensor()
-    self.Image_tensor = self.Image_To_Tensor(self.one_image)
-    
-    self.imageDATASET[0] = self.Image_tensor   #PLACE THE REAL IMAGE *TENSOR* IN THE FIRST DATASET TENSOR LOCATION
-    
-    
+  
     print(f'This is the tensor conversion of an actual REAL image:  {self.Image_tensor}')
    
     print(f'I am in the constructor for SuperTuxt, just assigned image tensor above to DATASET zero, this is dataset 0: {self.imageDATASET[0]}')
@@ -56,7 +61,7 @@ class SuperTuxDataset(Dataset):
     
     print ("Finally, I will now display the REAL image:")
 
-    self.one_image.show()
+    
     
          
         
@@ -262,7 +267,7 @@ def train(args):
     
     
 #LOAD DATA LOAD LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA 
- 
+#Use load_data() function, somethhing like my_loader = load_data("path"). 
              
     
     
