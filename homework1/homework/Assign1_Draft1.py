@@ -10,7 +10,7 @@ LABEL_NAMES = ['background', 'kart', 'pickup', 'nitro', 'bomb', 'projectile']
 input_dim = 3*64*64
 hidden_size=5
 
-class SuperTuxDataset(Dataset):
+class SuperTuxDataset(Dataset):   #kel76y
 
   def __init__(self, dataset_path):
   
@@ -116,6 +116,7 @@ class SuperTuxDataset(Dataset):
     return (self.imageDATASET[idx], self.labels[idx]) #image Tensor size (3,64,64) range [0,1], label is int.
     
         
+#kel76y
 
 def load_data(dataset_path, num_workers=0, batch_size=128):     #use this in train.py
     #all this does is return the data_loader to use in SGD?
@@ -145,7 +146,7 @@ def LossFunction (prediction_logit, y_vector):      #FOR TESTING UNIT CIRCLE ERA
   return -(y_vector.float() * (Y_hat_Vector+1e-10).log() +(1-y_vector.float()) * (1-Y_hat_Vector+1e-10).log() ).mean()
  
       
-
+#kel76y
 class ClassificationLoss(torch.nn.Module):
   
     
@@ -155,6 +156,7 @@ class ClassificationLoss(torch.nn.Module):
     #LIKELIHOOD use with LOG-softmax.)   
     #https://pytorch.org/docs/master/generated/torch.nn.LogSoftmax.html#torch.nn.LogSoftmax
           
+  
   def forward(self, Y_hat_Vector, y_vector):   #OLD: def forward(self, input, target):
       
     m = nn.LogSoftmax()
@@ -169,21 +171,26 @@ class ClassificationLoss(torch.nn.Module):
       
       
       
-        
+#kel76y
+# -----------------------------------------------LINEAR-----------------------------------------------
+# -----------------------------------------------LINEAR-----------------------------------------------
+# -----------------------------------------------LINEAR-----------------------------------------------
+
 class LinearClassifier(torch.nn.Module):
 
-  def __init__(self, input_dim):        #input_dim parameter not needed for homework, I added thiS!
+  def __init__(self):        
       
     super().__init__()   #original
        
+    self.input_dim = input_dim
     
-    self.w = Parameter(torch.zeros(input_dim))  #added
-    self.b = Parameter(-torch.zeros(1))         #added
-    
+    #self.w = Parameter(torch.zeros(input_dim))  #added
+    #self.b = Parameter(-torch.zeros(1))         #added
+    self.w = torch.ones(self.input_dim)
    
   def forward(self, x):      
     
-    return (x * self.w[None,:]).sum(dim=1) + self.b 
+    return (torch.matmul(self.w, x))
    
 
 
@@ -192,7 +199,7 @@ class LinearClassifier(torch.nn.Module):
 #*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP*************
 
 
-
+#kel76y
 class MLPClassifier(torch.nn.Module):  
 
   def __init__(self):   
@@ -265,6 +272,8 @@ def train(args):
     
     image_index = 1                   #test code
     My_DataSet = SuperTuxDataset('c:\fakepath')      
+    linear_M = model_factory[args.model](2)     #LINEAR CLASSIFIER BY DEFAULT IN THE COMMAND LINE, USED FOR GRADING
+    MLPx = MLPClassifier()                                     #MLP Used for Testing, Erase - use command line args to call this
       
  
     y_hat_tensor = torch.ones(batch_size,6)  #this is going to change when put through network
@@ -281,10 +290,7 @@ def train(args):
 #trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
     
     
-    #create the network
-    linear_Classifier_model = model_factory[args.model](2)     #LINEAR CLASSIFIER BY DEFAULT IN THE COMMAND LINE, USED FOR GRADING
     
-    MLPx = MLPClassifier()                                     #MLP Used for Testing, Erase - use command line args to call this
     
     #create the optimizer for MLP (change to use args)
     optimizer = torch.optim.SGD(MLPx.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4)        
@@ -346,44 +352,24 @@ def train(args):
     
     
     
-    print (f'HERE I GO - ABOUT TO CREATE A MLP.................., these are the image dimensions:  {real_Image.size()}')
+    print (f'HERE I GO - ABOUT TO CREATE A MLP and Linear Models, these are the image dimensions:  {real_Image.size()}')
+    print (f'input_dim is {input_dim}')
     
     val = input("Enter your value, then I will print the flattened image: ")
     print(val)
   
     
     flatened_Image = real_Image.view(real_Image.size(0), -1).view(-1)   
-    
-    
-    print ("*****************I AM IN THE TRAIN MODULE NOW******************************************")
-    print (f'This is the flattened image {flatened_Image}, of size {flatened_Image.size()}, original tensor size was {real_Image[0].size()}')
-    
-    print (f'This is the Zero-th 6-tensor Before taking the output from my neural network: {y_hat_tensor[0]}')
-    
-    print (f'This is the real image, which should be 3x64x64: {real_Image[0]}')
-       
-    val = input("Just printed the flattened image (before above 6-tensor).  Enter your value: ")
-    print(val)
-    
-    ############ CALL MLP
-    ############ CALL MLP
-    ############ CALL MLP  kel76y
-    
-    
+    test_logit = linear_M(flatened_Image)
     y_hat_tensor[0] = MLPx(flatened_Image) #the true label is real_image_label  
     
     
-    print (f'Here is the zero-th 6-tensor AFTER putting it through the MLPx Network: {y_hat_tensor[0]}')
+    print (f'This is the flattened image {flatened_Image}, of size {flatened_Image.size()}, original tensor size was {real_Image[0].size()}')
     
-    print(f'Here is the 7th and 110th REAL images, 7th---> {My_DataSet[7]}, 1110th ---> {My_DataSet[110]}')
-    
-    
-    val = input("Just printed The 7th and 110th image tensor tuples.  Press enter to see y_hat_tensor prediction")
-    print(val)
-    
-    print (f'Thank you, here the y_hat_tensor predictions on untrained MLP is {y_hat_tensor}')
-    
-    
+    print (f'This is the real image, which should be 3x64x64: {real_Image}, its size {real_Image.size()}')
+       
+    print (f'The y_hat_tensor[0] prediction on untrained MLP is {y_hat_tensor[0]}, and the logit obtained from the linear model is {test_logit}')
+     
     #SEPT 12, 2021:  __get_item__ is called when you create a new image object from the dataset object!
      
     
