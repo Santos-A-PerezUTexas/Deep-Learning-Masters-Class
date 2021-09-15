@@ -18,50 +18,16 @@ class SuperTuxDataset(Dataset):   #kel76y
     self.BatchSize = batch_size
     self.imageDATASET = torch.rand([self.BatchSize,3,64,64])   #COMPLETE BUT RANDOM DATA SET
  
-    self.labels = torch.randint(0, 5, (self.BatchSize, ))  
-    
-    """
-    self.labels = torch.tensor([3, 1, 0, 4, 4, 2, 2, 0, 3, 1, 3, 2, 4, 4, 4, 4, 2, 0, 4, 3, 1, 3, 4, 0,
-        3, 1, 2, 4, 4, 1, 4, 3, 3, 0, 0, 3, 4, 4, 1, 2, 2, 2, 4, 1, 0, 1, 1, 4,
-        4, 2, 1, 3, 0, 1, 0, 2, 0, 1, 1, 4, 0, 1, 0, 3, 4, 2, 2, 0, 0, 0, 2, 2,
-        2, 3, 1, 4, 4, 4, 4, 0, 3, 4, 3, 4, 3, 3, 0, 2, 2, 4, 0, 0, 1, 1, 4, 2,
-        2, 2, 0, 3, 3, 4, 1, 1, 0, 2, 1, 1, 2, 3, 0, 2, 0, 4, 4, 1, 1, 0, 2, 0,
-        3, 4, 3, 2, 0, 0, 0, 2])
-    """
-    
-    file_names = ['00001.jpg', '00002.jpg', '00003.jpg', '00004.jpg', '00005.jpg', '00006.jpg', '00007.jpg', '00008.jpg', '00009.jpg', '00010.jpg']
-    
-    self.one_image = Image.open(file_names[0])
-    
-    image_index = 0
-    
-    for this_image in file_names:
-      self.one_image = Image.open(this_image)
-      self.Image_To_Tensor = Image_Transformer.transforms.ToTensor()
-      self.Image_tensor = self.Image_To_Tensor(self.one_image)
-      self.imageDATASET[image_index] = self.Image_tensor
-      #self.one_image.show()
-      image_index += 1   
+    self.labels = torch.randint(0, 5, (self.BatchSize, ))    
   
-    #Now just open labels.cv, loop until the file ends, populate file_names, the iterate over file names.
-    #OR, iterate through labels until it ends, grab the file name, open, convert, etc.  
-
-    print(f'This is the FAKE RAND DATA SET TENSORS:  {self.imageDATASET[0:, ]}')
-  
-    print(f'This is the tensor conversion of an actual REAL image:  {self.Image_tensor}')
-   
-    print(f'I am in the constructor for SuperTuxt, just assigned image tensor above to DATASET zero, this is dataset 0: {self.imageDATASET[0]}')
     
-    print (f'These are the fake labels, {self.labels}')
-    print (f'These are the file names  {file_names}')
     
     
     val = input("PRESS ANY KEY AND BE BOLD")
     print(val) 
     
-    print(f'This is the second fake image tensor in RAND DATASET:  {self.imageDATASET[1]}')
     
-    print ("Finally, I will now iterate over labels.cvs file.........")
+    print ("I will now iterate over labels.cvs file.........")
     
     val = input("PRESS ANY KEY to iteraTE over labels.csv and load ALL DATA")
     print(val) 
@@ -185,12 +151,12 @@ class LinearClassifier(torch.nn.Module):
     self.input_dim = input_dim
     
     #self.w = Parameter(torch.zeros(input_dim))  #added
-    #self.b = Parameter(-torch.zeros(1))         #added
+    self.b = Parameter(-torch.zeros(1))         #added
     self.w = torch.ones(self.input_dim)
    
   def forward(self, x):      
     
-    return (torch.matmul(self.w, x))
+    return (torch.matmul(self.w, x)+self.b)
    
 
 
@@ -204,18 +170,7 @@ class MLPClassifier(torch.nn.Module):
 
   def __init__(self):   
    
-    super().__init__()
-    
-     #flatten t0 12K features (input_dim = 3*64*64)
-     #https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html
-     #https://gluon.mxnet.io/chapter03_deep-neural-networks/mlp-scratch.html  READ THIS!!!!!!
-     #https://discuss.pytorch.org/t/multi-class-cross-entropy-loss-and-softmax-in-pytorch/24920/5
-     #model.eval()
-     #output = net(input)
-     #sm = torch.nn.Softmax()
-     #probabilities = sm(output)
-     #print(probabilities )
-     
+    super().__init__()        
      
     print(f'The input_dimension is --------------------->{input_dim}')
     print(f'The hidden size is --------------------->{hidden_size}')
@@ -264,7 +219,7 @@ model_factory = { 'linear': LinearClassifier, 'mlp': MLPClassifier, }
 #TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN 
 
 n_epochs = 10                   #CHANGE EPOCHS to 100 !!!!!!!!
-batch_size = 128
+batch_size = 64
 input_size = 64*64*3
 
 def train(args):
@@ -272,7 +227,8 @@ def train(args):
     
     image_index = 1                   #test code
     My_DataSet = SuperTuxDataset('c:\fakepath')      
-    linear_M = model_factory[args.model](2)     #LINEAR CLASSIFIER BY DEFAULT IN THE COMMAND LINE, USED FOR GRADING
+    #linear_M = model_factory[args.model](2)     #LINEAR CLASSIFIER BY DEFAULT IN THE COMMAND LINE, USED FOR GRADING
+    linear_M = LinearClassifier()
     MLPx = MLPClassifier()                                     #MLP Used for Testing, Erase - use command line args to call this
       
  
