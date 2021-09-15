@@ -265,48 +265,14 @@ def train(args):
     
     image_index = 1                   #test code
     My_DataSet = SuperTuxDataset('c:\fakepath')      
-    
-    
-    
-    
-    local_fake_image = torch.rand([3,64,64])    #test code
-    Local_Fake_Image_Set = torch.rand([batch_size,3,64,64])  #no labels
-    local_tuple=(local_fake_image, LABEL_NAMES[image_index])       #test code, but the second tuple should be int.
-    
-    Batch_Size_Sixtensors = torch.zeros(batch_size,6)  #test code to test output from network
-       
+      
  
-    #y_labels_tensor = torch.ones(batch_size,6)  #Actual Y to compute softmax loss, [0,1,0,0,0,0], NEEDS pre-processing
-    #y_labels_tensor = (torch.rand(size=(batch_size,6)) < 0.25).int()  #Actual Y to compute softmax loss, e.g,  [0,1,0,0,0,0]
-    
-    rand_mat = torch.rand(batch_size, 6)
-    k_th_quant = torch.topk(rand_mat, 1, largest = False)[0][:,-1:]
-    
-    
-    #Define the one-hot-encoded Y vectors.  Y_labels is Y, 
-    #I am not sure if we only convert to 6-tensor at the end.  Presumably
-    #Since the output is a 6 tensor - all values have to be updated and the proper value softmaxED
-    
-    y_labels_tensor = torch.where((rand_mat <= k_th_quant),torch.tensor(1),torch.tensor(0))
-    y_hat_tensor = torch.rand(batch_size,6)  #this is going to change when put through network
+    y_hat_tensor = torch.ones(batch_size,6)  #this is going to change when put through network
     
       
-    
-    #This should load the data un the constructor using load_data function    
-    #Sept 13, 2021: This will load a random, fake data set, with the first entry 0 a real image
+    real_Image, real_image_label = My_DataSet[0]   #gets image [0] TENSOR  tuple
+                    
         
-        
-    real_Image, an_int_label_from_dataset = My_DataSet[0]   #gets the real image TENSOR  kel76y
-    Second_Fake_image_tuple = My_DataSet[2]                 #this should get fake image #2    
-    
-        
-    
-     #SOME FAKE TEST DATA FOR UNIT CIRCLE SGD
-    
-    x = torch.rand([10,2])          #for testing unit circle SGD
-    true_y = ((x**2).sum(1) < 1)    #for testing unit circle SGD
-
-    
     
 #LOAD DATA LOAD LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA 
 #Use load_data() function, somethhing like my_loader = load_data("path"). 
@@ -317,6 +283,7 @@ def train(args):
     
     #create the network
     linear_Classifier_model = model_factory[args.model](2)     #LINEAR CLASSIFIER BY DEFAULT IN THE COMMAND LINE, USED FOR GRADING
+    
     MLPx = MLPClassifier()                                     #MLP Used for Testing, Erase - use command line args to call this
     
     #create the optimizer for MLP (change to use args)
@@ -344,105 +311,78 @@ def train(args):
     
     print ("--------------------------------STARTING TRAINING---------------------------------")
     
-    for epoch in range(n_epochs): 
-    
+    #for epoch in range(n_epochs): 
     
       # Shuffle the data
-      permutation = torch.randperm(Local_Fake_Image_Set.size(0))  #generate batch_size numbers from 0 to batch_size-1
+      #permutation = torch.randperm(Local_Fake_Image_Set.size(0))  #generate batch_size numbers from 0 to batch_size-1
+     
       
+      #model_loss = LossFunction(Y_hat, true_y)                    
+      #model_loss.backward()   #get the gradients with the computation graph
+    
       
+      #for p in linear_Classifier_model.parameters():         #update parameters, replace with optimizer step                
     
-    
-      #iteration of unit circle
-      Y_hat = linear_Classifier_model.forward(x)    # unit circle erase
-      
-      model_loss = LossFunction(Y_hat, true_y)     #unit circle
-                 
-      model_loss.backward()   #get the gradients with the computation graph
-    
-      train_accuracy = []
-      
-      for p in linear_Classifier_model.parameters():         #update parameters, replace with optimizer step                
-    
-        p.data[:] -= 0.5 * p.grad                    
-        p.grad.zero_()
+        #p.data[:] -= 0.5 * p.grad                    
+        #p.grad.zero_()
 
 #*********************************************************END TRAINING*************************************************************
 #*********************************************************END TRAINING*************************************************************
 #*********************************************************END TRAINING*************************************************************
 #*********************************************************END TRAINING*************************************************************
 
-      print ("UNIT CIRCLE Model LOSS:", model_loss) #unit circle
-      print ("UNIT CIRCLE Truth Value of Logits", Y_hat > .5 )  #unit circle
-      print (f'UNIT CIRCLE model loss at epoch {epoch} is {model_loss} and the prediction y_hat is {Y_hat}, while the y is {true_y}')
-
-
+      
 
     print ("--------------------------------FINISHED TRAINING---------------------------------")
     
+  
     
-    
-    print (f'*********A sample fake image created with tensor RAND, this is NOT from the Dataset!:  {local_fake_image}, the local tuple {local_tuple}')
-    
-    
-    print (f'22222222222222222---->Item 2 FROM THE OBJECT DATASET, which was created w/ RAND, this SHOULD BE A TUPLE: {Second_Fake_image_tuple}')
-    
-    print (f'One image from Second_Fake_image_tuple, which I got from getitem method {Second_Fake_image_tuple[0]}')
-    
-    print (f'Here is the Local_Fake_Image_Set.size, {Local_Fake_Image_Set.size(0)}  and  the permutation data set {[permutation]}')
-    
-    print (f'Here is the permutation iterative which goes in the for loop, len(permutation)-batch_size+1 = {len(permutation)} minus {batch_size+1}')
+    #print (f'Here is the permutation iterative which goes in the for loop, len(permutation)-batch_size+1 = {len(permutation)} minus {batch_size+1}')
     
     val = input("Enter your value: ")
     print(val)
     
-    print (f'Just did {n_epochs} Gradient Descent iterations with ten UNIT CIRCLE points ONLY!!!')
+    print (f'Just did {n_epochs} Gradient Descent iterations')
     
     
-    #GRADIENT DESCENT USING THE  IMAGES----------------------------------------------------
-    #LOAD THE 250 IMAGES 
     
-    
-    print (f'HERE I GO - ABOUT TO CREATE A MLP.................., these are the image dimensions:  {Second_Fake_image_tuple[0].size()}')
+    print (f'HERE I GO - ABOUT TO CREATE A MLP.................., these are the image dimensions:  {real_Image.size()}')
     
     val = input("Enter your value, then I will print the flattened image: ")
     print(val)
-
+  
     
-    
-    flatened_Image = real_Image.view(real_Image.size(0), -1).view(-1)    #kel76y
+    flatened_Image = real_Image.view(real_Image.size(0), -1).view(-1)   
     
     
     print ("*****************I AM IN THE TRAIN MODULE NOW******************************************")
-    print (f'This is the flattened image {flatened_Image}, of size {flatened_Image.size()}, , original tensor size was {real_Image[0].size()}')
+    print (f'This is the flattened image {flatened_Image}, of size {flatened_Image.size()}, original tensor size was {real_Image[0].size()}')
     
-    print (f'This is the Zero-th 6-tensor Before taking the output from my neural network: {Batch_Size_Sixtensors[0]}')
+    print (f'This is the Zero-th 6-tensor Before taking the output from my neural network: {y_hat_tensor[0]}')
     
     print (f'This is the real image, which should be 3x64x64: {real_Image[0]}')
-    
-    
-    
-    
-     
+       
     val = input("Just printed the flattened image (before above 6-tensor).  Enter your value: ")
     print(val)
     
-    Batch_Size_Sixtensors[0] = MLPx(flatened_Image)  #kel76y
-    
-    print (f'Here is the zero-th 6-tensor AFTER putting it through the MLPx Network: {Batch_Size_Sixtensors[0]}')
-    
-    print(f'Here is the 7th and 110th fake images {Local_Fake_Image_Set[7]}, {Local_Fake_Image_Set[110]}')
+    ############ CALL MLP
+    ############ CALL MLP
+    ############ CALL MLP  kel76y
     
     
-    val = input("Just printed The 7th and 110th fake images.  Press enter to see y_labels_tensor and y_hat_tensor")
+    y_hat_tensor[0] = MLPx(flatened_Image) #the true label is real_image_label  
+    
+    
+    print (f'Here is the zero-th 6-tensor AFTER putting it through the MLPx Network: {y_hat_tensor[0]}')
+    
+    print(f'Here is the 7th and 110th REAL images, 7th---> {My_DataSet[7]}, 1110th ---> {My_DataSet[110]}')
+    
+    
+    val = input("Just printed The 7th and 110th image tensor tuples.  Press enter to see y_hat_tensor prediction")
     print(val)
     
-    print (f'Thank you, here they are, the y_labels_tensor is {y_labels_tensor}, and the y_hat_tensor is {y_hat_tensor}')
+    print (f'Thank you, here the y_hat_tensor predictions on untrained MLP is {y_hat_tensor}')
     
-    
-    print ("Now you need to figure out how to populate y_labels_tensor using labels.csv file")
-    
-    print (f'real_image {real_Image} should be the same as My_DataSet[0] {My_DataSet[0]}')
     
     #SEPT 12, 2021:  __get_item__ is called when you create a new image object from the dataset object!
      
