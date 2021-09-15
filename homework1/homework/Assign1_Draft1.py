@@ -155,7 +155,13 @@ class LinearClassifier(torch.nn.Module):
     self.b = Parameter(-torch.zeros(1))         #added
     self.w = torch.ones(self.input_dim)
    
+    self.network = torch.nn.Linear(input_dim, 6)
+    
+   
+   
   def forward(self, x):      
+    
+    #SHOULD return a (B,6) torch.Tensor!!!!!!!!!!
     
     return (torch.matmul(self.w, x)+self.b)
    
