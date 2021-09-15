@@ -112,12 +112,6 @@ models.py models.py models.py models.py models.py models.py models.py models.py 
 models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py 
 models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py 
 """
-
-def LossFunction (prediction_logit, y_vector):      #FOR TESTING UNIT CIRCLE ERASE
-  
-  Y_hat_Vector = 1/(1+(-prediction_logit).exp())   #Take the sigmoid of the logit  
-  return -(y_vector.float() * (Y_hat_Vector+1e-10).log() +(1-y_vector.float()) * (1-Y_hat_Vector+1e-10).log() ).mean()
- 
       
 #kel76y
 class ClassificationLoss(torch.nn.Module):
