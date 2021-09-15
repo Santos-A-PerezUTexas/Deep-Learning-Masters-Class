@@ -9,6 +9,12 @@ import csv
 LABEL_NAMES = ['background', 'kart', 'pickup', 'nitro', 'bomb', 'projectile']
 input_dim = 3*64*64
 hidden_size=5
+n_epochs = 10                   #CHANGE EPOCHS to 100 !!!!!!!!
+batch_size = 128
+input_size = 64*64*3
+model_factory = { 'linear': LinearClassifier, 'mlp': MLPClassifier, }
+  
+  
 
 class SuperTuxDataset(Dataset):   #kel76y
 
@@ -84,7 +90,7 @@ class SuperTuxDataset(Dataset):   #kel76y
         
 #kel76y
 
-def load_data(dataset_path, num_workers=0, batch_size=128):     #use this in train.py
+def load_data(dataset_path, num_workers=0, batch_size=128):     #Change to 64! use this in train.py
     #all this does is return the data_loader to use in SGD?
   
     #https://machinelearningknowledge.ai/pytorch-dataloader-tutorial-with-example/
@@ -210,17 +216,12 @@ def load_model(model):
   return r
 
 
-model_factory = { 'linear': LinearClassifier, 'mlp': MLPClassifier, }
-  
-  
+
   
 
 #TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN 
 #TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN 
 
-n_epochs = 10                   #CHANGE EPOCHS to 100 !!!!!!!!
-batch_size = 64
-input_size = 64*64*3
 
 def train(args):
 
@@ -230,7 +231,8 @@ def train(args):
     #linear_M = model_factory[args.model](2)     #LINEAR CLASSIFIER BY DEFAULT IN THE COMMAND LINE, USED FOR GRADING
     linear_M = LinearClassifier()
     MLPx = MLPClassifier()                                     #MLP Used for Testing, Erase - use command line args to call this
-      
+     
+    Tux_DataLoader =  load_data('c:\fakepath', batch_size=64) 
  
     y_hat_tensor = torch.ones(batch_size,6)  #this is going to change when put through network
     
@@ -263,16 +265,22 @@ def train(args):
     #or is it tuples???  
     
 
-    #BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD BEGIN SGD 
+    
+    #BEGIN SGD kel76y
     
     global_step = 0
     
-    
-    #*******************************************BEGIN  UNIT CIRCLE TRAINING*********************************************
-    #*******************************************BEGIN  UNIT CIRCLE TRAINING*********************************************
-    
+   
     print ("--------------------------------STARTING TRAINING---------------------------------")
     
+    print (f'The size of the data loader is {len(Tux_DataLoader)}')
+    
+    
+    
+    for batch_idx, data in enumerate(Tux_DataLoader):
+      print ('batch idx{}, batch len {}'.format(batch_idx, len(data)))
+      print (data)
+        
     #for epoch in range(n_epochs): 
     
       # Shuffle the data
