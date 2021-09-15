@@ -21,7 +21,7 @@ class SuperTuxDataset(Dataset):   #kel76y
   def __init__(self, dataset_path):
   
   
-    self.BatchSize = batch_size
+    self.BatchSize = 512
     self.imageDATASET = torch.rand([self.BatchSize,3,64,64])   #COMPLETE BUT RANDOM DATA SET
  
     self.labels = torch.randint(0, 5, (self.BatchSize, ))    
@@ -91,7 +91,7 @@ class SuperTuxDataset(Dataset):   #kel76y
         
 #kel76y
 
-def load_data(dataset_path, num_workers=0, batch_size=128):     #Change to 64! use this in train.py
+def load_data(dataset_path, num_workers=0, batch_size=batch_size):     #Use this in train.py
     #all this does is return the data_loader to use in SGD?
   
     #https://machinelearningknowledge.ai/pytorch-dataloader-tutorial-with-example/
@@ -233,12 +233,14 @@ def train(args):
     linear_M = LinearClassifier()
     MLPx = MLPClassifier()                                     #MLP Used for Testing, Erase - use command line args to call this
      
-    Tux_DataLoader =  load_data('c:\fakepath', batch_size=64) 
+    Tux_DataLoader =  load_data('c:\fakepath') 
  
     y_hat_tensor = torch.ones(batch_size,6)  #this is going to change when put through network
     
+    y_hat_tensorLinear = torch.ones(batch_size)
+    y_hat_tensorMLP = torch.ones(batch_size,6)
       
-    real_Image, real_image_label = My_DataSet[0]   #gets image [0] TENSOR  tuple
+    real_Image_tensor, real_image_label = My_DataSet[0]   #gets image [0] TENSOR  tuple
                     
         
     
@@ -276,14 +278,49 @@ def train(args):
     
     print (f'The size of the data loader is {len(Tux_DataLoader)}')
     
+    #For epochs here
     
     
-    for batch_idx, data in enumerate(Tux_DataLoader):
-      print ('batch idx{}, batch len {}'.format(batch_idx, len(data)))
-      print (f'------------This is batch {batch_idx}, it has size {len(data)}, and here is the data: {data}')
-      print (f'------------The size of data[0] for batch[{batch_idx}], the images, is {len(data[0])}')
-      print (f'------------The size of data[1] for batch[{batch_idx}], the labels, is {len(data[1])}')
-      print (f'These are the labels for this batch:  {data[1]}')
+    for batch_idx, image_tuples_tensor in enumerate(Tux_DataLoader):
+           
+      for i in range(len(image_tuples_tensor[0])):
+        #print (f'label {i}, for batch {batch_idx} is {image_tuples_tensor[1][i]}')
+        flatened_Image_tensor = image_tuples_tensor[0][i].view(image_tuples_tensor[0][i].size(0), -1).view(-1)
+        y_hat_tensorLinear[i] = linear_M(flatened_Image_tensor) 
+        y_hat_tensorMLP[i] = MLPx(flatened_Image_tensor)
+        
+      print ('batch idx{}, batch len {}'.format(batch_idx, len(image_tuples_tensor)))
+      print (f'------------This is batch {batch_idx}, it has size {len(image_tuples_tensor)}, and here is the image_tuples_tensor: {image_tuples_tensor}')
+      print (f'------------The size of image_tuples_tensor[0] for batch[{batch_idx}], the images, is {len(image_tuples_tensor[0])}')
+      print (f'------------The size of image_tuples_tensor[1] for batch[{batch_idx}], the labels, is {len(image_tuples_tensor[1])}')
+      print (f'These are the labels for this batch:  {image_tuples_tensor[1]}')
+      print ("#### NOW calculate the loss, obtain gradients, and update weights BEFORE next batch")
+      val = input(f'##################  Above you can see batch {batch_idx}  #################')
+      print(val)
+      
+      print(f'y_hat_tensorLinear is {y_hat_tensorLinear}')
+      
+      print(f'y_hat_tensorMLP is {y_hat_tensorMLP}')
+      
+      #MLP_gradient = y_hat_tensorMLP.backward()
+      #linear_gradient = y_hat_tensorLinear()
+      
+      #need to calculate the loss first!
+      #print (f'The gradient for linear is {linear_gradient}, and for MLP its {MLP_gradient}')
+      #need to calculate the loss first! and take backward of the loss!
+      #print ("BOTH OF THESE ARE WRONG, NEED TO TRAIN NOW")
+      
+    
+      val = input(f'##################  Above you can Y_hat Tensor for both linear and MLP #################')
+      print(val)
+         
+      
+    
+        
+      
+       
+    
+      
         
     #for epoch in range(n_epochs): 
     
@@ -320,21 +357,21 @@ def train(args):
     
     
     
-    print (f'HERE I GO - ABOUT TO CREATE A MLP and Linear Models, these are the image dimensions:  {real_Image.size()}')
+    print (f'HERE I GO - ABOUT TO CREATE A MLP and Linear Models, these are the image dimensions:  {real_Image_tensor.size()}')
     print (f'input_dim is {input_dim}')
     
     val = input("Enter your value, then I will print the flattened image: ")
     print(val)
   
     
-    flatened_Image = real_Image.view(real_Image.size(0), -1).view(-1)   
-    test_logit = linear_M(flatened_Image)
-    y_hat_tensor[0] = MLPx(flatened_Image) #the true label is real_image_label  
+    flatened_Image_tensor = real_Image_tensor.view(real_Image_tensor.size(0), -1).view(-1)   
+    test_logit = linear_M(flatened_Image_tensor)
+    y_hat_tensor[0] = MLPx(flatened_Image_tensor) #the true label is real_image_label  
     
     
-    print (f'This is the flattened image {flatened_Image}, of size {flatened_Image.size()}, original tensor size was {real_Image[0].size()}')
+    print (f'This is the flattened image {flatened_Image_tensor}, of size {flatened_Image_tensor.size()}, original tensor size was {real_Image_tensor[0].size()}')
     
-    print (f'This is the real image, which should be 3x64x64: {real_Image}, its size {real_Image.size()}')
+    print (f'This is the real image TENSOR, which should be 3x64x64: {real_Image_tensor}, its size {real_Image_tensor.size()}')
        
     print (f'The y_hat_tensor[0] prediction on untrained MLP is {y_hat_tensor[0]}, and the logit obtained from the linear model is {test_logit}')
      
