@@ -65,12 +65,13 @@ class SuperTuxDataset(Dataset):   #kel76y
           counter_labels = 0
           for i in LABEL_NAMES:
             if i==row[1]:
-              self.labels[image_index] = counter_labels
+              self.labels[image_index-1] = counter_labels
             counter_labels += 1 
-          print (f'I just assigned self.labels[{image_index}] the value {self.labels[image_index]} which corresponds to label {row[1]}')
+          print (f'I just assigned self.labels[{image_index-1}] the value {self.labels[image_index-1]} which corresponds to label {row[1]}')
           
         image_index += 1 
         if image_index == self.BatchSize:
+            print(f'I will now break, image_index is {image_index}')
             break
     
 
