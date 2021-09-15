@@ -12,7 +12,7 @@ hidden_size=5
 n_epochs = 10                   #CHANGE EPOCHS to 100 !!!!!!!!
 batch_size = 128
 input_size = 64*64*3
-model_factory = { 'linear': LinearClassifier, 'mlp': MLPClassifier, }
+
   
   
 
@@ -216,7 +216,7 @@ def load_model(model):
   return r
 
 
-
+model_factory = { 'linear': LinearClassifier, 'mlp': MLPClassifier, }  #this has to stay here!!
   
 
 #TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN 
@@ -279,7 +279,10 @@ def train(args):
     
     for batch_idx, data in enumerate(Tux_DataLoader):
       print ('batch idx{}, batch len {}'.format(batch_idx, len(data)))
-      print (data)
+      print (f'------------This is batch {batch_idx}, it has size {len(data)}, and here is the data: {data}')
+      print (f'------------The size of data[0] for batch[{batch_idx}], the images, is {len(data[0])}')
+      print (f'------------The size of data[1] for batch[{batch_idx}], the labels, is {len(data[1])}')
+      print (f'These are the labels for this batch:  {data[1]}')
         
     #for epoch in range(n_epochs): 
     
