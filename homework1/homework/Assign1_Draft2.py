@@ -140,8 +140,6 @@ class ClassificationLoss(torch.nn.Module):
       
 #kel76y
 # -----------------------------------------------LINEAR-----------------------------------------------
-# -----------------------------------------------LINEAR-----------------------------------------------
-# -----------------------------------------------LINEAR-----------------------------------------------
 
 class LinearClassifier(torch.nn.Module):
 
@@ -161,14 +159,14 @@ class LinearClassifier(torch.nn.Module):
 
 
 #*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP*************
-#*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP*************
-#*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP*************
 
 
 #kel76y
 class MLPClassifier(torch.nn.Module):  
 
 #The inputs and outputs to the multi-layer perceptron are the same as the linear classifier.
+#Some tuning of your training code. Move modifications to command-line arguments in ArgumentParser
+
 
   def __init__(self):   
    
@@ -176,11 +174,7 @@ class MLPClassifier(torch.nn.Module):
      
     print(f'The input_dimension is --------------------->{input_dim}')
     print(f'The hidden size is --------------------->{hidden_size}')
-     
-    self.layer1=torch.nn.Linear(input_dim, hidden_size)
-    self.REluLayer =  torch.nn.ReLU(inplace=False)
-    self.layer2=torch.nn.Linear(hidden_size, 6)
-     
+        
     self.network = torch.nn.Sequential( 
                 torch.nn.Linear(input_dim, hidden_size),   #keep this small???
                 torch.nn.ReLU(inplace=False),                                               #THIS IS FOR THE MLP!!!
@@ -215,8 +209,7 @@ def load_model(model):
 model_factory = { 'linear': LinearClassifier, 'mlp': MLPClassifier, }  #this has to stay here!!
   
 
-#TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN 
-#TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN 
+#TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN T
 
 
 def train(args):
