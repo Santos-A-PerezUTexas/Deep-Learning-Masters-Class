@@ -8,7 +8,6 @@ import csv
 
 LABEL_NAMES = ['background', 'kart', 'pickup', 'nitro', 'bomb', 'projectile']
 input_dim = 3*64*64
-hidden_size=5
 n_epochs = 10                   #CHANGE EPOCHS to 100 !!!!!!!!
 batch_size = 128
 input_size = 64*64*3
@@ -159,25 +158,22 @@ class LinearClassifier(torch.nn.Module):
 
 
 #*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP*************
-
-
 #kel76y
+
 class MLPClassifier(torch.nn.Module):  
 
 #The inputs and outputs to the multi-layer perceptron are the same as the linear classifier.
 #Some tuning of your training code. Move modifications to command-line arguments in ArgumentParser
 
 
-  def __init__(self):   
+  def __init__(self, hidden_size):   
    
     super().__init__()        
-     
-    print(f'The input_dimension is --------------------->{input_dim}')
-    print(f'The hidden size is --------------------->{hidden_size}')
+    self.hidden_size = hidden_size
         
     self.network = torch.nn.Sequential( 
-                torch.nn.Linear(input_dim, hidden_size),   #keep this small???
-                torch.nn.ReLU(inplace=False),                                               #THIS IS FOR THE MLP!!!
+                torch.nn.Linear(input_dim, hidden_size),   #----->keep this layer small to save parameters???
+                torch.nn.ReLU(inplace=False),               
                 torch.nn.Linear(hidden_size, 6)  
                 )
                 
@@ -217,9 +213,9 @@ def train(args):
     
     image_index = 1                   #test code
     My_DataSet = SuperTuxDataset('c:\fakepath')      
-    #linear_M = model_factory[args.model](2)     #LINEAR CLASSIFIER BY DEFAULT IN THE COMMAND LINE, USED FOR GRADING
+    #linear_M = model_factory[args.model](2)     #LINEAR CLASSIFIER BY DEFAULT IN THE COMMAND LINE 
     linear_M = LinearClassifier()
-    MLPx = MLPClassifier()                                     #MLP Used for Testing, Erase - use command line args to call this
+    MLPx = MLPClassifier(hidden_size=5)                                     
      
     Tux_DataLoader =  load_data('c:\fakepath') 
  
