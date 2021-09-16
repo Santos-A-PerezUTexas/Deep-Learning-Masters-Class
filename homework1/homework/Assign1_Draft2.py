@@ -151,10 +151,6 @@ class LinearClassifier(torch.nn.Module):
        
     self.input_dim = input_dim
     
-    #self.w = Parameter(torch.zeros(input_dim))  #added
-    self.b = Parameter(-torch.zeros(1))         #added
-    self.w = torch.ones(self.input_dim)
-   
     self.network = torch.nn.Linear(input_dim, 6)
     
      
@@ -171,6 +167,8 @@ class LinearClassifier(torch.nn.Module):
 
 #kel76y
 class MLPClassifier(torch.nn.Module):  
+
+#The inputs and outputs to the multi-layer perceptron are the same as the linear classifier.
 
   def __init__(self):   
    
