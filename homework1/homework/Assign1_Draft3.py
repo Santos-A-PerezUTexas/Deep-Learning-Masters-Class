@@ -120,16 +120,22 @@ class ClassificationLoss(torch.nn.Module):
     
   def forward(self, Y_hat_Vector, y_vector):   #OLD: def forward(self, input, target):
       
-    Get_Log_Softmax = torch.nn.LogSoftmax()  #may have to change this to logsoftmax, then use nllloss 
+    Get_Softmax = torch.nn.Softmax()  #may have to change this to logsoftmax, then use nllloss 
     Negative_L_loss = torch.nn.NLLLoss()
-    weighted_mean_batch_loss = Negative_L_loss(Get_Log_Softmax(Y_hat_Vector),  y_vector)
+    cross_loss = torch.nn.CrossEntropyLoss()
+    #nn.CrossEntropyLoss() is actually a combination of nn.LogSoftmax() and nn.NLLLoss(). Refer this 5 doc.
+    
+    #weighted_mean_batch_loss = Negative_L_loss(Get_Softmax(Y_hat_Vector),  y_vector)
+    #weighted_mean_batch_loss = Negative_L_loss(Y_hat_Vector,  y_vector)
+    weighted_mean_batch_loss = cross_loss(Y_hat_Vector,  y_vector)
+    
     
     #Y_hat_vector is a minibatch with 128 6-tensor entries for 128 (batch_size) image outputs
     #y_vector is the a 128 1-tensor vector with the correct class label
     #Get_log_Softmax returns 128 6-tensor entries with 6 log probabilities for each image
     #Negative_L_Loss returns a 1 tensor entry with the mean? loss????, with backward you get gradients, then optimize.step
         
-    print (f'*********INSIDE Classification Loss, the Get_Log_Softmax of Y_hat_Vector vector is {Get_Log_Softmax(Y_hat_Vector)}, and this compares with the actual values{y_vector}')
+    print (f'*********INSIDE Classification Loss, the Get_Softmax of Y_hat_Vector vector is {Get_Softmax(Y_hat_Vector)}, and this compares with the actual values{y_vector}')
     
     print (f'*********STILL INSIDE Classification Loss, the weighted_mean_batch_loss is {weighted_mean_batch_loss}')
         
