@@ -111,26 +111,27 @@ models.py models.py models.py models.py models.py models.py models.py models.py 
 models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py 
 models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py 
 """
-      
+   
+#----------------------------------------------CLASSIFICATION LOSS      
 #kel76y
+
 class ClassificationLoss(torch.nn.Module):
   
     
-    #**You should implement the log-likelihood of a softmax classifier.
-    #https://pytorch.org/docs/master/nn.html#torch.nn.LogSoftmax
-    #https://pytorch.org/docs/master/generated/torch.nn.NLLLoss.html#torch.nn.NLLLoss    (NEGATIVE LOSS 
-    #LIKELIHOOD use with LOG-softmax.)   
-    #https://pytorch.org/docs/master/generated/torch.nn.LogSoftmax.html#torch.nn.LogSoftmax
-          
-  #https://pytorch.org/docs/master/generated/torch.nn.NLLLoss.html#torch.nn.NLLLoss
-  #torch.nn.NLLLoss(weight=None, size_average=None, ignore_index=- 100, reduce=None, reduction='mean')
-  
   def forward(self, Y_hat_Vector, y_vector):   #OLD: def forward(self, input, target):
       
-    m = nn.Softmax()  #may have to change this to logsoftmax, then use nllloss 
-    Softmaxed_Y_hat = m(Y_hat_Vector)  #.mean()?
+    Get_Log_Softmax = torch.nn.LogSoftmax()  #may have to change this to logsoftmax, then use nllloss 
+    Negative_L_loss = torch.nn.NLLLoss()
+    output = Negative_L_loss(Get_Log_Softmax(Y_hat_Vector),  y_vector)
+    
+    #Y_hat_vector is a minibatch with 128 6-tensor entries for 128 (batch_size) image outputs
+    #y_vector is the a 128 1-tensor vector with the correct class label
+    #Get_log_Softmax returns 128 6-tensor entries with 6 log probabilities for each image
+    #Negative_L_Loss returns a 128 1 tensor entry with the loss, with backward you get gradients, then optimize.step
         
-    return (Softmaxed_Y_hat)
+    print (f'*********INSIDE Classification Loss, the output vector is {output}, and the output mean loss is {output.mean()}')
+        
+    return (output.mean())  #return the mean loss accross the entire batch
       
     
       
@@ -245,7 +246,7 @@ def train(args):
     # Create the loss - For these batch_size images, the network predicted the labels as set forth by y_hat_vector 
     #(change to tensor!!!)
     
-    model_loss = ClassificationLoss()   
+    calculate_loss = ClassificationLoss()   
     
     #call it with Y_hat_Vector, y_vector... input (y_hat predicted labels) and 
     #target (y_vector actual image label)
@@ -276,13 +277,16 @@ def train(args):
       #end iterate through all images
       
       
-      #calculated_loss = model_loss(yhat, y) 
+      model_loss = calculate_loss(y_hat_tensorMLP, image_tuples_tensor[1]) 
         
       print ('batch idx{}, batch len {}'.format(batch_idx, len(image_tuples_tensor)))
       print (f'------------This is batch {batch_idx}, it has size {len(image_tuples_tensor)}, and here is the image_tuples_tensor: {image_tuples_tensor}')
       print (f'------------The size of image_tuples_tensor[0] for batch[{batch_idx}], the images, is {len(image_tuples_tensor[0])}')
       print (f'------------The size of image_tuples_tensor[1] for batch[{batch_idx}], the labels, is {len(image_tuples_tensor[1])}')
       print (f'These are the labels for this batch:  {image_tuples_tensor[1]}')
+      
+      print (f'==============================LOSS FOR BATCH {batch_idx} is {model_loss}')
+            
       print ("#### NOW calculate the loss, obtain gradients, and update weights BEFORE next batch")
       val = input(f'##################  Above you can see batch {batch_idx}  #################')
       print(val)
