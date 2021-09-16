@@ -125,15 +125,12 @@ class ClassificationLoss(torch.nn.Module):
   
   def forward(self, Y_hat_Vector, y_vector):   #OLD: def forward(self, input, target):
       
-    m = nn.LogSoftmax()
-    input = torch.randn(2, 3)
-    output = m(input)
+    m = nn.Softmax()
+    Softmaxed_Y_hat = m(Y_hat_Vector)  #.mean()?
         
-    return -(y_vector.float() * (Y_hat_Vector+1e-10).log() +(1-y_vector.float()) * (1-Y_hat_Vector+1e-10).log() ).mean()
+    return (Softmaxed_Y_hat)
       
-    #This is the negative log likelihood for logistic regression, need SOFTMAX instead.
-    #In Logistic Regression, Y_hat_vector is a prediction for ALL x(i) in the data set, so it returns
-    #a vector of i scalars.  In Softmax, this would return a vector (tensor) of i vectors - not scalars).
+    
       
       
       
@@ -246,7 +243,8 @@ def train(args):
     # Create the loss - For these batch_size images, the network predicted the labels as set forth by y_hat_vector 
     #(change to tensor!!!)
     
-    loss_object = ClassificationLoss()   
+    model_loss = ClassificationLoss()   
+    
     #call it with Y_hat_Vector, y_vector... input (y_hat predicted labels) and 
     #target (y_vector actual image label)
     #now I can call it as such, model_loss = loss_object (y_hat_tensor, y_tensor) where y_tensor has actual values.. 
@@ -274,6 +272,9 @@ def train(args):
         y_hat_tensorLinear[i] = linear_M(flatened_Image_tensor) 
         y_hat_tensorMLP[i] = MLPx(flatened_Image_tensor)
       #end iterate through all images
+      
+      
+      #calculated_loss = model_loss(yhat, y) 
         
       print ('batch idx{}, batch len {}'.format(batch_idx, len(image_tuples_tensor)))
       print (f'------------This is batch {batch_idx}, it has size {len(image_tuples_tensor)}, and here is the image_tuples_tensor: {image_tuples_tensor}')
