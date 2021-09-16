@@ -157,13 +157,10 @@ class LinearClassifier(torch.nn.Module):
    
     self.network = torch.nn.Linear(input_dim, 6)
     
-   
-   
-  def forward(self, x):      
-    
-    #SHOULD return a (B,6) torch.Tensor!!!!!!!!!!
-    
-    return (torch.matmul(self.w, x)+self.b)
+     
+  def forward(self, flat_image):   
+  
+    return self.network(flat_image)
    
 
 
@@ -237,7 +234,7 @@ def train(args):
  
     y_hat_tensor = torch.ones(batch_size,6)  #this is going to change when put through network
     
-    y_hat_tensorLinear = torch.ones(batch_size)
+    y_hat_tensorLinear = torch.ones(batch_size, 6)
     y_hat_tensorMLP = torch.ones(batch_size,6)
       
     real_Image_tensor, real_image_label = My_DataSet[0]   #gets image [0] TENSOR  tuple
@@ -281,13 +278,14 @@ def train(args):
     #For epochs here
     
     
-    for batch_idx, image_tuples_tensor in enumerate(Tux_DataLoader):
+    for batch_idx, image_tuples_tensor in enumerate(Tux_DataLoader):  #iterate batches
            
-      for i in range(len(image_tuples_tensor[0])):
+      for i in range(len(image_tuples_tensor[0])):  #iterate through all images
         #print (f'label {i}, for batch {batch_idx} is {image_tuples_tensor[1][i]}')
         flatened_Image_tensor = image_tuples_tensor[0][i].view(image_tuples_tensor[0][i].size(0), -1).view(-1)
         y_hat_tensorLinear[i] = linear_M(flatened_Image_tensor) 
         y_hat_tensorMLP[i] = MLPx(flatened_Image_tensor)
+      #end iterate through all images
         
       print ('batch idx{}, batch len {}'.format(batch_idx, len(image_tuples_tensor)))
       print (f'------------This is batch {batch_idx}, it has size {len(image_tuples_tensor)}, and here is the image_tuples_tensor: {image_tuples_tensor}')
@@ -313,14 +311,7 @@ def train(args):
     
       val = input(f'##################  Above you can Y_hat Tensor for both linear and MLP #################')
       print(val)
-         
-      
-    
-        
-      
-       
-    
-      
+               
         
     #for epoch in range(n_epochs): 
     
@@ -347,33 +338,8 @@ def train(args):
     print ("--------------------------------FINISHED TRAINING---------------------------------")
     
   
-    
     #print (f'Here is the permutation iterative which goes in the for loop, len(permutation)-batch_size+1 = {len(permutation)} minus {batch_size+1}')
     
-    val = input("Enter your value: ")
-    print(val)
-    
-    print (f'Just did {n_epochs} Gradient Descent iterations')
-    
-    
-    
-    print (f'HERE I GO - ABOUT TO CREATE A MLP and Linear Models, these are the image dimensions:  {real_Image_tensor.size()}')
-    print (f'input_dim is {input_dim}')
-    
-    val = input("Enter your value, then I will print the flattened image: ")
-    print(val)
-  
-    
-    flatened_Image_tensor = real_Image_tensor.view(real_Image_tensor.size(0), -1).view(-1)   
-    test_logit = linear_M(flatened_Image_tensor)
-    y_hat_tensor[0] = MLPx(flatened_Image_tensor) #the true label is real_image_label  
-    
-    
-    print (f'This is the flattened image {flatened_Image_tensor}, of size {flatened_Image_tensor.size()}, original tensor size was {real_Image_tensor[0].size()}')
-    
-    print (f'This is the real image TENSOR, which should be 3x64x64: {real_Image_tensor}, its size {real_Image_tensor.size()}')
-       
-    print (f'The y_hat_tensor[0] prediction on untrained MLP is {y_hat_tensor[0]}, and the logit obtained from the linear model is {test_logit}')
      
     #SEPT 12, 2021:  __get_item__ is called when you create a new image object from the dataset object!
      
