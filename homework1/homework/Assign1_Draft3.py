@@ -131,7 +131,7 @@ class ClassificationLoss(torch.nn.Module):
         
     print (f'*********INSIDE Classification Loss, the Get_Log_Softmax of Y_hat_Vector vector is {Get_Log_Softmax(Y_hat_Vector)}, and this compares with the actual values{y_vector}')
     
-    print (f'*********STILL INSIDE Classification Loss, the weighted_mean_batch_loss is {weighted_mean_batch_loss}}')
+    print (f'*********STILL INSIDE Classification Loss, the weighted_mean_batch_loss is {weighted_mean_batch_loss}')
         
         
     return (weighted_mean_batch_loss)  #return the mean loss accross the entire batch
