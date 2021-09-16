@@ -287,6 +287,7 @@ def train(args):
       
       
       model_loss = calculate_loss(y_hat_tensorMLP, image_tuples_tensor[1]) 
+      gradient = model_loss.backward()
         
       print ('batch idx{}, batch len {}'.format(batch_idx, len(image_tuples_tensor)))
       print (f'------------This is batch {batch_idx}, it has size {len(image_tuples_tensor)}, and here is the image_tuples_tensor: {image_tuples_tensor}')
