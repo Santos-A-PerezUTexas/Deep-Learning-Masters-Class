@@ -227,20 +227,21 @@ def train(args):
     real_Image_tensor, real_image_label = My_DataSet[0]   #gets image [0] TENSOR  tuple
                     
         
-    
-#LOAD DATA LOAD LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA LOAD DATA 
-#Use load_data() function, somethhing like my_loader = load_data("path"). 
-#https://machinelearningknowledge.ai/pytorch-dataloader-tutorial-with-example/
+ 
 #trainset = datasets.MNIST('~/.pytorch/MNIST_data/', download=True, train=True, transform=transform)
 #trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
     
     
     
     
-    #create the optimizer for MLP (change to use args)
-    optimizer = torch.optim.SGD(MLPx.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4)        
+    #create the optimizer (change to use args??)
     #just defining the optimizer, call it w/ step to update weights 
     #but must implement loss.backward first to get the gradients
+    
+    optimizerMLPx = torch.optim.SGD(MLPx.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4)
+    
+    optimizerLinear = torch.optim.SGD(linear_M.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4)
+        
     
     # Create the loss - For these batch_size images, the network predicted the labels as set forth by y_hat_vector 
     #(change to tensor!!!)
