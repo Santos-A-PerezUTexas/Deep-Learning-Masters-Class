@@ -23,9 +23,9 @@ class SuperTuxDataset(Dataset):   #kel76y
     self.BatchSize = 512
     self.imageDATASET = torch.rand([self.BatchSize,3,64,64])   #COMPLETE BUT RANDOM DATA SET
  
-    self.labels = torch.randint(0, 5, (self.BatchSize, ))    
-  
-    
+     #self.labels = torch.ones(self.BatchSize)
+     
+    self.labels = torch.randint(0, 5, (self.BatchSize, ))
     
     
     val = input("PRESS ANY KEY AND BE BOLD")
@@ -46,7 +46,7 @@ class SuperTuxDataset(Dataset):   #kel76y
       #ImageReader = csv.reader(csvfile, delimiter=' ', quotechar='|') 
       #https://www.geeksforgeeks.org/working-csv-files-python/     
       
-      for row in ImageReader:
+      for labelsFILE_image_row in ImageReader:
         
         #print(', '.join(row))
         #print (f'File names ONLY-------------------{row[0]}')
@@ -54,19 +54,24 @@ class SuperTuxDataset(Dataset):   #kel76y
         
         if image_index > 0:
                   
-          image_file_name = "..\data\\train\\"+row[0] 
+          image_file_name = "..\data\\train\\"+labelsFILE_image_row[0] 
           print(image_file_name)
           self.one_image = Image.open(image_file_name)
           self.Image_To_Tensor = Image_Transformer.transforms.ToTensor()
           self.Image_tensor = self.Image_To_Tensor(self.one_image)
           self.imageDATASET[image_index] = self.Image_tensor
-          #self.labels[image_index] = row[1] ->row[1] is a string, e.g. background. Convert to int...
-          counter_labels = 0
-          for i in LABEL_NAMES:
-            if i==row[1]:
-              self.labels[image_index-1] = counter_labels
-            counter_labels += 1 
-          print (f'I just assigned self.labels[{image_index-1}] the value {self.labels[image_index-1]} which corresponds to label {row[1]}')
+          
+          label_string_to_number = 0
+          
+          #iterate through label names, assign current label[image_index] a number:
+          current_label_string = labelsFILE_image_row[1]
+           
+          for i in LABEL_NAMES:  #from string to string, iterate through the strongs
+            if i==current_label_string:
+              self.labels[image_index-1] = label_string_to_number
+            label_string_to_number += 1
+             
+          print (f'I just assigned self.labels[{image_index-1}] the value {self.labels[image_index-1]} which corresponds to label {labelsFILE_image_row[1]}')
           
         image_index += 1 
         if image_index == self.BatchSize:
@@ -123,10 +128,11 @@ class ClassificationLoss(torch.nn.Module):
     Get_Softmax = torch.nn.Softmax()  #may have to change this to logsoftmax, then use nllloss 
     Negative_L_loss = torch.nn.NLLLoss()
     cross_loss = torch.nn.CrossEntropyLoss()
+ 
     #nn.CrossEntropyLoss() is actually a combination of nn.LogSoftmax() and nn.NLLLoss(). Refer this 5 doc.
-    
     #weighted_mean_batch_loss = Negative_L_loss(Get_Softmax(Y_hat_Vector),  y_vector)
     #weighted_mean_batch_loss = Negative_L_loss(Y_hat_Vector,  y_vector)
+ 
     weighted_mean_batch_loss = cross_loss(Y_hat_Vector,  y_vector)
     
     
@@ -135,10 +141,11 @@ class ClassificationLoss(torch.nn.Module):
     #Get_log_Softmax returns 128 6-tensor entries with 6 log probabilities for each image
     #Negative_L_Loss returns a 1 tensor entry with the mean? loss????, with backward you get gradients, then optimize.step
         
-    print (f'*********INSIDE Classification Loss, the Get_Softmax of Y_hat_Vector vector is {Get_Softmax(Y_hat_Vector)}, and this compares with the actual values{y_vector}')
+    print (f'*********INSIDE Classification Loss, Y_hat_Vector vector is {Y_hat_Vector}, and this compares with the actual values{y_vector}')
     
     print (f'*********STILL INSIDE Classification Loss, the weighted_mean_batch_loss is {weighted_mean_batch_loss}')
-    print (f'*********The backward fx of weighted_mean_batch_loss (gradient) is {weighted_mean_batch_loss.backward()}')
+    
+    #print (f'*********The backward fx of weighted_mean_batch_loss (gradient) is {weighted_mean_batch_loss.backward(retain_graph=True)}')
         
         
     return (weighted_mean_batch_loss)  #return the mean loss accross the entire batch
@@ -161,10 +168,12 @@ class LinearClassifier(torch.nn.Module):
     self.network = torch.nn.Linear(input_dim, 6)
     
      
-  def forward(self, flat_image):   
+  def forward(self, image_tensor):   
+    
+    flatened_Image_tensor = image_tensor.view(image_tensor.size(0), -1).view(-1)
+    
+    return self.network(flatened_Image_tensor)
   
-    return self.network(flat_image)
-   
 
 
 #*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP*************
@@ -187,8 +196,11 @@ class MLPClassifier(torch.nn.Module):
                 torch.nn.Linear(hidden_size, 6)  
                 )
                 
-  def forward(self, flat_image):   
-    return self.network(flat_image)
+  def forward(self, image_tensor):   
+  
+    flatened_Image_tensor = image_tensor.view(image_tensor.size(0), -1).view(-1)
+    
+    return self.network(flatened_Image_tensor)
   
   #def forward(self, multiple_image_tensor):   
   #receives a (B,3,64,64) tensor as an input and should return a (B,6) torch.Tensor
@@ -232,7 +244,7 @@ def train(args):
     y_hat_tensor = torch.ones(batch_size,6)  #this is going to change when put through network
     
     y_hat_tensorLinear = torch.ones(batch_size, 6)
-    y_hat_tensorMLP = torch.ones(batch_size,6)
+    y_hat_tensorMLP = torch.ones(batch_size,6)              #requires_grad = True????
       
     real_Image_tensor, real_image_label = My_DataSet[0]   #gets image [0] TENSOR  tuple
                     
@@ -276,35 +288,55 @@ def train(args):
     
     #For epochs here
     
+    #flatened_Image_tensor = torch.rand(input_dim)
     
     for batch_idx, image_tuples_tensor in enumerate(Tux_DataLoader):  #iterate batches
            
-      for i in range(len(image_tuples_tensor[0])):  #iterate through all images
+      for i in range(len(image_tuples_tensor[0])):  #iterate through all images, MAYBE I DONT NEED THIS!
         #print (f'label {i}, for batch {batch_idx} is {image_tuples_tensor[1][i]}')
-        flatened_Image_tensor = image_tuples_tensor[0][i].view(image_tuples_tensor[0][i].size(0), -1).view(-1)
-        y_hat_tensorLinear[i] = linear_M(flatened_Image_tensor) 
-        y_hat_tensorMLP[i] = MLPx(flatened_Image_tensor)
+        
+        y_hat_tensorLinear[i] = linear_M(image_tuples_tensor[0][i]) 
+        
+        y_hat_tensorMLP[i] = MLPx(image_tuples_tensor[0][i])
+        
+        #y_hat_tensorMLP[i] = MLPx(flatened_Image_tensor)
+        #y_hat_tensorMLP[i] = MLPx(flatened_Image_tensor)   "a view requires grad in place operation"
+        #y_hat_tensorMLP[i] = MLPx(flatened_Image_tensor)
+        
+        print (f'%%%%%%%%  Just assinged y_hat_tensor[{i}] this value:   {MLPx(image_tuples_tensor[0][i])}')
+      
       #end iterate through all images
+      
+      #print ('batch idx{}, batch len {}'.format(batch_idx, len(image_tuples_tensor)))
+      #print (f'------------This is batch {batch_idx}, it has size {len(image_tuples_tensor)}, and here is the image_tuples_tensor: {image_tuples_tensor}')
+      #print (f'------------The size of image_tuples_tensor[0] for batch[{batch_idx}], the images, is {len(image_tuples_tensor[0])}')
+      #print (f'------------The size of image_tuples_tensor[1] for batch[{batch_idx}], the labels, is {len(image_tuples_tensor[1])}')
+      #print (f'These are the labels for this batch:  {image_tuples_tensor[1]}')
+           
+      val = input(f'!!!!!!!!!!!!!!!!About to call model_loss with this value for y_hat {y_hat_tensorMLP}, and this one for target,   {image_tuples_tensor[1]}')
+      print(val)
       
       
       model_loss = calculate_loss(y_hat_tensorMLP, image_tuples_tensor[1]) 
-      gradient = model_loss.backward()
-        
-      print ('batch idx{}, batch len {}'.format(batch_idx, len(image_tuples_tensor)))
-      print (f'------------This is batch {batch_idx}, it has size {len(image_tuples_tensor)}, and here is the image_tuples_tensor: {image_tuples_tensor}')
-      print (f'------------The size of image_tuples_tensor[0] for batch[{batch_idx}], the images, is {len(image_tuples_tensor[0])}')
-      print (f'------------The size of image_tuples_tensor[1] for batch[{batch_idx}], the labels, is {len(image_tuples_tensor[1])}')
-      print (f'These are the labels for this batch:  {image_tuples_tensor[1]}')
       
-      print (f'==============================LOSS FOR BATCH {batch_idx} is {model_loss}')
+      torch.autograd.set_detect_anomaly(True)
+      
+      optimizerMLPx.zero_grad()
+      model_loss.backward(retain_graph=True) 
+      optimizerMLPx.step()
+        
+      print (f'==============================LOSS FOR BATCH {batch_idx} is {model_loss} and the gradient is deleted')
             
       print ("#### NOW calculate the loss, obtain gradients, and update weights BEFORE next batch")
+      
       val = input(f'##################  Above you can see batch {batch_idx}  #################')
       print(val)
       
       print(f'y_hat_tensorLinear is {y_hat_tensorLinear}')
       
       print(f'y_hat_tensorMLP is {y_hat_tensorMLP}')
+      
+      
       
       #MLP_gradient = y_hat_tensorMLP.backward()
       #linear_gradient = y_hat_tensorLinear()
