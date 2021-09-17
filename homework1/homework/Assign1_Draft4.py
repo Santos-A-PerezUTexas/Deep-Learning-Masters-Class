@@ -342,7 +342,9 @@ def train(args):
         #y_hat_tensorMLP[i] = MLPx(flatened_Image_tensor)   "a view requires grad in place operation"
         #This may be an "inplace" operation!!!!!!!!
         
-        print(f'At line 302, y_hat_tensorMLP[i] {y_hat_tensorMLP[i]} has been assigned the MLPx of image_tuples_tensor[0][i], {image_tuples_tensor[0][i]}')
+        #print(f'At line 302, y_hat_tensorMLP[i] {y_hat_tensorMLP[i]} has been assigned the MLPx of image_tuples_tensor[0][i], {image_tuples_tensor[0][i]}')
+        #print(f'At line 302, y_hat_tensorMLP[i] {y_hat_tensorMLP[i]} has been assigned the MLPx of image_tuples_tensor[0][i], {image_tuples_tensor[0][i]}')
+        
         
         #y_hat_tensorMLP[i] has grad_fn=<SelectBackward>  
         #BUT ..... image_tuples_tensor[0][i] - the "input" x_vector has no grad!!!!!!!!!!
@@ -362,10 +364,10 @@ def train(args):
       #print (f'------------The size of image_tuples_tensor[1] for batch[{batch_idx}], the labels, is {len(image_tuples_tensor[1])}')
       #print (f'These are the labels for this batch:  {image_tuples_tensor[1]}')
       
-      print (f'SEPT 17:  444444444444444444444---------------------->CURRENTLY AT BACTH[{batch_idx}]') 
-      print (f'SEPT 17:  444444444444444444444---------------------->CURRENTLY AT BACTH[{batch_idx}]') 
-      print (f'SEPT 17:  444444444444444444444---------------------->CURRENTLY AT BACTH[{batch_idx}]') 
-      print (f'SEPT 17:  444444444444444444444---------------------->CURRENTLY AT BACTH[{batch_idx}]') 
+      print (f'SEPT 17:  444444444444444444444---------------------->CURRENTLY AT BATCH[{batch_idx}]') 
+      print (f'SEPT 17:  444444444444444444444---------------------->CURRENTLY AT BATCH[{batch_idx}]') 
+      print (f'SEPT 17:  444444444444444444444---------------------->CURRENTLY AT BATCH[{batch_idx}]') 
+      print (f'SEPT 17:  444444444444444444444---------------------->CURRENTLY AT BATCH[{batch_idx}]') 
           
       val = input(f'!!!!!!!!!!!!!!!!About to call model_loss with this value for y_hat {y_hat_tensorMLP}, and this one for target,   {image_tuples_tensor[1]}')
       print(val)
@@ -385,6 +387,8 @@ def train(args):
       optimizerLinear.zero_grad()
       
       model_lossLinear.backward(retain_graph=True)
+      #model_lossMLP.backward(retain_graph=True)    # #8x8x8x8x8x8x8x8x8x8x8x8x8x8x8x8  PROBLEM HERE
+      #model_lossMLP.backward(retain_graph=True)    # #8x8x8x8x8x8x8x8x8x8x8x8x8x8x8x8  PROBLEM HERE
       #model_lossMLP.backward(retain_graph=True)    # #8x8x8x8x8x8x8x8x8x8x8x8x8x8x8x8  PROBLEM HERE
       
       #one of the variables needed for gradient computation has been modified by an inplace operation: 
