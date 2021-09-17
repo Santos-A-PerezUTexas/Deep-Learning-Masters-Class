@@ -1,6 +1,8 @@
 #QUESTIONS
 #  NO NEED TO USE SIGMOID FOR LINEAR, CROSS ENTROPY W/ SOFTMAX GOOD ENOUGH
 # CROSS ENTROPY LOSS TAKES SOFTMAX of 6-VECTOR as Y_hat, and as a Y it takes scalars from 0-5 
+#does target have to have requires_gradent = true
+#were to flatten images, in train or MLP or Linear class
 
 
 import torch
@@ -193,12 +195,12 @@ class LinearClassifier(torch.nn.Module):
     flatened_Image_tensor = image_tensor.view(image_tensor.size(0), -1).view(-1)
     #this will have NO GRADIENT!
     
-    return self.network(flatened_Image_tensor)
+    return self.network(flatened_Image_tensor).requires_grad_()   #Added requires_grad on Sept 17
     
     #return (flatened_Image_tensor* self.w[:, None]).sum(1) + self.b
 
 
-#*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP*************
+#--------------------------------------------------------------MLP------------------------------------------------
 #kel76y
 
 class MLPClassifier(torch.nn.Module):  
@@ -215,6 +217,12 @@ class MLPClassifier(torch.nn.Module):
     #added this Sept 17, 2021
     self.w = Parameter(torch.ones(input_dim))
     self.b = Parameter(-torch.ones(1))
+        
+    self.linear1 = torch.nn.Linear(input_dim, hidden_size)
+    torch.nn.init.normal_(self.linear1.weight, std=0.01)
+    torch.nn.init.normal_(self.linear1.bias, std=0.01)
+    self.linear2 = torch.nn.Linear(hidden_size, 6)
+    self.ReLU = torch.nn.ReLU(inplace=False)
         
     self.network = torch.nn.Sequential( 
                 torch.nn.Linear(input_dim, hidden_size),   #----->keep this layer small to save parameters???
@@ -238,8 +246,12 @@ class MLPClassifier(torch.nn.Module):
     print(f'Now will compute y_hat with the flattened image, this is y_hat: {self.network(flattened_Image_tensor)}')
     print(f"I will now return that value to the training loop")
     
-    return self.network(flattened_Image_tensor)
+    #return self.network(flattened_Image_tensor)    COMMENTED OUT ON SEP 17
     # This result grad_fn=<AddBackward0>, but flattened_image (x) has no grad!
+    
+    return (self.linear2(self.ReLU(self.linear1(flattened_Image_tensor))))  #added this Sept 17, revert back????
+    
+
     
   #def forward(self, multiple_image_tensor):   
   #receives a (B,3,64,64) tensor as an input and should return a (B,6) torch.Tensor
@@ -399,17 +411,25 @@ def train(args):
       optimizerLinear.zero_grad()
       
       model_lossLinear.backward(retain_graph=True)
-      #model_lossMLP.backward(retain_graph=True)    # #8x8x8x8x8x8x8x8x8x8x8x8x8x8x8x8  PROBLEM HERE
-      #model_lossMLP.backward(retain_graph=True)    # #8x8x8x8x8x8x8x8x8x8x8x8x8x8x8x8  PROBLEM HERE
-      #model_lossMLP.backward(retain_graph=True)    # #8x8x8x8x8x8x8x8x8x8x8x8x8x8x8x8  PROBLEM HERE
+      model_lossMLP.backward(retain_graph=True)    # #8x8x8x8x8x8x8x8x8x8x8x8x8x8x8x8  PROBLEM HERE  UNCOMMENT THIS SEPT 17!
+      
+      #model_lossMLP.backward(retain_graph=True)    # #8x8x8x8x8x8x8x8x8x8x8x8x8x8x8x8  PROBLEM HERE  UNCOMMENT THIS SEPT 17!
+      #model_lossMLP.backward(retain_graph=True)    # #8x8x8x8x8x8x8x8x8x8x8x8x8x8x8x8  PROBLEM HERE  UNCOMMENT THIS SEPT 17!
       
       #one of the variables needed for gradient computation has been modified by an inplace operation: 
       #[torch.FloatTensor [5, 6]], which is output 0 of TBackward, is at version 2; expected version 1 instead. 
       #Hint: the backtrace further above shows the operation that failed to compute its gradient. 
       #The variable in question was changed in there or anywhere later 
            
-      optimizerLinear.step()
-      optimizerMLPx.step()
+      optimizerLinear.step()             
+      optimizerMLPx.step()                #UNCOMMENT THIS SEPT 17
+      
+      
+      #for p in linear_M.parameters():       #added SEPT 17 REMOVE if use optize. p.grad is NONE!!! Sept 17
+        #print (f'p.grad is {p.grad} ')
+        #p.data[:] -= 0.5 * p.grad             #added SEPT 17 REMOVE if use optize
+        #p.grad.zero_()                        #added SEPT 17 REMOVE if use optize
+
         
       print (f'==============================MLP LOSS FOR BATCH {batch_idx} is {model_lossMLP} and the gradient is deleted')
            
