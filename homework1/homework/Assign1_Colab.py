@@ -3,6 +3,8 @@
 # CROSS ENTROPY LOSS TAKES SOFTMAX of 6-VECTOR as Y_hat, and as a Y it takes scalars from 0-5 
 #does target have to have requires_gradent = true
 #were to flatten images, in train or MLP or Linear class
+#Data loaded at instantiation, or with data loader
+#Do I need to use iter() with data loader, I did it w/ a loop
 
 
 import torch
@@ -27,7 +29,7 @@ class SuperTuxDataset(Dataset):   #kel76y
   def __init__(self, dataset_path):
   
   
-    self.BatchSize = 512
+    self.BatchSize = 5120
     self.imageDATASET = torch.rand([self.BatchSize,3,64,64])   #COMPLETE BUT RANDOM DATA SET
  
      #self.labels = torch.ones(self.BatchSize)
@@ -285,7 +287,7 @@ def train(args):
 
     
     image_index = 1                   #test code
-    My_DataSet = SuperTuxDataset('c:\fakepath')      
+    #My_DataSet = SuperTuxDataset('c:\fakepath')      REMOVED SEPT 17
     #linear_M = model_factory[args.model](2)     #LINEAR CLASSIFIER BY DEFAULT IN THE COMMAND LINE 
     linear_M = LinearClassifier(input_dim)
     MLPx = MLPClassifier(hidden_size=5)                                     
@@ -343,6 +345,11 @@ def train(args):
     
     print (f'The size of the data loader is {len(Tux_DataLoader)}')
     
+    
+    val = input(f'ABOUT TO BEGIN TRAINING, NOw, Hold On')
+    
+    print(val)
+    
     #For epochs here
     
     #flatened_Image_tensor = torch.rand(input_dim)
@@ -352,6 +359,7 @@ def train(args):
     for batch_idx, image_tuples_tensor in enumerate(Tux_DataLoader):  #iterate batches
            
       print (f'image_tuples_tensor[1], the labels for this batch[{batch_idx}], is {image_tuples_tensor[1]} ')
+      
       val = input(f'At beggining of for loop [{batch_idx}] for batches, iterating through all batches')
       print(val)
       
