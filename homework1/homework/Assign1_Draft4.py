@@ -1,3 +1,8 @@
+#QUESTIONS
+#  NO NEED TO USE SIGMOID FOR LINEAR, CROSS ENTROPY W/ SOFTMAX GOOD ENOUGH
+# CROSS ENTROPY LOSS TAKES SOFTMAX of 6-VECTOR as Y_hat, and as a Y it takes scalars from 0-5 
+
+
 import torch
 import torch.nn.functional as F
 from torch.nn.parameter import Parameter          #USE THIS!!!!!!!!!!!!!!!!!!   SEPT 17, 2021
@@ -169,7 +174,7 @@ class ClassificationLoss(torch.nn.Module):
 
 class LinearClassifier(torch.nn.Module):
 
-  def __init__(self):        
+  def __init__(self, input_dim):        
       
     super().__init__()   #original
        
@@ -189,7 +194,8 @@ class LinearClassifier(torch.nn.Module):
     #this will have NO GRADIENT!
     
     return self.network(flatened_Image_tensor)
-  
+    
+    #return (flatened_Image_tensor* self.w[:, None]).sum(1) + self.b
 
 
 #*************MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP MLP*************
@@ -269,7 +275,7 @@ def train(args):
     image_index = 1                   #test code
     My_DataSet = SuperTuxDataset('c:\fakepath')      
     #linear_M = model_factory[args.model](2)     #LINEAR CLASSIFIER BY DEFAULT IN THE COMMAND LINE 
-    linear_M = LinearClassifier()
+    linear_M = LinearClassifier(input_dim)
     MLPx = MLPClassifier(hidden_size=5)                                     
      
     Tux_DataLoader =  load_data('c:\fakepath') 
@@ -314,7 +320,13 @@ def train(args):
     
     global_step = 0
     
-   
+    print (f'PARAMATERS FOR MLPx are {list(MLPx.parameters())}')
+    print (f'PARAMATERS FOR Linear are {list(linear_M.parameters())}')
+      
+    
+    val = input(f'ABOUT TO BEGIN TRAINING, ABOVE YOU SEE THE PARAMETERSSSSSSSSSSSSSSSSSSSSSSS')
+    print(val)
+    
     print ("--------------------------------STARTING TRAINING---------------------------------")
     
     print (f'The size of the data loader is {len(Tux_DataLoader)}')
@@ -394,9 +406,8 @@ def train(args):
       #one of the variables needed for gradient computation has been modified by an inplace operation: 
       #[torch.FloatTensor [5, 6]], which is output 0 of TBackward, is at version 2; expected version 1 instead. 
       #Hint: the backtrace further above shows the operation that failed to compute its gradient. 
-      #The variable in question was changed in there or anywhere later
-      
-      
+      #The variable in question was changed in there or anywhere later 
+           
       optimizerLinear.step()
       optimizerMLPx.step()
         
@@ -453,7 +464,9 @@ def train(args):
       
 
     print ("--------------------------------FINISHED TRAINING---------------------------------")
-    
+    print (f'PARAMATERS FOR MLPx are {list(MLPx.parameters())}')
+    print (f'PARAMATERS FOR Linear are {list(linear_M.parameters())}')
+      
   
     #print (f'Here is the permutation iterative which goes in the for loop, len(permutation)-batch_size+1 = {len(permutation)} minus {batch_size+1}')
     
