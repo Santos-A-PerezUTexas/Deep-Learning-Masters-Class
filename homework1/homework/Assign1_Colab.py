@@ -287,7 +287,7 @@ def train(args):
 
     
     image_index = 1                   #test code
-    #My_DataSet = SuperTuxDataset('c:\fakepath')      REMOVED SEPT 17
+    
     #linear_M = model_factory[args.model](2)     #LINEAR CLASSIFIER BY DEFAULT IN THE COMMAND LINE 
     linear_M = LinearClassifier(input_dim)
     MLPx = MLPClassifier(hidden_size=5)                                     
@@ -299,7 +299,7 @@ def train(args):
     y_hat_tensorLinear = torch.ones(batch_size, 6)
     y_hat_tensorMLP = torch.ones(batch_size,6)              #requires_grad = True????
       
-    real_Image_tensor, real_image_label = My_DataSet[0]   #gets image [0] TENSOR  tuple
+    
                     
         
  
