@@ -392,13 +392,15 @@ def train(args):
         
        
         
-        #print (f'%%%%%%%%  Just assigned y_hat_tensor[{i}] this value:   {MLPx(image_tuples_tensor[0][i])}')      #commented out on Sept 17, 2021 evening
+        #print (f'%%%%%%%%  Just assigned y_hat_tensor[{i}] this value:   {MLPx(image_tuples_tensor[0][i])}')           
+        #commented out on Sept 17, 2021 evening
         
         
         #Same tensor as line 302, but with grad_fn=<AddBackward0> (for MLPx(image_tuples_tensor[0][i]))
         
         
     #-------------------------END ITERATE THROUGH ALL IMAGES OF A BATCH --------------------------
+      
       
       #print ('batch idx{}, batch len {}'.format(batch_idx, len(image_tuples_tensor)))
       #print (f'------------This is batch {batch_idx}, it has size {len(image_tuples_tensor)}, and here is the image_tuples_tensor: {image_tuples_tensor}')
@@ -472,11 +474,15 @@ def train(args):
       #need to calculate the loss first! and take backward of the loss!
       #print ("BOTH OF THESE ARE WRONG, NEED TO TRAIN NOW")
       
-    
+      model_accuracy = accuracy(y_hat_tensorLinear, image_tuples_tensor[1])  #Sept 18
+      print (f'Accuracy After Weight Updates for Batch {batch_idx} is {model_accuracy}')
+      print (f'Accuracy After Weight Updates for Batch {batch_idx} is {model_accuracy}')
+      print (f'Accuracy After Weight Updates for Batch {batch_idx} is {model_accuracy}')
+      
       val = input(f'##################  Above you can Y_hat Tensor for both linear and MLP #################')
       print(val)
                
-        
+          
     #for epoch in range(n_epochs): 
     
       # Shuffle the data
@@ -506,8 +512,10 @@ def train(args):
       
     print (f'MODEL LOSS MLP: {model_lossMLP}, MODEL LOSS LINEAR: {model_lossLinear}')  
     print ("ModelossMLP was not updated, see line 429")  
-      
-  
+     
+    model_accuracy = accuracy(y_hat_tensorLinear, image_tuples_tensor[1])   #Sept 18
+    print (f'Final Model Accuracy is {model_accuracy}')
+    
     #print (f'Here is the permutation iterative which goes in the for loop, len(permutation)-batch_size+1 = {len(permutation)} minus {batch_size+1}')
     
      
