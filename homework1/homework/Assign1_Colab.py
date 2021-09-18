@@ -65,7 +65,7 @@ class SuperTuxDataset(Dataset):   #kel76y
                   
           #image_file_name = "../data/train/"+labelsFILE_image_row[0]  for colab Sept 18
           #print(image_file_name)  commented Sept 17 evening
-           image_file_name = "..\data\\train\\"+labelsFILE_image_row[0] 
+          image_file_name = "..\data\\train\\"+labelsFILE_image_row[0] 
           
           self.one_image = Image.open(image_file_name)
           self.Image_To_Tensor = Image_Transformer.transforms.ToTensor()
