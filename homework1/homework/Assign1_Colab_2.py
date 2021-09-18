@@ -41,15 +41,17 @@ class SuperTuxDataset(Dataset):   #kel76y
       
     #NO BATCH SIZE...  Use a list...  
     
+    
+    #Maybe remove self???
     self.imageDATASET = torch.rand([self.BatchSize,3,64,64])   #COMPLETE BUT RANDOM DATA SET
+    
+    self.image_list = []
+    self.label_list = []
+    
     #list has no set size.... can append... Sept 18
     #argument parser  Sept 18
     
-     #self.labels = torch.ones(self.BatchSize)
      
-    self.labels = torch.randint(0, 5, (self.BatchSize, ))
-    
-    
     val = input("PRESS ANY KEY TO BEGIN")
     print(val) 
     
@@ -68,6 +70,13 @@ class SuperTuxDataset(Dataset):   #kel76y
       
       for labelsFILE_image_row in ImageReader:
               
+        if image_index == 0:
+          print (f'image index is zero')
+          image_file_name = "..\data\\train\\"+labelsFILE_image_row[0]
+          print (f'This is the image name at zero:  {image_file_name}')
+          val = input("Press any key")
+          print(val)
+          
         if image_index > 0:
                   
           #image_file_name = "../data/train/"+labelsFILE_image_row[0]  for colab Sept 18
@@ -77,7 +86,9 @@ class SuperTuxDataset(Dataset):   #kel76y
           self.one_image = Image.open(image_file_name)
           self.Image_To_Tensor = Image_Transformer.transforms.ToTensor()
           self.Image_tensor = self.Image_To_Tensor(self.one_image)
-          self.imageDATASET[image_index] = self.Image_tensor
+  
+          self.imageDATASET[image_index-1] = self.Image_tensor  #added -1 to image_index Sept 18   
+          self.image_list.append(self.Image_tensor)
           
           label_string_to_number = 0
           
@@ -86,29 +97,46 @@ class SuperTuxDataset(Dataset):   #kel76y
            
           for i in LABEL_NAMES:  #from string to string, iterate through the strongs
             if i==current_label_string:
-              self.labels[image_index-1] = label_string_to_number
+              self.label_list.append(label_string_to_number)
+              #self.labels[image_index-1] = label_string_to_number
             label_string_to_number += 1
-             
+          
+                  
+          #label_list.append(self.labels[image_index-1])   #WARNING -1 ????
+          
+          
           #print (f'I just assigned self.labels[{image_index-1}] the value {self.labels[image_index-1]} which corresponds to label {labelsFILE_image_row[1]}')
           
         image_index += 1 
-        if image_index == self.BatchSize:
+        if image_index == self.BatchSize+1:   #added +1 Sept 18
           break
-    
-
-    print(f'The size of this data set is ==================={self.imageDATASET.size(0)}')
+   
+    print(f'ABOVE IS THE LIST.  Size of data set is =============={self.imageDATASET.size(0)}, of the label list {len(self.label_list)}, and of the image list, {len(self.image_list)}')
+    print(f'The 511th image, indexed at 510, from data set is, {self.imageDATASET[510]} ')
+    print(f'The 511th image, indexed at 510, from THE LIST is, {self.image_list[510]} ')
+    #the list doesn't have item 511, but the dataset does?  Sept 18
     
     val = input("There!  I just LOADED ALL DATA up to Batch size!")
     print(val) 
     
-         
-        
+    print (self.imageDATASET[0])
+    
+    val = input("Above is the first image tensor from the data set, does it have grad?")
+    print(val) 
+    
+    
+    
+    
+
+ 
+            
   def __len__(self):
     return (self.imageDATASET.size(0))  
          
   def __getitem__(self, idx):     
-    return (self.imageDATASET[idx], self.labels[idx]) #image Tensor size (3,64,64) range [0,1], label is int.
-    
+  
+    #return (self.imageDATASET[idx], self.labels[idx]) #image Tensor size (3,64,64) range [0,1], label is int.
+    return (self.image_list[idx], self.label_list[idx])
         
 #kel76y
 
