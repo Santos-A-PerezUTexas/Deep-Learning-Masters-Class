@@ -1,6 +1,6 @@
 #Loss can be > 1
 #validation at end of training loop... accuracy()....
-#Line 398 y_hat_tensor[i] = Chosen_Model(Tux_DataLoader[0][i]) #feed entire batch Sept 18
+#Line 398 y_hat_tensorLinear[i] = linear_M(Tux_DataLoader[0][i]) #feed entire batch Sept 18
 #change len() to get size of image label list??
 #line 327 for image_tuples_tensor, label in Tux_DataLoader:  #Sept 18
      
@@ -256,13 +256,17 @@ def train(args):
     
     image_index = 1                   #test code
     
-    Chosen_Model = model_factory[args.model](input_dim)     #LINEAR CLASSIFIER BY DEFAULT IN THE COMMAND LINE 
+    linear_M = model_factory[args.model](input_dim)     #LINEAR CLASSIFIER BY DEFAULT IN THE COMMAND LINE 
+    #linear_M = LinearClassifier(input_dim)
+    #MLPx = MLPClassifier(hidden_size=5)                                     
      
     Tux_DataLoader =  load_data('c:\fakepath', num_workers=2)   #set num_workers here   
  
     y_hat_tensor = torch.ones(batch_size,6)  #this is going to change when put through network
     
-         
+    y_hat_tensorLinear = torch.ones(batch_size, 6)  #Commented Sept 18
+    y_hat_tensorMLP = torch.ones(batch_size,6)      #requires_grad = True????
+      
     
                     
         
@@ -277,7 +281,9 @@ def train(args):
     #just defining the optimizer, call it w/ step to update weights 
     #but must implement loss.backward first to get the gradients
     
-    optimizer = torch.optim.SGD(Chosen_Model.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4)
+    #optimizerMLPx = torch.optim.SGD(MLPx.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4)
+    
+    optimizerLinear = torch.optim.SGD(linear_M.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4)
         
     
     # Create the loss - For these batch_size images, the network predicted the labels as set forth by y_hat_vector 
@@ -297,7 +303,8 @@ def train(args):
     global_step = 0
     
     
-    print (f'PARAMATERS FOR Chosen Model are {list(Chosen_Model.parameters())}')
+    print (f'PARAMATERS FOR MLPx are {list(MLPx.parameters())}')
+    print (f'PARAMATERS FOR Linear are {list(linear_M.parameters())}')
       
     
     val = input(f'ABOUT TO BEGIN TRAINING, ABOVE YOU SEE THE PARAMETERSSSSSSSSSSSSSSSSSSSSSSS')
@@ -322,7 +329,8 @@ def train(args):
     #for batch_idx, image_tuples_tensor in enumerate(Tux_DataLoader):  #iterate batches
     for batch_data, batch_labels in Tux_DataLoader:
       for i in range(len(batch_data)):          
-        y_hat_tensor[i] = Chosen_Model(batch_data[i]) #feed entire batch Sept 18       
+        y_hat_tensorLinear[i] = linear_M(batch_data[i]) #feed entire batch Sept 18       
+        y_hat_tensorMLP[i] = MLPx(batch_data[i])   #flattening occurs in MLPx
         
     #for image_tuples_tensor, label in Tux_DataLoader:  #Sept 18
       
@@ -334,7 +342,7 @@ def train(args):
       i#=0
       #for batch_data, batch_label in Tux_DataLoader:
         #print (f'Batch Data ****{i}****** is  [{batch_data}], batch_label is {batch_label} ')
-        #y_hat_tensor = Chosen_Model(batch_data) #feed entire batch Sept 18       
+        #y_hat_tensorLinear = linear_M(batch_data) #feed entire batch Sept 18       
         #y_hat_tensorMLP = MLPx(batch_data)   #flattening occurs in MLPx
         #i = i + 1
         
@@ -345,49 +353,54 @@ def train(args):
       
       #------------------------------BEGIN ITERATE THROUGH ALL IMAGES OF A BATCH
   
-      #y_hat_tensor = Chosen_Model(sample_tuple) #feed entire batch Sept 18       
+      #y_hat_tensorLinear = linear_M(sample_tuple) #feed entire batch Sept 18       
       #y_hat_tensorMLP = MLPx(sample_tuple)   #flattening occurs in MLPx
   
-      #y_hat_tensor = Chosen_Model(image_tuples_tensor[0]) #feed entire batch Sept 18       
+      #y_hat_tensorLinear = linear_M(image_tuples_tensor[0]) #feed entire batch Sept 18       
       #y_hat_tensorMLP = MLPx(image_tuples_tensor[0])   #flattening occurs in MLPx
   
-      #y_hat_tensor = Chosen_Model(image_tuples_tensor[0][0:64]) #feed entire batch Sept 18       
+      #y_hat_tensorLinear = linear_M(image_tuples_tensor[0][0:64]) #feed entire batch Sept 18       
       #y_hat_tensorMLP = MLPx(image_tuples_tensor[0][0:64])   #flattening occurs in MLPx
      
       
         
     #-
       #for i in range(len(image_tuples_tensor[0])):          
-        #y_hat_tensor[i] = Chosen_Model(image_tuples_tensor[0][i]) #feed entire batch Sept 18       
+        #y_hat_tensorLinear[i] = linear_M(image_tuples_tensor[0][i]) #feed entire batch Sept 18       
         #y_hat_tensorMLP[i] = MLPx(image_tuples_tensor[0][i])   #flattening occurs in MLPx
         
     #-------------------------END ITERATE THROUGH ALL IMAGES OF A BATCH --------------------------
       
           
-      val = input(f'!!!!!!!!!!!!!!!!About to call model_loss with this SIZE for y_hat {y_hat_tensor.size()}, and this one for target,   {batch_labels.size()}')
+      val = input(f'!!!!!!!!!!!!!!!!About to call model_loss with this SIZE for y_hat {y_hat_tensorMLP.size()}, and this one for target,   {batch_labels.size()}')
       print(val)
      
       
-      model_loss = calculate_loss(y_hat_tensor, batch_labels)   
+      model_lossLinear = calculate_loss(y_hat_tensorLinear, batch_labels)   
+      model_lossMLP = calculate_loss(y_hat_tensorMLP, batch_labels) #8x8x8x8x8x8x8x8x8x8x8x8x8x8x8x8  HERE
       
       torch.autograd.set_detect_anomaly(True)
       
  
-      optimizer.zero_grad()
+      optimizerMLPx.zero_grad()
       
-      model_loss.backward(retain_graph=True)
+      optimizerLinear.zero_grad()
+      
+      model_lossLinear.backward(retain_graph=True)
       
       #model_lossMLP.backward(retain_graph=True)         
      
-      optimizer.step()             
-           
+      optimizerLinear.step()             
+      optimizerMLPx.step()                #UNCOMMENT THIS SEPT 17
       
-      model_accuracy = accuracy(y_hat_tensor, batch_labels)  #Sept 18
+      
+      
+      model_accuracy = accuracy(y_hat_tensorLinear, batch_labels)  #Sept 18
       #print (f'Accuracy Before Weight Updates for Batch ??? is {model_accuracy}')
       #for i in range(len(image_tuples_tensor[0])):  #iterate through all images, MAYBE I DONT NEED THIS!
-       # y_hat_tensor[i] = Chosen_Model(image_tuples_tensor[0][i]) 
+       # y_hat_tensorLinear[i] = linear_M(image_tuples_tensor[0][i]) 
         #y_hat_tensorMLP[i] = MLPx(image_tuples_tensor[0][i])
-      New_model_accuracy = accuracy(y_hat_tensor, batch_labels)  #Sept 18
+      New_model_accuracy = accuracy(y_hat_tensorLinear, batch_labels)  #Sept 18
       print (f'Accuracy Before Weight Updates for Batch ??? is {model_accuracy}, the new one: {New_model_accuracy}')
       
       val = input(f'##################  Above you can Y_hat Tensor for both linear and MLP #################')
@@ -399,7 +412,7 @@ def train(args):
 
 #*********************************************************END TRAINING*************************************************************
      
-    model_accuracy = accuracy(y_hat_tensor, batch_labels)   #Sept 18
+    model_accuracy = accuracy(y_hat_tensorLinear, batch_labels)   #Sept 18
     print (f'Final Model Accuracy is {model_accuracy}')
     
 
@@ -410,7 +423,7 @@ if __name__ == '__main__':
     parser.add_argument('-m', '--model', choices=['linear', 'mlp'], default='linear')     
     #calls the linear model by default
     # Put custom arguments here
-
+    
     args = parser.parse_args()   
     
     print (f'SEPT 18--------------args is {args}')
