@@ -29,7 +29,9 @@ class SuperTuxDataset(Dataset):   #kel76y
   def __init__(self, dataset_path):
   
   
-    self.BatchSize = 5120
+    #self.BatchSize = 5120  colab
+    self.BatchSize = 512
+      
     self.imageDATASET = torch.rand([self.BatchSize,3,64,64])   #COMPLETE BUT RANDOM DATA SET
  
      #self.labels = torch.ones(self.BatchSize)
