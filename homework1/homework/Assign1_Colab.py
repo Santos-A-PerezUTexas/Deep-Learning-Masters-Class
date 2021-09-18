@@ -1,12 +1,18 @@
 #QUESTIONS
 #  NO NEED TO USE SIGMOID FOR LINEAR, CROSS ENTROPY W/ SOFTMAX GOOD ENOUGH
 # CROSS ENTROPY LOSS TAKES SOFTMAX of 6-VECTOR as Y_hat, and as a Y it takes scalars from 0-5 
+#Loss can be > 1
 #does target have to have requires_gradent = true
 #were to flatten images, in train or MLP or Linear class
 #Data loaded at instantiation, or with data loader
 #Do I need to use iter() with data loader, I did it w/ a loop
 #accuracy function
-
+#validation at end of training loop... accuracy()....
+#model_accuracy = accuracy(y_hat_tensorLinear, image_tuples_tensor[1])  
+#get_item is implicit......***************
+#self.imageDATASET = torch.rand([self.BatchSize,3,64,64])   This should have requires_grad=TRUE.
+#Line 398 y_hat_tensorLinear[i] = linear_M(Tux_DataLoader[0][i]) #feed entire batch Sept 18
+     
 
 import torch
 import torch.nn.functional as F
@@ -33,8 +39,12 @@ class SuperTuxDataset(Dataset):   #kel76y
     #self.BatchSize = 5120  colab
     self.BatchSize = 512
       
+    #NO BATCH SIZE...  Use a list...  
+    
     self.imageDATASET = torch.rand([self.BatchSize,3,64,64])   #COMPLETE BUT RANDOM DATA SET
- 
+    #list has no set size.... can append... Sept 18
+    #argument parser  Sept 18
+    
      #self.labels = torch.ones(self.BatchSize)
      
     self.labels = torch.randint(0, 5, (self.BatchSize, ))
@@ -115,11 +125,11 @@ def load_data(dataset_path, num_workers=0, batch_size=batch_size):     #Use this
     #https://machinelearningknowledge.ai/pytorch-dataloader-tutorial-with-example/
     
     dataset = SuperTuxDataset(dataset_path)   #In Orginal
+    
     #length of the loader will adapt to the batch_size. So if your train dataset has 1000 samples 
     #and you use a batch_size of 10, the loader will have the length 100.
         
     return DataLoader(dataset, num_workers=num_workers, batch_size=batch_size, shuffle=True, drop_last=False)  
-    
     
 def accuracy(outputs, labels):
     outputs_idx = outputs.max(1)[1].type_as(labels)
@@ -190,8 +200,8 @@ class LinearClassifier(torch.nn.Module):
     self.input_dim = input_dim
     
     #added this Sept 17, 2021
-    self.w = Parameter(torch.ones(input_dim))
-    self.b = Parameter(-torch.ones(1))
+    #self.w = Parameter(torch.ones(input_dim))
+    #self.b = Parameter(-torch.ones(1))
     
     
     self.network = torch.nn.Linear(input_dim, 6)
@@ -222,8 +232,8 @@ class MLPClassifier(torch.nn.Module):
     self.hidden_size = hidden_size
     
     #added this Sept 17, 2021
-    self.w = Parameter(torch.ones(input_dim))
-    self.b = Parameter(-torch.ones(1))
+    #self.w = Parameter(torch.ones(input_dim))
+    #self.b = Parameter(-torch.ones(1))
         
     self.linear1 = torch.nn.Linear(input_dim, hidden_size)
     torch.nn.init.normal_(self.linear1.weight, std=0.01)
@@ -232,7 +242,7 @@ class MLPClassifier(torch.nn.Module):
     self.ReLU = torch.nn.ReLU(inplace=False)
         
     self.network = torch.nn.Sequential( 
-                torch.nn.Linear(input_dim, hidden_size),   #----->keep this layer small to save parameters???
+                torch.nn.Linear(input_dim, hidden_size),   
                 torch.nn.ReLU(inplace=False),               
                 torch.nn.Linear(hidden_size, 6)  
                 )
@@ -259,8 +269,8 @@ class MLPClassifier(torch.nn.Module):
     #return self.network(flattened_Image_tensor)    COMMENTED OUT ON SEP 17
     # This result grad_fn=<AddBackward0>, but flattened_image (x) has no grad!
     
-    return (self.linear2(self.ReLU(self.linear1(flattened_Image_tensor))))  #added this Sept 17, revert back????
-    
+    return self.linear2(self.ReLU(self.linear1(flattened_Image_tensor)))  #added this Sept 17, revert back????
+    #return (self.linear2(self.ReLU(self.linear1(flattened_Image_tensor))))  #added this Sept 17, revert back
 
     
   #def forward(self, multiple_image_tensor):   
@@ -300,7 +310,7 @@ def train(args):
     linear_M = LinearClassifier(input_dim)
     MLPx = MLPClassifier(hidden_size=5)                                     
      
-    Tux_DataLoader =  load_data('c:\fakepath') 
+    Tux_DataLoader =  load_data('c:\fakepath')   
  
     y_hat_tensor = torch.ones(batch_size,6)  #this is going to change when put through network
     
@@ -365,7 +375,25 @@ def train(args):
     
 #------------------------------BEGIN ITERATE THROUGH BATCHES------------------------------------------
 
+    
+    #for image_tuples_tensor, label in Tux_DataLoader:  #Sept 18
+      # y_hat_tensorLinear = linear_M(image_tuples_tensor)  
+    
+    
+    
+    
+    
+    
+    
     for batch_idx, image_tuples_tensor in enumerate(Tux_DataLoader):  #iterate batches
+    
+    #for image_tuples_tensor, label in Tux_DataLoader:  #Sept 18
+    
+    #dataloader takes batch_size Sept 18
+    
+           #for images, label in data_loader - no enumerate?     SEPT 18 CONFERENCE
+           #USE GETITEM  !!!!!!!!!!! SEPT 18
+           #Iterate through batch_size????
            
       print (f'image_tuples_tensor[1], the labels for this batch[{batch_idx}], is {image_tuples_tensor[1]} ')
       
@@ -373,11 +401,14 @@ def train(args):
       print(val)
       
       #------------------------------BEGIN ITERATE THROUGH ALL IMAGES OF A BATCH
+      #------------------------------DONT NEED CAN FEED ENTIRE BATCH INTO LINEAR OR MLP
       
       for i in range(len(image_tuples_tensor[0])):  #iterate through all images, MAYBE I DONT NEED THIS!
         #print (f'label {i}, for batch {batch_idx} is {image_tuples_tensor[1][i]}')
         
-        y_hat_tensorLinear[i] = linear_M(image_tuples_tensor[0][i]) 
+        y_hat_tensorLinear[i] = linear_M(image_tuples_tensor[0][i]) #feed entire batch Sept 18
+        #y_hat_tensorLinear = linear_M(image_tuples_tensor[0]) #feed entire batch Sept 18
+        #y_hat_tensorLinear[i] = linear_M(Tux_DataLoader[0][i]) #feed entire batch Sept 18
         
         y_hat_tensorMLP[i] = MLPx(image_tuples_tensor[0][i])   #flattening occurs in MLPx
         #y_hat_tensorMLP[i] = MLPx(flatened_Image_tensor)   "a view requires grad in place operation"
@@ -421,18 +452,20 @@ def train(args):
       #target, images_tuples_tensor[1] has no grad!!!  (the labels)
       
       model_lossLinear = calculate_loss(y_hat_tensorLinear, image_tuples_tensor[1])   
-      model_lossMLP = calculate_loss(y_hat_tensorMLP, image_tuples_tensor[1])   #8x8x8x8x8x8x8x8x8x8x8x8x8x8x8x8  HERE
+      model_lossMLP = calculate_loss(y_hat_tensorMLP, image_tuples_tensor[1])#8x8x8x8x8x8x8x8x8x8x8x8x8x8x8x8  HERE
       ##y_hat_tensorMLP has grad_fn=<CopySlices>
       ##image_tuples_tensor[1] has NO GRAD!!!!!!!!!!!!!  PROBLEM????????
       
       torch.autograd.set_detect_anomaly(True)
       
-      
+ 
       optimizerMLPx.zero_grad()
+      
       optimizerLinear.zero_grad()
       
       model_lossLinear.backward(retain_graph=True)
       
+      #model_lossMLP.backward(retain_graph=True)         
       #COMMENTED THIS SEPT 17 evening, error below
       #model_lossMLP.backward(retain_graph=True)    # #8x8x8x8x8x8x8x8x8x8x8x8x8x8x8x8  PROBLEM HERE  UNCOMMENT THIS SEPT 17!
      
