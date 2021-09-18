@@ -495,14 +495,13 @@ def train(args):
 #*********************************************************END TRAINING*************************************************************
 #*********************************************************END TRAINING*************************************************************
 
-      
 
     print ("--------------------------------FINISHED TRAINING---------------------------------")
     print (f'PARAMATERS FOR MLPx are {list(MLPx.parameters())}')
     print (f'PARAMATERS FOR Linear are {list(linear_M.parameters())}')
       
     print (f'MODEL LOSS MLP: {model_lossMLP}, MODEL LOSS LINEAR: {model_lossLinear}')  
-    print (f'ModelossMLP was not updated, see line 429")  
+    print ("ModelossMLP was not updated, see line 429")  
       
   
     #print (f'Here is the permutation iterative which goes in the for loop, len(permutation)-batch_size+1 = {len(permutation)} minus {batch_size+1}')
