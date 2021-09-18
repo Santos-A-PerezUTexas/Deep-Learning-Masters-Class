@@ -1,16 +1,5 @@
-#QUESTIONS
-#  NO NEED TO USE SIGMOID FOR LINEAR, CROSS ENTROPY W/ SOFTMAX GOOD ENOUGH
-# CROSS ENTROPY LOSS TAKES SOFTMAX of 6-VECTOR as Y_hat, and as a Y it takes scalars from 0-5 
 #Loss can be > 1
-#does target have to have requires_gradent = true
-#were to flatten images, in train or MLP or Linear class
-#Data loaded at instantiation, or with data loader
-#Do I need to use iter() with data loader, I did it w/ a loop
-#accuracy function
 #validation at end of training loop... accuracy()....
-#model_accuracy = accuracy(y_hat_tensorLinear, image_tuples_tensor[1])  
-#get_item is implicit......***************
-#self.imageDATASET = torch.rand([self.BatchSize,3,64,64])   This should have requires_grad=TRUE.
 #Line 398 y_hat_tensorLinear[i] = linear_M(Tux_DataLoader[0][i]) #feed entire batch Sept 18
      
 
