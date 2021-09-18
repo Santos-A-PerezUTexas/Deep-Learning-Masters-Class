@@ -63,7 +63,7 @@ class SuperTuxDataset(Dataset):   #kel76y
         
         if image_index > 0:
                   
-          image_file_name = "./data/train/"+labelsFILE_image_row[0] 
+          image_file_name = "../data/train/"+labelsFILE_image_row[0] 
           print(image_file_name)
           self.one_image = Image.open(image_file_name)
           self.Image_To_Tensor = Image_Transformer.transforms.ToTensor()
