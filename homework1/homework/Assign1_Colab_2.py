@@ -1,6 +1,8 @@
 #Loss can be > 1
 #validation at end of training loop... accuracy()....
 #Line 398 y_hat_tensorLinear[i] = linear_M(Tux_DataLoader[0][i]) #feed entire batch Sept 18
+#change len() to get size of image label list??
+#line 327 for image_tuples_tensor, label in Tux_DataLoader:  #Sept 18
      
 
 import torch
@@ -25,7 +27,7 @@ class SuperTuxDataset(Dataset):   #kel76y
   def __init__(self, dataset_path):
   
   
-    #self.BatchSize = 5120  colab
+    #self.BatchSize = 5120  colab   #SHOULD NOT USE HERE!
     self.BatchSize = 512
       
     #NO BATCH SIZE...  Use a list...  
@@ -101,11 +103,9 @@ class SuperTuxDataset(Dataset):   #kel76y
           break
    
     print(f'ABOVE IS THE LIST.  Size of data set is =============={self.imageDATASET.size(0)}, of the label list {len(self.label_list)}, and of the image list, {len(self.image_list)}')
-    print(f'The 511th image, indexed at 510, from data set is, {self.imageDATASET[510]} ')
-    print(f'The 511th image, indexed at 510, from THE LIST is, {self.image_list[510]} ')
-    #the list doesn't have item 511, but the dataset does?  Sept 18
     
-    val = input("There!  I just LOADED ALL DATA up to Batch size!")
+    
+    val = input("PRESS ANY KEY TO LEARN")
     print(val) 
     
     print (self.imageDATASET[0])
@@ -260,12 +260,12 @@ def train(args):
     linear_M = LinearClassifier(input_dim)
     MLPx = MLPClassifier(hidden_size=5)                                     
      
-    Tux_DataLoader =  load_data('c:\fakepath')   
+    Tux_DataLoader =  load_data('c:\fakepath', num_workers=2)   #set num_workers here   
  
     y_hat_tensor = torch.ones(batch_size,6)  #this is going to change when put through network
     
-    y_hat_tensorLinear = torch.ones(batch_size, 6)
-    y_hat_tensorMLP = torch.ones(batch_size,6)              #requires_grad = True????
+    #y_hat_tensorLinear = torch.ones(batch_size, 6)           Commented Sept 18
+    #y_hat_tensorMLP = torch.ones(batch_size,6)              #requires_grad = True????
       
     
                     
@@ -325,16 +325,7 @@ def train(args):
     
 #------------------------------BEGIN ITERATE THROUGH BATCHES------------------------------------------
 
-    
     #for image_tuples_tensor, label in Tux_DataLoader:  #Sept 18
-      # y_hat_tensorLinear = linear_M(image_tuples_tensor)  
-    
-    
-    
-    
-    
-    
-    
     for batch_idx, image_tuples_tensor in enumerate(Tux_DataLoader):  #iterate batches
     
     #for image_tuples_tensor, label in Tux_DataLoader:  #Sept 18
@@ -345,11 +336,18 @@ def train(args):
       print(val)
       
       #------------------------------BEGIN ITERATE THROUGH ALL IMAGES OF A BATCH
-      
-      for i in range(len(image_tuples_tensor[0])):          
-        y_hat_tensorLinear[i] = linear_M(image_tuples_tensor[0][i]) #feed entire batch Sept 18       
-        y_hat_tensorMLP[i] = MLPx(image_tuples_tensor[0][i])   #flattening occurs in MLPx
-        
+  
+      y_hat_tensorLinear = linear_M(image_tuples_tensor[0]) #feed entire batch Sept 18       
+      y_hat_tensorMLP = MLPx(image_tuples_tensor[0])   #flattening occurs in MLPx
+  
+      #y_hat_tensorLinear = linear_M(image_tuples_tensor[0][0:64]) #feed entire batch Sept 18       
+      #y_hat_tensorMLP = MLPx(image_tuples_tensor[0][0:64])   #flattening occurs in MLPx
+  
+
+   
+      #for i in range(len(image_tuples_tensor[0])):          
+        #y_hat_tensorLinear[i] = linear_M(image_tuples_tensor[0][i]) #feed entire batch Sept 18       
+        #y_hat_tensorMLP[i] = MLPx(image_tuples_tensor[0][i])   #flattening occurs in MLPx
         
     #-------------------------END ITERATE THROUGH ALL IMAGES OF A BATCH --------------------------
       
