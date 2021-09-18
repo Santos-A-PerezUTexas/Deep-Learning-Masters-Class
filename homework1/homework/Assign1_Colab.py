@@ -5,6 +5,7 @@
 #were to flatten images, in train or MLP or Linear class
 #Data loaded at instantiation, or with data loader
 #Do I need to use iter() with data loader, I did it w/ a loop
+#accuracy function
 
 
 import torch
