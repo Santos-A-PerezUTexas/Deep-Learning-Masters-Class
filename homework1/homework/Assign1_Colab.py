@@ -475,9 +475,12 @@ def train(args):
       #print ("BOTH OF THESE ARE WRONG, NEED TO TRAIN NOW")
       
       model_accuracy = accuracy(y_hat_tensorLinear, image_tuples_tensor[1])  #Sept 18
-      print (f'Accuracy After Weight Updates for Batch {batch_idx} is {model_accuracy}')
-      print (f'Accuracy After Weight Updates for Batch {batch_idx} is {model_accuracy}')
-      print (f'Accuracy After Weight Updates for Batch {batch_idx} is {model_accuracy}')
+      print (f'Accuracy Before Weight Updates for Batch {batch_idx} is {model_accuracy}')
+      for i in range(len(image_tuples_tensor[0])):  #iterate through all images, MAYBE I DONT NEED THIS!
+        y_hat_tensorLinear[i] = linear_M(image_tuples_tensor[0][i]) 
+        y_hat_tensorMLP[i] = MLPx(image_tuples_tensor[0][i])
+      New_model_accuracy = accuracy(y_hat_tensorLinear, image_tuples_tensor[1])  #Sept 18
+      print (f'Accuracy Before Weight Updates for Batch {batch_idx} is {model_accuracy}, the new one: {New_model_accuracy}')
       
       val = input(f'##################  Above you can Y_hat Tensor for both linear and MLP #################')
       print(val)
