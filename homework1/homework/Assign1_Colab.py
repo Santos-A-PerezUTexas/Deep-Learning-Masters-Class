@@ -37,13 +37,13 @@ class SuperTuxDataset(Dataset):   #kel76y
     self.labels = torch.randint(0, 5, (self.BatchSize, ))
     
     
-    val = input("PRESS ANY KEY AND BE BOLD")
+    val = input("PRESS ANY KEY TO BEGIN")
     print(val) 
     
     
     print ("I will now iterate over labels.cvs file.........")
     
-    val = input("PRESS ANY KEY to iteraTE over labels.csv and load ALL DATA")
+    val = input("PRESS ANY KEY to iterate over labels.csv and load *ALL* DATA")
     print(val) 
     
     
@@ -64,7 +64,7 @@ class SuperTuxDataset(Dataset):   #kel76y
         if image_index > 0:
                   
           image_file_name = "../data/train/"+labelsFILE_image_row[0] 
-          print(image_file_name)
+          #print(image_file_name)  commented Sept 17 evening
           self.one_image = Image.open(image_file_name)
           self.Image_To_Tensor = Image_Transformer.transforms.ToTensor()
           self.Image_tensor = self.Image_To_Tensor(self.one_image)
@@ -140,7 +140,7 @@ class ClassificationLoss(torch.nn.Module):
  
  
     print (f'SEPT 17, 2021:    INSIDE OF THE LOSS FUNCTION OBJECT')
-    print (f'SEPT 17, 2021:    Y_hat_vector predictions is {Y_hat_Vector}, and y_vector (labels) is {y_vector} ')
+    print (f'SEPT 17, 2021:    Y_hat_vector predictions SIZE is {Y_hat_Vector.size()}, and y_vector (labels) is {y_vector.size()} ')
     print (f'SEPT 17, 2021:    Y_hat_vector should have grad_fn=<CopySlices> , and y_vector no gradient!')
     
     
@@ -237,7 +237,10 @@ class MLPClassifier(torch.nn.Module):
     
     flattened_Image_tensor = image_tensor.view(image_tensor.size(0), -1).view(-1)
     
-    print(f'SEPT 17:  Inside forward of MLPx, line 223, flattened_image x-value is {flattened_Image_tensor}, image_tensor orginal is {image_tensor}')
+    #print(f'SEPT 17:  Inside forward of MLPx, line 223, flattened_image x-value is {flattened_Image_tensor}, image_tensor orginal is {image_tensor}')
+    
+    #print(f'SEPT 17 EVENING:  Inside forward of MLPx, line 223, flattened_image x-value is {flattened_Image_tensor}, image_tensor orginal SIZE is {image_tensor.size()}')
+    
     #SEPT 17, 2021: image_tensor HAS NO GRADIENT!
     #SEPT 17, 2021: image_tensor HAS NO GRADIENT!
     #SEPT 17, 2021: image_tensor HAS NO GRADIENT!
@@ -334,6 +337,7 @@ def train(args):
     
     global_step = 0
     
+    
     print (f'PARAMATERS FOR MLPx are {list(MLPx.parameters())}')
     print (f'PARAMATERS FOR Linear are {list(linear_M.parameters())}')
       
@@ -346,7 +350,7 @@ def train(args):
     print (f'The size of the data loader is {len(Tux_DataLoader)}')
     
     
-    val = input(f'ABOUT TO BEGIN TRAINING, NOw, Hold On')
+    val = input(f'BEGIN TRAINING LOOP (Only one Epoch Through All Batches)')
     
     print(val)
     
@@ -384,7 +388,9 @@ def train(args):
         
        
         
-        print (f'%%%%%%%%  Just assigned y_hat_tensor[{i}] this value:   {MLPx(image_tuples_tensor[0][i])}')
+        #print (f'%%%%%%%%  Just assigned y_hat_tensor[{i}] this value:   {MLPx(image_tuples_tensor[0][i])}')      #commented out on Sept 17, 2021 evening
+        
+        
         #Same tensor as line 302, but with grad_fn=<AddBackward0> (for MLPx(image_tuples_tensor[0][i]))
         
         
@@ -401,7 +407,7 @@ def train(args):
       print (f'SEPT 17:  444444444444444444444---------------------->CURRENTLY AT BATCH[{batch_idx}]') 
       print (f'SEPT 17:  444444444444444444444---------------------->CURRENTLY AT BATCH[{batch_idx}]') 
           
-      val = input(f'!!!!!!!!!!!!!!!!About to call model_loss with this value for y_hat {y_hat_tensorMLP}, and this one for target,   {image_tuples_tensor[1]}')
+      val = input(f'!!!!!!!!!!!!!!!!About to call model_loss with this SIZE for y_hat {y_hat_tensorMLP.size()}, and this one for target,   {image_tuples_tensor[1].size()}')
       print(val)
       
       #y_hat has grad_fn=<CopySlices>)
@@ -419,10 +425,10 @@ def train(args):
       optimizerLinear.zero_grad()
       
       model_lossLinear.backward(retain_graph=True)
-      model_lossMLP.backward(retain_graph=True)    # #8x8x8x8x8x8x8x8x8x8x8x8x8x8x8x8  PROBLEM HERE  UNCOMMENT THIS SEPT 17!
       
+      #COMMENTED THIS SEPT 17 evening, error below
       #model_lossMLP.backward(retain_graph=True)    # #8x8x8x8x8x8x8x8x8x8x8x8x8x8x8x8  PROBLEM HERE  UNCOMMENT THIS SEPT 17!
-      #model_lossMLP.backward(retain_graph=True)    # #8x8x8x8x8x8x8x8x8x8x8x8x8x8x8x8  PROBLEM HERE  UNCOMMENT THIS SEPT 17!
+     
       
       #one of the variables needed for gradient computation has been modified by an inplace operation: 
       #[torch.FloatTensor [5, 6]], which is output 0 of TBackward, is at version 2; expected version 1 instead. 
@@ -494,6 +500,9 @@ def train(args):
     print ("--------------------------------FINISHED TRAINING---------------------------------")
     print (f'PARAMATERS FOR MLPx are {list(MLPx.parameters())}')
     print (f'PARAMATERS FOR Linear are {list(linear_M.parameters())}')
+      
+    print (f'MODEL LOSS MLP: {model_lossMLP}, MODEL LOSS LINEAR: {model_lossLinear}')  
+    print (f'ModelossMLP was not updated, see line 429")  
       
   
     #print (f'Here is the permutation iterative which goes in the for loop, len(permutation)-batch_size+1 = {len(permutation)} minus {batch_size+1}')
