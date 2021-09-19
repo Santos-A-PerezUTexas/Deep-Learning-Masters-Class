@@ -11,7 +11,7 @@
 
 import torch
 import torch.nn.functional as F
-from torch.nn.parameter import Parameter          
+from torch.nn.parameter import Parameter          #USE THIS!!!!!!!!!!!!!!!!!!   SEPT 17, 2021
 from PIL import Image
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms as Image_Transformer
@@ -69,6 +69,13 @@ class SuperTuxDataset(Dataset):   #kel76y
         #REMOVE THIS FOR COLAB
         if image_index == 513:   #REMOVE FOR COLAB
           break
+   
+    print(f'Size of data set is ==============of the label list {len(self.label_list)}, and of the image list, {len(self.image_list)}')
+    
+    
+    val = input("PRESS ANY KEY TO LEARN")
+    print(val) 
+    
                
   def __len__(self):
     return (len(self.label_list))  
@@ -79,8 +86,11 @@ class SuperTuxDataset(Dataset):   #kel76y
  
 def load_data(dataset_path, num_workers=0, batch_size=batch_size):     #Use this in train.py
     
-    dataset = SuperTuxDataset(dataset_path)      
-       
+    dataset = SuperTuxDataset(dataset_path)   
+    
+    #length of the loader will adapt to the batch_size. So if your train dataset has 1000 samples 
+    #and you use a batch_size of 10, the loader will have the length 100.
+        
     return DataLoader(dataset, num_workers=num_workers, batch_size=batch_size, shuffle=True, drop_last=False)  
     
 def accuracy(outputs, labels):
@@ -94,7 +104,7 @@ models.py models.py models.py models.py models.py models.py models.py models.py 
 """
    
 #----------------------------------------------CLASSIFICATION LOSS      
-
+#kel76y
 
 class ClassificationLoss(torch.nn.Module):
   
@@ -104,6 +114,11 @@ class ClassificationLoss(torch.nn.Module):
     cross_loss = torch.nn.CrossEntropyLoss()  #applies softmax to Y_hat, then crossEloss, returns mean
      
     weighted_mean_batch_loss = cross_loss(Y_hat_Vector,  y_vector)
+    
+    
+    ##y_hat_Vector has grad_fn=<CopySlices>
+    ##y_vector has NO GRAD!!!!!!!!!!!!!  PROBLEM????????
+
         
     return (weighted_mean_batch_loss)  #return the mean loss accross the entire batch
       
@@ -125,15 +140,20 @@ class LinearClassifier(torch.nn.Module):
      
   def forward(self, image_tensor):   
    
-     return (self.network(image_tensor))   
+     return (self.network(image_tensor))   #Sept 19
 
 #--------------------------------------------------------------MLP------------------------------------------------
 
+
 class MLPClassifier(torch.nn.Module):  
 
-  def __init__(self, hidden_size=5, input_dim=input_dim):     #set hiddensize here
+
+  #learning rate, hidden_layers
+
+  def __init__(self, hidden_size=5, input_dim=input_dim):     #set hiddensize here!!!!!!!!!!!!!!!!!!
    
     super().__init__()        
+    #self.hidden_size = hidden_size
 
     self.network = torch.nn.Sequential( 
                 torch.nn.Linear(input_dim, hidden_size),   
@@ -172,12 +192,16 @@ model_factory = { 'linear': LinearClassifier, 'mlp': MLPClassifier, }  #this has
 def train(args):
 
     
-    image_index = 1                   
+    image_index = 1                   #test code
     
-    Chosen_Model = model_factory[args.model](input_dim=input_dim)     
+    Chosen_Model = model_factory[args.model](input_dim=input_dim)     #LINEAR CLASSIFIER BY DEFAULT IN THE COMMAND LINE 
      
-    Tux_DataLoader =  load_data('c:\fakepath', num_workers=2)   
+    Tux_DataLoader =  load_data('c:\fakepath', num_workers=2)   #set num_workers here   
  
+    y_hat_tensor = torch.ones(batch_size,6)  #this is going to change when put through network
+    
+         
+    
     optimizer = torch.optim.SGD(Chosen_Model.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4)
         
     
@@ -187,55 +211,83 @@ def train(args):
     global_step = 0
     
      
+    
+    val = input(f'ABOUT TO BEGIN TRAINING, PRESS A KEY')
+    print(val)
+    
     print ("--------------------------------STARTING TRAINING---------------------------------")
     
     print (f'The size of the data loader is {len(Tux_DataLoader)}')
+    
     
     val = input(f'BEGIN TRAINING LOOP (Only one Epoch Through All Batches)')
     
     print(val)
     
-    for epochs in range(n_epochs): # set to n_epochs in colab
+    #For epochs here
+    
+    #flatened_Image_tensor = torch.rand(input_dim)
     
 #------------------------------BEGIN ITERATE THROUGH BATCHES------------------------------------------
 
-      for batch_data, batch_labels in Tux_DataLoader:
+    for batch_data, batch_labels in Tux_DataLoader:
 
 
-        reshaped = batch_data.reshape(len(batch_data), input_dim)
-        #reshaped has no gradient  Sept 19
+      reshaped = batch_data.reshape(len(batch_data), input_dim)
+      #reshaped has no gradient  Sept 19
               
-        predictions = Chosen_Model(reshaped)   #substituted reshaped for batch_data
-        #predictions has gradient  grad_fn=<AddmmBackward> Sept 19
-        #batch_labels has no gradient Sept 19
-       
-        model_loss = calculate_loss(predictions, batch_labels)
-      
-        torch.autograd.set_detect_anomaly(True)
-      
-        optimizer.zero_grad()
-      
-      
-      
-        model_loss.backward(retain_graph=True)
-      
-        #cd cs342\homework1\homework
-      
-        print("Updating weights now with step()")
+      predictions = Chosen_Model(reshaped)   #substituted reshaped for batch_data
+      #predictions has gradient  grad_fn=<AddmmBackward> Sept 19
+      #batch_labels has no gradient Sept 19
+              
+      val = input(f'!!!!!!!!!!!!!!!!About to call model_loss with this SIZE for y_hat {y_hat_tensor.size()}, and this one for target,   {batch_labels.size()}')
+      print(val)
      
-        optimizer.step()             
+      print("model_loss = calculate next")
+      
+      model_loss = calculate_loss(predictions, batch_labels)
+         
+      
+      print (f'Model loss is: {model_loss}')
+      val = input(f'PRESS ANY KEY')
+      print(val)
+     
+      
+      print("Detect Anomaly Next")
+      
+      torch.autograd.set_detect_anomaly(True)
+      
+      print("Optimizer zero grad next")
+      
+      optimizer.zero_grad()
+      
+      print("Calling backward now to get gradients")
+      #goes into LOOP here
+      
+      model_loss.backward(retain_graph=True)
+      
+      #cd cs342\homework1\homework
+      
+      print("Updating weights now with step()")
+     
+      optimizer.step()             
            
-        model_accuracy = accuracy(predictions, batch_labels)  #Sept 18
-     
-        print (f'Model Accuracy is  {model_accuracy}')
       
-   
+      model_accuracy = accuracy(y_hat_tensor, batch_labels)  #Sept 18
+     
+      New_model_accuracy = accuracy(y_hat_tensor, batch_labels)  #Sept 18
+      print (f'Accuracy Before Weight Updates for Batch ??? is {model_accuracy}, the new one: {New_model_accuracy}')
+      
+      val = input(f'##################  Above you can Y_hat Tensor for both linear and MLP #################')
+      print(val)
+               
+
 #------------------------------END ITERATE THROUGH BATCHES------------------------------------------
 
 
 #*********************************************************END TRAINING*************************************************************
      
-    model_accuracy = accuracy(predictions, batch_labels)   #Sept 18
+    model_accuracy = accuracy(y_hat_tensor, batch_labels)   #Sept 18
     print (f'Final Model Accuracy is {model_accuracy}')
     
 
