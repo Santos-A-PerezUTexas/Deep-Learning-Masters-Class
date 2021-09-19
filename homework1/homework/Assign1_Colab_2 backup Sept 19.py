@@ -41,7 +41,10 @@ class SuperTuxDataset(Dataset):   #kel76y
       ImageReader = csv.reader(csvfile) 
       
       for row in ImageReader:
-                     
+              
+        
+        print(f'Image index is {image_index}, about to evaluate is bigger than 0')    
+        
         if image_index > 0:
                   
           #image_file_name = "../data/train/"+row[0]  for colab Sept 18
@@ -131,16 +134,21 @@ class ClassificationLoss(torch.nn.Module):
 
 class LinearClassifier(torch.nn.Module):
 
-  def __init__(self, input_dim=input_dim):        
+  def __init__(self, input_dim):        
       
     super().__init__()   #original
        
+    self.input_dim = input_dim   
     self.network = torch.nn.Linear(input_dim, 6)
     
      
   def forward(self, image_tensor):   
-   
-     return (self.network(image_tensor))   #Sept 19
+    
+    flatened_Image_tensor = image_tensor.view(image_tensor.size(0), -1).view(-1)
+    #this will have NO GRADIENT!
+    
+    #return self.network(flatened_Image_tensor).requires_grad_()   #Added requires_grad on Sept 17
+    return (self.network(image_tensor))   #Sept 19
 
 #--------------------------------------------------------------MLP------------------------------------------------
 
@@ -163,8 +171,10 @@ class MLPClassifier(torch.nn.Module):
 
                 
   def forward(self, image_tensor):   
-       
-    return (self.network(image_tensor))
+   
+    print("Inside forward method of MLP")
+    flattened_Image_tensor = image_tensor.view(image_tensor.size(0), -1).view(-1)   
+    return (self.network(flattened_Image_tensor))
 
 def save_model(model):
   from torch import save
@@ -210,9 +220,11 @@ def train(args):
    
     global_step = 0
     
-     
     
-    val = input(f'ABOUT TO BEGIN TRAINING, PRESS A KEY')
+    print (f'PARAMATERS FOR Chosen Model are {list(Chosen_Model.parameters())}')
+      
+    
+    val = input(f'ABOUT TO BEGIN TRAINING, ABOVE YOU SEE THE PARAMETERSSSSSSSSSSSSSSSSSSSSSSS')
     print(val)
     
     print ("--------------------------------STARTING TRAINING---------------------------------")
@@ -234,18 +246,35 @@ def train(args):
 
 
       reshaped = batch_data.reshape(len(batch_data), input_dim)
-      #reshaped has no gradient  Sept 19
-              
-      predictions = Chosen_Model(reshaped)   #substituted reshaped for batch_data
-      #predictions has gradient  grad_fn=<AddmmBackward> Sept 19
-      #batch_labels has no gradient Sept 19
-              
+      print(f'Reshaped, flatten tensor size is {reshaped.size()}')
+      val = input(f'PRESS ANY KEY')
+      print(val)
+     
+      print (reshaped)
+      
+      val = input(f'PRESS ANY KEY')
+      print(val)
+     
+      print (f'Reshaped tensor ABOVE')
+      
+      for i in range(len(batch_data)):          
+        #y_hat_tensor[i] = Chosen_Model(batch_data[i]) #should feed entire batch instead, Sept 18 
+         y_hat_tensor[i] = Chosen_Model(reshaped[i]) #Sept 19
+         
+      output = Chosen_Model(reshaped)   #substituted reshaped for batch_data
+        
+        
+        
+       # if (i==4):
+        #  print (f'The fifth batch_data image is {batch_data[i]}, and its prediction yhat is {y_hat_tensor[i]}, this is y_hat_tensor: {y_hat_tensor}')
+          
       val = input(f'!!!!!!!!!!!!!!!!About to call model_loss with this SIZE for y_hat {y_hat_tensor.size()}, and this one for target,   {batch_labels.size()}')
       print(val)
      
       print("model_loss = calculate next")
       
-      model_loss = calculate_loss(predictions, batch_labels)
+      #model_loss = calculate_loss(y_hat_tensor, batch_labels)        Sept 19
+      model_loss = calculate_loss(output, batch_labels)
          
       
       print (f'Model loss is: {model_loss}')
