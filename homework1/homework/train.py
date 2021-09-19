@@ -1,5 +1,9 @@
-from .models import ClassificationLoss, model_factory, save_model, LinearClassifier, MLPClassifier
-from .utils import accuracy, load_data
+#from models import ClassificationLoss, model_factory, save_model, LinearClassifier, MLPClassifier
+#from utils import accuracy, load_data
+
+import models
+import utils
+
 import torch
 import torch.nn.functional as F
 from torch.nn.parameter import Parameter          
