@@ -13,10 +13,7 @@ class SuperTuxDataset(Dataset):
     
     self.image_list = []
     self.label_list = []
-        
-    val = input("PRESS ANY KEY to iterate over labels.csv and load *ALL* DATA")
-    print(val) 
-    
+           
     image_index = 0
   
     with open('labels.csv', newline='') as csvfile:
@@ -49,8 +46,8 @@ class SuperTuxDataset(Dataset):
         image_index += 1 
         
         #REMOVE THIS FOR COLAB
-        if image_index == 513:   #REMOVE FOR COLAB
-          break
+        #if image_index == 513:   #REMOVE FOR COLAB
+         # break
                
   def __len__(self):
     return (len(self.label_list))  
