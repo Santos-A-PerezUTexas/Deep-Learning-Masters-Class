@@ -1,8 +1,9 @@
-#Loss can be > 1
+#Line 78 self.Image_tensor = torch.tensor(self.Image_To_Tensor(self.one_image), requires_grad=True)         
 #validation at end of training loop... accuracy()....
 #Line 398 y_hat_tensor[i] = Chosen_Model(Tux_DataLoader[0][i]) #feed entire batch Sept 18
 #change len() to get size of image label list??
 #line 327 for image_tuples_tensor, label in Tux_DataLoader:  #Sept 18
+#In Colab remove line 102 - the break statement in Dataset constructor
      
 
 import torch
@@ -19,39 +20,15 @@ n_epochs = 10                   #CHANGE EPOCHS to 100 !!!!!!!!
 batch_size = 128
 input_size = 64*64*3
 
-  
-  
-
 class SuperTuxDataset(Dataset):   #kel76y
 
-  def __init__(self, dataset_path):
-  
-  
-    #self.BatchSize = 5120  colab   #SHOULD NOT USE HERE!
-    self.BatchSize = 512
-      
-    #NO BATCH SIZE...  Use a list...  
-    
-    
-    #Maybe remove self???
-    self.imageDATASET = torch.rand([self.BatchSize,3,64,64])   #COMPLETE BUT RANDOM DATA SET
+  def __init__(self, dataset_path):  
     
     self.image_list = []
     self.label_list = []
-    
-    #list has no set size.... can append... Sept 18
-    #argument parser  Sept 18
-    
-     
-    val = input("PRESS ANY KEY TO BEGIN")
-    print(val) 
-    
-    
-    print ("I will now iterate over labels.cvs file.........")
-    
+        
     val = input("PRESS ANY KEY to iterate over labels.csv and load *ALL* DATA")
     print(val) 
-    
     
     image_index = 0
   
@@ -59,78 +36,52 @@ class SuperTuxDataset(Dataset):   #kel76y
     
       ImageReader = csv.reader(csvfile) 
       
-      for labelsFILE_image_row in ImageReader:
+      for row in ImageReader:
               
-        if image_index == 0:
-          print (f'image index is zero')
-          image_file_name = "..\data\\train\\"+labelsFILE_image_row[0]
-          print (f'This is the image name at zero:  {image_file_name}')
-          val = input("Press any key")
-          print(val)
-          
+        
+        print(f'Image index is {image_index}, about to evaluate is bigger than 0')    
+        
         if image_index > 0:
                   
-          #image_file_name = "../data/train/"+labelsFILE_image_row[0]  for colab Sept 18
-          #print(image_file_name)  commented Sept 17 evening
-          image_file_name = "..\data\\train\\"+labelsFILE_image_row[0] 
+          #image_file_name = "../data/train/"+row[0]  for colab Sept 18
+          image_file_name = "..\data\\train\\"+row[0] 
           
           self.one_image = Image.open(image_file_name)
           self.Image_To_Tensor = Image_Transformer.transforms.ToTensor()
           self.Image_tensor = self.Image_To_Tensor(self.one_image)
-  
-          self.imageDATASET[image_index-1] = self.Image_tensor  #added -1 to image_index Sept 18   
           self.image_list.append(self.Image_tensor)
           
           label_string_to_number = 0
           
-          #iterate through label names, assign current label[image_index] a number:
-          current_label_string = labelsFILE_image_row[1]
+          current_label_string = row[1]
            
           for i in LABEL_NAMES:  #from string to string, iterate through the strongs
             if i==current_label_string:
               self.label_list.append(label_string_to_number)
-              #self.labels[image_index-1] = label_string_to_number
+              
             label_string_to_number += 1
           
-                  
-          #label_list.append(self.labels[image_index-1])   #WARNING -1 ????
-          
-          
-          #print (f'I just assigned self.labels[{image_index-1}] the value {self.labels[image_index-1]} which corresponds to label {labelsFILE_image_row[1]}')
-          
         image_index += 1 
-        if image_index == self.BatchSize+1:   #added +1 Sept 18
+        
+        #REMOVE THIS FOR COLAB
+        if image_index == 513:   #REMOVE FOR COLAB
           break
    
-    print(f'ABOVE IS THE LIST.  Size of data set is =============={self.imageDATASET.size(0)}, of the label list {len(self.label_list)}, and of the image list, {len(self.image_list)}')
+    print(f'Size of data set is ==============of the label list {len(self.label_list)}, and of the image list, {len(self.image_list)}')
     
     
     val = input("PRESS ANY KEY TO LEARN")
     print(val) 
     
-    print (self.imageDATASET[0])
-    
-    val = input("Above is the first image tensor from the data set, does it have grad?")
-    print(val) 
-    
-    
-    
-    
-
- 
-            
+               
   def __len__(self):
-    return (self.imageDATASET.size(0))  
+    return (len(self.label_list))  
          
   def __getitem__(self, idx):     
   
-    #return (self.imageDATASET[idx], self.labels[idx]) #image Tensor size (3,64,64) range [0,1], label is int.
     return (self.image_list[idx], self.label_list[idx])
-        
-#kel76y
-
+ 
 def load_data(dataset_path, num_workers=0, batch_size=batch_size):     #Use this in train.py
-   
     
     dataset = SuperTuxDataset(dataset_path)   
     
@@ -223,7 +174,7 @@ class MLPClassifier(torch.nn.Module):
                 
   def forward(self, image_tensor):   
    
-    
+    print("SEPT 18:  INSIDE OF FORWARD OF MLP")
     flattened_Image_tensor = image_tensor.view(image_tensor.size(0), -1).view(-1)   
     return self.linear2(self.ReLU(self.linear1(flattened_Image_tensor)))  #added this Sept 17, revert back????
     
@@ -318,66 +269,39 @@ def train(args):
     
 #------------------------------BEGIN ITERATE THROUGH BATCHES------------------------------------------
 
-    #for image_tuples_tensor, label in Tux_DataLoader:  #Sept 18
-    #for batch_idx, image_tuples_tensor in enumerate(Tux_DataLoader):  #iterate batches
     for batch_data, batch_labels in Tux_DataLoader:
       for i in range(len(batch_data)):          
         y_hat_tensor[i] = Chosen_Model(batch_data[i]) #feed entire batch Sept 18       
-        
-    #for image_tuples_tensor, label in Tux_DataLoader:  #Sept 18
-      
-      #print (f'image_tuples_tensor[1], the labels for this batch[{batch_idx}], is {image_tuples_tensor[1]} ')
-      
-      #val = input(f'PRESS A KEY TO BEGIN THE DIRECT ITERATION SEPT 18')
-      #print(val)
-      
-      i#=0
-      #for batch_data, batch_label in Tux_DataLoader:
-        #print (f'Batch Data ****{i}****** is  [{batch_data}], batch_label is {batch_label} ')
-        #y_hat_tensor = Chosen_Model(batch_data) #feed entire batch Sept 18       
-        #y_hat_tensorMLP = MLPx(batch_data)   #flattening occurs in MLPx
-        #i = i + 1
-        
-      #print (f'ABOVE SEPT 18 is the iteration through TuxData Loader with no INDEX!, i = {i}, which is the number of batches!!!')
-      
-      #val = input(f'At beggining of for loop [{batch_idx}] for batches, iterating through all batches')
-      #print(val)
-      
-      #------------------------------BEGIN ITERATE THROUGH ALL IMAGES OF A BATCH
-  
-      #y_hat_tensor = Chosen_Model(sample_tuple) #feed entire batch Sept 18       
-      #y_hat_tensorMLP = MLPx(sample_tuple)   #flattening occurs in MLPx
-  
-      #y_hat_tensor = Chosen_Model(image_tuples_tensor[0]) #feed entire batch Sept 18       
-      #y_hat_tensorMLP = MLPx(image_tuples_tensor[0])   #flattening occurs in MLPx
-  
-      #y_hat_tensor = Chosen_Model(image_tuples_tensor[0][0:64]) #feed entire batch Sept 18       
-      #y_hat_tensorMLP = MLPx(image_tuples_tensor[0][0:64])   #flattening occurs in MLPx
-     
-      
-        
-    #-
-      #for i in range(len(image_tuples_tensor[0])):          
-        #y_hat_tensor[i] = Chosen_Model(image_tuples_tensor[0][i]) #feed entire batch Sept 18       
-        #y_hat_tensorMLP[i] = MLPx(image_tuples_tensor[0][i])   #flattening occurs in MLPx
-        
-    #-------------------------END ITERATE THROUGH ALL IMAGES OF A BATCH --------------------------
-      
+    
           
       val = input(f'!!!!!!!!!!!!!!!!About to call model_loss with this SIZE for y_hat {y_hat_tensor.size()}, and this one for target,   {batch_labels.size()}')
       print(val)
      
+      print("model_loss = calculate next")
       
       model_loss = calculate_loss(y_hat_tensor, batch_labels)   
       
+      print (f'Model loss is: {model_loss}')
+      val = input(f'PRESS ANY KEY')
+      print(val)
+     
+      
+      print("Detect Anomaly Next")
+      
       torch.autograd.set_detect_anomaly(True)
       
- 
+      print("Optimizer zero grad next")
+      
       optimizer.zero_grad()
+      
+      print("Calling backward now to get gradients")
+      #goes into LOOP here
       
       model_loss.backward(retain_graph=True)
       
-      #model_lossMLP.backward(retain_graph=True)         
+      #cd cs342\homework1\homework
+      
+      print("Updating weights now with step()")
      
       optimizer.step()             
            
