@@ -70,7 +70,7 @@ class SuperTuxDataset(Dataset):
   
     return (self.image_list[idx], self.label_list[idx])
  
-def load_data(dataset_path, num_workers=0, batch_size=batch_size):     #Use this in train.py
+def load_data(dataset_path, num_workers=0):     #Use this in train.py
     
     dataset = SuperTuxDataset(dataset_path)      
        
@@ -107,7 +107,7 @@ class ClassificationLoss(torch.nn.Module):
 
 class LinearClassifier(torch.nn.Module):
 
-  def __init__(self, input_dim=input_dim):        
+  def __init__(self, input_dim):        
       
     super().__init__()   #original
        
@@ -122,7 +122,7 @@ class LinearClassifier(torch.nn.Module):
 
 class MLPClassifier(torch.nn.Module):  
 
-  def __init__(self, hidden_size=5, input_dim=input_dim):     #set hiddensize here
+  def __init__(self, input_dim, hidden_size=5):     #set hiddensize here
    
     super().__init__()        
 
@@ -227,7 +227,7 @@ def train(args):
     save_model(Chosen_Model)
     
     
-    #Test_DataLoader =  load_data(Test_data_path, num_workers=2) 
+    #Test_DataLoader =  load_data(Test_data_path, num_workers=2, batch_size=batch_size) 
     #TestData, TestLabels =  Test_DataLoader()
     #TestPredictions = Chosen_Model(TestData)
     #model_accuracy = accuracy(TestPredictions, TestLabels)   #Sept 18

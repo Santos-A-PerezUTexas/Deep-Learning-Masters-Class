@@ -1,8 +1,9 @@
-#from models import ClassificationLoss, model_factory, save_model, LinearClassifier, MLPClassifier
-#from utils import accuracy, load_data
+from .utils import accuracy, load_data
+from .models import model_factory, save_model, LinearClassifier, MLPClassifier
 
 import models
 import utils
+
 
 import torch
 import torch.nn.functional as F
@@ -10,7 +11,7 @@ from torch.nn.parameter import Parameter
 
 input_dim = 3*64*64
 n_epochs = 10                   #CHANGE EPOCHS to 100 !!!!!!!!
-batch_size = 128
+#batch_size = 128
 input_size = 64*64*3
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 Train_data_path = "..\data\\train\\"

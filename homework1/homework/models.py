@@ -2,7 +2,6 @@ import torch
 import torch.nn.functional as F
 from torch.nn.parameter import Parameter
 
-model_factory = { 'linear': LinearClassifier, 'mlp': MLPClassifier, }  #this has to stay here!!
 
 #----------------------------------------------CLASSIFICATION LOSS      
 
@@ -25,7 +24,7 @@ class ClassificationLoss(torch.nn.Module):
 
 class LinearClassifier(torch.nn.Module):
 
-  def __init__(self, input_dim=input_dim):        
+  def __init__(self, input_dim):        
       
     super().__init__()   #original
        
@@ -40,7 +39,7 @@ class LinearClassifier(torch.nn.Module):
 
 class MLPClassifier(torch.nn.Module):  
 
-  def __init__(self, hidden_size=5, input_dim=input_dim):     #set hiddensize here
+  def __init__(self, input_dim, hidden_size=5):     #set hiddensize here
    
     super().__init__()        
 
@@ -54,6 +53,8 @@ class MLPClassifier(torch.nn.Module):
   def forward(self, image_tensor):   
        
     return (self.network(image_tensor))
+
+model_factory = { 'linear': LinearClassifier, 'mlp': MLPClassifier, } 
 
 def save_model(model):
   from torch import save
@@ -70,4 +71,7 @@ def load_model(model):
   r = model_factory[model]()
   r.load_state_dict(load(path.join(path.dirname(path.abspath(__file__)), '%s.th' % model), map_location='cpu'))
   return r
+
+
+ #this has to stay here!!
 

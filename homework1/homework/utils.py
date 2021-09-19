@@ -5,7 +5,7 @@ import csv
 import torch
 
 LABEL_NAMES = ['background', 'kart', 'pickup', 'nitro', 'bomb', 'projectile']
-
+batch_size = 128
 
 class SuperTuxDataset(Dataset):   
 
