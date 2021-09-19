@@ -242,7 +242,7 @@ if __name__ == '__main__':
     args = parser.parse_args()   
     
     print (f'SEPT 18--------------args is {args}')
-    
+    print ("IN NEW TRAIN")
      
     train(args)
   
