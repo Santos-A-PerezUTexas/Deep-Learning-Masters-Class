@@ -134,9 +134,7 @@ class LinearClassifier(torch.nn.Module):
       
     super().__init__()   #original
        
-    self.input_dim = input_dim
-    
-    
+    self.input_dim = input_dim   
     self.network = torch.nn.Linear(input_dim, 6)
     
      
@@ -153,30 +151,26 @@ class LinearClassifier(torch.nn.Module):
 
 class MLPClassifier(torch.nn.Module):  
 
-  def __init__(self, hidden_size):   
+
+  #learning rate, hidden_layers
+
+  def __init__(self, hidden_size=5, input_dim=input_dim):     #set hiddensize here!!!!!!!!!!!!!!!!!!
    
     super().__init__()        
-    self.hidden_size = hidden_size
+    #self.hidden_size = hidden_size
 
-       
-    self.linear1 = torch.nn.Linear(input_dim, hidden_size)
-    torch.nn.init.normal_(self.linear1.weight, std=0.01)
-    torch.nn.init.normal_(self.linear1.bias, std=0.01)
-    self.linear2 = torch.nn.Linear(hidden_size, 6)
-    self.ReLU = torch.nn.ReLU(inplace=False)
-        
     self.network = torch.nn.Sequential( 
                 torch.nn.Linear(input_dim, hidden_size),   
                 torch.nn.ReLU(inplace=False),               
                 torch.nn.Linear(hidden_size, 6)  
                 )
+
                 
   def forward(self, image_tensor):   
    
-    print("SEPT 18:  INSIDE OF FORWARD OF MLP")
+    print("Inside forward method of MLP")
     flattened_Image_tensor = image_tensor.view(image_tensor.size(0), -1).view(-1)   
-    return self.linear2(self.ReLU(self.linear1(flattened_Image_tensor)))  #added this Sept 17, revert back????
-    
+    return (self.network(flattened_Image_tensor))
 
 def save_model(model):
   from torch import save
@@ -206,7 +200,7 @@ def train(args):
     
     image_index = 1                   #test code
     
-    Chosen_Model = model_factory[args.model](input_dim)     #LINEAR CLASSIFIER BY DEFAULT IN THE COMMAND LINE 
+    Chosen_Model = model_factory[args.model](input_dim=input_dim)     #LINEAR CLASSIFIER BY DEFAULT IN THE COMMAND LINE 
      
     Tux_DataLoader =  load_data('c:\fakepath', num_workers=2)   #set num_workers here   
  
@@ -245,10 +239,16 @@ def train(args):
 #------------------------------BEGIN ITERATE THROUGH BATCHES------------------------------------------
 
     for batch_data, batch_labels in Tux_DataLoader:
+      
       for i in range(len(batch_data)):          
         y_hat_tensor[i] = Chosen_Model(batch_data[i]) #should feed entire batch instead, Sept 18 
-        if (i==4):
-          print (f'The fifth batch_data image is {batch_data[i]}, and its prediction yhat is {y_hat_tensor[i]}')
+        
+      #output = Chosen_Model(batch_data)
+        
+        
+        
+       # if (i==4):
+        #  print (f'The fifth batch_data image is {batch_data[i]}, and its prediction yhat is {y_hat_tensor[i]}, this is y_hat_tensor: {y_hat_tensor}')
           
       val = input(f'!!!!!!!!!!!!!!!!About to call model_loss with this SIZE for y_hat {y_hat_tensor.size()}, and this one for target,   {batch_labels.size()}')
       print(val)
@@ -283,10 +283,7 @@ def train(args):
            
       
       model_accuracy = accuracy(y_hat_tensor, batch_labels)  #Sept 18
-      #print (f'Accuracy Before Weight Updates for Batch ??? is {model_accuracy}')
-      #for i in range(len(image_tuples_tensor[0])):  #iterate through all images, MAYBE I DONT NEED THIS!
-       # y_hat_tensor[i] = Chosen_Model(image_tuples_tensor[0][i]) 
-        #y_hat_tensorMLP[i] = MLPx(image_tuples_tensor[0][i])
+     
       New_model_accuracy = accuracy(y_hat_tensor, batch_labels)  #Sept 18
       print (f'Accuracy Before Weight Updates for Batch ??? is {model_accuracy}, the new one: {New_model_accuracy}')
       
