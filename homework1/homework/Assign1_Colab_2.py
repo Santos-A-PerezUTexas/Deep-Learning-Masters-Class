@@ -49,6 +49,8 @@ class SuperTuxDataset(Dataset):   #kel76y
           self.one_image = Image.open(image_file_name)
           self.Image_To_Tensor = Image_Transformer.transforms.ToTensor()
           self.Image_tensor = self.Image_To_Tensor(self.one_image)
+          #self.Image_tensor = torch.tensor(self.Image_To_Tensor(self.one_image), requires_grad=True)
+          
           self.image_list.append(self.Image_tensor)
           
           label_string_to_number = 0
@@ -155,11 +157,8 @@ class MLPClassifier(torch.nn.Module):
    
     super().__init__()        
     self.hidden_size = hidden_size
-    
-    #added this Sept 17, 2021
-    #self.w = Parameter(torch.ones(input_dim))
-    #self.b = Parameter(-torch.ones(1))
-        
+
+       
     self.linear1 = torch.nn.Linear(input_dim, hidden_size)
     torch.nn.init.normal_(self.linear1.weight, std=0.01)
     torch.nn.init.normal_(self.linear1.bias, std=0.01)
@@ -215,36 +214,12 @@ def train(args):
     
          
     
-                    
-        
- 
-#trainset = datasets.MNIST('~/.pytorch/MNIST_data/', download=True, train=True, transform=transform)
-#trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
-    
-    
-    
-    
-    #create the optimizer (change to use args??)
-    #just defining the optimizer, call it w/ step to update weights 
-    #but must implement loss.backward first to get the gradients
-    
     optimizer = torch.optim.SGD(Chosen_Model.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4)
         
     
-    # Create the loss - For these batch_size images, the network predicted the labels as set forth by y_hat_vector 
-    #(change to tensor!!!)
-    
     calculate_loss = ClassificationLoss()   
     
-    #call it with Y_hat_Vector, y_vector... input (y_hat predicted labels) and 
-    #target (y_vector actual image label)
-    #now I can call it as such, model_loss = loss_object (y_hat_tensor, y_tensor) where y_tensor has actual values.. 
-    #or is it tuples???  
-    
-
-    
-    #BEGIN SGD kel76y
-    
+   
     global_step = 0
     
     
@@ -271,8 +246,9 @@ def train(args):
 
     for batch_data, batch_labels in Tux_DataLoader:
       for i in range(len(batch_data)):          
-        y_hat_tensor[i] = Chosen_Model(batch_data[i]) #feed entire batch Sept 18       
-    
+        y_hat_tensor[i] = Chosen_Model(batch_data[i]) #should feed entire batch instead, Sept 18 
+        if (i==4):
+          print (f'The fifth batch_data image is {batch_data[i]}, and its prediction yhat is {y_hat_tensor[i]}')
           
       val = input(f'!!!!!!!!!!!!!!!!About to call model_loss with this SIZE for y_hat {y_hat_tensor.size()}, and this one for target,   {batch_labels.size()}')
       print(val)
