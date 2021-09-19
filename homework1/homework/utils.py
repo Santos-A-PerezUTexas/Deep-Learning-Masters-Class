@@ -16,7 +16,7 @@ class SuperTuxDataset(Dataset):
            
     image_index = 0
   
-    with open('labels.csv', newline='') as csvfile:
+    with open( dataset_path+'/labels.csv', newline='') as csvfile:
     
       ImageReader = csv.reader(csvfile) 
       
@@ -24,7 +24,7 @@ class SuperTuxDataset(Dataset):
                      
         if image_index > 0:
       
-          image_file_name = dataset_path+row[0]
+          image_file_name = dataset_path+'/'+row[0]
           
           self.one_image = Image.open(image_file_name)
           self.Image_To_Tensor = Image_Transformer.transforms.ToTensor()

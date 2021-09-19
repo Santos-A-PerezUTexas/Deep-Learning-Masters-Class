@@ -24,22 +24,31 @@ class ClassificationLoss(torch.nn.Module):
 
 class LinearClassifier(torch.nn.Module):
 
-  def __init__(self, input_dim):        
+  def __init__(self, input_dim=3*64*64):        
       
-    super().__init__()   #original
+    super().__init__()   
        
-    self.network = torch.nn.Linear(input_dim, 6)
+    self.network = torch.nn.Linear(3*64*64, 6)            
+    
     
      
   def forward(self, image_tensor):   
    
-     return (self.network(image_tensor))   
+    batch_size=100
+    
+    temp_tensor = torch.zeros(batch_size, 6)
+      
+    for i in range(batch_size):
+      temp_tensor[i] = self.network(image_tensor[i].view(image_tensor[i].size(0), -1).view(-1)) 
+    return (temp_tensor) 
 
+    #return (self.network(image_tensor.view(image_tensor.size(0), -1).view(-1))) 
+    
 #--------------------------------------------------------------MLP------------------------------------------------
 
 class MLPClassifier(torch.nn.Module):  
 
-  def __init__(self, input_dim, hidden_size=5):     #set hiddensize here
+  def __init__(self, input_dim=12288, hidden_size=5):     #set hiddensize here
    
     super().__init__()        
 
@@ -51,8 +60,16 @@ class MLPClassifier(torch.nn.Module):
 
                 
   def forward(self, image_tensor):   
+
+    batch_size=128
+    temp_tensor = torch.zeros(batch_size, 6)
+      
+    for i in range(batch_size):
+      temp_tensor[i] = self.network(image_tensor[i].view(image_tensor[i].size(0), -1).view(-1)) 
+    
+    return (temp_tensor) 
        
-    return (self.network(image_tensor))
+    #return (self.network(image_tensor))
 
 model_factory = { 'linear': LinearClassifier, 'mlp': MLPClassifier, } 
 
