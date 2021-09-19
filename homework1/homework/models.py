@@ -2,6 +2,8 @@ import torch
 import torch.nn.functional as F
 from torch.nn.parameter import Parameter
 
+model_factory = { 'linear': LinearClassifier, 'mlp': MLPClassifier, }  #this has to stay here!!
+
 #----------------------------------------------CLASSIFICATION LOSS      
 
 

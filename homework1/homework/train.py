@@ -1,4 +1,4 @@
-from .models import LossFunction, ClassificationLoss, model_factory, save_model, LinearClassifier, MLPClassifier
+from .models import ClassificationLoss, model_factory, save_model, LinearClassifier, MLPClassifier
 from .utils import accuracy, load_data
 import torch
 import torch.nn.functional as F
@@ -13,7 +13,6 @@ Train_data_path = "..\data\\train\\"
 #For colab path is "../data/train/"
 Test_data_path = "..\data\\valid\\"
 #For colab path is "../data/valid/"
-model_factory = { 'linear': LinearClassifier, 'mlp': MLPClassifier, }  #this has to stay here!!
 
 """
 
