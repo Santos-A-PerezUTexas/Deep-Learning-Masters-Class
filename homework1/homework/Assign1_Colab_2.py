@@ -25,9 +25,6 @@ class SuperTuxDataset(Dataset):
     self.image_list = []
     self.label_list = []
         
-    val = input("PRESS ANY KEY to iterate over labels.csv and load *ALL* DATA")
-    print(val) 
-    
     image_index = 0
   
     with open('labels.csv', newline='') as csvfile:
@@ -182,9 +179,6 @@ def train(args):
     
     print (f'The size of the data loader is {len(Tux_DataLoader)}')
     
-    val = input(f'BEGIN TRAINING LOOP (Only one Epoch Through All Batches)')
-    
-    print(val)
     
     for epochs in range(n_epochs): # set to n_epochs in colab
     
