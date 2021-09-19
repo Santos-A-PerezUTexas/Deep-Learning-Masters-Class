@@ -1,14 +1,3 @@
-#Line 78 self.Image_tensor = torch.tensor(self.Image_To_Tensor(self.one_image), requires_grad=True)         
-#validation at end of training loop... accuracy()....
-#Line 398 y_hat_tensor[i] = Chosen_Model(Tux_DataLoader[0][i]) #feed entire batch Sept 18
-#change len() to get size of image label list??
-#line 327 for image_tuples_tensor, label in Tux_DataLoader:  #Sept 18
-#In Colab remove line 102 - the break statement in Dataset constructor
-
-
-#Chosen_Model = model_factory[args.model](input_dim=input_dim).to(device) 
-     
-
 import torch
 import torch.nn.functional as F
 from torch.nn.parameter import Parameter          
@@ -23,8 +12,13 @@ n_epochs = 10                   #CHANGE EPOCHS to 100 !!!!!!!!
 batch_size = 128
 input_size = 64*64*3
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+Train_data_path = "..\data\\train\\"
+#For colab path is "../data/train/"
+Test_data_path = "..\data\\valid\\"
+#For colab path is "../data/valid/"
 
-class SuperTuxDataset(Dataset):   #kel76y
+
+class SuperTuxDataset(Dataset):   
 
   def __init__(self, dataset_path):  
     
@@ -43,9 +37,8 @@ class SuperTuxDataset(Dataset):   #kel76y
       for row in ImageReader:
                      
         if image_index > 0:
-                  
-          #image_file_name = "../data/train/"+row[0]  for colab Sept 18
-          image_file_name = "..\data\\train\\"+row[0] 
+      
+          image_file_name = dataset_path+row[0]
           
           self.one_image = Image.open(image_file_name)
           self.Image_To_Tensor = Image_Transformer.transforms.ToTensor()
@@ -109,9 +102,7 @@ class ClassificationLoss(torch.nn.Module):
       
     
       
-      
-      
-#kel76y
+
 # -----------------------------------------------LINEAR-----------------------------------------------
 
 class LinearClassifier(torch.nn.Module):
@@ -176,8 +167,8 @@ def train(args):
     
     Chosen_Model = model_factory[args.model](input_dim=input_dim)     
      
-    Tux_DataLoader =  load_data('c:\fakepath', num_workers=2)   
- 
+    Tux_DataLoader =  load_data(Train_data_path, num_workers=2)   
+    
     optimizer = torch.optim.SGD(Chosen_Model.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4)
         
     
@@ -215,11 +206,7 @@ def train(args):
       
         optimizer.zero_grad()
       
-      
-      
         model_loss.backward(retain_graph=True)
-      
-        #cd cs342\homework1\homework
       
         print("Updating weights now with step()")
      
@@ -237,6 +224,14 @@ def train(args):
      
     model_accuracy = accuracy(predictions, batch_labels)   #Sept 18
     print (f'Final Model Accuracy is {model_accuracy}')
+    save_model(Chosen_Model)
+    
+    
+    #Test_DataLoader =  load_data(Test_data_path, num_workers=2) 
+    #TestData, TestLabels =  Test_DataLoader()
+    #TestPredictions = Chosen_Model(TestData)
+    #model_accuracy = accuracy(TestPredictions, TestLabels)   #Sept 18
+    #print (f'Model Accuracy on TEST DATA is {model_accuracy}')
     
 
 if __name__ == '__main__':
@@ -253,6 +248,4 @@ if __name__ == '__main__':
     
      
     train(args)
-    
-     #Now implement MLPClassifier class. The inputs and outputs to same as the linear classifier. 
-     #Try to move most modifications to command-line arguments  in ArgumentParser.
+  

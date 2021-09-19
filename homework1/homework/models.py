@@ -2,37 +2,56 @@ import torch
 import torch.nn.functional as F
 from torch.nn.parameter import Parameter
 
+#----------------------------------------------CLASSIFICATION LOSS      
+
+
 class ClassificationLoss(torch.nn.Module):
+  
     
-  def forward(Y_hat_Vector, y_vector):   #OLD: def forward(self, Y_hat_Vector, y_vector):
-        
-    return -(y_vector.float() * (Y_hat_Vector+1e-10).log() +(1-y_vector.float()) * (1-Y_hat_Vector+1e-10).log() ).mean()
+  def forward(self, Y_hat_Vector, y_vector):   #OLD: def forward(self, input, target):
       
-      #This is the negative log likelihood for logistic regression, need softmax instead.
-      #In Logistic Regression, Y_hat_vector is a prediction for ALL x(i) in the data set, so it returns
-      #a vector of "i" scalars.  In Softmax, this would return a vector (tensor) of "i" vectors - not scalars).
+    cross_loss = torch.nn.CrossEntropyLoss()  #applies softmax to Y_hat, then crossEloss, returns mean
+     
+    weighted_mean_batch_loss = cross_loss(Y_hat_Vector,  y_vector)
         
-        
-"""
-        
-        Implement the log-likelihood of a softmax classifier.
+    return (weighted_mean_batch_loss)  #return the mean loss accross the entire batch
+      
+    
+      
 
-        Compute mean(-log(softmax(input)_label))
-
-        @input:  torch.Tensor((B,C))
-        @target: torch.Tensor((B,), dtype=torch.int64)
-
-        @return:  torch.Tensor((,))
-
-        Hint: Don't be too fancy, this is a one-liner
-"""         
-             
+# -----------------------------------------------LINEAR-----------------------------------------------
 
 class LinearClassifier(torch.nn.Module):
-  
-class MLPClassifier(torch.nn.Module):
 
-  
+  def __init__(self, input_dim=input_dim):        
+      
+    super().__init__()   #original
+       
+    self.network = torch.nn.Linear(input_dim, 6)
+    
+     
+  def forward(self, image_tensor):   
+   
+     return (self.network(image_tensor))   
+
+#--------------------------------------------------------------MLP------------------------------------------------
+
+class MLPClassifier(torch.nn.Module):  
+
+  def __init__(self, hidden_size=5, input_dim=input_dim):     #set hiddensize here
+   
+    super().__init__()        
+
+    self.network = torch.nn.Sequential( 
+                torch.nn.Linear(input_dim, hidden_size),   
+                torch.nn.ReLU(inplace=False),               
+                torch.nn.Linear(hidden_size, 6)  
+                )
+
+                
+  def forward(self, image_tensor):   
+       
+    return (self.network(image_tensor))
 
 def save_model(model):
   from torch import save
@@ -49,3 +68,4 @@ def load_model(model):
   r = model_factory[model]()
   r.load_state_dict(load(path.join(path.dirname(path.abspath(__file__)), '%s.th' % model), map_location='cpu'))
   return r
+
