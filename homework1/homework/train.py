@@ -31,7 +31,7 @@ class SuperTuxDataset(Dataset):
         
     image_index = 0
   
-    with open('labels.csv', newline='') as csvfile:
+    with open(dataset_path+'labels.csv', newline='') as csvfile:
     
       ImageReader = csv.reader(csvfile) 
       
