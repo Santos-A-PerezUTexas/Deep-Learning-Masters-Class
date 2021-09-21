@@ -26,20 +26,26 @@ class LinearClassifier(torch.nn.Module):
 
   def __init__(self, input_dim=3*64*64):        
       
+    self.input_dim = input_dim
     super().__init__()   
        
-    self.network = torch.nn.Linear(3*64*64, 6)            
+    self.network = torch.nn.Linear(input_dim, 6)            
     
     
      
   def forward(self, image_tensor):   
    
     batch_size=100
+    input_dim = self.input_dim
+
     
     temp_tensor = torch.zeros(batch_size, 6)
-      
+    #reshaped = image_tensor.reshape(batch_size, input_dim)
+
     for i in range(batch_size):
-      temp_tensor[i] = self.network(image_tensor[i].view(image_tensor[i].size(0), -1).view(-1)) 
+      #temp_tensor[i] = self.network(image_tensor[i].view(image_tensor[i].size(0), -1).view(-1))
+      #temp_tensor[i] = self.network(reshaped[i]) 
+      temp_tensor[i] = self.network(image_tensor[i].reshape(1, input_dim))
     return (temp_tensor) 
 
     #return (self.network(image_tensor.view(image_tensor.size(0), -1).view(-1))) 
@@ -50,7 +56,9 @@ class MLPClassifier(torch.nn.Module):
 
   def __init__(self, input_dim=12288, hidden_size=5):     #set hiddensize here
    
-    super().__init__()        
+    super().__init__() 
+    
+    self.input_dim = input_dim      
 
     self.network = torch.nn.Sequential( 
                 torch.nn.Linear(input_dim, hidden_size),   
@@ -62,13 +70,16 @@ class MLPClassifier(torch.nn.Module):
   def forward(self, image_tensor):   
 
     batch_size=128
+    input_dim = self.input_dim
+
     temp_tensor = torch.zeros(batch_size, 6)
-      
+    reshaped = image_tensor.reshape(batch_size, input_dim)
+
     for i in range(batch_size):
-      temp_tensor[i] = self.network(image_tensor[i].view(image_tensor[i].size(0), -1).view(-1)) 
-    
+      #temp_tensor[i] = self.network(image_tensor[i].view(image_tensor[i].size(0), -1).view(-1))
+      temp_tensor[i] = self.network(reshaped[i]) 
     return (temp_tensor) 
-       
+          
     #return (self.network(image_tensor))
 
 model_factory = { 'linear': LinearClassifier, 'mlp': MLPClassifier, } 
