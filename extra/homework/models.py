@@ -7,7 +7,12 @@ class LanguageModel(object):
     
     def predict_all(self, some_text):
         """
+        The main task of the character-level language model is to predict the next character 
+        given all previous characters in a sequence of data, i.e. generates text character by character.
+        
         https://towardsdatascience.com/character-level-language-model-1439f5dd87fe
+        
+        https://machinelearningmastery.com/develop-character-based-neural-language-model-keras/
         
         Given some_text, predict the likelihoods of the next character for each substring from 0..i
         The resulting tensor is one element longer than the input, as it contains probabilities for all sub-strings
@@ -20,6 +25,8 @@ class LanguageModel(object):
 
     def predict_next(self, some_text):
         """
+        NOT PART OF EXTRA CREDIT, SEPT 21
+        
         Given some_text, predict the likelihood of the next character
 
         :param some_text: A string containing characters in utils.vocab, may be an empty string!
@@ -30,6 +37,9 @@ class LanguageModel(object):
 
 class Bigram(LanguageModel):
     """
+    
+    IMPLEMENTED BELOW IN TH FILE. SEPT 21
+    
     Implements a simple Bigram model. You can use this to compare your TCN to.
     The bigram, simply counts the occurrence of consecutive characters in transition, and chooses more frequent
     transitions more often. See https://en.wikipedia.org/wiki/Bigram .
