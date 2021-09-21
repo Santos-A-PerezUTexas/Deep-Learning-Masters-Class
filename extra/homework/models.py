@@ -4,8 +4,11 @@ from . import utils
 
 
 class LanguageModel(object):
+    
     def predict_all(self, some_text):
         """
+        https://towardsdatascience.com/character-level-language-model-1439f5dd87fe
+        
         Given some_text, predict the likelihoods of the next character for each substring from 0..i
         The resulting tensor is one element longer than the input, as it contains probabilities for all sub-strings
         including the first empty string (probability of the first character)
