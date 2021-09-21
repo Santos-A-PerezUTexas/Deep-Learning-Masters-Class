@@ -1,0 +1,1 @@
+cd C:\Users\spere\cs342\homework2\homework
