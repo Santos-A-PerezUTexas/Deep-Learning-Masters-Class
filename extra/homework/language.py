@@ -4,6 +4,21 @@ from . import utils
 
 def log_likelihood(model: LanguageModel, some_text: str):
     """
+    
+    This function takes a string as input and returns the log probability 
+    of that string under the current language model. Test your implementation using the Bigram 
+    or AdjacentLanguageModel.
+    
+    https://stackoverflow.com/questions/42817834/understanding-maximum-likelihood-in-nlp
+    https://machinelearningmastery.com/what-is-maximum-likelihood-estimation-in-machine-learning/
+    It is common in optimization problems to prefer to minimize the cost function, rather than to maximize it.
+    Therefore, the negative of the log-likelihood function is used, referred to generally as a
+    Negative Log-Likelihood (NLL) function.
+    
+    https://moonbooks.org/Articles/How-to-calculate-a-log-likelihood-in-python-example-with-a-normal-distribution-/
+    
+    
+    
     Your code here
 
     Evaluate the log-likelihood of a given string.
