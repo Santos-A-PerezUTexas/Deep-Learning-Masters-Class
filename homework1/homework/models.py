@@ -35,7 +35,7 @@ class LinearClassifier(torch.nn.Module):
      
   def forward(self, image_tensor):   
    
-    batch_size=100
+    batch_size=128
     input_dim = self.input_dim
 
     
