@@ -4,7 +4,8 @@ from torch.nn.parameter import Parameter
 from PIL import Image
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms as Image_Transformer
-import csv     
+import csv   
+from .utils import accuracy, load_data  
 
 LABEL_NAMES = ['background', 'kart', 'pickup', 'nitro', 'bomb', 'projectile']
 input_dim = 3*64*64
@@ -70,15 +71,6 @@ class SuperTuxDataset(Dataset):
   
     return (self.image_list[idx], self.label_list[idx])
  
-def load_data(dataset_path, num_workers=0):     #Use this in train.py
-    
-    dataset = SuperTuxDataset(dataset_path)      
-       
-    return DataLoader(dataset, num_workers=num_workers, batch_size=batch_size, shuffle=True, drop_last=False)  
-    
-def accuracy(outputs, labels):
-    outputs_idx = outputs.max(1)[1].type_as(labels)
-    return outputs_idx.eq(labels).float().mean()
 
 """
 models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py models.py 
