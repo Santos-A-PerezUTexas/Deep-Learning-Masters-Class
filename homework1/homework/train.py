@@ -97,7 +97,7 @@ def train(args):
 
     predictions = Chosen_Model(train_data)
     model_accuracy = accuracy(predictions, train_labels)   #Sept 18
-    #print (f'Final Model Accuracy is {model_accuracy}')
+    print (f'Final Model Accuracy is {model_accuracy}')
     save_model(Chosen_Model)
     
     
