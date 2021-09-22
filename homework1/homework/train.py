@@ -58,7 +58,7 @@ def train(args):
       for batch_data, batch_labels in Tux_DataLoader:
 
         print(f'->Epoch {epochs}, batch {idx}')
-
+      
         idx -= 1
         if idx==1:
           break
@@ -80,7 +80,7 @@ def train(args):
         optimizer.step()             
            
         #model_accuracy = accuracy(predictions, batch_labels)  #Sept 18
-     
+        
         #print (f'Model Accuracy is  {model_accuracy}')
       
    
@@ -91,8 +91,12 @@ def train(args):
      
     train_data, train_labels = next(iter(Tux_DataLoader))
 
-    model_accuracy = accuracy(train_data, train_labels)   #Sept 18
-    print (f'Final Model Accuracy is {model_accuracy}')
+    #train_data, train_labels = batch_data, batch_labels
+    
+    print (f'data size {train_data.size()}, labels size {train_labels.size()}')
+
+    #model_accuracy = accuracy(train_data, train_labels)   #Sept 18
+    #print (f'Final Model Accuracy is {model_accuracy}')
     save_model(Chosen_Model)
     
     
