@@ -94,8 +94,8 @@ def train(args):
     #train_data, train_labels = batch_data, batch_labels
     
     print (f'data size {train_data.size()}, labels size {train_labels.size()}')
-
     predictions = Chosen_Model(train_data)
+    print (f'predictions size is {predictions.size()}')
     model_accuracy = accuracy(predictions, train_labels)   #Sept 18
     print (f'Final Model Accuracy is {model_accuracy}')
     save_model(Chosen_Model)
