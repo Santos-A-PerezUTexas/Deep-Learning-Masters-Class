@@ -22,59 +22,6 @@ Train_data_path = "./data/train/"
 #Test_data_path = "..\data\\valid\\"
 Test_data_path = "../data/valid/"
 
-
-
-class SuperTuxDataset(Dataset):   
-
-  def __init__(self, dataset_path):  
-    
-    self.image_list = []
-    self.label_list = []
-        
-    image_index = 0
-  
-    with open(dataset_path+'labels.csv', newline='') as csvfile:
-    
-      ImageReader = csv.reader(csvfile) 
-      
-      for row in ImageReader:
-                     
-        if image_index > 0:
-      
-          image_file_name = dataset_path+row[0]
-          
-          self.one_image = Image.open(image_file_name)
-          self.Image_To_Tensor = Image_Transformer.transforms.ToTensor()
-          self.Image_tensor = self.Image_To_Tensor(self.one_image)
-                    
-          self.image_list.append(self.Image_tensor)
-          
-          label_string_to_number = 0
-          
-          current_label_string = row[1]
-           
-          for i in LABEL_NAMES:  #from string to string, iterate through the strongs
-            if i==current_label_string:
-              self.label_list.append(label_string_to_number)
-              
-            label_string_to_number += 1
-          
-        image_index += 1 
-        
-        #REMOVE THIS FOR COLAB
-        #if image_index == 513:   #REMOVE FOR COLAB
-         # break
-               
-  def __len__(self):
-    return (len(self.label_list))  
-         
-  def __getitem__(self, idx):     
-  
-    return (self.image_list[idx], self.label_list[idx])
- 
-
-
-#model_factory = { 'linear': LinearClassifier, 'mlp': MLPClassifier, }  #this has to stay here!!
   
 
 #TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN TRAIN BEGIN T
@@ -103,13 +50,18 @@ def train(args):
     print (f'The size of the data loader is {len(Tux_DataLoader)}')
     
     
-    for epochs in range(n_epochs): # set to n_epochs in colab
+    for epochs in range(n_epochs-8): # set to n_epochs in colab
     
 #------------------------------BEGIN ITERATE THROUGH BATCHES------------------------------------------
+      idx = len(Tux_DataLoader)
 
       for batch_data, batch_labels in Tux_DataLoader:
 
+        print(f'->Epoch {epochs}, batch {idx}')
 
+        idx -= 1
+        if idx==1:
+          break
         predictions = Chosen_Model(batch_data)      
         #predictions = Chosen_Model(reshaped)   #substituted reshaped for batch_data
         #predictions has gradient  grad_fn=<AddmmBackward> Sept 19
@@ -123,13 +75,13 @@ def train(args):
       
         model_loss.backward(retain_graph=True)
       
-        print("Updating weights now with step()")
+        #print("Updating weights now with step()")
      
         optimizer.step()             
            
-        model_accuracy = accuracy(predictions, batch_labels)  #Sept 18
+        #model_accuracy = accuracy(predictions, batch_labels)  #Sept 18
      
-        print (f'Model Accuracy is  {model_accuracy}')
+        #print (f'Model Accuracy is  {model_accuracy}')
       
    
 #------------------------------END ITERATE THROUGH BATCHES------------------------------------------
@@ -137,7 +89,9 @@ def train(args):
 
 #*********************************************************END TRAINING*************************************************************
      
-    model_accuracy = accuracy(predictions, batch_labels)   #Sept 18
+    train_data, train_labels = next(iter(Tux_DataLoader))
+
+    model_accuracy = accuracy(train_data, train_labels)   #Sept 18
     print (f'Final Model Accuracy is {model_accuracy}')
     save_model(Chosen_Model)
     

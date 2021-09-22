@@ -43,9 +43,10 @@ class LinearClassifier(torch.nn.Module):
     #reshaped = image_tensor.reshape(batch_size, input_dim)
 
     for i in range(batch_size):
-      #temp_tensor[i] = self.network(image_tensor[i].view(image_tensor[i].size(0), -1).view(-1))
+      #print (f'---------->i is {i}')
+      temp_tensor[i] = self.network(image_tensor[i].view(image_tensor[i].size(0), -1).view(-1))
       #temp_tensor[i] = self.network(reshaped[i]) 
-      temp_tensor[i] = self.network(image_tensor[i].reshape(1, input_dim))
+      #temp_tensor[i] = self.network(image_tensor[i].reshape(1, input_dim))
     return (temp_tensor) 
 
     #return (self.network(image_tensor.view(image_tensor.size(0), -1).view(-1))) 
