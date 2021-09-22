@@ -14,8 +14,8 @@ input_size = 64*64*3
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
 #Train_data_path = "..\data\\train\\"
-Train_data_path = "../data/train/"
-#For colab path is "../data/train/"
+Train_data_path = "./data/train/"
+#For colab path is "./data/train/"
 
 #Test_data_path = "..\data\\valid\\"
 Test_data_path = "../data/valid/"
