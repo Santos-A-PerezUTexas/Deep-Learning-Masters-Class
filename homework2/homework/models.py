@@ -57,6 +57,8 @@ class CNNClassifier(torch.nn.Module):
            
       return x
     #Expected 4-dimensional input for 4-dimensional weight [32, 3, 5, 5], but got 3-dimensional input of size [3, 64, 64] instead 
+    #The error is happening because you are feeding the images to the convolution one by one. The convolution is expecting a tensor of the size
+     #(batch_size, channels, height, width). Processing the images in a loop will also be inefficient since the computation does not run in parallel this way.
 
 def save_model(model):
     from torch import save
