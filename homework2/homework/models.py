@@ -47,18 +47,16 @@ class CNNClassifier(torch.nn.Module):
     
       for i in range(batch_size):
     
-        x[i] = self.network(images_batch[i].view(image_tensor[i].size(0), -1).view(-1))
-        #x[i] = self.network(images_batch[i].reshape(1, input_dim))
-    
-        out = self.layer1(x)
+        out = self.layer1(images_batch[i])
         out = self.layer2(out)
         out = out.reshape(out.size(0), -1)
         #out = self.drop_out(out)
         out = self.fc1(out)
         out = self.fc2(out)
-    
-      return out
-        
+        x[i]=out
+           
+      return x
+    #Expected 4-dimensional input for 4-dimensional weight [32, 3, 5, 5], but got 3-dimensional input of size [3, 64, 64] instead 
 
 def save_model(model):
     from torch import save
