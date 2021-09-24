@@ -21,8 +21,8 @@ def train(args):
     optimizer = torch.optim.SGD(model.parameters(), lr=args.learning_rate, momentum=0.9)
     loss = ClassificationLoss()
 
-    train_data = load_data('homework/data/train')
-    valid_data = load_data('homework/data/valid')
+    train_data = load_data('data/train')
+    valid_data = load_data('data/valid')
 
     for epoch in range(args.num_epoch):
     
