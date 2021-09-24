@@ -5,17 +5,64 @@ import torch.utils.tensorboard as tb
 
 
 def train(args):
-    from os import path
-    model = CNNClassifier()
-    train_logger, valid_logger = None, None
-    if args.log_dir is not None:
-        train_logger = tb.SummaryWriter(path.join(args.log_dir, 'train'))
-        valid_logger = tb.SummaryWriter(path.join(args.log_dir, 'valid'))
+      model = CNNClassifier()
 
     """
-    Your code here, modify your HW1 code
-    
+    Your code here
+
     """
+    import torch
+
+    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+
+    model.to(device)
+    if args.continue_training:
+        from os import path
+        model.load_state_dict(torch.load(path.join(path.dirname(path.abspath(__file__)), '%s.th' % args.model)))
+
+    optimizer = torch.optim.SGD(model.parameters(), lr=args.learning_rate, momentum=0.9)
+    loss = ClassificationLoss()
+
+    train_data = load_data('data/train')
+    valid_data = load_data('data/valid')
+
+    for epoch in range(args.num_epoch):
+    
+        model.train()                                        #What is this?
+        
+        loss_vals, acc_vals, vacc_vals = [], [], []     #THREE LISTS
+        
+        for img, label in train_data:                      #  BEGIN TRAINING-----------------------------------------------------LOOP BEGIN
+     
+        
+            img, label = img.to(device), label.to(device)    #IS this how we get parrallel computation?
+
+            logit = model(img)                              #ONE IMAGE AT A TIME????  PARALLEL PROCESSING....img is entire BATCH, this returns (128, 6)
+          
+            loss_val = loss(logit, label)                  #Get loss for one batch of training batch, is this (128, 6)?  How to get the mean???
+            acc_val = accuracy(logit, label)               #get accuracy on same (128,6) logists of (128,3*64*64) batch
+
+            loss_vals.append(loss_val.detach().cpu().numpy())    #add batch loss_val to loss_vals list (with an s)
+            acc_vals.append(acc_val.detach().cpu().numpy())      #add accuracy acc_val to acc_vals list (with an s)
+
+            optimizer.zero_grad()
+            loss_val.backward()
+            optimizer.step()
+                                                      #END TRAINING LOOP------------------------------------------------------------------------LOOP END
+
+        avg_loss = sum(loss_vals) / len(loss_vals)
+        avg_acc = sum(acc_vals) / len(acc_vals)
+
+        model.eval()
+        
+        for img, label in valid_data:                     #iterate through validation data
+        
+            img, label = img.to(device), label.to(device)
+            vacc_vals.append(accuracy(model(img), label).detach().cpu().numpy())
+        avg_vacc = sum(vacc_vals) / len(vacc_vals)
+
+        print('epoch %-3d \t loss = %0.3f \t acc = %0.3f \t val acc = %0.3f' % (epoch, avg_loss, avg_acc, avg_vacc))
+    save_model(model)
 
     save_model(model)
 
