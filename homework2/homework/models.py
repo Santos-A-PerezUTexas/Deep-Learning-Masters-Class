@@ -1,4 +1,5 @@
 import torch
+import torch.nn.functional as F
 
 #https://adventuresinmachinelearning.com/convolutional-neural-networks-tutorial-in-pytorch/
 #calculate dimensions https://docs.google.com/spreadsheets/d/1UUromHy5ksKlcFafpJ760HoZ-vEwAJcoCKG0U80K5L8/edit#gid=0
