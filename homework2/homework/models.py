@@ -12,6 +12,24 @@ P is the padding - in your case 0 i believe
 S is the stride - which you have not provided.
 
 """
+
+
+class ClassificationLoss(torch.nn.Module):
+    def forward(self, input, target):
+        """
+        Your code here
+
+        Compute mean(-log(softmax(input)_label))
+
+        @input:  torch.Tensor((B,C))
+        @target: torch.Tensor((B,), dtype=torch.int64)
+
+        @return:  torch.Tensor((,))
+
+        Hint: Don't be too fancy, this is a one-liner
+        """
+        return F.cross_entropy(input, target)
+
 class CNNClassifier(torch.nn.Module):
 
     def __init__(self, layers=[], n_input_channels=3, kernel_size=3):

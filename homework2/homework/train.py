@@ -1,16 +1,14 @@
-from .models import CNNClassifier, save_model
+from .models import ClassificationLoss, CNNClassifier, save_model
 from .utils import accuracy, load_data
 import torch
 import torch.utils.tensorboard as tb
 
 
 def train(args):
-      model = CNNClassifier()
+    
+    model = CNNClassifier()
 
-    """
-    Your code here
-
-    """
+   
     import torch
 
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
@@ -73,6 +71,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--log_dir')
     # Put custom arguments here
-
+    parser.add_argument('-n', '--num_epoch', type=int, default=50)
+    parser.add_argument('-lr', '--learning_rate', type=float, default=1e-3)
+    parser.add_argument('-c', '--continue_training', action='store_true')
     args = parser.parse_args()
     train(args)
