@@ -3,23 +3,36 @@ import torch.nn.functional as F
 
 
 class CNNClassifier(torch.nn.Module):
-    def __init__(self):
-        super().__init__()
-        """
-        Your code here
-        Hint: Base this on yours or HW2 master solution if you'd like.
-        Hint: Overall model can be similar to HW2, but you likely need some architecture changes (e.g. ResNets)
-        """
-        raise NotImplementedError('CNNClassifier.__init__')
-
-    def forward(self, x):
-        """
-        Your code here
-        @x: torch.Tensor((B,3,64,64))
-        @return: torch.Tensor((B,6))
-        Hint: Apply input normalization inside the network, to make sure it is applied in the grader
-        """
-        raise NotImplementedError('CNNClassifier.forward')
+   def __init__(self, layers=[], n_input_channels=3, kernel_size=3):
+      
+      super().__init__()
+        
+        
+      c = n_input_channels    #3 in our case
+       
+      self.layer1 = torch.nn.Sequential(
+      
+            torch.nn.Conv2d(c, 32, kernel_size=5, stride=1, padding=2),
+            torch.nn.MaxPool2d(kernel_size=2, stride=2))    
+            
+      self.layer2 = torch.nn.Sequential(
+            torch.nn.Conv2d(32, 64, kernel_size=5, stride=1, padding=2),  
+            torch.nn.ReLU(),
+            torch.nn.MaxPool2d(kernel_size=2, stride=2, padding=0))                  
+        
+              
+      self.fc1 = torch.nn.Linear(32 * 32 * 32, 6)   #this takes 32x32 image of layer1 or 2, 32 channels
+          
+    
+    def forward(self, images_batch):
+    
+     
+      out = self.layer1(images_batch)
+      out = out.reshape(out.size(0), -1)
+      out = self.fc1(out)
+      
+                   
+      return out
 
 
 class FCN(torch.nn.Module):
