@@ -26,12 +26,17 @@ class FCN(torch.nn.Module):
     def __init__(self):
         super().__init__()
         """
-        Your code here.
+        
+        https://pytorch.org/hub/pytorch_vision_fcn_resnet101/
+        https://discuss.pytorch.org/t/add-residual-connection/20148/6
+        https://stats.stackexchange.com/questions/321054/what-are-residual-connections-in-rnns
+        
         Hint: The FCN can be a bit smaller the the CNNClassifier since you need to run it at a higher resolution
         Hint: Use up-convolutions
         Hint: Use skip connections
         Hint: Use residual connections
         Hint: Always pad by kernel_size / 2, use an odd kernel_size
+        
         """
         raise NotImplementedError('FCN.__init__')
 
