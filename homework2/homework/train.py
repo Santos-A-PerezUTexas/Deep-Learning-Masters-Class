@@ -26,7 +26,7 @@ def train(args):
 
     for epoch in range(args.num_epoch):
     
-        model.train()                                        #What is this?
+        model.train()                           #What is this?  Remember the video by professor, set to eval for validation.
         
         loss_vals, acc_vals, vacc_vals = [], [], []     #THREE LISTS
         
@@ -51,7 +51,7 @@ def train(args):
         avg_loss = sum(loss_vals) / len(loss_vals)
         avg_acc = sum(acc_vals) / len(acc_vals)
 
-        model.eval()
+        model.eval()   #do this just for validation... I think for Tensorboard....
         
         for img, label in valid_data:                     #iterate through validation data
         
