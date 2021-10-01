@@ -1,6 +1,47 @@
 import torch
 import torch.nn.functional as F
 
+"""
+1.   TUNE THE CNNClassifier 
+
+
+  Input normalization - https://en.wikipedia.org/wiki/Batch_normalization?
+  Residual blocks
+  Dropout
+  Data augmentations (Both geometric and color augmentations are important. Be aggressive here. Different levels of supertux have radically different lighting.)
+  Weight regularization
+  Early stopping
+
+
+Input Normatlization
+
+  http://www.philkr.net/dl_class/lectures/making_it_work/09.pdf
+
+Augmentation:
+
+  https://drive.google.com/file/d/1XOYF7qxlj3sDPk0dzV5w2jo4THvspQkk/view
+  https://discuss.pytorch.org/t/data-augmentation-in-pytorch/7925
+  https://www.youtube.com/watch?v=Zvd276j9sZ8
+
+
+
+Residual Connections:
+
+  https://drive.google.com/file/d/1in6SpWW0pRCE_aibvG2jCUvphlCt0wdp/view
+
+  http://www.philkr.net/dl_class/lectures/making_it_work/18.html
+  (this link also has batch normalization)
+
+  http://www.philkr.net/dl_class/lectures/making_it_work/17.pdf
+
+Identity Mapping for Residual Connections:
+
+  https://openreview.net/pdf?id=ryxB0Rtxx
+  reparameterization of the convolutional layers such that when all trainable weights
+  are 0, the layer represents the identity function. Formally, for an input x, each 
+  residual layer has the form x + h(x), rather than h(x)
+
+"""
 
 class CNNClassifier(torch.nn.Module):
    def __init__(self, layers=[], n_input_channels=3, kernel_size=3):
@@ -13,7 +54,10 @@ class CNNClassifier(torch.nn.Module):
       self.layer1 = torch.nn.Sequential(
       
             torch.nn.Conv2d(c, 32, kernel_size=5, stride=1, padding=2),
-            torch.nn.MaxPool2d(kernel_size=2, stride=2))    
+            #torch.nn.BatchNorm2d(32),
+            #torch.nn.ReLU(),
+            torch.nn.MaxPool2d(kernel_size=2, stride=2)
+                                      )    
             
       self.layer2 = torch.nn.Sequential(
             torch.nn.Conv2d(32, 64, kernel_size=5, stride=1, padding=2),  
@@ -21,7 +65,9 @@ class CNNClassifier(torch.nn.Module):
             torch.nn.MaxPool2d(kernel_size=2, stride=2, padding=0))                  
         
               
-      self.fc1 = torch.nn.Linear(32 * 32 * 32, 6)   #this takes 32x32 image of layer1 or 2, 32 channels
+      self.fc1 = torch.nn.Linear(32 * 32 * 32, 6)   
+      
+       #self.drop_out = nn.Dropout()
           
     
     def forward(self, images_batch):
@@ -29,6 +75,7 @@ class CNNClassifier(torch.nn.Module):
      
       out = self.layer1(images_batch)
       out = out.reshape(out.size(0), -1)
+      #out = self.drop_out(out)
       out = self.fc1(out)
       
                    
