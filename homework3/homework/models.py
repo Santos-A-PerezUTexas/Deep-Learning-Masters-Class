@@ -5,12 +5,12 @@ import torch.nn.functional as F
 1.   TUNE THE CNNClassifier 
 
 
-  Input normalization - https://en.wikipedia.org/wiki/Batch_normalization?
-  Residual blocks
-  Dropout
-  Data augmentations (Both geometric and color augmentations are important. Be aggressive here. Different levels of supertux have radically different lighting.)
-  Weight regularization
-  Early stopping
+  -Input normalization - https://en.wikipedia.org/wiki/Batch_normalization?
+  -Residual blocks (see video on residual connections pytorch programming by professor)
+  -Dropout
+  -Data augmentations (Both geometric and color augmentations are important. Be aggressive here. Different levels of supertux have radically different lighting.)
+  -Weight regularization
+  -Early stopping
 
 
 Input Normatlization
@@ -86,6 +86,8 @@ class FCN(torch.nn.Module):
     def __init__(self):
         super().__init__()
         """
+        https://github.com/pochih/FCN-pytorch/tree/master/python
+        https://github.com/wkentaro/pytorch-fcn/tree/master/torchfcn
         
         https://pytorch.org/hub/pytorch_vision_fcn_resnet101/
         https://discuss.pytorch.org/t/add-residual-connection/20148/6
