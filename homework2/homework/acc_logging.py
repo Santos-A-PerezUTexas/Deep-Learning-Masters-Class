@@ -1,6 +1,10 @@
 from os import path
 import torch
 import torch.utils.tensorboard as tb
+import tempfile
+import numpy as np
+log_dir = tempfile.mkdtemp()
+
 
 
 def test_logging(train_logger, valid_logger):
@@ -17,16 +21,31 @@ def test_logging(train_logger, valid_logger):
     for epoch in range(10):
     
         torch.manual_seed(epoch)
+        
+        
         for iteration in range(20):
             dummy_train_loss = 0.9**(epoch+iteration/20.)
             dummy_train_accuracy = epoch/10. + torch.randn(10)
-            raise NotImplementedError('Log the training loss')
-        raise NotImplementedError('Log the training accuracy')
+            logger = tb.SummaryWriter(log_dir+'/test3', flush_secs=1)
+            logger.add_scalar('first/some_number', 0, global_step=1)
+            logger.add_scalar('first/some_number', 1, global_step=2)
+            logger.add_histogram('plots/hist1', np.array([10,2,5,4,2]), global_step=1)
+            logger.add_histogram('plots/hist2', np.random.rand(20), global_step=1)
+            #raise NotImplementedError('Log the training loss')
+
+
+
+        #raise NotImplementedError('Log the training accuracy')
         torch.manual_seed(epoch)
+
+
+
+"""
         for iteration in range(10):
             dummy_validation_accuracy = epoch / 10. + torch.randn(10)
-        raise NotImplementedError('Log the validation accuracy')
 
+        raise NotImplementedError('Log the validation accuracy')
+"""
 
 if __name__ == "__main__":
     from argparse import ArgumentParser
