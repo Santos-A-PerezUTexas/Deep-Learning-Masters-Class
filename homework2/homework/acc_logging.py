@@ -1,14 +1,13 @@
+
+#Homework 2
+
 from os import path
 import torch
 import torch.utils.tensorboard as tb
 import tempfile
 import numpy as np
-from torch.utils.tensorboard import SummaryWriter
+log_dir = tempfile.mkdtemp()
 
-
-#log_dir = tempfile.mkdtemp()
-
-writer = SummaryWriter()
 
 
 def test_logging(train_logger, valid_logger):
@@ -20,13 +19,7 @@ def test_logging(train_logger, valid_logger):
     Make sure to set global_step correctly, for epoch=0, iteration=0: global_step=0
     Call the loss 'loss', and accuracy 'accuracy' (no slash or other namespace)
     """
-    for n_iter in range(100):
-      print ("TESTSSS")
-      writer.add_scalar('Loss/train', np.random.random(), n_iter)
-      writer.add_scalar('Loss/test', np.random.random(), n_iter)
-      writer.add_scalar('Accuracy/train', np.random.random(), n_iter)
-      writer.add_scalar('Accuracy/test', np.random.random(), n_iter)
-    
+
     # This is a strongly simplified training loop
     for epoch in range(10):
     
@@ -36,11 +29,12 @@ def test_logging(train_logger, valid_logger):
         for iteration in range(20):
             dummy_train_loss = 0.9**(epoch+iteration/20.)
             dummy_train_accuracy = epoch/10. + torch.randn(10)
-            print(iteration)
-            logger = tb.SummaryWriter(log_dir', flush_secs=1)
-            logger.add_scalar('first/ACCURACY', dummy_train_accuracy[epoch], global_step=iteration)
+            logger = tb.SummaryWriter(log_dir+'/test3', flush_secs=1)
+            logger.add_scalar('first/some_number', 0, global_step=1)
+            logger.add_scalar('first/some_number', 1, global_step=2)
+            logger.add_histogram('plots/hist1', np.array([10,2,5,4,2]), global_step=1)
+            logger.add_histogram('plots/hist2', np.random.rand(20), global_step=1)
             #raise NotImplementedError('Log the training loss')
-        logger.add_scalar('first/error', dummy_train_loss, global_step=epoch)
 
 
 
