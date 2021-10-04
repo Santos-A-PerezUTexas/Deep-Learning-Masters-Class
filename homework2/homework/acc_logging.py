@@ -7,11 +7,10 @@ import torch.utils.tensorboard as tb
 import tempfile
 import numpy as np
 from torch.utils.tensorboard import SummaryWriter
+import math
 
 
 #log_dir = tempfile.mkdtemp()
-
-writer = SummaryWriter()
 
 
 def test_logging(train_logger, valid_logger):
@@ -23,13 +22,17 @@ def test_logging(train_logger, valid_logger):
     Make sure to set global_step correctly, for epoch=0, iteration=0: global_step=0
     Call the loss 'loss', and accuracy 'accuracy' (no slash or other namespace)
     """
-    for n_iter in range(100):
-      print ("TESTSSS")
-      writer.add_scalar('Loss/train', np.random.random(), n_iter)
-      writer.add_scalar('Loss/test', np.random.random(), n_iter)
-      writer.add_scalar('Accuracy/train', np.random.random(), n_iter)
-      writer.add_scalar('Accuracy/test', np.random.random(), n_iter)
-    
+
+
+    for step in range(-360, 360):
+      angle_rad = step * math.pi / 180
+      train_logger.add_scalar('sin', math.sin(angle_rad), step)
+      train_logger.add_scalar('cos', math.cos(angle_rad), step)
+      train_logger.add_scalars('sin and cos', {'sin': math.sin(angle_rad), 'cos': math.cos(angle_rad)}, step)
+      train_logger.close()
+
+
+
     # This is a strongly simplified training loop
     for epoch in range(10):
     
@@ -40,10 +43,10 @@ def test_logging(train_logger, valid_logger):
             dummy_train_loss = 0.9**(epoch+iteration/20.)
             dummy_train_accuracy = epoch/10. + torch.randn(10)
             print(iteration)
-            logger = tb.SummaryWriter(log_dir, flush_secs=1)
-            logger.add_scalar('first/ACCURACY', dummy_train_accuracy[epoch], global_step=iteration)
+            #logger = tb.SummaryWriter(log_dir, flush_secs=1)
+            train_logger.add_scalar('first/ACCURACY', dummy_train_accuracy[epoch], global_step=iteration)
             #raise NotImplementedError('Log the training loss')
-        logger.add_scalar('first/error', dummy_train_loss, global_step=epoch)
+        train_logger.add_scalar('first/error', dummy_train_loss, global_step=epoch)
 
 
         #test
@@ -62,6 +65,7 @@ def test_logging(train_logger, valid_logger):
 if __name__ == "__main__":
     from argparse import ArgumentParser
 
+    print ("PROGRAM RUNNING")
     parser = ArgumentParser()
     parser.add_argument('log_dir')
     args = parser.parse_args()
