@@ -1,3 +1,5 @@
+#HOMEWORK 3
+
 from .models import CNNClassifier, save_model
 from .utils import ConfusionMatrix, load_data, LABEL_NAMES
 import torch
@@ -13,6 +15,12 @@ def train(args):
         train_logger = tb.SummaryWriter(path.join(args.log_dir, 'train'), flush_secs=1)
         valid_logger = tb.SummaryWriter(path.join(args.log_dir, 'valid'), flush_secs=1)
 
+transform_train = transforms.Compose([
+    transforms.RandomCrop(32, padding=4),
+    transforms.RandomHorizontalFlip(),
+    transforms.ToTensor(),
+    transforms.Normalize(rgb_mean, rgb_std),
+])
     """
     Your code here, modify your HW1 / HW2 code
     """
