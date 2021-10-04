@@ -46,7 +46,7 @@ def test_logging(train_logger, valid_logger):
         logger.add_scalar('first/error', dummy_train_loss, global_step=epoch)
 
 
-
+        #test
         #raise NotImplementedError('Log the training accuracy')
         torch.manual_seed(epoch)
 
