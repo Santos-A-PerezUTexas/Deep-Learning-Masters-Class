@@ -1,3 +1,6 @@
+
+  #HOMEWORK 3
+
 import torch
 import torch.nn.functional as F
 
@@ -85,9 +88,12 @@ class CNNClassifier(torch.nn.Module):
 class FCN(torch.nn.Module):
     def __init__(self):
         super().__init__()
-        """
+
+                """                                        
+
         https://github.com/pochih/FCN-pytorch/tree/master/python
         https://github.com/wkentaro/pytorch-fcn/tree/master/torchfcn
+        https://medium.com/@iceberg12/semantic-segmentation-applied-on-car-road-4ee62622292f
         
         https://pytorch.org/hub/pytorch_vision_fcn_resnet101/
         https://discuss.pytorch.org/t/add-residual-connection/20148/6
