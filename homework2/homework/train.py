@@ -1,3 +1,5 @@
+#HOMEWORK 2
+
 from .models import ClassificationLoss, CNNClassifier, save_model
 from .utils import accuracy, load_data
 import torch
@@ -26,19 +28,22 @@ def train(args):
 
     for epoch in range(args.num_epoch):
     
-        model.train()                           #What is this?  Remember the video by professor, set to eval for validation.
+        model.train()                           
         
         loss_vals, acc_vals, vacc_vals = [], [], []     #THREE LISTS
         
-        for img, label in train_data:                      #  BEGIN TRAINING-----------------------------------------------------LOOP BEGIN
+        for img, label in train_data:
+                              
+        #  BEGIN TRAINING-----------------------------------------------------LOOP BEGIN
      
         
-            img, label = img.to(device), label.to(device)    #IS this how we get parrallel computation?
+            img, label = img.to(device), label.to(device)    
 
-            logit = model(img)                              #ONE IMAGE AT A TIME????  PARALLEL PROCESSING....img is entire BATCH, this returns (128, 6)
+            logit = model(img)      #PARALLEL PROCESSING....img is entire BATCH, this returns (128, 6)
           
-            loss_val = loss(logit, label)                  #Get loss for one batch of training batch, is this (128, 6)?  How to get the mean???
-            acc_val = accuracy(logit, label)               #get accuracy on same (128,6) logists of (128,3*64*64) batch
+            loss_val = loss(logit, label)       #Loss for one training batch, is this (128, 6)?  mean???
+            
+            acc_val = accuracy(logit, label)        #Accuracy on (128,6) logits of (128,3*64*64) batch
 
             loss_vals.append(loss_val.detach().cpu().numpy())    #add batch loss_val to loss_vals list (with an s)
             acc_vals.append(acc_val.detach().cpu().numpy())      #add accuracy acc_val to acc_vals list (with an s)
@@ -46,12 +51,14 @@ def train(args):
             optimizer.zero_grad()
             loss_val.backward()
             optimizer.step()
-                                                      #END TRAINING LOOP------------------------------------------------------------------------LOOP END
+                                                      
+                                                      
+          #END TRAINING LOOP------------------------------------------------------------------------LOOP END
 
         avg_loss = sum(loss_vals) / len(loss_vals)
         avg_acc = sum(acc_vals) / len(acc_vals)
 
-        model.eval()   #do this just for validation... I think for Tensorboard....
+        model.eval()   #do this just for validation... Tensorboard....
         
         for img, label in valid_data:                     #iterate through validation data
         
@@ -60,7 +67,7 @@ def train(args):
         avg_vacc = sum(vacc_vals) / len(vacc_vals)
 
         print('epoch %-3d \t loss = %0.3f \t acc = %0.3f \t val acc = %0.3f' % (epoch, avg_loss, avg_acc, avg_vacc))
-    save_model(model)
+    
 
     save_model(model)
 
