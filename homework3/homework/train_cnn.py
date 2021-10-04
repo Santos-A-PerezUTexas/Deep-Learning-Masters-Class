@@ -6,7 +6,7 @@ from .utils import ConfusionMatrix, load_data, LABEL_NAMES
 import torch
 import torchvision
 import torch.utils.tensorboard as tb
-
+import torchvision.transforms as T
 
 def train(args):
     from os import path
@@ -19,12 +19,13 @@ def train(args):
     rgb_mean = (0.4914, 0.4822, 0.4465)
     rgb_std = (0.2023, 0.1994, 0.2010)
 
-    transform_train = transforms.Compose([
-      transforms.RandomCrop(32, padding=4),
-      transforms.RandomHorizontalFlip(),
-      transforms.ToTensor(),
-      transforms.Normalize(rgb_mean, rgb_std),
-])
+    transform_train = T.transforms.Compose([
+      T.transforms.RandomCrop(32, padding=4),
+      T.transforms.RandomHorizontalFlip(),
+      T.transforms.ToTensor(),
+      T.transforms.Normalize(rgb_mean, rgb_std),
+    ])
+
     """
     Your code here, modify your HW1 / HW2 code
     ADD LOGGING CODE
