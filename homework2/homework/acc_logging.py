@@ -37,7 +37,7 @@ def test_logging(train_logger, valid_logger):
             dummy_train_loss = 0.9**(epoch+iteration/20.)
             dummy_train_accuracy = epoch/10. + torch.randn(10)
             print(iteration)
-            logger = tb.SummaryWriter(log_dir', flush_secs=1)
+            logger = tb.SummaryWriter(log_dir, flush_secs=1)
             logger.add_scalar('first/ACCURACY', dummy_train_accuracy[epoch], global_step=iteration)
             #raise NotImplementedError('Log the training loss')
         logger.add_scalar('first/error', dummy_train_loss, global_step=epoch)
