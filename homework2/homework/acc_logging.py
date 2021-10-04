@@ -1,3 +1,6 @@
+#Homework 2
+#Oct 4, 2021
+
 from os import path
 import torch
 import torch.utils.tensorboard as tb
