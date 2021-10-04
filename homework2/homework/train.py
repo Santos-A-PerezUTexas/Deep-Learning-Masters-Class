@@ -9,20 +9,7 @@ import torchvision.transforms as T
 def train(args):
     
     model = CNNClassifier()
-
-    rgb_mean = (0.4914, 0.4822, 0.4465)
-    rgb_std = (0.2023, 0.1994, 0.2010)
-
-    transform_train = T.transforms.Compose([
-      T.transforms.RandomCrop(32, padding=4),
-      T.transforms.RandomHorizontalFlip(),
-      T.transforms.ToTensor(),
-      T.transforms.Normalize(rgb_mean, rgb_std),
-    ])
-
    
-    import torch
-
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     model.to(device)
