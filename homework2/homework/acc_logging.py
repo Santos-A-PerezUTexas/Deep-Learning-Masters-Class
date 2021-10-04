@@ -46,14 +46,11 @@ def test_logging(train_logger, valid_logger):
         for iteration in range(10):
             
             dummy_validation_accuracy = epoch / 10. + torch.randn(10)
-            print (dummy_validation_accuracy)
-            valid_logger.add_scalar('../valid_accuracy', dummy_validation_accuracy, global_step=iteration)
-
-        
-
-        
+            
+            valid_logger.add_scalar('../valid_accuracy', dummy_validation_accuracy[epoch], global_step=iteration)
     
-    train_logger.close()
+    
+    #train_logger.close()
 
 
 
