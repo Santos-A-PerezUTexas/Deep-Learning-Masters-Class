@@ -33,26 +33,31 @@ def test_logging(train_logger, valid_logger):
         torch.manual_seed(epoch)
            
         for iteration in range(20):
+            
             dummy_train_loss = 0.9**(epoch+iteration/20.)
+            
             dummy_train_accuracy = epoch/10. + torch.randn(10)
-            #logger = tb.SummaryWriter(log_dir, flush_secs=1)
+            
             train_logger.add_scalar('../accuracy', dummy_train_accuracy[epoch], global_step=iteration)
-            #raise NotImplementedError('Log the training loss')
-        train_logger.add_scalar('../error', dummy_train_loss, global_step=epoch)
+            train_logger.add_scalar('../error', dummy_train_loss, global_step=iteration)
 
-
-        #test
-        #raise NotImplementedError('Log the training accuracy')
         torch.manual_seed(epoch)
+
+        for iteration in range(10):
+            
+            dummy_validation_accuracy = epoch / 10. + torch.randn(10)
+            print (dummy_validation_accuracy)
+            valid_logger.add_scalar('../valid_accuracy', dummy_validation_accuracy, global_step=iteration)
+
+        
+
+        
     
     train_logger.close()
 
 
 
-    for iteration in range(10):
-      dummy_validation_accuracy = epoch / 10. + torch.randn(10)
-      valid_logger.add_scalar('../accuracy', dummy_train_loss, global_step=iteration)
-
+    
 if __name__ == "__main__":
     from argparse import ArgumentParser
 
