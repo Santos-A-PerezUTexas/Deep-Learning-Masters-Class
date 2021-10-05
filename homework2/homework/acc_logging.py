@@ -29,6 +29,9 @@ def test_logging(train_logger, valid_logger):
 
     # This is a strongly simplified training loop
     i=0
+    x= torch.zeros(20,10)
+    t=0
+    y= torch.zeros(10,10)
 
     for epoch in range(10):
     
@@ -37,21 +40,24 @@ def test_logging(train_logger, valid_logger):
         for iteration in range(20):
             
             dummy_train_loss = 0.9**(epoch+iteration/20.)
-            #print(f'dummy_train_loss is {dummy_train_loss} for iteration {iteration}, and epoch {epoch}')
-            #print(epoch+iteration/20)
             dummy_train_accuracy = epoch/10. + torch.randn(10)
             
-            train_logger.add_scalar('accuracy', dummy_train_accuracy.mean(), global_step=i)
+            x[iteration] = dummy_train_accuracy
+
+            train_logger.add_scalar('accuracy',x.mean(), global_step=i)
             train_logger.add_scalar('loss', dummy_train_loss, global_step=i)
             i+=1 
+      
         torch.manual_seed(epoch)
-
+        
         for iteration in range(10):
             
             dummy_validation_accuracy = epoch / 10. + torch.randn(10)
+            y[iteration] = dummy_validation_accuracy
             
-            valid_logger.add_scalar('accuracy', dummy_validation_accuracy.mean(), global_step=iteration+epoch*10)
-    
+            valid_logger.add_scalar('accuracy', y.mean(), global_step=t)
+            t+=1 
+        print (epoch, y.mean())
     
     #train_logger.close()
 
