@@ -59,7 +59,7 @@ def test_logging(train_logger, valid_logger):
             t+=1 
         print (epoch, y.mean())
     
-    #train_logger.close()
+    
 
 
 
