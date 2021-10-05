@@ -36,10 +36,10 @@ def test_logging(train_logger, valid_logger):
             
             dummy_train_loss = 0.9**(epoch+iteration/20.)
             #print(f'dummy_train_loss is {dummy_train_loss} for iteration {iteration}, and epoch {epoch}')
-            print(epoch+iteration/20)
+            #print(epoch+iteration/20)
             dummy_train_accuracy = epoch/10. + torch.randn(10)
             
-            train_logger.add_scalar('accuracy', dummy_train_accuracy[epoch], global_step=iteration)
+            train_logger.add_scalar('accuracy', dummy_train_accuracy.mean(), global_step=iteration)
             train_logger.add_scalar('error', dummy_train_loss, global_step=epoch+iteration/20.)
 
         torch.manual_seed(epoch)
