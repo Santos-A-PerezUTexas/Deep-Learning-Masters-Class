@@ -12,15 +12,15 @@ class SuperTuxDataset(Dataset):
         Hint: Use the python csv library to parse labels.csv
         """
         self.transform = transform
-        rgb_mean = (0.4914, 0.4822, 0.4465)
-        rgb_std = (0.2023, 0.1994, 0.2010)
+        #rgb_mean = (0.4914, 0.4822, 0.4465)
+        #rgb_std = (0.2023, 0.1994, 0.2010)
 
-        transform_train = transforms.Compose([
-          #transforms.RandomCrop(32, padding=4),
-          transforms.RandomHorizontalFlip(),
-          transforms.ToTensor(),
-          transforms.Normalize(rgb_mean, rgb_std),
-          ])
+        #transform_train = transforms.Compose([
+          #NO DON't USE transforms.RandomCrop(32, padding=4),
+          #transforms.RandomHorizontalFlip(),
+          #transforms.ToTensor(),
+          #transforms.Normalize(rgb_mean, rgb_std),
+          #])
 
         import csv
         from os import path
@@ -32,11 +32,11 @@ class SuperTuxDataset(Dataset):
                 if label in LABEL_NAMES:              #this exlcudes the first line
                     image = Image.open(path.join(dataset_path, fname))
                     label_id = LABEL_NAMES.index(label)
-                    if self.transform:
-                      image = self.transform(image)
-                    image = transform_train(image)
-                    #self.data.append((to_tensor(image), label_id))
-                    self.data.append((image, label_id))
+                    #if self.transform:
+                     # image = self.transform(image)
+                    #image = transform_train(image)
+                    self.data.append((to_tensor(image), label_id))
+                    #self.data.append((image, label_id))
 
     def __len__(self):
         """
