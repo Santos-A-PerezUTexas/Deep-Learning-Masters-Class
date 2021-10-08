@@ -23,6 +23,7 @@ def train(args):
     my_transform = T.Compose([
       ColorJitter(),
       T.RandomCrop(32, padding=4),
+      #T.transforms.ToTensor()
       ])
 
     train_logger, valid_logger = None, None

@@ -29,15 +29,23 @@ class SuperTuxDataset(Dataset):
       import csv
       from os import path
       self.data = []
+      
+      my_transform = T.Compose([
+        ColorJitter(),
+        T.RandomCrop(32, padding=4),
+        #T.transforms.ToTensor()
+                ])
+
       to_tensor = transforms.ToTensor()
+      
       with open(path.join(dataset_path, 'labels.csv'), newline='') as f:
         reader = csv.reader(f)
         for fname, label, _ in reader:            #READ THREE COLUMNS AT A TIME (as opposed to row[0], row[1], etc.
           if label in LABEL_NAMES:              #this exlcudes the first line
             image = Image.open(path.join(dataset_path, fname))
             label_id = LABEL_NAMES.index(label)
-            #if self.transform:
-            # image = self.transform(image)
+            if self.transform:
+              image = image #transforms.RandomCrop(32, padding=4)
             #image = transform_train(image)
             self.data.append((to_tensor(image), label_id))
             #self.data.append((image, label_id))
@@ -133,7 +141,7 @@ class ConfusionMatrix(object):
     @property
     def per_class(self):
         return self.matrix / (self.matrix.sum(1, keepdims=True) + 1e-5)
-        
+
 def accuracy(outputs, labels):
     outputs_idx = outputs.max(1)[1].type_as(labels)
     return outputs_idx.eq(labels).float().mean()
