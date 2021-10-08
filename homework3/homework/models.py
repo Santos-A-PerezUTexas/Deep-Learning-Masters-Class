@@ -90,8 +90,8 @@ class CNNClassifier(torch.nn.Module):
       self.layer1 = torch.nn.Sequential(
       
             torch.nn.Conv2d(c, 32, kernel_size=5, stride=1, padding=2),
-            #torch.nn.BatchNorm2d(32),
-            #torch.nn.ReLU(),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm2d(32),
             torch.nn.MaxPool2d(kernel_size=2, stride=2)
                                       )    
             
@@ -103,7 +103,7 @@ class CNNClassifier(torch.nn.Module):
               
       self.fc1 = torch.nn.Linear(32 * 32 * 32, 6)   
       
-      #self.drop_out = nn.Dropout()
+      self.drop_out = torch.nn.Dropout()
           
     
   def forward(self, images_batch):
@@ -111,7 +111,7 @@ class CNNClassifier(torch.nn.Module):
      
       out = self.layer1(images_batch)
       out = out.reshape(out.size(0), -1)
-      #out = self.drop_out(out)
+      out = self.drop_out(out)
       out = self.fc1(out)
       
                    

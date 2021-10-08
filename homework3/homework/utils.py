@@ -133,7 +133,10 @@ class ConfusionMatrix(object):
     @property
     def per_class(self):
         return self.matrix / (self.matrix.sum(1, keepdims=True) + 1e-5)
-
+        
+def accuracy(outputs, labels):
+    outputs_idx = outputs.max(1)[1].type_as(labels)
+    return outputs_idx.eq(labels).float().mean()
 
 if __name__ == '__main__':
     

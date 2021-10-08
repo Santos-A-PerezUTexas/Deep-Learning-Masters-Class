@@ -1,9 +1,10 @@
 #HOMEWORK 3 _ CNN PORTION
 #HOMEWORK 3  _ CNN PORTION
-#ADDED CLASSIFICATION LOSS 10/8/2021, DO i NEED THIS?
+#10/8/2021 - ADDED CLASSIFICATION LOSS, DO i NEED THIS
+#10/8/2021 - Added Accuracy below and to utils.py (Need this?)
 
 from .models import ClassificationLoss, CNNClassifier, save_model
-from .utils import ConfusionMatrix, load_data, LABEL_NAMES
+from .utils import ConfusionMatrix, load_data, LABEL_NAMES, accuracy
 import torch
 import torchvision
 import torch.utils.tensorboard as tb
