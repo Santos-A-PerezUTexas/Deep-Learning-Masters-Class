@@ -2,6 +2,7 @@
 #HOMEWORK 3  _ CNN PORTION
 #10/8/2021 - ADDED CLASSIFICATION LOSS, DO i NEED THIS
 #10/8/2021 - Added Accuracy below and to utils.py (Need this?)
+#Apply augmentations like ColorJitter() and RandomHorizontalFlip() in train.py.
 
 from .models import ClassificationLoss, CNNClassifier, save_model
 from .utils import ConfusionMatrix, load_data, LABEL_NAMES, accuracy
