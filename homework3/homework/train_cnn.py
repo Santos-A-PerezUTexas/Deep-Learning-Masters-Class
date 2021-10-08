@@ -10,11 +10,20 @@ import torch
 import torchvision
 import torch.utils.tensorboard as tb
 import torchvision.transforms as T
+from .dense_transforms import ColorJitter, RandomCrop
+import torchvision.transforms as T
+
 
 def train(args):
 
     from os import path
    
+    color_tranform = ColorJitter() 
+    
+    my_transform = T.Compose([
+      ColorJitter(),
+      RandomCrop(224),
+      ])
 
     train_logger, valid_logger = None, None
     if args.log_dir is not None:
@@ -51,7 +60,7 @@ def train(args):
 
     #ADD TRANSFORMS HERE?
     #train_data = load_data('data/train'transform_train)
-    train_data = load_data('data/train')
+    train_data = load_data('data/train', transform=my_transform)
     valid_data = load_data('data/valid')
 
     for epoch in range(args.num_epoch):
