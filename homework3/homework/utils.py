@@ -30,14 +30,14 @@ class SuperTuxDataset(Dataset):
       from os import path
       self.data = []
       
-      my_transform = T.Compose([
+      my_transforms = transforms.Compose([
         ColorJitter(),
-        T.RandomCrop(32, padding=4),
-        #T.transforms.ToTensor()
+        transforms.RandomCrop(32, padding=4),
+        trasforms.transforms.ToTensor()
                 ])
 
       to_tensor = transforms.ToTensor()
-      
+
       with open(path.join(dataset_path, 'labels.csv'), newline='') as f:
         reader = csv.reader(f)
         for fname, label, _ in reader:            #READ THREE COLUMNS AT A TIME (as opposed to row[0], row[1], etc.
@@ -47,7 +47,7 @@ class SuperTuxDataset(Dataset):
             if self.transform:
               image = image #transforms.RandomCrop(32, padding=4)
             #image = transform_train(image)
-            self.data.append((to_tensor(image), label_id))
+            self.data.append((my_transforms(image), label_id))
             #self.data.append((image, label_id))
 
     def __len__(self):
