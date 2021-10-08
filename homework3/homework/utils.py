@@ -31,9 +31,9 @@ class SuperTuxDataset(Dataset):
       self.data = []
       
       my_transforms = transforms.Compose([
-        ColorJitter(),
+        transforms.ColorJitter(),
         transforms.RandomCrop(32, padding=4),
-        trasforms.transforms.ToTensor()
+        transforms.transforms.ToTensor()
                 ])
 
       to_tensor = transforms.ToTensor()
@@ -47,7 +47,7 @@ class SuperTuxDataset(Dataset):
             if self.transform:
               image = image #transforms.RandomCrop(32, padding=4)
             #image = transform_train(image)
-            self.data.append((my_transforms(image), label_id))
+            self.data.append((to_tensor(image), label_id))
             #self.data.append((image, label_id))
 
     def __len__(self):
