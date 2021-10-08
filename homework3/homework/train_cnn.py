@@ -1,7 +1,8 @@
-#HOMEWORK 3
-#HOMEWORK 3
+#HOMEWORK 3 _ CNN PORTION
+#HOMEWORK 3  _ CNN PORTION
+#ADDED CLASSIFICATION LOSS 10/8/2021, DO i NEED THIS?
 
-from .models import CNNClassifier, save_model
+from .models import ClassificationLoss, CNNClassifier, save_model
 from .utils import ConfusionMatrix, load_data, LABEL_NAMES
 import torch
 import torchvision
@@ -9,22 +10,24 @@ import torch.utils.tensorboard as tb
 import torchvision.transforms as T
 
 def train(args):
+
     from os import path
-    model = CNNClassifier()
+   
+
     train_logger, valid_logger = None, None
     if args.log_dir is not None:
         train_logger = tb.SummaryWriter(path.join(args.log_dir, 'train'), flush_secs=1)
         valid_logger = tb.SummaryWriter(path.join(args.log_dir, 'valid'), flush_secs=1)
         
-    rgb_mean = (0.4914, 0.4822, 0.4465)
-    rgb_std = (0.2023, 0.1994, 0.2010)
+    #rgb_mean = (0.4914, 0.4822, 0.4465)
+    #rgb_std = (0.2023, 0.1994, 0.2010)
 
-    transform_train = T.transforms.Compose([
-      T.transforms.RandomCrop(32, padding=4),
-      T.transforms.RandomHorizontalFlip(),
-      T.transforms.ToTensor(),
-      T.transforms.Normalize(rgb_mean, rgb_std),
-    ])
+    #transform_train = T.transforms.Compose([
+     # T.transforms.RandomCrop(32, padding=4),
+     # T.transforms.RandomHorizontalFlip(),
+      #T.transforms.ToTensor(),
+      #T.transforms.Normalize(rgb_mean, rgb_std),
+    #])
 
     """
     Your code here, modify your HW1 / HW2 code
@@ -45,7 +48,8 @@ def train(args):
     loss = ClassificationLoss()
 
     #ADD TRANSFORMS HERE?
-    train_data = load_data('data/train', transform=transform_train)
+    #train_data = load_data('data/train'transform_train)
+    train_data = load_data('data/train')
     valid_data = load_data('data/valid')
 
     for epoch in range(args.num_epoch):
@@ -101,12 +105,15 @@ def train(args):
 
 
 if __name__ == '__main__':
-    import argparse
 
-    parser = argparse.ArgumentParser()
+  import argparse
 
-    parser.add_argument('--log_dir')
-    # Put custom arguments here
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--log_dir')
+  # Put custom arguments here
+  parser.add_argument('-n', '--num_epoch', type=int, default=50)
+  parser.add_argument('-lr', '--learning_rate', type=float, default=1e-3)
+  parser.add_argument('-c', '--continue_training', action='store_true')
+  args = parser.parse_args()
+  train(args)
 
-    args = parser.parse_args()
-    train(args)

@@ -45,9 +45,42 @@ Identity Mapping for Residual Connections:
   residual layer has the form x + h(x), rather than h(x)
 
 """
-
+class ClassificationLoss(torch.nn.Module):
+    def forward(self, input, target):
+        """
+        Compute mean(-log(softmax(input)_label))
+        @input:  torch.Tensor((B,C))
+        @target: torch.Tensor((B,), dtype=torch.int64)
+        @return:  torch.Tensor((,))
+   """
+        return F.cross_entropy(input, target)
+        
 class CNNClassifier(torch.nn.Module):
-   def __init__(self, layers=[], n_input_channels=3, kernel_size=3):
+
+  class Block(torch.nn.Module):
+        def __init__(self, n_input, n_output, stride=1):
+            super().__init__()
+            self.net = torch.nn.Sequential(
+              torch.nn.Conv2d(n_input, n_output, kernel_size=3, padding=1, stride=stride, bias=False),
+              torch.nn.BatchNorm2d(n_output),
+              torch.nn.ReLU(),
+              torch.nn.Conv2d(n_output, n_output, kernel_size=3, padding=1, bias=False),
+              torch.nn.BatchNorm2d(n_output),
+              torch.nn.ReLU()
+            )
+            self.downsample = None
+            if stride != 1 or n_input != n_output:
+                self.downsample = torch.nn.Sequential(torch.nn.Conv2d(n_input, n_output, 1),
+                                                      torch.nn.BatchNorm2d(n_output))
+        
+        def forward(self, x):
+            identity = x
+            if self.downsample is not None:
+                identity = self.downsample(x)
+            return self.net(x) + identity
+
+
+  def __init__(self, layers=[], n_input_channels=3, kernel_size=3):
       
       super().__init__()
         
@@ -70,11 +103,11 @@ class CNNClassifier(torch.nn.Module):
               
       self.fc1 = torch.nn.Linear(32 * 32 * 32, 6)   
       
-       #self.drop_out = nn.Dropout()
+      #self.drop_out = nn.Dropout()
           
     
-    def forward(self, images_batch):
-    
+  def forward(self, images_batch):
+   
      
       out = self.layer1(images_batch)
       out = out.reshape(out.size(0), -1)
@@ -86,29 +119,30 @@ class CNNClassifier(torch.nn.Module):
 
 
 class FCN(torch.nn.Module):
-    def __init__(self):
-        super().__init__()
-
-                """                                        
-
-        https://github.com/pochih/FCN-pytorch/tree/master/python
-        https://github.com/wkentaro/pytorch-fcn/tree/master/torchfcn
-        https://medium.com/@iceberg12/semantic-segmentation-applied-on-car-road-4ee62622292f
+  def __init__(self):
         
-        https://pytorch.org/hub/pytorch_vision_fcn_resnet101/
-        https://discuss.pytorch.org/t/add-residual-connection/20148/6
-        https://stats.stackexchange.com/questions/321054/what-are-residual-connections-in-rnns
-        
-        Hint: The FCN can be a bit smaller the the CNNClassifier since you need to run it at a higher resolution
-        Hint: Use up-convolutions
-        Hint: Use skip connections
-        Hint: Use residual connections
-        Hint: Always pad by kernel_size / 2, use an odd kernel_size
-        
-        """
-        raise NotImplementedError('FCN.__init__')
+    super().__init__()
+      
+                                           
 
-    def forward(self, x):
+        #https://github.com/pochih/FCN-pytorch/tree/master/python
+        #https://github.com/wkentaro/pytorch-fcn/tree/master/torchfcn
+        #https://medium.com/@iceberg12/semantic-segmentation-applied-on-car-road-4ee62622292f
+        
+        #https://pytorch.org/hub/pytorch_vision_fcn_resnet101/
+        #https://discuss.pytorch.org/t/add-residual-connection/20148/6
+        #https://stats.stackexchange.com/questions/321054/what-are-residual-connections-in-rnns
+        
+        #Hint: The FCN can be a bit smaller the the CNNClassifier since you need to run it at a higher resolution
+        #Hint: Use up-convolutions
+        #Hint: Use skip connections
+        #Hint: Use residual connections
+        #Hint: Always pad by kernel_size / 2, use an odd kernel_size
+        
+      
+      #raise NotImplementedError('FCN.__init__')
+
+  def forward(self, x):
         """
         Your code here
         @x: torch.Tensor((B,3,H,W))
