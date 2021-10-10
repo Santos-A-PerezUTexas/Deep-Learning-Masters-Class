@@ -124,6 +124,7 @@ class FCN(torch.nn.Module):
     super().__init__()
       
                                            
+        #Oct 10, 2021:  https://nanonets.com/blog/how-to-do-semantic-segmentation-using-deep-learning/
 
         #https://github.com/pochih/FCN-pytorch/tree/master/python
         #https://github.com/wkentaro/pytorch-fcn/tree/master/torchfcn
@@ -146,7 +147,7 @@ class FCN(torch.nn.Module):
         """
         Your code here
         @x: torch.Tensor((B,3,H,W))
-        @return: torch.Tensor((B,6,H,W))
+        @return: torch.Tensor((B,6,H,W))<--- returns 5 channels of HW instead!!!
         Hint: Apply input normalization inside the network, to make sure it is applied in the grader
         Hint: Input and output resolutions need to match, use output_padding in up-convolutions, crop the output
               if required (use z = z[:, :, :H, :W], where H and W are the height and width of a corresponding strided
