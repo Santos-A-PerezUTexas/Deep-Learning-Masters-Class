@@ -123,8 +123,15 @@ class FCN(torch.nn.Module):
         
     super().__init__()
       
-                                           
+        #Simply, our goal is to take either a RGB color image (height×width×3) or a grayscale
+        # image (height×width×1) and output a segmentation map where each pixel contains a
+        #class label represented as an integer (height×width×1).
+        
+        
+        #Oct 10, 2021: https://www.jeremyjordan.me/semantic-segmentation/
+        #Oct 10, 2021: https://www.jeremyjordan.me/semantic-segmentation/                                   
         #Oct 10, 2021:  https://nanonets.com/blog/how-to-do-semantic-segmentation-using-deep-learning/
+        #Oct 10, 2021: https://github.com/sagieppel/Fully-convolutional-neural-network-FCN-for-semantic-segmentation-with-pytorch/blob/master/NET_FCN.py
 
         #https://github.com/pochih/FCN-pytorch/tree/master/python
         #https://github.com/wkentaro/pytorch-fcn/tree/master/torchfcn

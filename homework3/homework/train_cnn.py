@@ -19,6 +19,7 @@ def train(args):
     from os import path
    
     color_tranform = ColorJitter() 
+    model = CNNClassifier()
     
     my_transform = T.Compose([
       ColorJitter(),
@@ -46,7 +47,7 @@ def train(args):
     ADD LOGGING CODE
     
     """
-    model = CNNClassifier()
+   
 
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 

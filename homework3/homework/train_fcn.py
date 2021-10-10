@@ -22,6 +22,21 @@ def train(args):
     Hint: If you found a good data augmentation parameters for the CNN, use them here too. Use dense_transforms
     Hint: Use the log function below to debug and visualize your model
     """
+    
+    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+
+    model.to(device)
+    
+    if args.continue_training:
+        from os import path
+        model.load_state_dict(torch.load(path.join(path.dirname(path.abspath(__file__)), '%s.th' % args.model)))
+
+    optimizer = torch.optim.SGD(model.parameters(), lr=args.learning_rate, momentum=0.9)
+
+    #loss = ClassificationLoss()  <--------------CHANGE!!!!!!!!!!!!!
+    #loss = ClassificationLoss()  <--------------CHANGE!!!!!!!!!!!!!
+    
+    
     save_model(model)
 
 
