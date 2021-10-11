@@ -119,23 +119,33 @@ class CNNClassifier(torch.nn.Module):
 
 
 class FCN(torch.nn.Module):
-  def __init__(self, pretrained_net, n_class):
-        
+  #def __init__(self, pretrained_net, n_class):
+  def __init__(self):
+
     super().__init__()
-    self.n_class = n_class
-    self.pretrained_net = pretrained_net
-    self.relu    = nn.ReLU(inplace=True)
-    self.deconv1 = nn.ConvTranspose2d(512, 512, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1)
-    self.bn1     = nn.BatchNorm2d(512)
-    self.deconv2 = nn.ConvTranspose2d(512, 256, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1)
-    self.bn2     = nn.BatchNorm2d(256)
-    self.deconv3 = nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1)
-    self.bn3     = nn.BatchNorm2d(128)
-    self.deconv4 = nn.ConvTranspose2d(128, 64, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1)
-    self.bn4     = nn.BatchNorm2d(64)
-    self.deconv5 = nn.ConvTranspose2d(64, 32, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1)
-    self.bn5     = nn.BatchNorm2d(32)
-    self.classifier = nn.Conv2d(32, n_class, kernel_size=1)
+    
+    #self.cnn = CNNClassifier()
+    self.cnn = torch.nn.Sequential(
+      
+            torch.nn.Conv2d(3, 32, kernel_size=5, stride=1, padding=2),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm2d(32),
+            torch.nn.MaxPool2d(kernel_size=2, stride=2)
+                                      )  
+    self.n_class = 5
+    #self.pretrained_net = pretrained_net
+    self.relu    = torch.nn.ReLU(inplace=True)
+    self.deconv1 = torch.nn.ConvTranspose2d(512, 512, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1)
+    self.bn1     = torch.nn.BatchNorm2d(512)
+    self.deconv2 = torch.nn.ConvTranspose2d(512, 256, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1)
+    self.bn2     = torch.nn.BatchNorm2d(256)
+    self.deconv3 = torch.nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1)
+    self.bn3     = torch.nn.BatchNorm2d(128)
+    self.deconv4 = torch.nn.ConvTranspose2d(128, 64, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1)
+    self.bn4     = torch.nn.BatchNorm2d(64)
+    self.deconv5 = torch.nn.ConvTranspose2d(64, 32, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1)
+    self.bn5     = torch.nn.BatchNorm2d(32)
+    self.classifier = torch.nn.Conv2d(32, self.n_class, kernel_size=1)
   
         #Simply, our goal is to take either a RGB color image (height×width×3) or a grayscale
         # image (height×width×1) and output a segmentation map where each pixel contains a
@@ -186,8 +196,8 @@ class FCN(torch.nn.Module):
       #raise NotImplementedError('FCN.__init__')
 
   def forward(self, x):
-    
-        output = self.pretrained_net(x)
+
+        output = self.cnn(x)
         x5 = output['x5']  # size=(N, 512, x.H/32, x.W/32)
         x4 = output['x4']  # size=(N, 512, x.H/16, x.W/16)
         x3 = output['x3']  # size=(N, 256, x.H/8,  x.W/8)
