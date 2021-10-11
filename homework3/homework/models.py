@@ -119,10 +119,24 @@ class CNNClassifier(torch.nn.Module):
 
 
 class FCN(torch.nn.Module):
-  def __init__(self):
+  def __init__(self, pretrained_net, n_class):
         
     super().__init__()
-      
+    self.n_class = n_class
+    self.pretrained_net = pretrained_net
+    self.relu    = nn.ReLU(inplace=True)
+    self.deconv1 = nn.ConvTranspose2d(512, 512, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1)
+    self.bn1     = nn.BatchNorm2d(512)
+    self.deconv2 = nn.ConvTranspose2d(512, 256, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1)
+    self.bn2     = nn.BatchNorm2d(256)
+    self.deconv3 = nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1)
+    self.bn3     = nn.BatchNorm2d(128)
+    self.deconv4 = nn.ConvTranspose2d(128, 64, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1)
+    self.bn4     = nn.BatchNorm2d(64)
+    self.deconv5 = nn.ConvTranspose2d(64, 32, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1)
+    self.bn5     = nn.BatchNorm2d(32)
+    self.classifier = nn.Conv2d(32, n_class, kernel_size=1)
+  
         #Simply, our goal is to take either a RGB color image (height×width×3) or a grayscale
         # image (height×width×1) and output a segmentation map where each pixel contains a
         #class label represented as an integer (height×width×1).
@@ -142,11 +156,11 @@ class FCN(torch.nn.Module):
 
         #Oct 10, 2021 https://pytorch.org/docs/stable/_modules/torch/nn/modules/loss.html
         #class NLLLoss(_WeightedLoss):
-        #Can also be used for higher dimension inputs, such as 2D images, by providing
-        #an input of size :math:`(minibatch, C, d_1, d_2, ..., d_K)` with
-        #K>=1, where K is the number of dimensions, and 
-        #a target of appropriate shape (see below). In the case of images, it computes 
-        #------->>>>NLL loss per-pixel.
+        
+        #Oct 10, 2021:  CROSS ENTROPY LOSS:  https://discuss.pytorch.org/t/cross-entropy-loss-error-on-image-segmentation/60194
+        #nn.CrossEntropyLoss is usually applied for multi class classification/segmentation
+        # use cases, where you are dealing with more than two classes.
+        #In this case, your target should be a LongTensor, should not have the channel dimension, and should contain the class indices in [0, nb_classes-1].
 
 
         #Oct 10, 2021: https://www.jeremyjordan.me/semantic-segmentation/
@@ -172,6 +186,27 @@ class FCN(torch.nn.Module):
       #raise NotImplementedError('FCN.__init__')
 
   def forward(self, x):
+    
+        output = self.pretrained_net(x)
+        x5 = output['x5']  # size=(N, 512, x.H/32, x.W/32)
+        x4 = output['x4']  # size=(N, 512, x.H/16, x.W/16)
+        x3 = output['x3']  # size=(N, 256, x.H/8,  x.W/8)
+        x2 = output['x2']  # size=(N, 128, x.H/4,  x.W/4)
+        x1 = output['x1']  # size=(N, 64, x.H/2,  x.W/2)
+
+        score = self.bn1(self.relu(self.deconv1(x5)))     # size=(N, 512, x.H/16, x.W/16)
+        score = score + x4                                # element-wise add, size=(N, 512, x.H/16, x.W/16)
+        score = self.bn2(self.relu(self.deconv2(score)))  # size=(N, 256, x.H/8, x.W/8)
+        score = score + x3                                # element-wise add, size=(N, 256, x.H/8, x.W/8)
+        score = self.bn3(self.relu(self.deconv3(score)))  # size=(N, 128, x.H/4, x.W/4)
+        score = score + x2                                # element-wise add, size=(N, 128, x.H/4, x.W/4)
+        score = self.bn4(self.relu(self.deconv4(score)))  # size=(N, 64, x.H/2, x.W/2)
+        score = score + x1                                # element-wise add, size=(N, 64, x.H/2, x.W/2)
+        score = self.bn5(self.relu(self.deconv5(score)))  # size=(N, 32, x.H, x.W)
+        score = self.classifier(score)                    # size=(N, n_class, x.H/1, x.W/1)
+
+        return score  # size=(N, n_class, x.H/1, x.W/1)
+
         """
         Your code here
         @x: torch.Tensor((B,3,H,W))
@@ -181,7 +216,7 @@ class FCN(torch.nn.Module):
               if required (use z = z[:, :, :H, :W], where H and W are the height and width of a corresponding strided
               convolution
         """
-        raise NotImplementedError('FCN.forward')
+        
 
 
 model_factory = {
