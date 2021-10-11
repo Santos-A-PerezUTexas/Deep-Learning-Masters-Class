@@ -134,7 +134,21 @@ class FCN(torch.nn.Module):
 
                      #PIXEL WIDE CROSS ENTROPY LOSS
         #https://discuss.pytorch.org/t/unet-pixel-wise-weighted-loss-function/46689
+        #https://stackoverflow.com/questions/50896412/channel-wise-crossentropyloss-for-image-segmentation-in-pytorch
+        #the documentation on the torch.nn.CrossEntropy() function can be found
+        # here and the code can be found here. The built-in functions do indeed already support
+        # KD cross-entropy loss.
         
+
+        #Oct 10, 2021 https://pytorch.org/docs/stable/_modules/torch/nn/modules/loss.html
+        #class NLLLoss(_WeightedLoss):
+        #Can also be used for higher dimension inputs, such as 2D images, by providing
+        #an input of size :math:`(minibatch, C, d_1, d_2, ..., d_K)` with
+        #:math:`K \geq 1`, where :math:`K` is the number of dimensions, and 
+        #a target of appropriate shape see below). In the case of images, it computes 
+        #------->>>>NLL loss per-pixel.
+
+
         #Oct 10, 2021: https://www.jeremyjordan.me/semantic-segmentation/
         #Oct 10, 2021: https://www.jeremyjordan.me/semantic-segmentation/                                   
         #Oct 10, 2021:  https://nanonets.com/blog/how-to-do-semantic-segmentation-using-deep-learning/
