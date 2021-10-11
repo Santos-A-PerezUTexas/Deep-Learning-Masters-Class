@@ -131,7 +131,9 @@ class FCN(torch.nn.Module):
         #Oct 10, 2021 (above)
 
         #LOSS: IOU!!!!!!!!!!!!!!!! https://www.jeremyjordan.me/evaluating-image-segmentation-models/
-        
+
+                     #PIXEL WIDE CROSS ENTROPY LOSS
+        #https://discuss.pytorch.org/t/unet-pixel-wise-weighted-loss-function/46689
         
         #Oct 10, 2021: https://www.jeremyjordan.me/semantic-segmentation/
         #Oct 10, 2021: https://www.jeremyjordan.me/semantic-segmentation/                                   
