@@ -127,6 +127,11 @@ class FCN(torch.nn.Module):
         # image (height×width×1) and output a segmentation map where each pixel contains a
         #class label represented as an integer (height×width×1).
         
+        #LOSS:   pixel-wide cross entropy loss, see https://www.jeremyjordan.me/semantic-segmentation/
+        #Oct 10, 2021 (above)
+
+        #LOSS: IOU!!!!!!!!!!!!!!!! https://www.jeremyjordan.me/evaluating-image-segmentation-models/
+        
         
         #Oct 10, 2021: https://www.jeremyjordan.me/semantic-segmentation/
         #Oct 10, 2021: https://www.jeremyjordan.me/semantic-segmentation/                                   
