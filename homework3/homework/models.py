@@ -144,8 +144,8 @@ class FCN(torch.nn.Module):
         #class NLLLoss(_WeightedLoss):
         #Can also be used for higher dimension inputs, such as 2D images, by providing
         #an input of size :math:`(minibatch, C, d_1, d_2, ..., d_K)` with
-        #:math:`K \geq 1`, where :math:`K` is the number of dimensions, and 
-        #a target of appropriate shape see below). In the case of images, it computes 
+        #K>=1, where K is the number of dimensions, and 
+        #a target of appropriate shape (see below). In the case of images, it computes 
         #------->>>>NLL loss per-pixel.
 
 
