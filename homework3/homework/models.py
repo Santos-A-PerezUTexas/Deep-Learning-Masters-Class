@@ -127,10 +127,13 @@ class FCN(torch.nn.Module):
     #self.cnn = CNNClassifier()
     self.cnn = torch.nn.Sequential(
       
-            torch.nn.Conv2d(3, 32, kernel_size=5, stride=1, padding=2),
+            torch.nn.Conv2d(3, 32, kernel_size=1, stride=1, padding=0),
             torch.nn.ReLU(),
             torch.nn.BatchNorm2d(32),
-            torch.nn.MaxPool2d(kernel_size=2, stride=2)
+            torch.nn.Conv2d(32, 32, kernel_size=3, stride=stride, padding=1),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm2d(32),
+            #torch.nn.MaxPool2d(kernel_size=2, stride=2)
                                       )  
     self.n_class = 5
     #self.pretrained_net = pretrained_net
