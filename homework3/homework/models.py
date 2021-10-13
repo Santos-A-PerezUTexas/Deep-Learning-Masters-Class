@@ -160,20 +160,20 @@ class FCN(torch.nn.Module):
      
       self.layer1 = torch.nn.Sequential(
       
-            torch.nn.Conv2d(c, 128, kernel_size=5, stride=1, padding=2),
+            torch.nn.Conv2d(c, 64, kernel_size=5, stride=1, padding=2),
             torch.nn.ReLU(),
-            self.Block(128,512),
-            torch.nn.BatchNorm2d(512),
+            self.Block(64,128),
+            torch.nn.BatchNorm2d(128),
             
-                                      )    
-            
+                                     )    
+        
       self.layer2 = torch.nn.Sequential( 
         
-        torch.nn.ConvTranspose2d(512, 512, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1),
-        torch.nn.BatchNorm2d(512),
-        torch.nn.ConvTranspose2d(512, 256, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1),
-        torch.nn.BatchNorm2d(256),
-        torch.nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1),
+        #torch.nn.ConvTranspose2d(512, 512, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1),
+        #torch.nn.BatchNorm2d(512),
+        #torch.nn.ConvTranspose2d(512, 256, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1),
+        #torch.nn.BatchNorm2d(256),
+        #torch.nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1),
         torch.nn.BatchNorm2d(128),
         torch.nn.ConvTranspose2d(128, 64, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1),
         torch.nn.BatchNorm2d(64),
