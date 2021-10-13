@@ -4,6 +4,7 @@
   #no pooling
   #Always pad by kernel_size / 2, use an odd kernel_size
   #Oct 13:  DO I HAVE TO use transforms on the labels?
+  #Oct 13 - does randcrop 64 do anything?
 
 
 import torch
