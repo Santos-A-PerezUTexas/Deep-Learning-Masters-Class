@@ -3,6 +3,7 @@
   #Oct 13, 2021
   #no pooling
   #Always pad by kernel_size / 2, use an odd kernel_size
+  #Oct 13:  DO I HAVE TO use transforms on the labels?
 
 
 import torch
