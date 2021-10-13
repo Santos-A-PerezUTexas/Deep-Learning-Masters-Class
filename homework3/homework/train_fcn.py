@@ -56,12 +56,14 @@ def log(logger, imgs, lbls, logits, global_step):
                                                   convert('RGB')), global_step, dataformats='HWC')
 
 if __name__ == '__main__':
-    import argparse
+   
+  import argparse
 
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument('--log_dir')
-    # Put custom arguments here
-
-    args = parser.parse_args()
-    train(args)
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--log_dir')
+  # Put custom arguments here
+  parser.add_argument('-n', '--num_epoch', type=int, default=50)
+  parser.add_argument('-lr', '--learning_rate', type=float, default=1e-3)
+  parser.add_argument('-c', '--continue_training', action='store_true')
+  args = parser.parse_args()
+  train(args)

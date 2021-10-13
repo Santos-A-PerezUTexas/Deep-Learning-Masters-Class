@@ -61,7 +61,7 @@ class CNNClassifier(torch.nn.Module):
         def __init__(self, n_input, n_output, stride=1):
             super().__init__()
             self.net = torch.nn.Sequential(
-              torch.nn.Conv2d(n_input, n_output, kernel_size=3, padding=1, stride=stride, bias=False),
+              torch.nn.Conv2d(n_input, n_output, kernel_size=3, padding=1, stride=1, bias=False),
               torch.nn.BatchNorm2d(n_output),
               torch.nn.ReLU(),
               torch.nn.Conv2d(n_output, n_output, kernel_size=3, padding=1, bias=False),
@@ -127,10 +127,10 @@ class FCN(torch.nn.Module):
     #self.cnn = CNNClassifier()
     self.cnn = torch.nn.Sequential(
       
-            torch.nn.Conv2d(3, 32, kernel_size=1, stride=1, padding=0),
+            torch.nn.Conv2d(3, 32, kernel_size=7, stride=7/2, padding=0),
             torch.nn.ReLU(),
             torch.nn.BatchNorm2d(32),
-            torch.nn.Conv2d(32, 32, kernel_size=3, stride=stride, padding=1),
+            torch.nn.Conv2d(320, 32, kernel_size=3, stride=3/2, padding=1),
             torch.nn.ReLU(),
             torch.nn.BatchNorm2d(32),
             #torch.nn.MaxPool2d(kernel_size=2, stride=2)
