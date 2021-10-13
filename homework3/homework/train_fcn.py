@@ -33,9 +33,9 @@ def train(args):
 
     optimizer = torch.optim.SGD(model.parameters(), lr=args.learning_rate, momentum=0.9)
 
-    #loss = ClassificationLoss()  <--------------CHANGE!!!!!!!!!!!!!
-    #loss = ClassificationLoss()  <--------------CHANGE!!!!!!!!!!!!!
-    
+    loss = ClassificationLoss()  #<--------------CHANGE!!!!!!!!!!!!!??
+    train_data = load_data('dense_data/train', transform=my_transform)
+    valid_data = load_data('dense_data/valid')
     
     save_model(model)
 
