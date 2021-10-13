@@ -31,12 +31,12 @@ class SuperTuxDataset(Dataset):
       self.data = []
       
       self.transforms = transforms.Compose([
-        transforms.RandomHorizontalFlip(p=0.5),
-        transforms.RandomCrop(64, padding=4),
+        #transforms.RandomHorizontalFlip(p=0.5),
+        #transforms.RandomCrop(64, padding=4),
         #transforms.CenterCrop(64),
         transforms.ColorJitter(brightness=.5, hue=.3),
-        transforms.GaussianBlur(),
-        transforms.RandomPerspective(),
+        #transforms.GaussianBlur(),
+        #transforms.RandomPerspective(),
         transforms.ToTensor(),
         transforms.Normalize([0, 0, 0], [1, 1, 1])
                 ])

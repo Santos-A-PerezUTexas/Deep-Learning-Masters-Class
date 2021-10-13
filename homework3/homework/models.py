@@ -92,11 +92,13 @@ class CNNClassifier(torch.nn.Module):
         
         
       c = n_input_channels    #3 in our case
-       
+
+     
       self.layer1 = torch.nn.Sequential(
       
             torch.nn.Conv2d(c, 32, kernel_size=5, stride=1, padding=2),
             torch.nn.ReLU(),
+            self.Block(32,32),
             torch.nn.BatchNorm2d(32),
             torch.nn.MaxPool2d(kernel_size=2, stride=2)
                                       )    
