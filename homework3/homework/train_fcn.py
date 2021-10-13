@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 
-from .models import FCN, save_model
+from .models import FCN, save_model, ClassificationLoss
 from .utils import load_dense_data, DENSE_CLASS_DISTRIBUTION, ConfusionMatrix
 from . import dense_transforms
 import torch.utils.tensorboard as tb
@@ -34,8 +34,8 @@ def train(args):
     optimizer = torch.optim.SGD(model.parameters(), lr=args.learning_rate, momentum=0.9)
 
     loss = ClassificationLoss()  #<--------------CHANGE!!!!!!!!!!!!!??
-    train_data = load_data('dense_data/train', transform=my_transform)
-    valid_data = load_data('dense_data/valid')
+    train_data = load_dense_data('dense_data/train')
+    valid_data = load_dense_data('dense_data/valid')
 
     for epoch in range(args.num_epoch):
     
