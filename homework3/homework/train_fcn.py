@@ -36,6 +36,43 @@ def train(args):
     loss = ClassificationLoss()  #<--------------CHANGE!!!!!!!!!!!!!??
     train_data = load_data('dense_data/train', transform=my_transform)
     valid_data = load_data('dense_data/valid')
+
+    for epoch in range(args.num_epoch):
+    
+        model.train()                                  
+        loss_vals, acc_vals, vacc_vals = [], [], []     
+        
+        #  BEGIN TRAINING-----------------------------------------------------LOOP BEGIN
+     
+        for img, label in train_data:                   
+        
+            img, label = img.to(device), label.to(device)    
+            logit = model(img)                              
+          
+            loss_val = loss(logit, label)                  
+            acc_val = accuracy(logit, label)         #get accuracy on same (128,6) logits of (128,3*64*64) batch
+
+            loss_vals.append(loss_val.detach().cpu().numpy())   #add batch loss_val to loss_vals list (with an s)
+            acc_vals.append(acc_val.detach().cpu().numpy())     #add accuracy acc_val to acc_vals list (with an s)
+
+            optimizer.zero_grad()
+            loss_val.backward()
+            optimizer.step()
+                                                      
+      #END TRAINING LOOP------------------------------------------------------------------------LOOP END
+
+        avg_loss = sum(loss_vals) / len(loss_vals)
+        avg_acc = sum(acc_vals) / len(acc_vals)
+
+        model.eval()   
+        
+        for img, label in valid_data:                     #iterate through validation data
+        
+            img, label = img.to(device), label.to(device)
+            vacc_vals.append(accuracy(model(img), label).detach().cpu().numpy())
+        avg_vacc = sum(vacc_vals) / len(vacc_vals)
+
+        print('epoch %-3d \t loss = %0.3f \t acc = %0.3f \t val acc = %0.3f' % (epoch, avg_loss, avg_acc, avg_vacc))
     
     save_model(model)
 
