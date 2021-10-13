@@ -1,6 +1,9 @@
 
   #HOMEWORK 3
   #Oct 13, 2021
+  #no pooling
+  #Always pad by kernel_size / 2, use an odd kernel_size
+
 
 import torch
 import torch.nn.functional as F
@@ -128,10 +131,10 @@ class FCN(torch.nn.Module):
     #self.cnn = CNNClassifier()
     self.cnn = torch.nn.Sequential(
       
-            torch.nn.Conv2d(3, 32, kernel_size=7, stride=7/2, padding=0),
+            torch.nn.Conv2d(3, 32, kernel_size=7, stride=1, padding=7/2),
             torch.nn.ReLU(),
             torch.nn.BatchNorm2d(32),
-            torch.nn.Conv2d(320, 32, kernel_size=3, stride=3/2, padding=1),
+            torch.nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=3/2),
             torch.nn.ReLU(),
             torch.nn.BatchNorm2d(32),
             #torch.nn.MaxPool2d(kernel_size=2, stride=2)
