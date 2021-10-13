@@ -61,6 +61,8 @@ class ClassificationLoss(torch.nn.Module):
    """
         return F.cross_entropy(input, target)
         
+#########################CNN  BEGIN
+
 class CNNClassifier(torch.nn.Module):
 
   class Block(torch.nn.Module):
@@ -85,6 +87,7 @@ class CNNClassifier(torch.nn.Module):
                 identity = self.downsample(x)
             return self.net(x) + identity
 
+##########CNN INIT  (ABOVE IS CNN BLOCK)
 
   def __init__(self, layers=[], n_input_channels=3, kernel_size=3):
       
@@ -113,7 +116,8 @@ class CNNClassifier(torch.nn.Module):
       
       self.drop_out = torch.nn.Dropout()
           
-    
+  #######################CNN FORWARD
+
   def forward(self, images_batch):
    
      
@@ -125,6 +129,9 @@ class CNNClassifier(torch.nn.Module):
                    
       return out
 
+######################################### END CNN
+
+#########################################BEGIN FCN
 
 class FCN(torch.nn.Module): 
   class Block(torch.nn.Module):
@@ -160,26 +167,33 @@ class FCN(torch.nn.Module):
      
       self.layer1 = torch.nn.Sequential(
       
-            torch.nn.Conv2d(c, 64, kernel_size=5, stride=1, padding=5/2),
+            torch.nn.Conv2d(3, 64, kernel_size=5, stride=1, padding=5/2),
             torch.nn.ReLU(),
             self.Block(64,128),
-            #torch.nn.BatchNorm2d(128),
+            torch.nn.BatchNorm2d(128),
             
                                      )    
         
       self.layer2 = torch.nn.Sequential( 
+        
+        #https://piazza.com/class/ksjhagmd59d6sg?cid=342
+        #https://piazza.com/class/ksjhagmd59d6sg?cid=342
+        #https://piazza.com/class/ksjhagmd59d6sg?cid=342
         
         #torch.nn.ConvTranspose2d(512, 512, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1),
         #torch.nn.BatchNorm2d(512),
         #torch.nn.ConvTranspose2d(512, 256, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1),
         #torch.nn.BatchNorm2d(256),
         #torch.nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1),
-        torch.nn.BatchNorm2d(128),
-        torch.nn.ConvTranspose2d(128, 64, kernel_size=3, stride=2, padding=3/2, dilation=1, output_padding=1),
-        torch.nn.BatchNorm2d(64),
-        torch.nn.ConvTranspose2d(64, 32, kernel_size=3, stride=2, padding=3/2, dilation=1, output_padding=1),
+        #torch.nn.BatchNorm2d(128),
+        torch.nn.ConvTranspose2d(128, 32, kernel_size=3, stride=2, padding=3/2, dilation=1, output_padding=1),
         torch.nn.BatchNorm2d(32),
         torch.nn.Conv2d(32, 5, kernel_size=1)
+        #torch.nn.ConvTranspose2d(128, 64, kernel_size=3, stride=2, padding=3/2, dilation=1, output_padding=1),
+        #torch.nn.BatchNorm2d(64),
+        #torch.nn.ConvTranspose2d(64, 32, kernel_size=3, stride=2, padding=3/2, dilation=1, output_padding=1),
+        #torch.nn.BatchNorm2d(32),
+        
                       )
   def forward(self, images_batch):
    
