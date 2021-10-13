@@ -126,38 +126,77 @@ class CNNClassifier(torch.nn.Module):
       return out
 
 
-class FCN(torch.nn.Module):
-  #def __init__(self, pretrained_net, n_class):
-  def __init__(self):
+class FCN(torch.nn.Module): 
+  class Block(torch.nn.Module):
+        def __init__(self, n_input, n_output, stride=1):
+            super().__init__()
+            self.net = torch.nn.Sequential(
+              torch.nn.Conv2d(n_input, n_output, kernel_size=3, padding=1, stride=1, bias=False),
+              torch.nn.BatchNorm2d(n_output),
+              torch.nn.ReLU(),
+              torch.nn.Conv2d(n_output, n_output, kernel_size=3, padding=1, bias=False),
+              torch.nn.BatchNorm2d(n_output),
+              torch.nn.ReLU()
+            )
+            self.downsample = None
+            if stride != 1 or n_input != n_output:
+                self.downsample = torch.nn.Sequential(torch.nn.Conv2d(n_input, n_output, 1),
+                                                      torch.nn.BatchNorm2d(n_output))
+        
+        def forward(self, x):
+            identity = x
+            if self.downsample is not None:
+                identity = self.downsample(x)
+            return self.net(x) + identity
 
-    super().__init__()
-    
-    #self.cnn = CNNClassifier()
-    self.cnn = torch.nn.Sequential(
+
+  def __init__(self, layers=[], n_input_channels=3, kernel_size=3):
       
-            torch.nn.Conv2d(3, 32, kernel_size=7, stride=1, padding=7/2),
+      super().__init__()
+        
+        
+      c = n_input_channels    #3 in our case
+
+     
+      self.layer1 = torch.nn.Sequential(
+      
+            torch.nn.Conv2d(c, 128, kernel_size=5, stride=1, padding=2),
             torch.nn.ReLU(),
-            torch.nn.BatchNorm2d(32),
-            torch.nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=3/2),
-            torch.nn.ReLU(),
-            torch.nn.BatchNorm2d(32),
-            #torch.nn.MaxPool2d(kernel_size=2, stride=2)
-                                      )  
-    self.n_class = 5
-    #self.pretrained_net = pretrained_net
-    self.relu    = torch.nn.ReLU(inplace=True)
-    self.deconv1 = torch.nn.ConvTranspose2d(512, 512, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1)
-    self.bn1     = torch.nn.BatchNorm2d(512)
-    self.deconv2 = torch.nn.ConvTranspose2d(512, 256, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1)
-    self.bn2     = torch.nn.BatchNorm2d(256)
-    self.deconv3 = torch.nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1)
-    self.bn3     = torch.nn.BatchNorm2d(128)
-    self.deconv4 = torch.nn.ConvTranspose2d(128, 64, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1)
-    self.bn4     = torch.nn.BatchNorm2d(64)
-    self.deconv5 = torch.nn.ConvTranspose2d(64, 32, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1)
-    self.bn5     = torch.nn.BatchNorm2d(32)
-    self.classifier = torch.nn.Conv2d(32, self.n_class, kernel_size=1)
-  
+            self.Block(128,512),
+            torch.nn.BatchNorm2d(512),
+            
+                                      )    
+            
+      self.layer2 = torch.nn.Sequential( 
+        
+        torch.nn.ConvTranspose2d(512, 512, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1),
+        torch.nn.BatchNorm2d(512),
+        torch.nn.ConvTranspose2d(512, 256, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1),
+        torch.nn.BatchNorm2d(256),
+        torch.nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1),
+        torch.nn.BatchNorm2d(128),
+        torch.nn.ConvTranspose2d(128, 64, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1),
+        torch.nn.BatchNorm2d(64),
+        torch.nn.ConvTranspose2d(64, 32, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1),
+        torch.nn.BatchNorm2d(32),
+        torch.nn.Conv2d(32, 5, kernel_size=1)
+                      )
+  def forward(self, images_batch):
+   
+     
+      out = self.layer1(images_batch)
+      out = self.layer2(out)
+      
+      #NOW DOWNSAMPLING!
+      #out = out.reshape(out.size(0), -1)
+      #out = self.drop_out(out)
+      #out = self.fc1(out)
+      
+                   
+      return out
+
+        #Oct 13, 2021:  https://medium.com/swlh/how-data-augmentation-improves-your-cnn-performance-an-experiment-in-pytorch-and-torchvision-e5fb36d038fb
+
         #Simply, our goal is to take either a RGB color image (height×width×3) or a grayscale
         # image (height×width×1) and output a segmentation map where each pixel contains a
         #class label represented as an integer (height×width×1).
@@ -206,37 +245,16 @@ class FCN(torch.nn.Module):
       
       #raise NotImplementedError('FCN.__init__')
 
-  def forward(self, x):
 
-        output = self.cnn(x)
-        x5 = output['x5']  # size=(N, 512, x.H/32, x.W/32)
-        x4 = output['x4']  # size=(N, 512, x.H/16, x.W/16)
-        x3 = output['x3']  # size=(N, 256, x.H/8,  x.W/8)
-        x2 = output['x2']  # size=(N, 128, x.H/4,  x.W/4)
-        x1 = output['x1']  # size=(N, 64, x.H/2,  x.W/2)
 
-        score = self.bn1(self.relu(self.deconv1(x5)))     # size=(N, 512, x.H/16, x.W/16)
-        score = score + x4                                # element-wise add, size=(N, 512, x.H/16, x.W/16)
-        score = self.bn2(self.relu(self.deconv2(score)))  # size=(N, 256, x.H/8, x.W/8)
-        score = score + x3                                # element-wise add, size=(N, 256, x.H/8, x.W/8)
-        score = self.bn3(self.relu(self.deconv3(score)))  # size=(N, 128, x.H/4, x.W/4)
-        score = score + x2                                # element-wise add, size=(N, 128, x.H/4, x.W/4)
-        score = self.bn4(self.relu(self.deconv4(score)))  # size=(N, 64, x.H/2, x.W/2)
-        score = score + x1                                # element-wise add, size=(N, 64, x.H/2, x.W/2)
-        score = self.bn5(self.relu(self.deconv5(score)))  # size=(N, 32, x.H, x.W)
-        score = self.classifier(score)                    # size=(N, n_class, x.H/1, x.W/1)
-
-        return score  # size=(N, n_class, x.H/1, x.W/1)
-
-        """
-        Your code here
-        @x: torch.Tensor((B,3,H,W))
-        @return: torch.Tensor((B,6,H,W))<--- returns 5 channels of HW instead!!!
-        Hint: Apply input normalization inside the network, to make sure it is applied in the grader
-        Hint: Input and output resolutions need to match, use output_padding in up-convolutions, crop the output
-              if required (use z = z[:, :, :H, :W], where H and W are the height and width of a corresponding strided
-              convolution
-        """
+        
+        #@x: torch.Tensor((B,3,H,W))
+        #@return: torch.Tensor((B,6,H,W))<--- returns 5 channels of HW instead!!!
+        #Hint: Apply input normalization inside the network, to make sure it is applied in the grader
+        #Hint: Input and output resolutions need to match, use output_padding in up-convolutions, crop the output
+        #     if required (use z = z[:, :, :H, :W], where H and W are the height and width of a corresponding strided
+        #     convolution
+       
         
 
 
