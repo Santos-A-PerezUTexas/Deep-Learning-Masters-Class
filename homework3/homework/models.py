@@ -6,6 +6,7 @@
   #Oct 13:  DO I HAVE TO use transforms on the labels?
   #Oct 13 - does randcrop 64 do anything?
   #OCT 13 NIGHT:  TOOK OUT BLOCK OF FCN
+  #Oct 13 Night:  Added target = target.type(torch.LongTensor) to Loss
 
 
 import torch
@@ -60,7 +61,8 @@ class ClassificationLoss(torch.nn.Module):
         @target: torch.Tensor((B,), dtype=torch.int64)
         @return:  torch.Tensor((,))
    """
-        return F.cross_entropy(input, target)
+        self.target = target.type(torch.LongTensor)
+        return F.cross_entropy(input, self.target)
         
 #########################CNN  BEGIN
 
@@ -174,7 +176,7 @@ class FCN(torch.nn.Module):
             torch.nn.Conv2d(3, 64, kernel_size=(5,5), stride=(1,1), padding=(2, 2), dilation=1, groups=1),
             torch.nn.ReLU(),
             #self.Block(64,128),
-            torch.nn.BatchNorm2d(64),   #image is now 65*65
+            torch.nn.BatchNorm2d(64),   #image is now 64*64
             
                                      )    
         
@@ -191,7 +193,7 @@ class FCN(torch.nn.Module):
         #torch.nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1),
         #torch.nn.BatchNorm2d(128),
         
-        #Oct 13 Night: image is 65x65, downsample to 64x64
+        #Oct 13 Night: image is 64x64, downsample to 64x64
 
         torch.nn.ConvTranspose2d(64, 32, kernel_size= (3,3), stride=(1,1), padding=(1,1), dilation=1, output_padding=(0,0)),
         torch.nn.BatchNorm2d(32),
