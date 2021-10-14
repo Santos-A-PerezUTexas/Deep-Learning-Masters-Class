@@ -161,8 +161,9 @@ class FCN(torch.nn.Module):
       
       print(f'In FCN, the size of input x is {images_batch.shape}')
       out = self.layer1(images_batch)
-      print(f'After layer 1, encoder, the size of x is {images_batch.shape}')
+      print(f'After layer 1, encoder, the images of x is {out.shape}')
       out = self.layer2(out)
+      print(f'After layer 2,decoder, the images of x is {out.shape}')
              
       return out
 
