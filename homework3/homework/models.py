@@ -143,7 +143,7 @@ class FCN(torch.nn.Module):
             torch.nn.ReLU(),
             torch.nn.Conv2d(64, 128, kernel_size=2, padding=0, stride=2, bias=False),
             torch.nn.BatchNorm2d(128),
-            torch.nn.ReLU(),   #image is now 16x16
+            torch.nn.ReLU(),   #image is now 16x16.....NO!, orginal image is 128x96!!
             #don’t want a reduction in resolution you can set your padding to (KS-1)/2 (same as //2 in python) and then stride by 1. 
                        
                                      )    
@@ -159,9 +159,9 @@ class FCN(torch.nn.Module):
                       )
   def forward(self, images_batch):
       
-      #print(f'In the beggining, the size of x is {images_batch.shape}')
+      print(f'In FCN, the size of input x is {images_batch.shape}')
       out = self.layer1(images_batch)
-      #print(f'After layer 1, encoder, the size of x is {images_batch.shape}')
+      print(f'After layer 1, encoder, the size of x is {images_batch.shape}')
       out = self.layer2(out)
              
       return out
