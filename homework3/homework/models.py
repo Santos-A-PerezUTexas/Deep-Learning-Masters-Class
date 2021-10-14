@@ -106,7 +106,8 @@ class FCN(torch.nn.Module):
             self.net = torch.nn.Sequential(
               torch.nn.ConvTranspose2d(n_input, n_output, kernel_size= (3,3), stride=(2,2), padding=(1,1), dilation=1, output_padding=(1,1)),
               torch.nn.BatchNorm2d(n_output),
-              torch.nn.ReLU(),   
+              torch.nn.ReLU(),
+           
             )
             self.downsample = None
             if stride != 1 or n_input != n_output:
@@ -115,10 +116,13 @@ class FCN(torch.nn.Module):
         
         def forward(self, x):
             identity = x
+            output = self.net(x)
+            #print (f'The size of output is {output.shape}, the size of identity is {identity.shape}')
             if self.downsample is not None:
                 identity = self.downsample(x)
-            return self.net(x) #+ identity
-
+            return output #+ identity
+            #return(torch.cat(output, identity))
+            #RETURN TORCH.CAT???
 
   def __init__(self, layers=[], n_input_channels=3, kernel_size=3):
       
@@ -154,8 +158,10 @@ class FCN(torch.nn.Module):
         
                       )
   def forward(self, images_batch):
-       
+      
+      #print(f'In the beggining, the size of x is {images_batch.shape}')
       out = self.layer1(images_batch)
+      #print(f'After layer 1, encoder, the size of x is {images_batch.shape}')
       out = self.layer2(out)
              
       return out
