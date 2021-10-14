@@ -104,13 +104,9 @@ class FCN(torch.nn.Module):
         def __init__(self, n_input, n_output, stride=1):
             super().__init__()
             self.net = torch.nn.Sequential(
-              torch.nn.Conv2d(n_input, n_output, kernel_size=2, padding=0, stride=2, bias=False),
+              torch.nn.ConvTranspose2d(n_input, n_output, kernel_size= (3,3), stride=(2,2), padding=(1,1), dilation=1, output_padding=(1,1)),
               torch.nn.BatchNorm2d(n_output),
-              torch.nn.ReLU(),
-              torch.nn.Conv2d(n_input, n_output, kernel_size=2, padding=0, stride=2, bias=False),
-              torch.nn.BatchNorm2d(n_output),
-              torch.nn.ReLU()
-            
+              torch.nn.ReLU(),   
             )
             self.downsample = None
             if stride != 1 or n_input != n_output:
@@ -121,7 +117,7 @@ class FCN(torch.nn.Module):
             identity = x
             if self.downsample is not None:
                 identity = self.downsample(x)
-            return self.net(x) + identity
+            return self.net(x) #+ identity
 
 
   def __init__(self, layers=[], n_input_channels=3, kernel_size=3):
@@ -153,9 +149,7 @@ class FCN(torch.nn.Module):
         torch.nn.ConvTranspose2d(128, 64, kernel_size= (3,3), stride=(2,2), padding=(1,1), dilation=1, output_padding=(1,1)),
         torch.nn.BatchNorm2d(64),
         torch.nn.ReLU(),
-        torch.nn.ConvTranspose2d(64, 32, kernel_size= (3,3), stride=(2,2), padding=(1,1), dilation=1, output_padding=(1,1)),
-        torch.nn.BatchNorm2d(32),
-        torch.nn.ReLU(),
+        self.Block(64,32),   #input is 32x32...  Out is 64x64, CAN add identity     
         torch.nn.Conv2d(32, 5, kernel_size=1)
         
                       )
