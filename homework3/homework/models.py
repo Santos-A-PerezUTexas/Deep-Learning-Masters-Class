@@ -102,7 +102,7 @@ class CNNClassifier(torch.nn.Module):
 class FCN(torch.nn.Module): 
   class Block(torch.nn.Module):
         def __init__(self, n_input, n_output, stride=1):
-            super().__init__()
+            super().__init__()  #input is ([32, 64, 48, 64])
             self.net = torch.nn.Sequential(
               torch.nn.ConvTranspose2d(n_input, n_output, kernel_size= (3,3), stride=(2,2), padding=(1,1), dilation=1, output_padding=(1,1)),
               torch.nn.BatchNorm2d(n_output),
@@ -115,9 +115,9 @@ class FCN(torch.nn.Module):
                                                       torch.nn.BatchNorm2d(n_output))
         
         def forward(self, x):
-            identity = x
-            output = self.net(x)
-            #print (f'The size of output is {output.shape}, the size of identity is {identity.shape}')
+            identity = x  ##([32, 64, 48, 64])
+            output = self.net(x)   #OUTPUT is #([32, 32, 96, 128])
+            print (f'The size of output is {output.shape}, the size of identity is {identity.shape}')
             if self.downsample is not None:
                 identity = self.downsample(x)
             return output #+ identity
@@ -143,7 +143,7 @@ class FCN(torch.nn.Module):
             torch.nn.ReLU(),
             torch.nn.Conv2d(64, 128, kernel_size=2, padding=0, stride=2, bias=False),
             torch.nn.BatchNorm2d(128),
-            torch.nn.ReLU(),   #image is now 16x16.....NO!, orginal image is 128x96!!
+            torch.nn.ReLU(),   #image is now ([32, 128, 24, 32]), original was ([32, 3, 96, 128])
             #don’t want a reduction in resolution you can set your padding to (KS-1)/2 (same as //2 in python) and then stride by 1. 
                        
                                      )    
@@ -152,7 +152,7 @@ class FCN(torch.nn.Module):
         
         torch.nn.ConvTranspose2d(128, 64, kernel_size= (3,3), stride=(2,2), padding=(1,1), dilation=1, output_padding=(1,1)),
         torch.nn.BatchNorm2d(64),
-        torch.nn.ReLU(),
+        torch.nn.ReLU(),  ##([32, 64, 48, 64])
         self.Block(64,32),   #input is 32x32...  Out is 64x64, CAN add identity     
         torch.nn.Conv2d(32, 5, kernel_size=1)
         
