@@ -187,8 +187,8 @@ class FCN(torch.nn.Module):
       
       out = self.layer3(out)
 
-      out = self.final_conv(out)  #ADD IDENTITY HERE!
-      
+      out = self.final_conv(out+identity)  #ADD IDENTITY HERE!
+
       print(f'After layer 2,decoder, the images of x is {out.shape}')#([32, 5, 96, 128])
              
       return out 
