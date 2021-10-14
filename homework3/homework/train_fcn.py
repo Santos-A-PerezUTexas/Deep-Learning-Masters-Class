@@ -46,6 +46,8 @@ def train(args):
      
         for img, label in train_data:                   
         
+            label = label.type(torch.LongTensor)
+            
             img, label = img.to(device), label.to(device)    
             logit = model(img)                              
           

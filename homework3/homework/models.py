@@ -61,8 +61,7 @@ class ClassificationLoss(torch.nn.Module):
         @target: torch.Tensor((B,), dtype=torch.int64)
         @return:  torch.Tensor((,))
    """
-        self.target = target.type(torch.LongTensor)
-        return F.cross_entropy(input, self.target)
+        return F.cross_entropy(input, target)
         
 #########################CNN  BEGIN
 
