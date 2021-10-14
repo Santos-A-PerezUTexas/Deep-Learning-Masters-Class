@@ -5,6 +5,7 @@
   #Always pad by kernel_size / 2, use an odd kernel_size
   #Oct 13:  DO I HAVE TO use transforms on the labels?
   #Oct 13 - does randcrop 64 do anything?
+  #OCT 13 NIGHT:  TOOK OUT BLOCK OF FCN
 
 
 import torch
@@ -169,7 +170,7 @@ class FCN(torch.nn.Module):
       
             torch.nn.Conv2d(3, 64, kernel_size=5, stride=1, padding=5/2),
             torch.nn.ReLU(),
-            self.Block(64,128),
+            #self.Block(64,128),
             torch.nn.BatchNorm2d(128),
             
                                      )    
