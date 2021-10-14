@@ -164,10 +164,12 @@ class FCN(torch.nn.Module):
         torch.nn.ConvTranspose2d(128, 64, kernel_size= (3,3), stride=(2,2), padding=(1,1), dilation=1, output_padding=(1,1)),
         torch.nn.BatchNorm2d(64),
         torch.nn.ReLU(),  ##([32, 64, 48, 64])
-        self.Block(64,32),    #([32, 5, 32, 128])  
-        torch.nn.Conv2d(32, 5, kernel_size=1) #([32, 5, 96, 128])
-        
+        self.Block(64,32),    #([32, 32, 96, 128])  <--add identity to this.
+                
                       )
+      
+      self.final_conv = torch.nn.Conv2d(32, 5, kernel_size=1) #([32, 5, 96, 128])
+
   def forward(self, images_batch):
       
       
@@ -184,6 +186,9 @@ class FCN(torch.nn.Module):
       print(f'After layer 1, encoder, the images of x is {out.shape}') #([32, 128, 24, 32])
       
       out = self.layer3(out)
+
+      out = self.final_conv(out)  #ADD IDENTITY HERE!
+      
       print(f'After layer 2,decoder, the images of x is {out.shape}')#([32, 5, 96, 128])
              
       return out 
