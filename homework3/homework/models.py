@@ -117,7 +117,7 @@ class FCN(torch.nn.Module):
         def forward(self, x):
             identity = x  ##([32, 64, 48, 64])
             output = self.net(x)   #OUTPUT is #([32, 32, 96, 128])
-            print (f'The size of output is {output.shape}, the size of identity is {identity.shape}')
+            #print (f'The size of output is {output.shape}, the size of identity is {identity.shape}')
             if self.downsample is not None:
                 identity = self.downsample(x)
             return output #+ identity
@@ -173,7 +173,7 @@ class FCN(torch.nn.Module):
   def forward(self, images_batch):
       
       
-      print(f'In FCN, the size of input x is {images_batch.shape}') #([32, 3, 96, 128])
+      #print(f'In FCN, the size of input x is {images_batch.shape}') #([32, 3, 96, 128])
 
       out = self.layer1(images_batch)
       #image is now ([32, 32, 96, 128])  <------IDENTITY!!!!!
@@ -183,13 +183,13 @@ class FCN(torch.nn.Module):
 
       out = self.layer2(out)
 
-      print(f'After layer 1, encoder, the images of x is {out.shape}') #([32, 128, 24, 32])
+      #print(f'After layer 1, encoder, the images of x is {out.shape}') #([32, 128, 24, 32])
       
       out = self.layer3(out)
 
       out = self.final_conv(out+identity)  #ADD IDENTITY HERE!
 
-      print(f'After layer 2,decoder, the images of x is {out.shape}')#([32, 5, 96, 128])
+      #print(f'After layer 2,decoder, the images of x is {out.shape}')#([32, 5, 96, 128])
              
       return out 
 

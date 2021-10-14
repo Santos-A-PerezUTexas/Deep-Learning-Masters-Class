@@ -31,8 +31,11 @@ def train(args):
         from os import path
         model.load_state_dict(torch.load(path.join(path.dirname(path.abspath(__file__)), '%s.th' % args.model)))
 
-    optimizer = torch.optim.SGD(model.parameters(), lr=args.learning_rate, momentum=0.9)
+    #CHANGE TO ADAM!!
 
+    #optimizer = torch.optim.SGD(model.parameters(), lr=args.learning_rate, momentum=0.9)
+    optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
+    
     loss = ClassificationLoss()  #<--------------CHANGE!!!!!!!!!!!!!??
     train_data = load_dense_data('dense_data/train')
     valid_data = load_dense_data('dense_data/valid')
@@ -47,7 +50,7 @@ def train(args):
         for img, label in train_data:                   
         
             label = label.type(torch.LongTensor)
-            print (f'Image Dimensions:  (IN TRAIN)  is {img.shape}')
+            #print (f'Image Dimensions:  (IN TRAIN)  is {img.shape}')
             img, label = img.to(device), label.to(device)    
             logit = model(img)                              
           
