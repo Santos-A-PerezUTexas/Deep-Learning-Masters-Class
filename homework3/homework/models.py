@@ -101,7 +101,7 @@ class CNNClassifier(torch.nn.Module):
 
 class FCN(torch.nn.Module): 
   class Block(torch.nn.Module):
-        def __init__(self, n_input, n_output, stride=1):
+        def __init__(self, n_input, n_output, stride=1, identity):
             super().__init__()  #input is ([32, 64, 48, 64])
             self.net = torch.nn.Sequential(
               torch.nn.ConvTranspose2d(n_input, n_output, kernel_size= (3,3), stride=(2,2), padding=(1,1), dilation=1, output_padding=(1,1)),
@@ -115,12 +115,12 @@ class FCN(torch.nn.Module):
                                                       torch.nn.BatchNorm2d(n_output))
         
         def forward(self, x):
-            identity = x  ##([32, 64, 48, 64])
+            #identity = x  ##([32, 64, 48, 64])
             output = self.net(x)   #OUTPUT is #([32, 32, 96, 128])
             print (f'The size of output is {output.shape}, the size of identity is {identity.shape}')
             if self.downsample is not None:
                 identity = self.downsample(x)
-            return output #+ identity
+            return output + identity
             #return(torch.cat(output, identity))
             #RETURN TORCH.CAT???
 
@@ -131,16 +131,26 @@ class FCN(torch.nn.Module):
         
       c = n_input_channels    #3 in our case
       
-     
       self.layer1 = torch.nn.Sequential(
+
+            #input is  ([32, 3, 96, 128])  
+
+            torch.nn.Conv2d(3, 32, kernel_size=(5,5), stride=(1,1), padding=(2, 2), dilation=1, groups=1),
+            torch.nn.ReLU(), 
+            
+            #image is now ([32, 32, 96, 128])  <------IDENTITY!!!!!
+      )
+
+      self.layer2 = torch.nn.Sequential(
       
             #CHANGE PADDING TO 5/2??????????????????????
+            #image is now ([32, 32, 96, 128])
             
-            torch.nn.Conv2d(3, 32, kernel_size=(5,5), stride=(1,1), padding=(2, 2), dilation=1, groups=1),
-            torch.nn.ReLU(),
+           
             torch.nn.Conv2d(32, 64, kernel_size=2, padding=0, stride=2, bias=False),
             torch.nn.BatchNorm2d(64),
-            torch.nn.ReLU(),
+            torch.nn.ReLU(),#image is now ([32, 64, 48, 64])
+
             torch.nn.Conv2d(64, 128, kernel_size=2, padding=0, stride=2, bias=False),
             torch.nn.BatchNorm2d(128),
             torch.nn.ReLU(),   #image is now ([32, 128, 24, 32]), original was ([32, 3, 96, 128])
@@ -148,25 +158,36 @@ class FCN(torch.nn.Module):
                        
                                      )    
         
-      self.layer2 = torch.nn.Sequential( 
-        
+      self.layer3 = torch.nn.Sequential( 
+
+        #image is now ([32, 128, 24, 32])
         torch.nn.ConvTranspose2d(128, 64, kernel_size= (3,3), stride=(2,2), padding=(1,1), dilation=1, output_padding=(1,1)),
         torch.nn.BatchNorm2d(64),
         torch.nn.ReLU(),  ##([32, 64, 48, 64])
-        self.Block(64,32),   #input is 32x32...  Out is 64x64, CAN add identity     
-        torch.nn.Conv2d(32, 5, kernel_size=1)
+
+        self.Block(64,32, identity),    #([32, 5, 32, 128])  
+        torch.nn.Conv2d(32, 5, kernel_size=1) #([32, 5, 96, 128])
         
                       )
   def forward(self, images_batch):
       
       
       print(f'In FCN, the size of input x is {images_batch.shape}') #([32, 3, 96, 128])
-      out = self.layer1(images_batch)
-      print(f'After layer 1, encoder, the images of x is {out.shape}') #([32, 128, 24, 32])
+
+      out = self.layer2(images_batch)
+      #image is now ([32, 32, 96, 128])  <------IDENTITY!!!!!
+
+      identity = out  #([32, 32, 96, 128])
+
+
       out = self.layer2(out)
+
+      print(f'After layer 1, encoder, the images of x is {out.shape}') #([32, 128, 24, 32])
+      
+      out = self.layer3(out, identity)
       print(f'After layer 2,decoder, the images of x is {out.shape}')#([32, 5, 96, 128])
              
-      return out + images_batch
+      return out 
 
 ###################END FCN###############################
 
