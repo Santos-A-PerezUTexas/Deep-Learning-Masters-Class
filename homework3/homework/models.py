@@ -72,10 +72,10 @@ class CNNClassifier(torch.nn.Module):
         def __init__(self, n_input, n_output, stride=1):
             super().__init__()
             self.net = torch.nn.Sequential(
-              torch.nn.Conv2d(n_input, n_output, kernel_size=5, padding=5//2, stride=1, bias=False), #66x66??
+              torch.nn.Conv2d(n_input, n_output, kernel_size=3, padding=1, stride=1, bias=False),
               torch.nn.BatchNorm2d(n_output),
               torch.nn.ReLU(),
-              torch.nn.Conv2d(n_output, n_output, kernel_size=3, padding=3//2, bias=False),  #67*67 or 64x64???
+              torch.nn.Conv2d(n_output, n_output, kernel_size=3, padding=1, bias=False),
               torch.nn.BatchNorm2d(n_output),
               torch.nn.ReLU()
             )
@@ -86,15 +86,10 @@ class CNNClassifier(torch.nn.Module):
         
         def forward(self, x):
             identity = x
-            output = self.net(x)
-            #print(f'x shape is, {x.shape}, output shape is {output.shape}'), #--->64x64
-
             if self.downsample is not None:
                 identity = self.downsample(x)
-                print ("downsampling x")
-            return output + identity
+            return self.net(x) + identity
 
-##########CNN INIT  (ABOVE IS CNN BLOCK)
 
   def __init__(self, layers=[], n_input_channels=3, kernel_size=3):
       
@@ -106,23 +101,28 @@ class CNNClassifier(torch.nn.Module):
      
       self.layer1 = torch.nn.Sequential(
       
-            torch.nn.Conv2d(c, 32, kernel_size=5, stride=1, padding=5//2), #65x65
+            torch.nn.Conv2d(c, 32, kernel_size=5, stride=1, padding=2),
             torch.nn.ReLU(),
-            self.Block(32,32), #64*64
+            self.Block(32,32),
             torch.nn.BatchNorm2d(32),
-            torch.nn.MaxPool2d(kernel_size=3, stride=1)  #62x62
+            torch.nn.MaxPool2d(kernel_size=2, stride=2)
                                       )    
             
-      self.fc1 = torch.nn.Linear(32 * 62 * 62, 6)   
+      self.layer2 = torch.nn.Sequential(
+            torch.nn.Conv2d(32, 64, kernel_size=5, stride=1, padding=2),  
+            torch.nn.ReLU(),
+            torch.nn.MaxPool2d(kernel_size=2, stride=2, padding=0))                  
+        
+              
+      self.fc1 = torch.nn.Linear(32 * 32 * 32, 6)   
       
       self.drop_out = torch.nn.Dropout()
           
-  #######################CNN FORWARD
-
+    
   def forward(self, images_batch):
    
-      #print(f'initial dimensions {images_batch.shape}') #128,3,64,64
-      out = self.layer1(images_batch)  
+     
+      out = self.layer1(images_batch)
       out = out.reshape(out.size(0), -1)
       out = self.drop_out(out)
       out = self.fc1(out)
