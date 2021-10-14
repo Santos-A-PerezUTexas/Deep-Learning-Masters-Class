@@ -171,7 +171,7 @@ class FCN(torch.nn.Module):
             torch.nn.Conv2d(3, 64, kernel_size=5, stride=1, padding=5/2),
             torch.nn.ReLU(),
             #self.Block(64,128),
-            torch.nn.BatchNorm2d(128),
+            torch.nn.BatchNorm2d(128),   #image is now 65*65
             
                                      )    
         
@@ -187,9 +187,14 @@ class FCN(torch.nn.Module):
         #torch.nn.BatchNorm2d(256),
         #torch.nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, dilation=1, output_padding=1),
         #torch.nn.BatchNorm2d(128),
-        torch.nn.ConvTranspose2d(128, 32, kernel_size=3, stride=2, padding=3/2, dilation=1, output_padding=1),
+        
+        #Oct 13 Night: image is 65x65, downsample to 64x64
+
+        torch.nn.ConvTranspose2d(128, 32, kernel_size=(2,2), stride=(1,1), padding=(1,1), dilation=1, output_padding=(1,1)),
         torch.nn.BatchNorm2d(32),
         torch.nn.Conv2d(32, 5, kernel_size=1)
+
+
         #torch.nn.ConvTranspose2d(128, 64, kernel_size=3, stride=2, padding=3/2, dilation=1, output_padding=1),
         #torch.nn.BatchNorm2d(64),
         #torch.nn.ConvTranspose2d(64, 32, kernel_size=3, stride=2, padding=3/2, dilation=1, output_padding=1),
