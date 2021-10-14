@@ -31,17 +31,14 @@ class SuperTuxDataset(Dataset):
       self.data = []
       
       self.transforms = transforms.Compose([
-        #transforms.RandomHorizontalFlip(p=0.5),
+        transforms.RandomHorizontalFlip(p=0.5),
         #transforms.RandomCrop(64, padding=4),
         #transforms.CenterCrop(64),
         transforms.ColorJitter(brightness=.5, hue=.3),
-        #transforms.GaussianBlur(),
-        #transforms.RandomPerspective(),
         transforms.ToTensor(),
         transforms.Normalize([0, 0, 0], [1, 1, 1])
+        #RandomHorizontalFlip() and RandomColorJitter(), you can set the transform ratio by changing the “flip_prob”.
                 ])
-
-      #to_tensor = transforms.ToTensor()
 
       with open(path.join(dataset_path, 'labels.csv'), newline='') as f:
         reader = csv.reader(f)
