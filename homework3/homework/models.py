@@ -8,7 +8,11 @@
   #OCT 13 NIGHT:  TOOK OUT BLOCK OF FCN
   #Oct 13 Night:  Added target = target.type(torch.LongTensor) to Loss
   #REMEMBER TO SET PADDING TO DIVIDED BY 2!!!!!!!!!!!!!!!!
-
+  #Apply augmentations like ColorJitter() and RandomHorizontalFlip() in train.py.
+  #Apply augmentations like ColorJitter() and RandomHorizontalFlip() in train.py.
+  #Apply augmentations like ColorJitter() and RandomHorizontalFlip() in train.py.
+  #Apply augmentations like ColorJitter() and RandomHorizontalFlip() in train.py.
+  
 
 import torch
 import torch.nn.functional as F
