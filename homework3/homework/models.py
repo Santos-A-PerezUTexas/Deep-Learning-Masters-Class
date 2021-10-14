@@ -130,7 +130,7 @@ class FCN(torch.nn.Module):
         
         
       c = n_input_channels    #3 in our case
-
+      
      
       self.layer1 = torch.nn.Sequential(
       
@@ -159,13 +159,14 @@ class FCN(torch.nn.Module):
                       )
   def forward(self, images_batch):
       
+      
       print(f'In FCN, the size of input x is {images_batch.shape}') #([32, 3, 96, 128])
       out = self.layer1(images_batch)
       print(f'After layer 1, encoder, the images of x is {out.shape}') #([32, 128, 24, 32])
       out = self.layer2(out)
       print(f'After layer 2,decoder, the images of x is {out.shape}')#([32, 5, 96, 128])
              
-      return out
+      return out + images_batch
 
 ###################END FCN###############################
 
