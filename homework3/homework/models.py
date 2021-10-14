@@ -7,6 +7,7 @@
   #Oct 13 - does randcrop 64 do anything?
   #OCT 13 NIGHT:  TOOK OUT BLOCK OF FCN
   #Oct 13 Night:  Added target = target.type(torch.LongTensor) to Loss
+  #REMEMBER TO SET PADDING TO DIVIDED BY 2!!!!!!!!!!!!!!!!
 
 
 import torch
@@ -140,12 +141,12 @@ class FCN(torch.nn.Module):
         def __init__(self, n_input, n_output, stride=1):
             super().__init__()
             self.net = torch.nn.Sequential(
-              torch.nn.Conv2d(n_input, n_output, kernel_size=3, padding=3/2, stride=1, bias=False),
+              torch.nn.Conv2d(n_input, n_output, kernel_size=5, padding=2, stride=1, bias=False),
               torch.nn.BatchNorm2d(n_output),
               torch.nn.ReLU(),
-              torch.nn.Conv2d(n_output, n_output, kernel_size=3, padding=3/2, bias=False),
-              torch.nn.BatchNorm2d(n_output),
-              torch.nn.ReLU()
+              #torch.nn.Conv2d(n_output, n_output, kernel_size=2, padding=2,stride =1, bias=False),
+              #torch.nn.BatchNorm2d(n_output),
+             # torch.nn.ReLU()
             )
             self.downsample = None
             if stride != 1 or n_input != n_output:
@@ -172,9 +173,9 @@ class FCN(torch.nn.Module):
             #CHANGE PADDING TO 5/2??????????????????????
             #CHANGE PADDING TO 5/2??????????????????????
             
-            torch.nn.Conv2d(3, 64, kernel_size=(5,5), stride=(1,1), padding=(2, 2), dilation=1, groups=1),
+            torch.nn.Conv2d(3, 32, kernel_size=(5,5), stride=(1,1), padding=(2, 2), dilation=1, groups=1),
             torch.nn.ReLU(),
-            #self.Block(64,128),
+            self.Block(32,64),
             torch.nn.BatchNorm2d(64),   #image is now 64*64
             
                                      )    
