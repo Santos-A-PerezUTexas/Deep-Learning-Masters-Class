@@ -61,12 +61,19 @@ class SuperTuxDataset(Dataset):
     def __getitem__(self, idx):
       return self.data[idx]
 
+####  #############  #########   ########DENSE SUPER TUX
 
 class DenseSuperTuxDataset(Dataset):
     def __init__(self, dataset_path, transform=dense_transforms.ToTensor()):
         from glob import glob
         from os import path
         self.files = []
+        
+        self.transform_color = transforms.Compose([
+        transforms.ColorJitter(brightness=.5, hue=.3),
+        
+                ])
+
         for im_f in glob(path.join(dataset_path, '*_im.jpg')):
             self.files.append(im_f.replace('_im.jpg', ''))
         self.transform = transform
@@ -78,6 +85,7 @@ class DenseSuperTuxDataset(Dataset):
         b = self.files[idx]
         im = Image.open(b + '_im.jpg')
         lbl = Image.open(b + '_seg.png')
+        im = self.transform_color(im)
         if self.transform is not None:
             im, lbl = self.transform(im, lbl)
         return im, lbl
