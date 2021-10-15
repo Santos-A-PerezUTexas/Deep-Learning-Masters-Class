@@ -23,46 +23,47 @@ def test_logging(train_logger, valid_logger):
     Call the loss 'loss', and accuracy 'accuracy' (no slash or other namespace)
     """
 
-    #scalar (below) : It will plot just one graph
-    #scalars (below): It will plot multi graphs at once
+    #train_logger.add_scalar (below) : It will plot just one graph
+    #train_logger.add_scalars (below): It will plot multi graphs at once
     
-    #for step in range(-360, 360):
-      #angle_rad = step * math.pi / 180
-      #train_logger.add_scalar('sin', math.sin(angle_rad), step)
-      #train_logger.add_scalar('cos', math.cos(angle_rad), step)
-      #train_logger.add_scalars('sin and cos', {'sin': math.sin(angle_rad), 'cos': math.cos(angle_rad)}, step)
-      #train_logger.close()
-
-
 
     # This is a strongly simplified training loop
+    i=0
+    x= torch.zeros(20,10)
+    t=0
+    y= torch.zeros(10,10)
+
     for epoch in range(10):
     
         torch.manual_seed(epoch)
-        
-        
+           
         for iteration in range(20):
+            
             dummy_train_loss = 0.9**(epoch+iteration/20.)
             dummy_train_accuracy = epoch/10. + torch.randn(10)
-            #logger = tb.SummaryWriter(log_dir, flush_secs=1)
-            train_logger.add_scalar('first/ACCURACY', dummy_train_accuracy[epoch], global_step=iteration)
-            #raise NotImplementedError('Log the training loss')
-        train_logger.add_scalar('first/error', dummy_train_loss, global_step=epoch)
+            
+            x[iteration] = dummy_train_accuracy
 
-
-        #test
-        #raise NotImplementedError('Log the training accuracy')
+            train_logger.add_scalar('accuracy',x.mean(), global_step=i)
+            train_logger.add_scalar('loss', dummy_train_loss, global_step=i)
+            i+=1 
+      
         torch.manual_seed(epoch)
-
-
-
-"""
+        
         for iteration in range(10):
+            
             dummy_validation_accuracy = epoch / 10. + torch.randn(10)
+            y[iteration] = dummy_validation_accuracy
+            
+            valid_logger.add_scalar('accuracy', y.mean(), global_step=i)
+            t+=1 
+        print (epoch, y.mean())
+    
+    
 
-        raise NotImplementedError('Log the validation accuracy')
-"""
 
+
+    
 if __name__ == "__main__":
     from argparse import ArgumentParser
 

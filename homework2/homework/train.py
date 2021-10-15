@@ -4,15 +4,12 @@ from .models import ClassificationLoss, CNNClassifier, save_model
 from .utils import accuracy, load_data
 import torch
 import torch.utils.tensorboard as tb
-
+import torchvision.transforms as T
 
 def train(args):
     
     model = CNNClassifier()
-
    
-    import torch
-
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     model.to(device)
