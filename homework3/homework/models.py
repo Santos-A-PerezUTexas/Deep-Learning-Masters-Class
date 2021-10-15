@@ -32,6 +32,8 @@ Residual Connections:
 
   https://drive.google.com/file/d/1in6SpWW0pRCE_aibvG2jCUvphlCt0wdp/view
 
+  http://www.philkr.net/dl_class/lectures/making_it_work/21.html  (CODE FOR BLOCKS)
+
   http://www.philkr.net/dl_class/lectures/making_it_work/18.html
   (this link also has batch normalization)
 
@@ -91,6 +93,11 @@ class FCN(torch.nn.Module):
 
                 """                                        
 
+        ***https://github.com/pochih/FCN-pytorch/blob/master/python/fcn.py
+        ***https://github.com/pochih/FCN-pytorch/blob/master/python/fcn.py
+        ***https://github.com/pochih/FCN-pytorch/blob/master/python/fcn.py
+        ***https://github.com/pochih/FCN-pytorch/blob/master/python/fcn.py
+        
         https://github.com/pochih/FCN-pytorch/tree/master/python
         https://github.com/wkentaro/pytorch-fcn/tree/master/torchfcn
         https://medium.com/@iceberg12/semantic-segmentation-applied-on-car-road-4ee62622292f

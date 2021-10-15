@@ -1,3 +1,6 @@
+#Homework3
+#http://www.philkr.net/dl_class/lectures/making_it_work/21.html  (blocks)
+
 import torch
 import numpy as np
 
