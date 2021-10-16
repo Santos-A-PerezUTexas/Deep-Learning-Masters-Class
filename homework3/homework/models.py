@@ -91,64 +91,131 @@ class CNNClassifier(torch.nn.Module):
 #########################################BEGIN FCN
 
 class FCN(torch.nn.Module): 
-  class Block(torch.nn.Module):
-        def __init__(self, n_input, n_output, stride=1):
-            super().__init__()
+     
+  class BlockUP(torch.nn.Module):
+      
+    def __init__(self, n_input, n_output, stride=1):
+      super().__init__()
             
-            self.net = torch.nn.Sequential(
-              torch.nn.Conv2d(n_input, n_output, kernel_size=5, padding=2, stride=1, bias=False),
+      self.net = torch.nn.Sequential(
+              torch.nn.ConvTranspose2d(n_input, n_output, kernel_size= (5,5), stride=(1,1), padding=(2,2), dilation=1, output_padding=(0,0)),
               torch.nn.BatchNorm2d(n_output),
               torch.nn.ReLU(),
             )
             
-            self.downsample = torch.nn.Sequential(
+      self.downsample = torch.nn.Sequential(
               
               torch.nn.Conv2d(n_input, n_output, 1),
               torch.nn.BatchNorm2d(n_output),
               )
         
-        def forward(self, x):
+    def forward(self, x):
             
-            identity = self.downsample(x)
-
-            return self.net(x) + identity
-
-
-  def __init__(self, layers=[], n_input_channels=3, kernel_size=3):
-      
+        identity = self.downsample(x)
+        return self.net(x) + identity
+            
+  class BlockDown(torch.nn.Module):
+    def __init__(self, n_input, n_output, stride=1):
       super().__init__()
-        
-        
-      c = n_input_channels    #3 in our case
-
-     
-      self.layer1 = torch.nn.Sequential(
-      
-            torch.nn.Conv2d(3, 32, kernel_size=(5,5), stride=(1,1), padding=(2, 2), dilation=1, groups=1),
-            torch.nn.ReLU(),
-            self.Block(32,64),
-            torch.nn.BatchNorm2d(64),   
             
-                                     )    
+      self.net = torch.nn.Sequential(
+              torch.nn.Conv2d(n_input, n_output, kernel_size=5, padding=2, stride=1, bias=False),
+              torch.nn.BatchNorm2d(n_output),
+              torch.nn.ReLU(),
+            )
+            
+      self.downsample = torch.nn.Sequential(
+              
+              torch.nn.Conv2d(n_input, n_output, 1),
+              torch.nn.BatchNorm2d(n_output),
+              )
         
-      self.layer2 = torch.nn.Sequential( 
-        
+    def forward(self, x):
+            
+            #need identity from PRIOR level?
+            identity = self.downsample(x)  #original image size, different channels
+            return self.net(x) + identity  #Trying to add two different sizes, shit.
+       
+      
+      #input is  ([32, 3, 96, 128])
+      
+  def __init__(self, layers=[], n_input_channels=3, kernel_size=3):  #FCN Constructor
 
-        torch.nn.ConvTranspose2d(64, 32, kernel_size= (3,3), stride=(1,1), padding=(1,1), dilation=1, output_padding=(0,0)),
-        torch.nn.BatchNorm2d(32),
-        torch.nn.Conv2d(32, 5, kernel_size=1)
-    
-                      )
+      super().__init__()
 
+      self.layer1 = torch.nn.Conv2d(3, 32, kernel_size=(5,5), stride=(1,1), padding=(2, 2), dilation=1, groups=1)
+         
+      #Output is  ([32, 32, 96, 128])  <------IDENTITY!!!!!
+      self.encoder1 = self.BlockDown(32, 64) 
+      #x is now ([32, 64, 48, 64])
 
-  def forward(self, images_batch):
-   
+      self.encoder2 = self.BlockDown(64, 128)
+     #Output  is  ([32, 128, 24, 32]) 
+
+      self.encoder3 = self.BlockDown(128, 256)
+      #Output  is  ([32, 256, 12, 16])
+
+      self.encoder4 = self.BlockDown(256, 512)
+      #Output  is  ([32, 512, 6, 8])
+
+      self.to_classes = torch.nn.Conv2d(256, 5, kernel_size=1) 
      
-      out = self.layer1(images_batch)
-      out = self.layer2(out)
+      #Output  is  ([32, 5, 6, 8])
+
+
+
+      self.decoderA = self.BlockUP(5, 5) 
+      ## Output is ([32, 5, 12, 16])
+
+      self.decoderB = self.BlockUP(5, 5) 
+      ## Output is ([32, 5, 24, 32])
+
+      self.decoderC = self.BlockUP(5, 5)
+      ## Output is ([32, 5, 48, 64])
+
+      self.decoderD = self.BlockUP(5, 5)
+      ## Output is ([32, 5, 96, 128])
+
+
+      #input should be ([32, 128, 24, 32]) HERE.  OCT 16, 2021
+
+               
+
+  def forward(self, x):
+             
+      #Input x is [32, 3, 96, 128]
+      out = self.layer1(x) #out.shape is ([32, 32, 96, 128])  <------IDENTITY
+     
+      #out is now [32, 32, 96, 128]
+      out = self.encoder1(out)  
+      
+      #out is now ([32, 64, 48, 64]), 64 channels & downsampled
+      out = self.encoder2(out)  
+      #out  is  ([32, 128, 24, 32]), 128 channels & downsampled 
+      out = self.encoder3(out)  
+      #out  is ([32, 256, 12, 16]) 
+      #out = self.encoder4(out)  
+      #out  is  ([32, 512, 6, 8]), 
+
+
+      out = self.to_classes(out)
+      
+      #out  is  ([32, 5, 6, 8]), 
+
+      #out=self.decoderA(out)
+      ## Output is ([32, 5, 12, 16])
+
+      #out=self.decoderB(out)
+      ## Output is ([32, 5, 24, 32])
+
+      #out=self.decoderC(out)
+      ## Output is ([32, 5, 48, 64])
+      
+      #out=self.decoderD(out)  
+      ## Output is ([32, 5, 96, 128])
+
     
-                   
-      return out
+      return out 
 
 
 ###################END FCN###############################
