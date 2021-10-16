@@ -181,7 +181,7 @@ class FCN(torch.nn.Module):
       self.decoder2 = torch.nn.ConvTranspose2d(64, 32, kernel_size= (3,3), stride=(2,2), padding=(1,1), dilation=1, output_padding=(1,1))
       #Output is ([32, 32, 96, 128])  <--add identity to this.
                
-      self.final_conv = torch.nn.Conv2d(35, 5, kernel_size=1) #([32, 5, 96, 128])  #note: channels 35, not 32
+      self.final_conv = torch.nn.Conv2d(8, 5, kernel_size=1) #([32, 5, 96, 128])  #note: channels 8, not 32 or 35
 
 
   def forward(self, x):
@@ -237,12 +237,18 @@ class FCN(torch.nn.Module):
       out = self.bn5(out)
       out = self.Relu(out)
       ## Output is ([32, 5, 48, 64])
-      next_input = torch.cat((out, identity1), 1) #identity1 is [32, 64, 48, 64], 69 channels
+      skip_connection2 = torch.cat((out, identity1), 1) #identity1 is [32, 64, 48, 64], 69 channels total
 
-      out=self.decoderD(next_input)  #69 channels in!
+      out=self.decoderD(skip_connection2)  #69 channels in!
       out = self.bn5(out)
       out = self.Relu(out)
       ## Output is ([32, 5, 96, 128])
+
+      skip_connection3 = torch.cat((x, out), 1)  #[3 channels in x, plus 5 channels in out = 8 channels totals]  
+
+      out = self.final_conv(skip_connection3) #8 channels in
+
+
 
       return out 
 
