@@ -136,11 +136,13 @@ class FCN(torch.nn.Module):
       
             #Input  is  ([32, 32, 96, 128])
             
-            torch.nn.Conv2d(32, 64, kernel_size=2, padding=0, stride=2, bias=False),
+            torch.nn.Conv2d(32, 64, kernel_size=(2,2), padding=(0,0), stride=(2,2), bias=False),
             torch.nn.BatchNorm2d(64),
-            torch.nn.ReLU(),#image is now ([32, 64, 48, 64])
+            torch.nn.ReLU(),
+            
+            #x is now ([32, 64, 48, 64])
 
-            torch.nn.Conv2d(64, 128, kernel_size=2, padding=0, stride=2, bias=False),
+            torch.nn.Conv2d(64, 128, kernel_size=(1,1), padding=(0,0), stride=(2,2), bias=False),
             torch.nn.BatchNorm2d(128),
             torch.nn.ReLU(),   
             
