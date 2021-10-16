@@ -158,11 +158,12 @@ class FCN(torch.nn.Module):
       self.encoder4 = self.BlockDown(256, 512)
       #Output  is  ([32, 512, 6, 8])
 
-      self.to_classes = torch.nn.Conv2d(256, 5, kernel_size=1) 
+      self.to_classes = torch.nn.Conv2d(5, 5, kernel_size=1) 
      
       #Output  is  ([32, 5, 6, 8])
 
 
+      self.decoder = self.BlockUP(128, 5) 
 
       self.decoderA = self.BlockUP(5, 5) 
       ## Output is ([32, 5, 12, 16])
@@ -192,13 +193,14 @@ class FCN(torch.nn.Module):
       #out is now ([32, 64, 48, 64]), 64 channels & downsampled
       out = self.encoder2(out)  
       #out  is  ([32, 128, 24, 32]), 128 channels & downsampled 
-      out = self.encoder3(out)  
+      #out = self.encoder3(out)  
       #out  is ([32, 256, 12, 16]) 
       #out = self.encoder4(out)  
-      #out  is  ([32, 512, 6, 8]), 
+      #out  is  ([32, 512, 6, 8]),
 
+      out=self.decoder(out)  #128 to five channels
 
-      out = self.to_classes(out)
+      out = self.to_classes(out)  #5 to 5 channels kernel 1
       
       #out  is  ([32, 5, 6, 8]), 
 
