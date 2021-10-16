@@ -124,7 +124,7 @@ class FCN(torch.nn.Module):
             torch.nn.Conv2d(3, 32, kernel_size=(5,5), stride=(1,1), padding=(2, 2), dilation=1, groups=1),
             torch.nn.ReLU(),
             self.Block(32,64),
-            torch.nn.BatchNorm2d(64),   #image is now 64*64
+            torch.nn.BatchNorm2d(64),   
             
                                      )    
         
@@ -134,9 +134,10 @@ class FCN(torch.nn.Module):
         torch.nn.ConvTranspose2d(64, 32, kernel_size= (3,3), stride=(1,1), padding=(1,1), dilation=1, output_padding=(0,0)),
         torch.nn.BatchNorm2d(32),
         torch.nn.Conv2d(32, 5, kernel_size=1)
-
     
                       )
+
+
   def forward(self, images_batch):
    
      
