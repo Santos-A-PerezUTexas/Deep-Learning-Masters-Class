@@ -1,21 +1,13 @@
-<<<<<<< HEAD
 #HOMEWORK 3
 #HOMEWORK 3
 #https://bit.ly/3AaUm3l 
-
-
-from .models import CNNClassifier, save_model
-from .utils import ConfusionMatrix, load_data, LABEL_NAMES
-=======
-#HOMEWORK 3 _ CNN PORTION
-#HOMEWORK 3  _ CNN PORTION
 #10/8/2021 - ADDED CLASSIFICATION LOSS, DO i NEED THIS
 #10/8/2021 - Added Accuracy below and to utils.py (Need this?)
 #Apply augmentations like ColorJitter() and RandomHorizontalFlip() in train.py.
-
+from .models import CNNClassifier, save_model
+from .utils import ConfusionMatrix, load_data, LABEL_NAMES
 from .models import ClassificationLoss, CNNClassifier, save_model
 from .utils import ConfusionMatrix, load_data, LABEL_NAMES, accuracy
->>>>>>> be9ae1f16dd87ba1ac5244aca5aef51cdc735bda
 import torch
 import torchvision
 import torch.utils.tensorboard as tb
@@ -42,23 +34,7 @@ def train(args):
         train_logger = tb.SummaryWriter(path.join(args.log_dir, 'train'), flush_secs=1)
         valid_logger = tb.SummaryWriter(path.join(args.log_dir, 'valid'), flush_secs=1)
         
-    #rgb_mean = (0.4914, 0.4822, 0.4465)
-    #rgb_std = (0.2023, 0.1994, 0.2010)
-
-    #transform_train = T.transforms.Compose([
-     # T.transforms.RandomCrop(32, padding=4),
-     # T.transforms.RandomHorizontalFlip(),
-      #T.transforms.ToTensor(),
-      #T.transforms.Normalize(rgb_mean, rgb_std),
-    #])
-
-    """
-    Your code here, modify your HW1 / HW2 code
-    ADD LOGGING CODE
-    
-    """
-   
-
+  
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     model.to(device)
@@ -116,14 +92,6 @@ def train(args):
     
 
     save_model(model)
-
-
-
-
-
-
-
-
 
 
 

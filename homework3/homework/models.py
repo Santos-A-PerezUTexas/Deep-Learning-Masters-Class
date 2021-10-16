@@ -17,52 +17,15 @@
 import torch
 import torch.nn.functional as F
 
-"""
-1.   TUNE THE CNNClassifier 
 
-
-  -Input normalization - https://en.wikipedia.org/wiki/Batch_normalization?
-  -Residual blocks (see video on residual connections pytorch programming by professor)
-  -Dropout
-  -Data augmentations (Both geometric and color augmentations are important. Be aggressive here. Different levels of supertux have radically different lighting.)
-  -Weight regularization
-  -Early stopping
-
-"""
 class ClassificationLoss(torch.nn.Module):
     def forward(self, input, target):
         return F.cross_entropy(input, target)
         
 #########################CNN  BEGIN
 
-<<<<<<< HEAD
-Input Normatlization
-
-  http://www.philkr.net/dl_class/lectures/making_it_work/09.pdf
-
-Augmentation:
-
-  https://drive.google.com/file/d/1XOYF7qxlj3sDPk0dzV5w2jo4THvspQkk/view
-  https://discuss.pytorch.org/t/data-augmentation-in-pytorch/7925
-  https://www.youtube.com/watch?v=Zvd276j9sZ8
-
-
-
-Residual Connections:
-
-  https://drive.google.com/file/d/1in6SpWW0pRCE_aibvG2jCUvphlCt0wdp/view
-
-  http://www.philkr.net/dl_class/lectures/making_it_work/21.html  (CODE FOR BLOCKS)
-
-  http://www.philkr.net/dl_class/lectures/making_it_work/18.html
-  (this link also has batch normalization)
-
-  http://www.philkr.net/dl_class/lectures/making_it_work/17.pdf
-
-Identity Mapping for Residual Connections:
-=======
 class CNNClassifier(torch.nn.Module):
->>>>>>> be9ae1f16dd87ba1ac5244aca5aef51cdc735bda
+
 
   class Block(torch.nn.Module):
         def __init__(self, n_input, n_output, stride=1):
@@ -172,16 +135,6 @@ class FCN(torch.nn.Module):
             #image is now ([32, 32, 96, 128])  <------IDENTITY!!!!!
       )
 
-<<<<<<< HEAD
-        ***https://github.com/pochih/FCN-pytorch/blob/master/python/fcn.py
-        ***https://github.com/pochih/FCN-pytorch/blob/master/python/fcn.py
-        ***https://github.com/pochih/FCN-pytorch/blob/master/python/fcn.py
-        ***https://github.com/pochih/FCN-pytorch/blob/master/python/fcn.py
-        
-        https://github.com/pochih/FCN-pytorch/tree/master/python
-        https://github.com/wkentaro/pytorch-fcn/tree/master/torchfcn
-        https://medium.com/@iceberg12/semantic-segmentation-applied-on-car-road-4ee62622292f
-=======
       self.layer2 = torch.nn.Sequential(
       
             #CHANGE PADDING TO 5/2??????????????????????
@@ -198,7 +151,6 @@ class FCN(torch.nn.Module):
             #don’t want a reduction in resolution you can set your padding to (KS-1)/2 (same as //2 in python) and then stride by 1. 
                        
                                      )    
->>>>>>> be9ae1f16dd87ba1ac5244aca5aef51cdc735bda
         
       self.layer3 = torch.nn.Sequential( 
 
