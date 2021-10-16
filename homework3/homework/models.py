@@ -1,18 +1,22 @@
 
-  #HOMEWORK 3
-  #Oct 13, 2021
-  #no pooling
-  #Always pad by kernel_size / 2, use an odd kernel_size
-  #Oct 13:  DO I HAVE TO use transforms on the labels?
-  #Oct 13 - does randcrop 64 do anything?
-  #OCT 13 NIGHT:  TOOK OUT BLOCK OF FCN
-  #Oct 13 Night:  Added target = target.type(torch.LongTensor) to Loss
-  #REMEMBER TO SET PADDING TO DIVIDED BY 2!!!!!!!!!!!!!!!!
-  #Apply augmentations like ColorJitter() and RandomHorizontalFlip() in train.py.
-  #Apply augmentations like ColorJitter() and RandomHorizontalFlip() in train.py.
-  #Apply augmentations like ColorJitter() and RandomHorizontalFlip() in train.py.
-  #Apply augmentations like ColorJitter() and RandomHorizontalFlip() in train.py.
-  
+#HOMEWORK 3
+#Oct 13, 2021
+#no pooling
+#Always pad by kernel_size / 2, use an odd kernel_size
+#Oct 13:  DO I HAVE TO use transforms on the labels?
+#Oct 13 - does randcrop 64 do anything?
+#OCT 13 NIGHT:  TOOK OUT BLOCK OF FCN
+#Oct 13 Night:  Added target = target.type(torch.LongTensor) to Loss
+#REMEMBER TO SET PADDING TO DIVIDED BY 2!!!!!!!!!!!!!!!!
+#Apply augmentations like ColorJitter() and RandomHorizontalFlip() in train.py.
+#Apply augmentations like ColorJitter() and RandomHorizontalFlip() in train.py.
+#Apply augmentations like ColorJitter() and RandomHorizontalFlip() in train.py.
+#Apply augmentations like ColorJitter() and RandomHorizontalFlip() in train.py.
+ 
+#don’t want a reduction in resolution you can set your
+#padding to (KS-1)/2 (same as //2 in python) and then stride by 1. 
+#CHANGE PADDING TO 5/2??????????????????????
+                         
 
 import torch
 import torch.nn.functional as F
@@ -53,11 +57,9 @@ class CNNClassifier(torch.nn.Module):
   def __init__(self, layers=[], n_input_channels=3, kernel_size=3):
       
       super().__init__()
-        
-        
+                
       c = n_input_channels    #3 in our case
 
-     
       self.layer1 = torch.nn.Sequential(
       
             torch.nn.Conv2d(c, 32, kernel_size=5, stride=1, padding=2),
@@ -66,27 +68,22 @@ class CNNClassifier(torch.nn.Module):
             torch.nn.BatchNorm2d(32),
             torch.nn.MaxPool2d(kernel_size=2, stride=2)
                                       )    
-            
+
       self.layer2 = torch.nn.Sequential(
             torch.nn.Conv2d(32, 64, kernel_size=5, stride=1, padding=2),  
             torch.nn.ReLU(),
             torch.nn.MaxPool2d(kernel_size=2, stride=2, padding=0))                  
         
-              
       self.fc1 = torch.nn.Linear(32 * 32 * 32, 6)   
-      
       self.drop_out = torch.nn.Dropout()
-          
-    
+             
   def forward(self, images_batch):
-   
      
       out = self.layer1(images_batch)
       out = out.reshape(out.size(0), -1)
       out = self.drop_out(out)
       out = self.fc1(out)
-      
-                   
+                
       return out
 
 ######################################### END CNN
@@ -109,19 +106,19 @@ class FCN(torch.nn.Module):
                                                       torch.nn.BatchNorm2d(n_output))
         
         def forward(self, x):
+          
             identity = x  ##([32, 64, 48, 64])
             output = self.net(x)   #OUTPUT is #([32, 32, 96, 128])
-            #print (f'The size of output is {output.shape}, the size of identity is {identity.shape}')
+            
             if self.downsample is not None:
                 identity = self.downsample(x)
             return output #+ identity
             #return(torch.cat(output, identity))
-            #RETURN TORCH.CAT???
+            
 
   def __init__(self, layers=[], n_input_channels=3, kernel_size=3):
       
       super().__init__()
-        
         
       c = n_input_channels    #3 in our case
       
@@ -132,58 +129,50 @@ class FCN(torch.nn.Module):
             torch.nn.Conv2d(3, 32, kernel_size=(5,5), stride=(1,1), padding=(2, 2), dilation=1, groups=1),
             torch.nn.ReLU(), 
             
-            #image is now ([32, 32, 96, 128])  <------IDENTITY!!!!!
+            #Output is  ([32, 32, 96, 128])  <------IDENTITY!!!!!
       )
 
-      self.layer2 = torch.nn.Sequential(
+      self.encoder = torch.nn.Sequential(
       
-            #CHANGE PADDING TO 5/2??????????????????????
-            #image is now ([32, 32, 96, 128])
+            #Input  is  ([32, 32, 96, 128])
             
-           
             torch.nn.Conv2d(32, 64, kernel_size=2, padding=0, stride=2, bias=False),
             torch.nn.BatchNorm2d(64),
             torch.nn.ReLU(),#image is now ([32, 64, 48, 64])
 
             torch.nn.Conv2d(64, 128, kernel_size=2, padding=0, stride=2, bias=False),
             torch.nn.BatchNorm2d(128),
-            torch.nn.ReLU(),   #image is now ([32, 128, 24, 32]), original was ([32, 3, 96, 128])
-            #don’t want a reduction in resolution you can set your padding to (KS-1)/2 (same as //2 in python) and then stride by 1. 
+            torch.nn.ReLU(),   
+            
+            #Output  is  ([32, 128, 24, 32]) 
                        
                                      )    
-        
-      self.layer3 = torch.nn.Sequential( 
 
-        #image is now ([32, 128, 24, 32])
+
+      self.decoder = torch.nn.Sequential( 
+
+        #Input is ([32, 128, 24, 32])
         torch.nn.ConvTranspose2d(128, 64, kernel_size= (3,3), stride=(2,2), padding=(1,1), dilation=1, output_padding=(1,1)),
         torch.nn.BatchNorm2d(64),
         torch.nn.ReLU(),  ##([32, 64, 48, 64])
-        self.Block(64,32),    #([32, 32, 96, 128])  <--add identity to this.
+        self.Block(64,32),    
+        
+        #Output is ([32, 32, 96, 128])  <--add identity to this.
                 
                       )
       
       self.final_conv = torch.nn.Conv2d(32, 5, kernel_size=1) #([32, 5, 96, 128])
 
-  def forward(self, images_batch):
-      
-      
-      #print(f'In FCN, the size of input x is {images_batch.shape}') #([32, 3, 96, 128])
+  def forward(self, x):
+             
+      #Input x is [32, 3, 96, 128]
+      out = self.layer1(x) #out.shape is ([32, 32, 96, 128])  <------IDENTITY
+      identity = out  #identity shape is ([32, 32, 96, 128])
+      out = self.encoder(out)  #out.shape after encoder is ([32, 128, 24, 32])
+      out = self.decoder(out)  #out.shape after decoder is ([32, 32, 96, 128])
+      out = self.final_conv(out+identity)  #ADD IDENTITY HERE.
 
-      out = self.layer1(images_batch)
-      #image is now ([32, 32, 96, 128])  <------IDENTITY!!!!!
-
-      identity = out  #([32, 32, 96, 128])
-
-
-      out = self.layer2(out)
-
-      #print(f'After layer 1, encoder, the images of x is {out.shape}') #([32, 128, 24, 32])
-      
-      out = self.layer3(out)
-
-      out = self.final_conv(out+identity)  #ADD IDENTITY HERE!
-
-      #print(f'After layer 2,decoder, the images of x is {out.shape}')#([32, 5, 96, 128])
+      #Output is ([32, 5, 96, 128])
              
       return out 
 
