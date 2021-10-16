@@ -91,166 +91,61 @@ class CNNClassifier(torch.nn.Module):
 #########################################BEGIN FCN
 
 class FCN(torch.nn.Module): 
- 
-            
-  #return(torch.cat(output, identity))
-            
+  class Block(torch.nn.Module):
+        def __init__(self, n_input, n_output, stride=1):
+            super().__init__()
+            self.net = torch.nn.Sequential(
+              torch.nn.Conv2d(n_input, n_output, kernel_size=5, padding=2, stride=1, bias=False),
+              torch.nn.BatchNorm2d(n_output),
+              torch.nn.ReLU(),
+            )
+            self.downsample = None
+            if stride != 1 or n_input != n_output:
+                self.downsample = torch.nn.Sequential(torch.nn.Conv2d(n_input, n_output, 1),
+                                                      torch.nn.BatchNorm2d(n_output))
+        
+        def forward(self, x):
+            identity = x
+            if self.downsample is not None:
+                identity = self.downsample(x)
+            return self.net(x) + identity
+
 
   def __init__(self, layers=[], n_input_channels=3, kernel_size=3):
       
       super().__init__()
         
+        
       c = n_input_channels    #3 in our case
-      
-      k=2
-      p=0
-      s=2
 
-      #input is  ([32, 3, 96, 128])
-      self.layer1 =torch.nn.Conv2d(3, 32, kernel_size=(5,5), stride=(1,1), padding=(2, 2), dilation=1, groups=1)
-      self.bn32 = torch.nn.BatchNorm2d(32)
-      self.Relu = torch.nn.ReLU() 
-      #Output is  ([32, 32, 96, 128])  <------IDENTITY!!!!!
-      self.encoder1 = torch.nn.Conv2d(32, 64, kernel_size=(k,k), padding=(p,p), stride=(s,s), bias=False)
-      self.bn64 = torch.nn.BatchNorm2d(64)
-      #Relu      
-      #x is now ([32, 64, 48, 64])
-
-      self.encoder2 = torch.nn.Conv2d(64, 128, kernel_size=(2,2), padding=(0,0), stride=(2,2), bias=False)
-      self.bn128 = torch.nn.BatchNorm2d(128)
-      #Relu         
-      #Problem is above (2,2) kernel  <-------------------*
-      #Crash "Calculated padded input size per channel: (1 x 8). 
-      #Kernel size: (2 x 2). Kernel size can't be greater than actual input size" ]
-      #Output  is  ([32, 128, 24, 32]) 
-
-      self.encoder3 = torch.nn.Conv2d(128, 256, kernel_size=(2,2), padding=(0,0), stride=(2,2), bias=False)
-      self.bn256 = torch.nn.BatchNorm2d(256)
-      #Relu         
-      #Problem is above (2,2) kernel  <-------------------*
-      #Crash "Calculated padded input size per channel: (1 x 8). 
-      #Kernel size: (2 x 2). Kernel size can't be greater than actual input size" ]
-      #Output  is  ([32, 256, 12, 16])
-
-      self.encoder4 = torch.nn.Conv2d(256, 512, kernel_size=(2,2), padding=(0,0), stride=(2,2), bias=False)
-      self.bn512 = torch.nn.BatchNorm2d(512)
-      #Relu         
-      #Problem is above (2,2) kernel  <-------------------*
-      #Crash "Calculated padded input size per channel: (1 x 8). 
-      #Kernel size: (2 x 2). Kernel size can't be greater than actual input size" ]
-      #Output  is  ([32, 512, 6, 8])
-
-      self.encoder5 = torch.nn.Conv2d(512, 5, kernel_size=(1,1), padding=(0,0), stride=(1,1), bias=False)
-      self.bn5 = torch.nn.BatchNorm2d(5)
-      #Relu         
-      #Problem is above (2,2) kernel  <-------------------*
-      #Crash "Calculated padded input size per channel: (1 x 8). 
-      #Kernel size: (2 x 2). Kernel size can't be greater than actual input size" ]
-      #Output  is  ([32, 5, 6, 8])
-
-
-      self.decoderA = torch.nn.ConvTranspose2d(5, 5, kernel_size= (3,3), stride=(2,2), padding=(1,1), dilation=1, output_padding=(1,1))
-      #batchnorm5
-      #Relu
-      ## Output is ([32, 5, 12, 16])
-
-      self.decoderB = torch.nn.ConvTranspose2d(5, 5, kernel_size= (3,3), stride=(2,2), padding=(1,1), dilation=1, output_padding=(1,1))
-      #batchnorm5
-      #Relu
-      ## Output is ([32, 5, 24, 32])
-
-      self.decoderC = torch.nn.ConvTranspose2d(5, 5, kernel_size= (3,3), stride=(2,2), padding=(1,1), dilation=1, output_padding=(1,1))
-      #batchnorm5
-      #Relu
-      ## Output is ([32, 5, 48, 64])
-
-      self.decoderD = torch.nn.ConvTranspose2d(69, 5, kernel_size= (3,3), stride=(2,2), padding=(1,1), dilation=1, output_padding=(1,1))
-      #batchnorm5
-      #Relu
-      ## Output is ([32, 5, 96, 128])
-
-
-
-      #input should be ([32, 128, 24, 32]) HERE.  OCT 16, 2021
-
-      self.decoder1 = torch.nn.ConvTranspose2d(128, 64, kernel_size= (3,3), stride=(2,2), padding=(1,1), dilation=1, output_padding=(1,1))
-      #batchnorm64
-      #Relu
-      ## Output is ([32, 64, 48, 64])
-      
-      self.decoder2 = torch.nn.ConvTranspose2d(64, 32, kernel_size= (3,3), stride=(2,2), padding=(1,1), dilation=1, output_padding=(1,1))
-      #Output is ([32, 32, 96, 128])  <--add identity to this.
-               
-      self.final_conv = torch.nn.Conv2d(8, 5, kernel_size=1) #([32, 5, 96, 128])  #note: channels 8, not 32 or 35
-
-
-  def forward(self, x):
-             
-      #Input x is [32, 3, 96, 128]
-      out = self.layer1(x) #out.shape is ([32, 32, 96, 128])  <------IDENTITY
-      identity1 = out  #identity shape is 
-      out = self.bn32(out)
-      out = self.Relu(out)
      
-      #out is now [32, 32, 96, 128]
-      out = self.encoder1(out)  
-      identity2 = out
-      out = self.bn64(out)
-      out = self.Relu(out)  
-      #out is now ([32, 64, 48, 64]), 64 channels & downsampled
-      identity1 = out
+      self.layer1 = torch.nn.Sequential(
+      
+            torch.nn.Conv2d(3, 32, kernel_size=(5,5), stride=(1,1), padding=(2, 2), dilation=1, groups=1),
+            torch.nn.ReLU(),
+            self.Block(32,64),
+            torch.nn.BatchNorm2d(64),   #image is now 64*64
+            
+                                     )    
+        
+      self.layer2 = torch.nn.Sequential( 
+        
 
-      out = self.encoder2(out)  
-      out = self.bn128(out)  
-      out = self.Relu(out)
-      #out  is  ([32, 128, 24, 32]), 128 channels & downsampled 
+        torch.nn.ConvTranspose2d(64, 32, kernel_size= (3,3), stride=(1,1), padding=(1,1), dilation=1, output_padding=(0,0)),
+        torch.nn.BatchNorm2d(32),
+        torch.nn.Conv2d(32, 5, kernel_size=1)
 
+    
+                      )
+  def forward(self, images_batch):
+   
+     
+      out = self.layer1(images_batch)
+      out = self.layer2(out)
+    
+                   
+      return out
 
-      out = self.encoder3(out)  
-      out = self.bn256(out)  
-      out = self.Relu(out)
-      #out  is ([32, 256, 12, 16]) 
-
-
-      out = self.encoder4(out)  
-      out = self.bn512(out)  
-      out = self.Relu(out)
-      #out  is  ([32, 512, 6, 8]), 
-
-
-      out = self.encoder5(out)  
-      out = self.bn5(out)  
-      out = self.Relu(out)
-      #out  is  ([32, 5, 6, 8]), 
-
-      out=self.decoderA(out)
-      out = self.bn5(out)
-      out = self.Relu(out)
-      ## Output is ([32, 5, 12, 16])
-
-      out=self.decoderB(out)
-      out = self.bn5(out)
-      out = self.Relu(out)
-      ## Output is ([32, 5, 24, 32])
-
-      out=self.decoderC(out)
-      out = self.bn5(out)
-      out = self.Relu(out)
-      ## Output is ([32, 5, 48, 64])
-      skip_connection2 = torch.cat((out, identity1), 1) #identity1 is [32, 64, 48, 64], 69 channels total
-
-      out=self.decoderD(skip_connection2)  #69 channels in!
-      out = self.bn5(out)
-      out = self.Relu(out)
-      ## Output is ([32, 5, 96, 128])
-
-      skip_connection3 = torch.cat((x, out), 1)  #[3 channels in x, plus 5 channels in out = 8 channels totals]  
-
-      out = self.final_conv(skip_connection3) #8 channels in
-
-
-
-      return out 
 
 ###################END FCN###############################
 
