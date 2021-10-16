@@ -94,20 +94,23 @@ class FCN(torch.nn.Module):
   class Block(torch.nn.Module):
         def __init__(self, n_input, n_output, stride=1):
             super().__init__()
+            
             self.net = torch.nn.Sequential(
               torch.nn.Conv2d(n_input, n_output, kernel_size=5, padding=2, stride=1, bias=False),
               torch.nn.BatchNorm2d(n_output),
               torch.nn.ReLU(),
             )
-            self.downsample = None
-            if stride != 1 or n_input != n_output:
-                self.downsample = torch.nn.Sequential(torch.nn.Conv2d(n_input, n_output, 1),
-                                                      torch.nn.BatchNorm2d(n_output))
+            
+            self.downsample = torch.nn.Sequential(
+              
+              torch.nn.Conv2d(n_input, n_output, 1),
+              torch.nn.BatchNorm2d(n_output),
+              )
         
         def forward(self, x):
-            identity = x
-            if self.downsample is not None:
-                identity = self.downsample(x)
+            
+            identity = self.downsample(x)
+
             return self.net(x) + identity
 
 
