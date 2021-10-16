@@ -142,10 +142,14 @@ class FCN(torch.nn.Module):
             
             #x is now ([32, 64, 48, 64])
 
-            torch.nn.Conv2d(64, 128, kernel_size=(1,1), padding=(0,0), stride=(2,2), bias=False),
+            torch.nn.Conv2d(64, 128, kernel_size=(2,2), padding=(0,0), stride=(2,2), bias=False),
             torch.nn.BatchNorm2d(128),
             torch.nn.ReLU(),   
-            
+
+            #Problem is above (2,2) kernel  <-------------------*
+            #Crash "Calculated padded input size per channel: (1 x 8). 
+            #Kernel size: (2 x 2). Kernel size can't be greater than actual input size" ]
+
             #Output  is  ([32, 128, 24, 32]) 
                        
                                      )    
