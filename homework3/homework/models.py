@@ -131,22 +131,24 @@ class FCN(torch.nn.Module):
       #Output is ([32, 32, 96, 128])  <--add identity to this.
                 
       
-      self.final_conv = torch.nn.Conv2d(32, 5, kernel_size=1) #([32, 5, 96, 128])
+      self.final_conv = torch.nn.Conv2d(35, 5, kernel_size=1) #([32, 5, 96, 128])  #note: channels 35, not 32
 
 
   def forward(self, x):
              
       #Input x is [32, 3, 96, 128]
       out = self.layer1(x) #out.shape is ([32, 32, 96, 128])  <------IDENTITY
+      identity1 = out  #identity shape is ([32, 32, 96, 128])
       out = self.bn32(out)
       out = self.Relu(out)
-      identity1 = out  #identity shape is ([32, 32, 96, 128])
+     
 
       out = self.encoder1(out)  
+      identity2 = out
       out = self.bn64(out)
       out = self.Relu(out)  
       #x is now ([32, 64, 48, 64])
-      identity2 = out
+      
 
       out = self.encoder2(out)  
       out = self.bn128(out)  
@@ -158,13 +160,16 @@ class FCN(torch.nn.Module):
       out = self.Relu(out)
       ## x is ([32, 64, 48, 64]) 
 
-      out = self.decoder2(out+identity2)  
+      out = self.decoder2(out+identity2)    # +identity2
       out = self.bn32(out)
       out = self.Relu(out)
       #x is ([32, 32, 96, 128])
-           
-      out = self.final_conv(out+identity1)  #ADD IDENTITY HERE.
 
+      identity = torch.cat((x, out), 1)
+
+      out = self.final_conv(identity)  #ADD IDENTITY1 HERE. out+identity1
+      
+      
       #Output is ([32, 5, 96, 128])
              
       return out 
