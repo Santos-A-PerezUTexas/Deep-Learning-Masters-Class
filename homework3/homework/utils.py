@@ -56,8 +56,10 @@ class DenseSuperTuxDataset(Dataset):
         self.files = []
         
         self.my_dense_transforms = transforms.Compose([
-        dense_transforms.ColorJitter(brightness=.5, hue=.3),
-        dense_transforms.RandomHorizontalFlip(flip_prob=0.5),
+
+        transforms.ColorJitter(brightness=.5, hue=.3),
+        #dense_transforms.ColorJitter(brightness=.5, hue=.3),
+        #dense_transforms.RandomHorizontalFlip(flip_prob=0.5),
                         ])
 
         for im_f in glob(path.join(dataset_path, '*_im.jpg')):
@@ -71,7 +73,7 @@ class DenseSuperTuxDataset(Dataset):
         b = self.files[idx]
         im = Image.open(b + '_im.jpg')
         lbl = Image.open(b + '_seg.png')
-        im, lbl  = self.my_dense_transforms(im, lbl)
+        im = self.my_dense_transforms(im)
         if self.transform is not None:
             im, lbl = self.transform(im, lbl)
         
