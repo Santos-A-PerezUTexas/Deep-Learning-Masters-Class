@@ -16,16 +16,7 @@ class SuperTuxDataset(Dataset):
     def __init__(self, dataset_path, transform=None):
      
       self.transform = transform
-      #rgb_mean = (0.4914, 0.4822, 0.4465)
-      #rgb_std = (0.2023, 0.1994, 0.2010)
-
-      #transform_train = transforms.Compose([
-      #NO DON't USE transforms.RandomCrop(32, padding=4),
-      #transforms.RandomHorizontalFlip(),
-      #transforms.ToTensor(),
-      #transforms.Normalize(rgb_mean, rgb_std),
-      #])
-
+    
       import csv
       from os import path
       self.data = []
@@ -64,10 +55,10 @@ class DenseSuperTuxDataset(Dataset):
         from os import path
         self.files = []
         
-        self.transform_color = transforms.Compose([
-        transforms.ColorJitter(brightness=.5, hue=.3),
-        
-                ])
+        self.my_dense_transforms = transforms.Compose([
+        dense_transforms.ColorJitter(brightness=.5, hue=.3),
+        dense_transforms.RandomHorizontalFlip(flip_prob=0.5),
+                        ])
 
         for im_f in glob(path.join(dataset_path, '*_im.jpg')):
             self.files.append(im_f.replace('_im.jpg', ''))
@@ -80,9 +71,10 @@ class DenseSuperTuxDataset(Dataset):
         b = self.files[idx]
         im = Image.open(b + '_im.jpg')
         lbl = Image.open(b + '_seg.png')
-        im = self.transform_color(im)
+        im, lbl  = self.my_dense_transforms(im, lbl)
         if self.transform is not None:
             im, lbl = self.transform(im, lbl)
+        
         return im, lbl
 
 
