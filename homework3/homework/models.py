@@ -165,7 +165,7 @@ class FCN(torch.nn.Module):
       out = self.Relu(out)
       #x is ([32, 32, 96, 128])
 
-      identity = torch.cat((x, out), 1)
+      identity = torch.cat((x, out+identity1), 1)
 
       out = self.final_conv(identity)  #ADD IDENTITY1 HERE. out+identity1
       
