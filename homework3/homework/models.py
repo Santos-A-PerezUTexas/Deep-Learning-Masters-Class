@@ -147,7 +147,7 @@ class FCN(torch.nn.Module):
       out = self.Relu(out)  
       #x is now ([32, 64, 48, 64])
       identity2 = out
-      
+
       out = self.encoder2(out)  
       out = self.bn128(out)  
       out = self.Relu(out)
@@ -158,7 +158,7 @@ class FCN(torch.nn.Module):
       out = self.Relu(out)
       ## x is ([32, 64, 48, 64]) 
 
-      out = self.decoder2(out)  
+      out = self.decoder2(out+identity2)  
       out = self.bn32(out)
       out = self.Relu(out)
       #x is ([32, 32, 96, 128])
