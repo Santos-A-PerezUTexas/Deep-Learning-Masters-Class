@@ -1,6 +1,19 @@
 import torch
 import torch.nn.functional as F
 
+#Oct 22 2021
+
+#torch.nn.functional.max_pool2d(*args, **kwargs)
+#Applies a 2D max pooling over an input signal composed of several input planes.
+#When using the 2D Global Max Pooling block, all of the input channels are combined 
+#into one large pool (i.e., the Horizontal pooling factor x the Vertical pooling factor), 
+#and a single maximum value is computed for each channel.
+#https://www.quora.com/What-is-Max-Pooling-2D
+
+#torch.topk(input, k, dim=None, largest=True, sorted=True, *, out=None)
+#Returns the k largest elements of the given input tensor along a given dimension.
+
+
 
 def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
     """
