@@ -1,3 +1,31 @@
+SLIDES: https://piazza.com/class/ksjhagmd59d6sg?cid=191
+SLIDES: https://piazza.com/class/ksjhagmd59d6sg?cid=191
+SLIDES: https://piazza.com/class/ksjhagmd59d6sg?cid=191
+
+HW4 SLIDES:  https://docs.google.com/presentation/d/e/2PACX-1vR6bYbuIJeA1og36QOdEMANAXbdbCpjaPVWkZNthAqIJ-iKOPKtYcLnb7n_rlNGvbiukP7W3JLaM1HQ/pub?start=false&loop=false&delayms=3000&slide=id.p1
+        
+    
+
+
+
+Model
+How much should our model differ from our answer in HW3? I was able to get full marks on HW3 with the model I've implemented
+but now it performs poorly with AP  less than 0.2. I have also implemented Focal loss and have attempted to train with Focal loss and BCEWithLogitsLoss and the
+result is the same. Is there any major architecture changes that need to be done in our FCN model?
+
+---->Make sure that your detect function is working correctly. If you look to grader/tests.py, you will see that the tests for the detect function only checks if 
+---->the output is in the correct format, not that it actually returns valid detections. See below from line 177.
+
+            assert len(d) == 3, 'Return three lists of detections'
+            assert len(d[0]) <= 30 and len(d[1]) <= 30 and len(d[2]) <= 30, 'Returned more than 30 detections per class'
+            assert all(len(i) == 5 for c in d for i in c), 'Each detection should be a tuple (score, cx, cy, w/2, h/2)'
+
+------->Your detect function is used by the grader when it evaluates your actual model at line 197. So, if your detect function is working properly, 
+-------->you will also see poor performance when the grader evaluates your model.
+
+-------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------
+ 
 ---->Q1:
 
 dense_transform.py, Toheatmap class: this line does not work as it says image is PIL so does not have shape:
@@ -79,5 +107,20 @@ How would we go about doing the backwards  pass during training when the losse
   
 -------------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------------
+
+Detection Test
+Is there a way we can change the detection test in the test.py to in such a way that it will always get full points unless we have our
+detect or peak extraction wrong? Finding it impossible to debug what is wrong and thought passing the correct label to the test would help in such a case.
+
+----->I’m not sure if there’s an easy way to do this, but I’m also not sure I understand why you want to. The extract_peak function is already graded separately.
+----->For the detect function you could consider creating your own test case (creating an image with red/green/blue dots and using that insted of your model output)
+----->and seeing if the function returns the expected output.
+
+  
+-------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+
 
   
