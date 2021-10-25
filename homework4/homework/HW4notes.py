@@ -178,16 +178,40 @@ number of keypoint types.
 7. At inference time, we first extract the peaks in the heatmap for EACH category independently. 
                                                                                                                                       
                                                                                                                                       
+USEFUL POSTS:
+1. https://piazza.com/class/ksjhagmd59d6sg?cid=655   "Detection - About the assignment specs"   
+   "So is the raw output of our segmentation FCN called the predicted heatmap? In HW3 we took this output"
+   "and just did a softmax and cross entropy loss on it to find which pixel belonged to which class." 
+    "So are we taking this same output but this time, finding the peaks?"
+                                                                                                                                                          
 
-5. 
+2. https://piazza.com/class/ksjhagmd59d6sg?cid=634
+"
 
-                                                                                                                                       
+peak extract
 
-                                                                                                                                      
-                                                                                                                                     
-                                                                                                                                      
+The Heatmap has 3 channels. MaxPool2d operates channel wise and will return 3 channels..  once we compare the maxpool with the heatmap,
+should  we use a heuristic to combine the channels (eg summation), do we need a separate convolutional layer to deep learn the right way to 
+combine channel information, just pass three separate channels, or something else? 
 
-                                                                                                                                      
+I am not sure why you say the heatmap has only two dimensions.   Using batchsize of 100, this is what comes out of the dataloader.
+
+100,3,96,128
+100,3,96,128
+100,3,96,128
+
+Can you please resolve my question, how to apply peak-extract to a multi-channel heatmap.???
+---------->If you're just working on the extract_peak function, we should be passing one channel at a time to the extract_peak function.
+---------->So the "heatmap" input to extract_peak function is just HxW
+---------->As described in the starter code, extract_peak() is a function that works for one channel of heatmap (H x W).
+---------->In detect(), you will need to let an image (3 x H x W) pass the called forward() and get a 3-channel heatmap (3 x H x W).
+---------->Then in detect() you will apply the extract_peak to the 3-channel heatmap three times (by a for loop or list them), then return 3 list of detections.
+
+Q. is each channel of the heatmap a color (RGB) or does it a correspond to a class of objects?
+------------>each channel corresponds to a class.
+
+
+"                                                                                                                                      
 
                                                                                                                                       
 HOW TO CODE THIS:
@@ -239,7 +263,7 @@ class Detector(torch.nn.Module):
         super().__init__()
         raise NotImplementedError('Detector.__init__')
 
----------------    DETECTOR CLASS, FORWARD METHOD  -----------------------------------
+---------------    DETECTOR CLASS, FORWARD() METHOD  -----------------------------------
 
     def forward(self, x):  #DO THIS FIRST!!!!!!!!!!!!
         """
@@ -250,9 +274,9 @@ class Detector(torch.nn.Module):
         raise NotImplementedError('Detector.forward')
 
                                                                                                                                       
- ---------------    DETECTOR CLASS, DETECT METHOD  -----------------------------------
+ ---------------    DETECTOR CLASS, DETECT() METHOD  -----------------------------------
                                                                                                                                       
-    def detect(self, image):   #------------->Use extract_peak here
+    def detect(self, image):   #------------->Use extract_peak here, ONE SINGLE IMAGE
                                                                                                                                       
         """
            Your code here.
@@ -268,7 +292,10 @@ class Detector(torch.nn.Module):
                 
            def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
                 returns List of peaks [(score, cx, cy), ...], 
-                 
+            
+---------->As described in the starter code, extract_peak() is a function that works for one channel of heatmap (H x W).
+---------->In detect(), you will need to let an image (3 x H x W) pass the called forward() and get a 3-channel heatmap (3 x H x W).
+---------->Then in detect() you will apply the extract_peak to the 3-channel heatmap three times (by a for loop or list them), then return 3 list of detections.     
         """
         raise NotImplementedError('Detector.detect')
 
