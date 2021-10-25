@@ -138,6 +138,51 @@ DEFINING HEATMAPS
 11.The value of the heatmap at the local maxima (peak score) is a good confidence measure. Use the extract_peak function to find detected objects.
 12.ANNOTATIONS:  Unlike HW3, the annotations for this homework are not yet in a format that can be batched by pytorch. 
 13.ANNOTATIONS:  dense_transforms.py also contains several other annotations that you might find useful.
+
+OTHER DEFINITIONS OF HEATMAP:
+
+https://arxiv.org/pdf/2101.03541.pdf
+
+1.     The task now was to use the location information of the previously described .txt file to create so-called heatmaps which represent the ideal output
+we want from our neural network for each picture.
+
+2.   By taking the coordinates of the .txt files and putting a Gaussian
+distribution around them, we could create the desired heatmaps.
+
+3.   The purpose of these heatmaps is to help us tell the CNN how good or bad it is currently doing at
+telling us the location of the ball on the labyrinth, by providing the perfect solution.
+
+4. The heatmaps we are using to represent our labels and network output are, again, just a 2D-matrix of numbers,
+in which every number stands for the activation of a pixel
+
+5.  The whole heatmap can be looked at as a sort of ”probability distribution” on
+where the CNN thinks the ball is.
+
+
+PER THE PROFESSOR IN OBJECT TRACKING:
+
+1. We simply feed the input image to a fully convolutional network [37, 40] that generates
+a heatmap. Peaks in this heatmap correspond to object centers.
+
+2.  We simply extract local peaks in the keypoint heatmap
+
+3.  Our aim is to produce a keypoint heatmap Yˆ ∈ [0, 1] W/R × H/R  × C, where R is the output stride and C is the
+number of keypoint types.
+
+4.  Keypoint types include C = 17 human joints in human pose estimation, or ****** C = 80 object categories in object detection.
+
+5. We train the keypoint prediction.... For each ground truth keypoint p ∈ R2 of class c, we compute a low-resolution equivalent p˜ = p/R (lower bound?).  
+
+6.. We then splat all ground truth keypoints onto a HEATMAP. 
+
+7. At inference time, we first extract the peaks in the heatmap for EACH category independently. 
+                                                                                                                                      
+                                                                                                                                      
+
+5. 
+
+                                                                                                                                       
+
                                                                                                                                       
                                                                                                                                      
                                                                                                                                       
