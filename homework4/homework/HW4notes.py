@@ -1,6 +1,7 @@
 SLIDES: https://piazza.com/class/ksjhagmd59d6sg?cid=191
 SLIDES: https://piazza.com/class/ksjhagmd59d6sg?cid=191
 SLIDES: https://piazza.com/class/ksjhagmd59d6sg?cid=191
+kel76y  ---> Defining Heatmaps
 
 HW4 SLIDES:  https://docs.google.com/presentation/d/e/2PACX-1vR6bYbuIJeA1og36QOdEMANAXbdbCpjaPVWkZNthAqIJ-iKOPKtYcLnb7n_rlNGvbiukP7W3JLaM1HQ/pub?start=false&loop=false&delayms=3000&slide=id.p1
         
@@ -118,9 +119,101 @@ detect or peak extraction wrong? Finding it impossible to debug what is wrong
 
   
 -------------------------------------------------------------------------------------------------------------------------------
+                                                HEATPMAPS
 -------------------------------------------------------------------------------------------------------------------------------
+kel76y
+DEFINING HEATMAPS
 
+1. Predict a dense HEATMAP of object centers, 
+2. Each “PEAK” (local maxima) in this HEATMAP corresponds to a detected object.
+3. The input to extract_peak is a 2d HEATMAP, the output is a list of PEAKS with SCORE, x and y location of the center of the PEAK.  (But per #5, HEATMAP is NOT a tensor?)
+4. The SCORE is the value of the HEATMAP at the peak, and is used to rank detections later. A peak with a high score is a more important detection.
+5. Hint: Max pooling expects an order-4 tensor as an input, use heatmap[None,None] to convert the input HEATMAP to an order-4 tensor.
+6. You model should take an image as an input and predict a HEATMAP for *****each object.***
+7. Each heatmap is an independent 0-1 output map
+                                                                                                                                      
+HOW TO CODE THIS:
+                                                                                                                                      
+1.    Implement __init__ and forward
+2.    detect and detect_with_size later.
 
+                                                                                                                                     
+                                                                                                                                      
+                                                                                                                                     
+                                                                                                                                      
+            
+                                                                                                                                      
+                                          THE CODE  (MODELS.Py) ---- NOTE:  NO CNN????
+                                                                                                                                      
+def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
+    
+       """
+       THIS IS USED IN CLASS DETECTOR, DETECT METHOD
+       Your code here.
+       Extract local maxima (peaks) in a 2d heatmap.
+       @heatmap: H x W heatmap containing peaks (similar to your training heatmap) - THIS IS NOT A TENSOR? ********
+       @max_pool_ks: Only return points that are larger than a max_pool_ks x max_pool_ks window around the point
+       @min_score: Only return peaks greater than min_score
+       @return: List of peaks [(score, cx, cy), ...], where cx, cy are the position of a peak and score is the
+                heatmap value at the peak. Return no more than max_det peaks per image
+    """
+    raise NotImplementedError('extract_peak')
 
+                                                                                                                                                                                                                          
+ ---------------    *************DETECTOR CLASS*********  -----------------------------------
+                                                  
+"""
 
+You model should take an image as an input and predict a heatmap for ****each object.*** (e.g. six objects, six heatmaps). 
+Each heatmap is an independent 0-1 output map. The heatmap is zero almost everywhere, except at object centers. 
+Use a model similar to your solution to HW3 or the master solution
+                                                                                                                                      
+"""                                                                                                                                      
+                                                                                                                                      
+class Detector(torch.nn.Module):
+                                                                                                                                      
+                                                                                                                                      
+    def __init__(self):     #DO THIS FIRST!!!!!!!!!!!!
+        """
+           Your code here.
+           Setup your detection network
+        """
+        super().__init__()
+        raise NotImplementedError('Detector.__init__')
+
+---------------    DETECTOR CLASS, FORWARD METHOD  -----------------------------------
+
+    def forward(self, x):  #DO THIS FIRST!!!!!!!!!!!!
+        """
+           Your code here.
+           Implement a forward pass through the network, use forward for training,
+           and detect for detection
+        """
+        raise NotImplementedError('Detector.forward')
+
+                                                                                                                                      
+ ---------------    DETECTOR CLASS, DETECT METHOD  -----------------------------------
+                                                                                                                                      
+    def detect(self, image):   #------------->Use extract_peak here
+                                                                                                                                      
+        """
+           Your code here.
+           Implement object detection here.
+           @image: 3 x H x W image
+           @return: Three list of detections [(score, cx, cy, w/2, h/2), ...], one per class,
+                    return no more than 30 detections per image per class. You only need to predict width and height
+                    for extra credit. If you do not predict an object size, return w=0, h=0.
+           Hint: Use extract_peak here
+           Hint: Make sure to return three python lists of tuples of (float, int, int, float, float) and not a pytorch
+                 scalar. Otherwise pytorch might keep a computation graph in the background and your program will run
+                 out of memory.
+                
+           def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
+                returns List of peaks [(score, cx, cy), ...], 
+                 
+        """
+        raise NotImplementedError('Detector.detect')
+
+                                                                                                                                      
+      def detect_with_size   #-----------------*EXTRA CREDIT
   
