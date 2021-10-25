@@ -131,6 +131,19 @@ DEFINING HEATMAPS
 5. Hint: Max pooling expects an order-4 tensor as an input, use heatmap[None,None] to convert the input HEATMAP to an order-4 tensor.
 6. You model should take an image as an input and predict a HEATMAP for *****each object.***
 7. Each heatmap is an independent 0-1 output map
+    TRAINING: 
+8. You can convert the *DETECTION ANNOTATIONS* to a heatmap by calling the dense_transforms.ToHeatmap transform.
+9. ToHeatmap changes just the label and leaves the image unchanged. Call ToTensor to change the image. 
+10.class ToHeatmap(object): def __init__(self, radius=2): self.radius = radius   (dense_transforms.py)
+11.The value of the heatmap at the local maxima (peak score) is a good confidence measure. Use the extract_peak function to find detected objects.
+12.ANNOTATIONS:  Unlike HW3, the annotations for this homework are not yet in a format that can be batched by pytorch. 
+13.ANNOTATIONS:  dense_transforms.py also contains several other annotations that you might find useful.
+                                                                                                                                      
+                                                                                                                                     
+                                                                                                                                      
+
+                                                                                                                                      
+
                                                                                                                                       
 HOW TO CODE THIS:
                                                                                                                                       
@@ -216,4 +229,9 @@ class Detector(torch.nn.Module):
 
                                                                                                                                       
       def detect_with_size   #-----------------*EXTRA CREDIT
+                                                                                                                                      
+  """
+  You can earn some extra credit by implementing a full-fledged object detector. To do so you’ll need to predict the size of the object in question.
+  The easiest way to do this is to predict two more output channels, in addition to the 3-channel heatmap. We will evaluate AP at an intersection over union (overlap) of 0.5.
   
+  """
