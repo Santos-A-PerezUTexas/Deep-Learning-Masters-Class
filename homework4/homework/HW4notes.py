@@ -237,7 +237,29 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
        @max_pool_ks: Only return points that are larger than a max_pool_ks x max_pool_ks window around the point
        @min_score: Only return peaks greater than min_score
        @return: List of peaks [(score, cx, cy), ...], where cx, cy are the position of a peak and score is the
-                heatmap value at the peak. Return no more than max_det peaks per image
+       heatmap value at the peak. Return no more than max_det peaks per image
+       
+       extract_peak-->  PARAMETER @max_pool_ks: Only return points that are larger than a max_pool_ks x max_pool_ks window around the point
+        if it said only return points equal to the   maxpool,  it would make sense. But how can a point exceed the maxpool centered at that point
+       
+       -------->The hint means you should only return a value if it is larger than all values in a max_pool_ks x max_pool_ks  square around it.
+       -------->E.g. if we had a max_pool_ks of 3:
+
+1 3 2
+5 4 1
+2 1 3
+
+the 4 in the center should not be detected as a peak since the 5 to the left of it is larger.
+       BUT--------------------->5 is a global maximum but it would flunk that test since 5 is not greater than the maxpool of 5
+                 REPLY: I see what you mean. The value does not have to be larger than itself, it just has to be the maximum value in that window.
+                        If we were looking at an example like
+
+                                             1 3 2
+                                             4 5 1
+                                             2 1 3
+
+                       with a window size of 3, 5 would be a valid peak.
+       
     """
     raise NotImplementedError('extract_peak')
 
@@ -295,7 +317,9 @@ class Detector(torch.nn.Module):
             
 ---------->As described in the starter code, extract_peak() is a function that works for one channel of heatmap (H x W).
 ---------->In detect(), you will need to let an image (3 x H x W) pass the called forward() and get a 3-channel heatmap (3 x H x W).
----------->Then in detect() you will apply the extract_peak to the 3-channel heatmap three times (by a for loop or list them), then return 3 list of detections.     
+---------->Then in detect() you will apply the extract_peak to the 3-channel heatmap three times (by a for loop or list them), then return 3 list of detections. 
+
+
         """
         raise NotImplementedError('Detector.detect')
 
