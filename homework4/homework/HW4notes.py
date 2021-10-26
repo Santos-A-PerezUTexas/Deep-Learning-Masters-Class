@@ -98,8 +98,29 @@ How would we go about doing the backwards  pass during training when the losse
 
               L = w1*L1 + w2*L2
               L.backward()
-          
- 
+                
+-------------------------------------------------------------------------------------------------------------------------------
+                        LOSS FUNCTION
+-------------------------------------------------------------------------------------------------------------------------------
+
+Hint: Use the sigmoid and BCEWithLogitsLoss
+
+                         CLASS torch.nn.BCEWithLogitsLoss(weight=None,
+                                                          size_average=None, 
+                                                          reduce=None, 
+                                                          reduction='mean', 
+                                                          pos_weight=None)
+
+This loss combines a Sigmoid layer and the BCELoss in one single class.
+This version is more numerically stable than using a plain Sigmoid followed by a BCELoss as, by combining the operations into one layer, 
+we take advantage of the log-sum-exp trick for numerical stability.
+       
+loss = nn.BCEWithLogitsLoss()
+input = torch.randn(3, requires_grad=True)
+target = torch.empty(3).random_(2)
+output = loss(input, target)
+output.backward()
+
 -------------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------------
 
