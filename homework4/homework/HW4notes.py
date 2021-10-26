@@ -100,11 +100,24 @@ How would we go about doing the backwards  pass during training when the losse
               L.backward()
                 
 -------------------------------------------------------------------------------------------------------------------------------
-                        LOSS FUNCTION
+                        LOSS FUNCTION - TWO OF THEM.  MSE() and BCE()  (FOCAL LOSS?)
 -------------------------------------------------------------------------------------------------------------------------------
+              
+              L1 = BCE()
+              L2 = MSE()
+
+              L = w1*L1 + w2*L2  <-----------what is w1 and w2??? The weigths they spoke about...
+                
+              L.backward()
+
 
 Hint: Use the sigmoid and BCEWithLogitsLoss
-
+NEW HINT:  sigmoid function would be helpful when implementing the FOCAL LOSS, if you won’t use focal loss, you can just use BCEWithLogitsLoss.
+Whatever:  Focal loss or BCEWithLogitsLoss should be used while we are training the model, not in the implementation of the model itself
+On Average Precision (AP): AP is not a requirement for model validation, just train the Detector() as in HW3, and you can validate 
+training with the loss, or by visualizing the detection by using the log function provided in train.py.
+Source:  https://piazza.com/class/ksjhagmd59d6sg?cid=663
+                
                          CLASS torch.nn.BCEWithLogitsLoss(weight=None,
                                                           size_average=None, 
                                                           reduce=None, 
