@@ -2,7 +2,9 @@ SLIDES: https://piazza.com/class/ksjhagmd59d6sg?cid=191
 SLIDES: https://piazza.com/class/ksjhagmd59d6sg?cid=191
 SLIDES: https://piazza.com/class/ksjhagmd59d6sg?cid=191
 kel76y  ---> Defining Heatmaps
-
+Example Output:  https://piazza.com/class/ksjhagmd59d6sg?cid=610
+                
+                
 HW4 SLIDES:  https://docs.google.com/presentation/d/e/2PACX-1vR6bYbuIJeA1og36QOdEMANAXbdbCpjaPVWkZNthAqIJ-iKOPKtYcLnb7n_rlNGvbiukP7W3JLaM1HQ/pub?start=false&loop=false&delayms=3000&slide=id.p1
         
     
@@ -100,7 +102,7 @@ How would we go about doing the backwards  pass during training when the losse
               L.backward()
                 
 -------------------------------------------------------------------------------------------------------------------------------
-                        LOSS FUNCTION - TWO OF THEM.  MSE() and BCE()  (FOCAL LOSS?)
+                        LOSS FUNCTION - TWO OF THEM.  MSE() and BCE()  (FOCAL LOSS?)   KEYWORD:  IMBALANCE!!!!!!
 -------------------------------------------------------------------------------------------------------------------------------
               
               L1 = BCE()
@@ -110,13 +112,52 @@ How would we go about doing the backwards  pass during training when the losse
                 
               L.backward()
 
-
+Weights:  I was not familiar with the impact of dynamically adjusting weights to handle class imbalance.
+Weights:  Hint: Similar to HW3 the positive and negative samples are highly imbalanced. Try using the FOCAL LOSS.
+                
+Weights:  alter the weight of the loss function to account for the class imbalance and not the weights of the network
+More:  https://piazza.com/class/ksjhagmd59d6sg?cid=618
+                
+                
 Hint: Use the sigmoid and BCEWithLogitsLoss
 NEW HINT:  sigmoid function would be helpful when implementing the FOCAL LOSS, if you won’t use focal loss, you can just use BCEWithLogitsLoss.
 Whatever:  Focal loss or BCEWithLogitsLoss should be used while we are training the model, not in the implementation of the model itself
 On Average Precision (AP): AP is not a requirement for model validation, just train the Detector() as in HW3, and you can validate 
 training with the loss, or by visualizing the detection by using the log function provided in train.py.
 Source:  https://piazza.com/class/ksjhagmd59d6sg?cid=663
+
+FOCAL LOSS:  IMBALANCE - MOST PIXELS ARE BACKGROUND (or TRACK, etc)!!!!!!!!!!!!  IMBALANCE HERE!!
+        
+FOCAL LOSS: WHAT IS IT?  (FOR CLASS IMBALANCE) https://amaarora.github.io/2020/06/29/FocalLoss.html
+FOCAL LOSS: WHAT IS IT?  (FOR CLASS IMBALANCE) https://amaarora.github.io/2020/06/29/FocalLoss.html
+FOCAL LOSS: WHAT IS IT?  (FOR CLASS IMBALANCE) https://amaarora.github.io/2020/06/29/FocalLoss.html
+                
+ *Whereasm, what Focal Loss does is that it makes it easier for the model to predict things without being 80-100% sure that this object is “something”. 
+ *In simple words, giving the model a bit more freedom to take some risk when making predictions. This is particularly important when dealing with highly IMBALANCED
+ *datasets because in some cases (such as cancer detection), we really need to model to take a risk and predict something even if the prediction turns out to be a
+ *False Positive.  
+
+ *Therefore, Focal Loss is particularly useful in cases where there is a class imbalance. Another example, is in the case of *OBJECT DETECTION* when most pixels are usually
+ *background and only very few pixels inside an image sometimes have the object of interest. 
+
+class WeightedFocalLoss(nn.Module):
+    "Non weighted version of Focal Loss"
+    def __init__(self, alpha=.25, gamma=2):
+        super(WeightedFocalLoss, self).__init__()
+        self.alpha = torch.tensor([alpha, 1-alpha]).cuda()
+        self.gamma = gamma
+
+    def forward(self, inputs, targets):
+        BCE_loss = F.binary_cross_entropy_with_logits(inputs, targets, reduction='none')
+        targets = targets.type(torch.long)
+        at = self.alpha.gather(0, targets.data.view(-1))
+        pt = torch.exp(-BCE_loss)
+        F_loss = at*(1-pt)**self.gamma * BCE_loss
+        return F_loss.mean()
+
+FOCAL LOSS:  You will need to implement it yourself, but there are plenty of resources with respect to implementing it in conjunction with PyTorch with a simple Google search.
+FOCAL LOSS:  https://discuss.pytorch.org/t/is-this-a-correct-implementation-for-focal-loss-in-pytorch/43327  
+FOCAL LOSS: Remember the alpha to address class imbalance and keep in mind that this will only work for binary classification.
                 
                          CLASS torch.nn.BCEWithLogitsLoss(weight=None,
                                                           size_average=None, 
