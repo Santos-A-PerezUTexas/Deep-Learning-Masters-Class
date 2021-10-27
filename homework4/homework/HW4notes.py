@@ -1,3 +1,7 @@
+
+https://piazza.com/class/ksjhagmd59d6sg?cid=672
+  
+  
 SLIDES: https://piazza.com/class/ksjhagmd59d6sg?cid=191
 SLIDES: https://piazza.com/class/ksjhagmd59d6sg?cid=191
 SLIDES: https://piazza.com/class/ksjhagmd59d6sg?cid=191
