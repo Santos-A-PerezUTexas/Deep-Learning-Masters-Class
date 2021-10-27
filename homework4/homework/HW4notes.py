@@ -289,9 +289,77 @@ Can you please resolve my question, how to apply peak-extract to a multi-channel
 Q. is each channel of the heatmap a color (RGB) or does it a correspond to a class of objects?
 ------------>each channel corresponds to a class.
 
+                                                                                                                                      
 
-"                                                                                                                                      
+https://piazza.com/class/ksjhagmd59d6sg?cid=288
+                                                                                                                                      
+                                                                                                                                      
+So the given heatmap is 
 
+tensor([[[
+
+[0., 0., 0., 0., 0.],
+
+[0., 0., 5., 0., 0.],
+
+[0., 3., 0., 0., 0.],
+
+[0., 0., 0., 0., 0.],
+
+[0., 0., 0., 0., 0.]]]])
+
+after MaxPool2d, with the proper parameters to conserve the dimension, what we can get is:
+
+tensor([[[
+
+[0., 5., 5., 5., 0.],
+
+[3., 5., 5., 5., 0.],
+
+[3., 5., 5., 5., 0.],
+
+[3., 3., 3., 0., 0.],
+
+[0., 0., 0., 0., 0.]]]])                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                      
+Correct, the local maxima is just 5. Recall that we only want indexes which are greater than or equal to its neighbors. As noted in the slides, 
+maxpool2d helps you identify the local maximum by *distributing* the max value to all indexes in a given window. In the provided example, we want to know
+that 3 is indeed not a local maxima. When maxpool2d returns the modified tensor with 5 distributed over the index where 3 was originally located, it 
+becomes clear that 3 is not greater than or equal to its neighbors.  You need to make use of the information maxpool2d provides you with, and generate a new 
+tensor suitable for ***TOPK***. You should not pass the raw output of maxpool to topk. The slides also illustrates how you can find the true indexes to generate 
+the new tensor.
+
+torch.topk(input, k, dim=None, largest=True, sorted=True, *, out=None)
+torch.topk(input, k, dim=None, largest=True, sorted=True, *, out=None)                                                                                                           torch.topk(input, k, dim=None, largest=True, sorted=True, *, out=None)
+torch.topk(input, k, dim=None, largest=True, sorted=True, *, out=None)
+torch.topk(input, k, dim=None, largest=True, sorted=True, *, out=None)
+                           
+Returns the k largest elements of the given input tensor along a given dimension.
+I am thinking what are the factors I need to consider for determining the "k" in "topk"?
+
+      1. k must <= max_det
+      2. k must <=the number of points output by max_pool2d. 
+
+
+
+https://piazza.com/class/ksjhagmd59d6sg?cid=477
+https://piazza.com/class/ksjhagmd59d6sg?cid=477                                                                                                                                      
+First we must use a max_pool2d layer and convert our order 2 tensor to an order 4.
+But I'm stuck on what to do after this step. I tried converting the tensor back to its original shape but no luck. 
+I have also looked at the notes on this assignment provided by the TA.  So thus far, I have an order 4 tensor after applying max_pool2d and 
+don't know where to go from here or how to achieve the end product.  Any guidance would help, thank you!
+
+Once you apply max pool you will have two tensors.******* One that is the original heat map, and the other that a maxpooled heatmap of the same size.
+Think about how these two relate to one another in terms of “peaks”. Printing them out helped me think through this part of the assignment.
+
+                                                                                                                                      
+
+                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                      
+------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------
                                                                                                                                       
 HOW TO CODE THIS:
                                                                                                                                       
