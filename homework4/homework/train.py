@@ -12,6 +12,7 @@ def train(args):
     model = Detector()
     train_logger, valid_logger = None, None
     
+
     if args.log_dir is not None:
         train_logger = tb.SummaryWriter(path.join(args.log_dir, 'train'), flush_secs=1)
         valid_logger = tb.SummaryWriter(path.join(args.log_dir, 'valid'), flush_secs=1)
@@ -25,6 +26,11 @@ def train(args):
     #loss = ClassificationLoss()  #<--------------CHANGE!!!!!!!!!!!!!??
     train_data = load_detection_data('dense_data/train')
     valid_data = load_detection_data('dense_data/valid')
+    #optimizer = torch.optim.Adam(model.parameters(), lr=.01)   #lr=args.learning_rate
+
+    for epoch in range(5):   #change to range(args.num_epoch)
+
+      print (epoch)
 
     print ("You have finished training you sleuth.")
     #save_model(model)
