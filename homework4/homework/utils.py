@@ -8,11 +8,10 @@ class DetectionSuperTuxDataset(Dataset):
         from glob import glob
         from os import path
         self.files = []
-        print ("LOOP IS NEXT")
-        print (dataset_path)
+        
         for im_f in glob(path.join(dataset_path, '*_im.jpg')):
-            print ("IN LOOP")
-            print (im_f)
+            #print ("IN LOOP")
+            #print (im_f)
             self.files.append(im_f.replace('_im.jpg', ''))
         self.transform = transform
         self.min_size = min_size

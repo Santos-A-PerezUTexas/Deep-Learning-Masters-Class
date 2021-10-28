@@ -26,7 +26,7 @@ def train(args):
     train_data = load_detection_data('dense_data/train')
     valid_data = load_detection_data('dense_data/valid')
 
-
+    print ("You have finished training you sleuth.")
     #save_model(model)
 
 
