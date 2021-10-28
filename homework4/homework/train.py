@@ -28,10 +28,13 @@ def train(args):
     valid_data = load_detection_data('dense_data/valid')
     #optimizer = torch.optim.Adam(model.parameters(), lr=.01)   #lr=args.learning_rate
 
-    for epoch in range(5):   #change to range(args.num_epoch)
-
-      print (epoch)
-
+    #for epoch in range(5):   #change to range(args.num_epoch)
+    print(f'the size of train data is {len(train_data)}')
+    print(f'the size of valid data is {len(valid_data)}')
+    
+    for img in train_data:
+      print ("Something")
+     
     print ("You have finished training you sleuth.")
     #save_model(model)
 
