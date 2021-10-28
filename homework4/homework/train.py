@@ -32,7 +32,7 @@ def train(args):
     print(f'the size of train data is {len(train_data)}')
     print(f'the size of valid data is {len(valid_data)}')
     
-    for img in train_data:
+    for img, karts, bombs, pickups in train_data:
       print ("Something")
      
     print ("You have finished training you sleuth.")
