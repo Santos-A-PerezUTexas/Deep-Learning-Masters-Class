@@ -9,9 +9,13 @@ class DetectionSuperTuxDataset(Dataset):
         from os import path
         self.files = []
         for im_f in glob(path.join(dataset_path, '*_im.jpg')):
+            print ()
+            print (im_f)
             self.files.append(im_f.replace('_im.jpg', ''))
         self.transform = transform
         self.min_size = min_size
+        print("IN INIT OF DETECTION CLASS")
+        print (len(self.files))
 
     def _filter(self, boxes):
         if len(boxes) == 0:
@@ -34,6 +38,7 @@ class DetectionSuperTuxDataset(Dataset):
 
 def load_detection_data(dataset_path, num_workers=0, batch_size=32, **kwargs):
     dataset = DetectionSuperTuxDataset(dataset_path, **kwargs)
+    print("LOADED DATASET SANTOS")
     return DataLoader(dataset, num_workers=num_workers, batch_size=batch_size, shuffle=True, drop_last=True)
 
 

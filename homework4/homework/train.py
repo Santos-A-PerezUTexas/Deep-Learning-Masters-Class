@@ -11,16 +11,23 @@ def train(args):
     from os import path
     model = Detector()
     train_logger, valid_logger = None, None
+    
     if args.log_dir is not None:
         train_logger = tb.SummaryWriter(path.join(args.log_dir, 'train'), flush_secs=1)
         valid_logger = tb.SummaryWriter(path.join(args.log_dir, 'valid'), flush_secs=1)
 
+        
     """
     Your code here, modify your HW3 code
     Hint: Use the log function below to debug and visualize your model
     """
-    raise NotImplementedError('train')
-    save_model(model)
+   
+    #loss = ClassificationLoss()  #<--------------CHANGE!!!!!!!!!!!!!??
+    train_data = load_detection_data('dense_data/train')
+    valid_data = load_detection_data('dense_data/valid')
+
+
+    #save_model(model)
 
 
 def log(logger, imgs, gt_det, det, global_step):

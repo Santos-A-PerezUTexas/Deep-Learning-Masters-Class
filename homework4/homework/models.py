@@ -35,7 +35,7 @@ class Detector(torch.nn.Module):
            Setup your detection network
         """
         super().__init__()
-        raise NotImplementedError('Detector.__init__')
+       
 
     def forward(self, x):
         """
@@ -43,8 +43,7 @@ class Detector(torch.nn.Module):
            Implement a forward pass through the network, use forward for training,
            and detect for detection
         """
-        raise NotImplementedError('Detector.forward')
-
+       
     def detect(self, image):
         """
            Your code here.
@@ -58,7 +57,9 @@ class Detector(torch.nn.Module):
                  scalar. Otherwise pytorch might keep a computation graph in the background and your program will run
                  out of memory.
         """
-        raise NotImplementedError('Detector.detect')
+       
+
+
 
 
 def save_model(model):
