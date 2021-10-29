@@ -1,5 +1,7 @@
 import torch
 import numpy as np
+from torchvision import models
+from torchsummary import summary
 
 from .models import FCN, save_model
 from .utils import load_dense_data, DENSE_CLASS_DISTRIBUTION, ConfusionMatrix
@@ -24,6 +26,10 @@ def train(args):
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     model = FCN().to(device)
+    print(model)
+    summary(model, (3,96,128))
+    
+    
     if args.continue_training:
         model.load_state_dict(torch.load(path.join(path.dirname(path.abspath(__file__)), 'fcn.th')))
 
