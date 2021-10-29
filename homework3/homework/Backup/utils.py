@@ -13,48 +13,55 @@ DENSE_CLASS_DISTRIBUTION = [0.52683655, 0.02929112, 0.4352989, 0.0044619, 0.0041
 
 
 class SuperTuxDataset(Dataset):
-    def __init__(self, dataset_path, transform=transforms.ToTensor()):
-        """
-        Your code here
-        Hint: Use your solution (or the master solution) to HW1 / HW2
-        Hint: If you're loading (and storing) PIL images here, make sure to call image.load(),
-              to avoid an OS error for too many open files.
-        """
-        import csv
-        from os import path
-        self.data = []
-        self.transform = transform
-        with open(path.join(dataset_path, 'labels.csv'), newline='') as f:
-            reader = csv.reader(f)
-            for fname, label, _ in reader:
-                if label in LABEL_NAMES:
-                    image = Image.open(path.join(dataset_path, fname))
-                    image.load()
-                    label_id = LABEL_NAMES.index(label)
-                    self.data.append((image, label_id))
+    def __init__(self, dataset_path, transform=None):
+     
+      self.transform = transform
+    
+      import csv
+      from os import path
+      self.data = []
+      
+      self.transforms = transforms.Compose([
+        transforms.RandomHorizontalFlip(p=0.5),
+        transforms.ColorJitter(brightness=.5, hue=.3),
+        transforms.ToTensor(),
+        transforms.Normalize([0, 0, 0], [1, 1, 1])
+        
+                ])
+
+      with open(path.join(dataset_path, 'labels.csv'), newline='') as f:
+        reader = csv.reader(f)
+        for fname, label, _ in reader:            #READ THREE COLUMNS AT A TIME (as opposed to row[0], row[1], etc.
+          if label in LABEL_NAMES:              #this exlcudes the first line
+            image = Image.open(path.join(dataset_path, fname))
+            label_id = LABEL_NAMES.index(label)
+            if self.transform:
+              image = image #transforms.RandomCrop(32, padding=4)
+            #image = transform_train(image)
+            self.data.append((self.transforms(image), label_id))
+            #self.data.append((image, label_id))
 
     def __len__(self):
-        """
-        Your code here
-        """
-        return len(self.data)
+      return len(self.data)
 
     def __getitem__(self, idx):
-        """
-        Your code here
-        Hint: Make sure to apply the transform here, if you use any randomized transforms.
-              This ensures that a different random transform is used every time
-        """
-        # return self.data[idx]
-        img, lbl = self.data[idx]
-        return self.transform(img), lbl
+      return self.data[idx]
 
+####  #############  #########   ########DENSE SUPER TUX
 
 class DenseSuperTuxDataset(Dataset):
     def __init__(self, dataset_path, transform=dense_transforms.ToTensor()):
         from glob import glob
         from os import path
         self.files = []
+        
+        self.my_dense_transforms = transforms.Compose([
+
+        transforms.ColorJitter(brightness=.5, hue=.3),
+        #dense_transforms.ColorJitter(brightness=.5, hue=.3),
+        #dense_transforms.RandomHorizontalFlip(flip_prob=0.5),
+                        ])
+
         for im_f in glob(path.join(dataset_path, '*_im.jpg')):
             self.files.append(im_f.replace('_im.jpg', ''))
         self.transform = transform
@@ -66,8 +73,10 @@ class DenseSuperTuxDataset(Dataset):
         b = self.files[idx]
         im = Image.open(b + '_im.jpg')
         lbl = Image.open(b + '_seg.png')
+        im = self.my_dense_transforms(im)
         if self.transform is not None:
             im, lbl = self.transform(im, lbl)
+        
         return im, lbl
 
 
@@ -86,6 +95,7 @@ def _one_hot(x, n):
 
 
 class ConfusionMatrix(object):
+  
     def _make(self, preds, labels):
         label_range = torch.arange(self.size, device=preds.device)[None, :]
         preds_one_hot, labels_one_hot = _one_hot(preds, self.size), _one_hot(labels, self.size)
@@ -93,7 +103,7 @@ class ConfusionMatrix(object):
 
     def __init__(self, size=5):
         """
-        This class builds and updates a confusion matrix.
+        This class builds and updates a confusion matrix (FOR ACCURACY?).
         :param size: the number of classes to consider
         """
         self.matrix = torch.zeros(size, size)
@@ -113,6 +123,7 @@ class ConfusionMatrix(object):
 
     @property
     def iou(self):
+      #IOU for segmentation error 
         return self.class_iou.mean()
 
     @property
@@ -131,12 +142,17 @@ class ConfusionMatrix(object):
 
     @property
     def per_class(self):
-        return (self.matrix / (self.matrix.sum(1, keepdim=True) + 1e-5)).cpu()
+        return self.matrix / (self.matrix.sum(1, keepdims=True) + 1e-5)
 
+def accuracy(outputs, labels):
+    outputs_idx = outputs.max(1)[1].type_as(labels)
+    return outputs_idx.eq(labels).float().mean()
 
 if __name__ == '__main__':
+    
     dataset = DenseSuperTuxDataset('dense_data/train', transform=dense_transforms.Compose(
         [dense_transforms.RandomHorizontalFlip(), dense_transforms.ToTensor()]))
+    
     from pylab import show, imshow, subplot, axis
 
     for i in range(15):
@@ -151,6 +167,8 @@ if __name__ == '__main__':
     import numpy as np
 
     c = np.zeros(5)
+
+
     for im, lbl in dataset:
         c += np.bincount(lbl.view(-1), minlength=len(DENSE_LABEL_NAMES))
     print(100 * c / np.sum(c))

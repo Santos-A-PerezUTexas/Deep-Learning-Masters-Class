@@ -2,10 +2,21 @@ import torch
 import torch.nn.functional as F
 
 
+
+
+------------------------------------------------------------CNN------------------------------------------------------------
+
+
 class CNNClassifier(torch.nn.Module):
+
+
+-----------------------------------CNN BLOCK BEGIN
+
     class Block(torch.nn.Module):
         def __init__(self, n_input, n_output, kernel_size=3, stride=2):
             super().__init__()
+            
+            
             self.c1 = torch.nn.Conv2d(n_input, n_output, kernel_size=kernel_size, padding=kernel_size // 2,
                                       stride=stride, bias=False)
             self.c2 = torch.nn.Conv2d(n_output, n_output, kernel_size=kernel_size, padding=kernel_size // 2, bias=False)
@@ -13,10 +24,14 @@ class CNNClassifier(torch.nn.Module):
             self.b1 = torch.nn.BatchNorm2d(n_output)
             self.b2 = torch.nn.BatchNorm2d(n_output)
             self.b3 = torch.nn.BatchNorm2d(n_output)
-            self.skip = torch.nn.Conv2d(n_input, n_output, kernel_size=1, stride=stride)
+            
+SKIP--->   self.skip = torch.nn.Conv2d(n_input, n_output, kernel_size=1, stride=stride)
 
         def forward(self, x):
-            return F.relu(self.b3(self.c3(F.relu(self.b2(self.c2(F.relu(self.b1(self.c1(x)))))))) + self.skip(x))
+           return F.relu(self.b3(self.c3(F.relu(self.b2(self.c2(F.relu(self.b1(self.c1(x)))))))) + self.skip(x))
+
+-----------------------------------CNN BLOCK END
+
 
     def __init__(self, layers=[16, 32, 64, 128], n_output_channels=6, kernel_size=3):
         super().__init__()
@@ -26,18 +41,38 @@ class CNNClassifier(torch.nn.Module):
         L = []
         c = 3
         for l in layers:
-            L.append(self.Block(c, l, kernel_size, 2))
+            L.append(self.Block(c, l, kernel_size, 2))                #USING ONLY BLOCKS - which adds identity.
             c = l
         self.network = torch.nn.Sequential(*L)
-        self.classifier = torch.nn.Linear(c, n_output_channels)
+        self.classifier = torch.nn.Linear(c, n_output_channels)      #this should be [128, 6] for 128 images.
 
     def forward(self, x):
+        
         z = self.network((x - self.input_mean[None, :, None, None].to(x.device)) / self.input_std[None, :, None, None].to(x.device))
+        
+        #this could be z = self.network(x)
+        
         return self.classifier(z.mean(dim=[2, 3]))
+
+-----------------------------------------------------END        CNN------------------------------------------------------------
+
+
+
+
+
+
+------------------------------------------------------------FCN------------------------------------------------------------
+
+
+
 
 
 class FCN(torch.nn.Module):
+
+-------------->FCN UPBLOCK BEGIN
+
     class UpBlock(torch.nn.Module):
+
         def __init__(self, n_input, n_output, kernel_size=3, stride=2):
             super().__init__()
             self.c1 = torch.nn.ConvTranspose2d(n_input, n_output, kernel_size=kernel_size, padding=kernel_size // 2,
@@ -45,6 +80,10 @@ class FCN(torch.nn.Module):
 
         def forward(self, x):
             return F.relu(self.c1(x))
+            
+-------------->FCN UPBLOCK END
+
+------------------------------------------------------------------------------>BEGIN CONSTRUCTOR FOR FCN
 
     def __init__(self, layers=[16, 32, 64, 128], n_output_channels=5, kernel_size=3, use_skip=True):
         super().__init__()
@@ -52,9 +91,9 @@ class FCN(torch.nn.Module):
         self.input_std = torch.Tensor([0.2064, 0.1944, 0.2252])
 
         c = 3
-        self.use_skip = use_skip
+        self.use_skip = use_skip             #use_skip initially TRUE
         self.n_conv = len(layers)
-        skip_layer_size = [3] + layers[:-1]
+        skip_layer_size = [3] + layers[:-1]  #layers[:-1] is [16, 32, 64], so skip_layer_size is [3, 16, 32, 64]
         for i, l in enumerate(layers):
             self.add_module('conv%d' % i, CNNClassifier.Block(c, l, kernel_size, 2))
             c = l
@@ -65,10 +104,12 @@ class FCN(torch.nn.Module):
                 c += skip_layer_size[i]
         self.classifier = torch.nn.Conv2d(c, n_output_channels, 1)
 
+-------------------------------------------------------------------------------->END CONSTRUCTOR FOR FCN
+
     def forward(self, x):
         z = (x - self.input_mean[None, :, None, None].to(x.device)) / self.input_std[None, :, None, None].to(x.device)
         up_activation = []
-        for i in range(self.n_conv):
+        for i in range(self.n_conv):             #in range 4 basically.
             # Add all the information required for skip connections
             up_activation.append(z)
             z = self._modules['conv%d'%i](z)
@@ -81,6 +122,12 @@ class FCN(torch.nn.Module):
             if self.use_skip:
                 z = torch.cat([z, up_activation[i]], dim=1)
         return self.classifier(z)
+
+-------------------------------------------------------END FCN------------------------------------------------------------
+
+
+
+
 
 
 model_factory = {
