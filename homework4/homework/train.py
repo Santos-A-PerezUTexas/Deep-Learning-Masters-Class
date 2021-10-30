@@ -64,23 +64,28 @@ def train(args):
         #batch size is 32
         i_pred = 0
 
-        for img, label, size in train_data:        #THIS CALLS GET ITEM 145 TIMES OCT 30 2021
-            img, label, size = img.to(device), label.to(device).long(),  size.to(device).long()
-            #img, label, size = img.to(device), label.to(device),  size.to(device)
+        #for img, label, size in train_data
+        for img, karts, bombs, pickup in train_data:        #THIS CALLS GET ITEM 145 TIMES OCT 30 2021
+            
+            img, karts, bombs  = img.to(device), karts.to(device),  bombs.to(device)
+            #img, label, size, pickup = img.to(device), label.to(device).long(),  size.to(device).long() 
+            
 
-
             print (f'MAKING PREDICTION NUMBER {i_pred} WITH logit=model(img)-----------')
             print (f'MAKING PREDICTION NUMBER {i_pred} WITH logit=model(img)-----------')
             print (f'MAKING PREDICTION NUMBER {i_pred} WITH logit=model(img)-----------')
-            print (f'Image shape is {img.shape}, image size is {img.size}')
+            print (f'Image shape is {img.shape}')
             #Image shape is torch.Size([32, 3, 96, 128])
-            print (f'label shape is {label.shape}, label size is {label.size}')
-            #label shape is torch.Size([32, 3, 96, 128])
-            print (f'size shape is {size.shape}, size size is {size.size}')
-            #size shape is torch.Size([32, 2, 96, 128]) ([32, 2, 96, 128])
+            print (f'karts shape is {karts.shape}')
+            #karts shape is torch.Size([32, 3, 96, 128])
+            print (f'bombs shape is {bombs.shape}')
+            #bombs shape is torch.Size([32, 2, 96, 128])
+            #print (f'pickup shape is {pickup.shape}')
+            #pickups shape is 
 
-            print(f'image, label, and size number 25 is IMAGE: {img[25]}, LABEL: {label[25]}, SIZE:{size[25]}, respectively.')
-            print(f'THE MEAN FOR: image, label, and size number 25 is IMAGE: {img[25].mean}, LABEL: {label[25].mean}, SIZE:{size[25].mean}, respectively.')
+
+            print(f'image, label, and karts, bombs, and pickup  number 25 is IMAGE: {img[25]}, KARTS: {karts[25]}, BOMBS->:{bombs[25]},  PICKUP: ->:{11111},  respectively.')
+            #print(f'THE MEAN FOR: image, label, and size number 25 is IMAGE: {img[25].mean}, LABEL: {label[25].mean}, SIZE:{size[25].mean}, respectively.')
             
             logit = model(img)
             loss_val = loss(logit, label)
