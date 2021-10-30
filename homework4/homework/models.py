@@ -126,6 +126,7 @@ class Detector(torch.nn.Module):
       #Implement a forward pass through the network, use forward for training
       #and detect for detection       
 
+      print("MODELS.PY Making a Prediction/Detection NOW, INSIDE FORWARD, OCT 30 2021")
       print (self.detect(x))   #CALLING DETECT() HERE FOR TEST PURPOSES OCT 30 2021          
 
 
@@ -182,7 +183,7 @@ class Detector(torch.nn.Module):
         
         
         print(extract_peak(image))
-        return ("Hello World from Detector.Forward()--->detect() ****************OCT 29, 2021")              
+        return ("MODELS.PY: THIS STRING WAS RETURNED FROM detect():  Class Detector.Forward()--->detect() ****************OCT 30, 2021")              
    
 
 

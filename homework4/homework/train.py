@@ -58,7 +58,7 @@ def train(args):
     for epoch in range(args.num_epoch):
 
         print("At the beggining of an epoch****************")
-        #model.train()
+        model.train()
         
         #batch size is 32
         #batch size is 32
@@ -72,7 +72,8 @@ def train(args):
             logit = model(img)
             loss_val = loss(logit, label)
             i_pred += 1
-            
+            print ("Finished making prediction/detection")
+
             if train_logger is not None and global_step % 100 == 0:
                 log(train_logger, img, label, logit, global_step)
 
