@@ -68,7 +68,20 @@ def train(args):
             img, label, size = img.to(device), label.to(device).long(),  size.to(device).long()
             #img, label, size = img.to(device), label.to(device),  size.to(device)
 
+
             print (f'MAKING PREDICTION NUMBER {i_pred} WITH logit=model(img)-----------')
+            print (f'MAKING PREDICTION NUMBER {i_pred} WITH logit=model(img)-----------')
+            print (f'MAKING PREDICTION NUMBER {i_pred} WITH logit=model(img)-----------')
+            print (f'Image shape is {img.shape}, image size is {img.size}')
+            #Image shape is torch.Size([32, 3, 96, 128])
+            print (f'label shape is {label.shape}, label size is {label.size}')
+            #label shape is torch.Size([32, 3, 96, 128])
+            print (f'size shape is {size.shape}, size size is {size.size}')
+            #size shape is torch.Size([32, 2, 96, 128]) ([32, 2, 96, 128])
+
+            print(f'image, label, and size number 25 is IMAGE: {img[25]}, LABEL: {label[25]}, SIZE:{size[25]}, respectively.')
+            print(f'THE MEAN FOR: image, label, and size number 25 is IMAGE: {img[25].mean}, LABEL: {label[25].mean}, SIZE:{size[25].mean}, respectively.')
+            
             logit = model(img)
             loss_val = loss(logit, label)
             i_pred += 1
