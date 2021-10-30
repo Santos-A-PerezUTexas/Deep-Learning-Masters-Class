@@ -30,10 +30,13 @@ class DetectionSuperTuxDataset(Dataset):
 
     def __getitem__(self, idx):
         import numpy as np
-        print ("Good news, you made it to getitem, thanks to the for loop in train!!!!!!!!!!!!!")
+        print ("Getitem.......")
         b = self.files[idx]
         im = Image.open(b + '_im.jpg')
         nfo = np.load(b + '_boxes.npz')
+        print("KARTS")
+        print(nfo['karts'])
+
         data = im, self._filter(nfo['karts']), self._filter(nfo['bombs']), self._filter(nfo['pickup'])
         if self.transform is not None:
             data = self.transform(*data)
