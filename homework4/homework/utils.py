@@ -43,6 +43,10 @@ class DetectionSuperTuxDataset(Dataset):
 
 
         data = im, self._filter(nfo['karts']), self._filter(nfo['bombs']), self._filter(nfo['pickup'])
+        
+        #self._filter(nfo['karts']), etc, are the DETECTIONS.. we are LEARNING THESE.
+        #ToTheatmaps converts ALL THREE OF THESE DETECTIONS  to peak and size tensors.
+        
         if self.transform is not None:
             data = self.transform(*data)
         return data
