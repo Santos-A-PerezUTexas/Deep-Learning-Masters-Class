@@ -70,6 +70,21 @@ def train(args):
             img, peaks, size  = img.to(device), peaks.to(device),  size.to(device)
             #img, peaks, size, pickup = img.to(device), peaks.to(device).long(),  size.to(device).long() 
             
+            #ToTheatmaps converts ALL THREE OF THESE DETECTIONS  to peak and size tensors.
+            #Per the assignment:  
+            """
+            The final step of your detector extracts local maxima from each predicted heatmap. Each local maxima corresponds to a positive detection.
+            The function detect() returns a tuple of detections as a list of five numbers per class (i.e., **tuple of three lists): The confidence of the 
+            detection (float, higher means more confident, see evaluation), the x and y location of the object center (center of the predicted bounding box), 
+            and the ***size** of the bounding box (width and height). Your detection function may return up to 100 detections per image, each detection comes with a confidence. 
+            You’ll pay a higher price for getting a high confidence detection wrong. The value of the heatmap at the local maxima (peak score) is a good confidence measure.
+            Use the extract_peak function to find detected objects.
+            """
+        
+            
+            
+            
+            
 
             print (f'MAKING PREDICTION NUMBER {i_pred} WITH logit=model(img)-----------')
             print (f'MAKING PREDICTION NUMBER {i_pred} WITH logit=model(img)-----------')
