@@ -158,29 +158,35 @@ class Detector(torch.nn.Module):
 
     def detect(self, image):
         """
-           Your code here.
-           Implement object detection here.
+          Implement object detection here.
            
            image:           3 x H x W image
-           return:          Three list of detections [(score, cx, cy, w/2, h/2), ...], one per class,
-                            return no more than 30 detections per image per class. You only need to predict width and height
-                            for extra credit. If you do not predict an object size, return w=0, h=0.
+           return:          Three list of detections [(score, cx, cy, w/2, h/2), ...], one list per class (karts, bombs, pickup),
+                            return no more than 30 detections per image per class. Predict width and height
+                            for *extra credit*. If you do not predict an object size, return w=0, h=0.
            
-           Hint:  Use extract_peak here
-           Hint:  Make sure to return THREE python lists of tuples of (float, int, int, float, float) and not a pytorch
-                  scalar. Otherwise pytorch might keep a computation graph in the background and your program will run
-                  out of memory.
+           Hint:  Use extract_peak() 
+           Hint:  Return THREE python lists of tuples of (float, int, int, float, float) and not a pytorch
+                  scalar.
+                  
+              The final step of your detector extracts local maxima from each predicted heatmap. Each local maxima corresponds to a positive detection.
+              The function detect() returns a tuple of detections as a list of five numbers per class (i.e., **tuple of three lists): The confidence of the 
+              detection (float, higher means more confident, see evaluation), the x and y location of the object center (center of the predicted bounding box), 
+              and the ***size** of the bounding box (width and height). Your detection function may return up to 100 detections per image, each detection comes with a confidence. 
+              You’ll pay a higher price for getting a high confidence detection wrong. The value of the heatmap at the local maxima (peak score) is a good confidence measure.
+              Use the extract_peak function to find detected objects.
+            
         """
-       
-                  #extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
+           
+                  #ToTheatmaps converts ALL THREE OF THESE DETECTIONS  to peak and size tensors, which are the HEATMAPS????.
                 
-                    
-                    #Extract local maxima (peaks) in a 2d heatmap.
-                    #heatmap:               H x W heatmap containing peaks (similar to your training heatmap)
-                    #max_pool_ks:           Only return points that are larger than a max_pool_ks x max_pool_ks window around the point
-                    #min_score:             Only return peaks greater than min_score
-                    #return:                 List of peaks [(score, cx, cy), ...], where cx, cy are the position of a peak and score is the
-                    #                        heatmap value at the peak. Return no more than max_det peaks per image
+                  #extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
+                  #Extract local maxima (peaks) in a 2d heatmap.
+                  #heatmap:               H x W heatmap containing peaks (similar to your training heatmap)
+                  #max_pool_ks:           Only return points that are larger than a max_pool_ks x max_pool_ks window around the point
+                  #min_score:             Only return peaks greater than min_score
+                  #return:                 List of peaks [(score, cx, cy), ...], where cx, cy are the position of a peak and score is the
+                  #                        heatmap value at the peak. Return no more than max_det peaks per image
         
         
         print(extract_peak(image))
