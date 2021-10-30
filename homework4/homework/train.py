@@ -31,21 +31,43 @@ def train(args):
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, weight_decay=1e-5)
     w = torch.as_tensor(DENSE_CLASS_DISTRIBUTION)**(-args.gamma)
     loss = torch.nn.CrossEntropyLoss(weight=w / w.mean()).to(device)
+     
+
+    
+    print ("FROM TRAIN() ABOUT TO LOAD DATA!!!!!!!!!!!!!!!") 
+   
+    print ("FROM TRAIN() ABOUT TO LOAD DATA!!!!!!!!!!!!!!!")
+    #val = input("PRESS ANY KEY")
+    #print(val)
 
     import inspect
     transform = eval(args.transform, {k: v for k, v in inspect.getmembers(dense_transforms) if inspect.isclass(v)})
     train_data = load_detection_data('dense_data/train', num_workers=4, transform=transform)
     valid_data = load_detection_data('dense_data/valid', num_workers=4)
 
+    print ("FROM TRAIN() FINISHED LOAD DATA!!!!!!!!!!!!!!!")
+    print ("FROM TRAIN() FINISHED LOAD DATA!!!!!!!!!!!!!!!")
+    print ("FROM TRAIN() FINISHED LOAD DATA!!!!!!!!!!!!!!!")
+    print ("FROM TRAIN() FINISHED LOAD DATA!!!!!!!!!!!!!!!")
+
+    print (f'Size of training set is {len(train_data)}')
+    #val = input("PRESS ANY KEY")
+    #print(val)
+
     global_step = 0
     for epoch in range(args.num_epoch):
+
+        print("At the beggining of an epoch****************")
         model.train()
         
         for img, label, size in train_data:
             img, label, size = img.to(device), label.to(device).long(),  size.to(device).long()
+            #img, label, size = img.to(device), label.to(device),  size.to(device)
 
+            print ("MAKING A PREDICTION WITH logit=model(img)-----------")
             logit = model(img)
             loss_val = loss(logit, label)
+            
             if train_logger is not None and global_step % 100 == 0:
                 log(train_logger, img, label, logit, global_step)
 

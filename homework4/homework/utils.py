@@ -15,9 +15,9 @@ class DetectionSuperTuxDataset(Dataset):
             self.files.append(im_f.replace('_im.jpg', ''))
         self.transform = transform
         self.min_size = min_size
-        print("IN INIT OF DETECTION CLASS, this is the size of self.files")
+        #print("IN INIT OF DETECTION CLASS, this is the size of self.files")
         print (len(self.files))
-        print("IN INIT OF DETECTION CLASS, this is the shape of self.files")
+        #print("IN INIT OF DETECTION CLASS, this is the shape of self.files")
         print (self.files)
 
     def _filter(self, boxes):
@@ -30,12 +30,17 @@ class DetectionSuperTuxDataset(Dataset):
 
     def __getitem__(self, idx):
         import numpy as np
-        print ("Getitem.......")
+        print ("Getitem() was just called.......")
         b = self.files[idx]
         im = Image.open(b + '_im.jpg')
         nfo = np.load(b + '_boxes.npz')
-        print("KARTS")
-        print(nfo['karts'])
+        #print(f'From get_item, this is KARTS array from NPZ file, item {idx} in nfo variable:')
+        #print(nfo['karts'])
+        #print("From get_item, this is BOMBS array from NPZ file in nfo variable:")
+        #print(nfo['bombs'])
+        #print("From get_item, this is PICKUPS array from NPZ file in nfo variable:")
+        #print(nfo['pickup'])
+
 
         data = im, self._filter(nfo['karts']), self._filter(nfo['bombs']), self._filter(nfo['pickup'])
         if self.transform is not None:
