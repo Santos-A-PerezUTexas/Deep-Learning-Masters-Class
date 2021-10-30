@@ -87,7 +87,7 @@ class Detector(torch.nn.Module):
         def forward(self, x):
             return F.relu(self.c1(x))
             
-#-------------->DETECTOR  UPBLOCK END
+#-------------->DETECTOR  UPBLOCK CLASS END 
 
 
 
