@@ -126,7 +126,9 @@ class Detector(torch.nn.Module):
       #Implement a forward pass through the network, use forward for training
       #and detect for detection       
 
-      print (self.detect(x))
+      print (self.detect(x))   #CALLING DETECT() HERE FOR TEST PURPOSES OCT 30 2021          
+
+
       z = (x - self.input_mean[None, :, None, None].to(x.device)) / self.input_std[None, :, None, None].to(x.device)
       up_activation = []
       

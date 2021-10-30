@@ -17,7 +17,7 @@ def train(args):
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     model = Detector()
-    print(model)
+    #print(model)
     #summary(model, (3,96,128))
 
     train_logger, valid_logger = None, None
@@ -60,13 +60,18 @@ def train(args):
         print("At the beggining of an epoch****************")
         model.train()
         
-        for img, label, size in train_data:
+        #batch size is 32
+        #batch size is 32
+        i_pred = 0
+
+        for img, label, size in train_data:        #THIS CALLS GET ITEM 145 TIMES OCT 30 2021
             img, label, size = img.to(device), label.to(device).long(),  size.to(device).long()
             #img, label, size = img.to(device), label.to(device),  size.to(device)
 
-            print ("MAKING A PREDICTION WITH logit=model(img)-----------")
+            print (f'MAKING PREDICTION NUMBER {i_pred} WITH logit=model(img)-----------')
             logit = model(img)
             loss_val = loss(logit, label)
+            i_pred += 1
             
             if train_logger is not None and global_step % 100 == 0:
                 log(train_logger, img, label, logit, global_step)
