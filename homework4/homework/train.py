@@ -58,7 +58,7 @@ def train(args):
     for epoch in range(args.num_epoch):
 
         print("At the beggining of an epoch****************")
-        model.train()
+        #model.train()
         
         #batch size is 32
         #batch size is 32
