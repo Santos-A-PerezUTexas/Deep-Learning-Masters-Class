@@ -120,6 +120,7 @@ class Detector(torch.nn.Module):
 
 #------------------------------------------------------------------------------>BEGIN  Detector.FORWARD() METHOD FOR DETECTOR NETWORK
 ##=============================================================================>  USES Detector.DETECT() METHOD FOR DETECTION
+#OCT 30, 2021
 
     def forward(self, x):
         
