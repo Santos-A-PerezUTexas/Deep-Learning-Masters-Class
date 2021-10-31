@@ -147,12 +147,16 @@ class Detector(torch.nn.Module):
         z = self._modules['conv%d'%i](z)
 
       for i in reversed(range(self.n_conv)):
+        print(f'In detector->Forward LOOP Number {i}')
         z = self._modules['upconv%d'%i](z)
         # Fix the padding
         z = z[:, :, :up_activation[i].size(2), :up_activation[i].size(3)]
         # Add the skip connection
         if self.use_skip:
           z = torch.cat([z, up_activation[i]], dim=1)
+
+
+
         print (f'OCT 30, 2021 -------------------------------->This is Z: {z}')
         print (f'OCT 30, 2021 -------------------------------->This is Z: {z}')
         print (f'OCT 30, 2021 -------------------------------->This is Z: {z}')
