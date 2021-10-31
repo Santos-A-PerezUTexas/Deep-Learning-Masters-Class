@@ -70,6 +70,12 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
              4. topk(flattened_tensor, k, dim=None, largest=True, sorted=True, *, out=None)
              5.  What is k for topk()?
              6. Where do I use these min_score=-5, max_det=100 ????
+             7. Return no more than max_det peaks per image
+             8. f
+             9. Return:  (score, cx, cy) is a tuple with three numbers
+
+             RETURN (List of peaks [(score, cx, cy), ...], where cx, cy are the position of a peak and score is the heatmap value at the peak. (score, cx, cy) is a tuple with three numbers)
+                        Return no more than max_det peaks per image
 
     """ 
     return("You have succesfully called extract_peak as follows:  Detector-->Forward()--->Detect()--->extrac_peak")
