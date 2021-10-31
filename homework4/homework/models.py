@@ -81,6 +81,11 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
              RETURN (List of peaks [(score, cx, cy), ...], where cx, cy are the position of a peak and score is the heatmap value at the peak. (score, cx, cy) is a tuple with three numbers)
                         Return no more than max_det peaks per image
 
+           EXAMPLE:
+
+              1.  x = torch.tensor([[0,0,0,0,0], [0,1,2,3,0], [0,4,5,6,0],[0,7,8,9,0],[0,0,0,0,0]])
+              2. Maxpool = torch.nn.MaxPool2d (kernel_size=3)
+    
     """ 
     return("You have succesfully called extract_peak as follows:  Detector-->Forward()--->Detect()--->extrac_peak")
 
