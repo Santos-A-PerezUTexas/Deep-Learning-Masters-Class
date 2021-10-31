@@ -131,7 +131,7 @@ class Detector(torch.nn.Module):
       print (self.detect(x))   #CALLING DETECT() HERE FOR TEST PURPOSES OCT 30 2021          
 
       #CODE MAKES IT UP TO HERE, OCT 30, 2021 ---? then calls GetItem??? What?
-
+      PRINT ("LINE 134 MODELS.PY----------------------------------------------")
       z = (x - self.input_mean[None, :, None, None].to(x.device)) / self.input_std[None, :, None, None].to(x.device)
       up_activation = []
       
