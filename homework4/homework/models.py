@@ -57,10 +57,18 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
 
 
       **********torch.topk(input, k, dim=None, largest=True, sorted=True, *, out=None)
+                  Returns the k largest elements of the given input tensor along a given dimension.
       **********torch.nn.MaxPool2d(kernel_size=max_pool_ks=7, stride=None, padding=0, dilation=1, return_indices=True, ceil_mode=False)
                         **return_indices – if True, will return the max indices along with the outputs. 
                         **Max pooling expects an order-4 tensor as an input, use heatmap[None,None] to convert the input heatmap to an order-4 tensor.
-                        
+                        **Input size (N, C, H, W), output (N, C, H_{out}, W_{out}) 
+
+             1.  Heatmap [None, None]
+             2.  Maxpool2d (kernel_size=max_pool_ks=7, return_indices=True)
+             3.  Flattenned Tensor 
+             4. topk(flattened_tensor, k, dim=None, largest=True, sorted=True, *, out=None)
+             5.  What is k for topk()?
+
     """ 
     return("You have succesfully called extract_peak as follows:  Detector-->Forward()--->Detect()--->extrac_peak")
 
