@@ -107,10 +107,10 @@ def train(args):
             
             detected_peaks = model(img)
 
-            print(""LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW)
-            print(""LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW)
-            print(""LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW)
-            print(""LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW)
+            print("LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW")
+            print("LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW")
+            print("LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW")
+            print("LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW")
 
             loss_val = loss(detected_peaks, peak)
             
