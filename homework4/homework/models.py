@@ -145,7 +145,9 @@ class Detector(torch.nn.Module):
         print(f'In detector->Forward FIRST LOOP Number {i}')
         # Add all the information required for skip connections
         up_activation.append(z)
+        print(f'In detector->Forward LOOP Number {i} AFTER append()')
         z = self._modules['conv%d'%i](z)
+        print(f'In detector->Forward LOOP Number {i} AFTER Z')
 
       for i in reversed(range(self.n_conv)):
         print(f'In detector->Forward SECOND LOOP Number {i}')
