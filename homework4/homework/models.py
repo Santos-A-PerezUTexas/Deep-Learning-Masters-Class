@@ -131,15 +131,15 @@ class Detector(torch.nn.Module):
       print (self.detect(x))   #CALLING DETECT() HERE FOR TEST PURPOSES OCT 30 2021          
 
       #CODE MAKES IT UP TO HERE, OCT 30, 2021 ---? then calls GetItem??? What?
-      PRINT ("LINE 134 MODELS.PY----------------------------------------------")
+      print ("LINE 134 MODELS.PY----------------------------------------------")
       z = (x - self.input_mean[None, :, None, None].to(x.device)) / self.input_std[None, :, None, None].to(x.device)
       up_activation = []
       
 
-      PRINT ("LINE 139 MODELS.PY----------------------------------------------")
-      PRINT ("LINE 139 MODELS.PY----------------------------------------------")
-      PRINT ("LINE 139 MODELS.PY----------------------------------------------")
-      PRINT ("LINE 139 MODELS.PY----------------------------------------------")
+      print ("LINE 139 MODELS.PY----------------------------------------------")
+      print ("LINE 139 MODELS.PY----------------------------------------------")
+      print ("LINE 139 MODELS.PY----------------------------------------------")
+      print ("LINE 139 MODELS.PY----------------------------------------------")
       
       for i in range(self.n_conv):             #in range 4 basically.
         # Add all the information required for skip connections
