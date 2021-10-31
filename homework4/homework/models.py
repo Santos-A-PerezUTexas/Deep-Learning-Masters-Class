@@ -48,13 +48,17 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
       You should not pass the raw output of maxpool to topk. The slides also illustrates how you can find the true indexes to
       generate  the new tensor.
 
-      After max pooling, how does one pick out the actual maxima from the returned tensor? The only way I can think of is
+      After max pooling(), how does one pick out the actual maxima from the returned tensor? The only way I can think of is
       by basically manually doing what maxpool2d() is doing, but that obviously defeats the purpose. I know the next steps are
-       to pass a ***flattened** tensor to topk(), but am missing something in the order of operations here.
+       to pass a ***flattened** tensor to *topk()*, but am missing something in the order of operations here.
+               So you have two tensors after max pooling, the pool and the original heat map. There are very simple
+               operations and checks you can do you can *compare* the two to isolate the peaks. I did this comparison before 
+               passing it into *topk()*
 
 
-      torch.topk(input, k, dim=None, largest=True, sorted=True, *, out=None)
-
+      **********torch.topk(input, k, dim=None, largest=True, sorted=True, *, out=None)
+      **********torch.nn.MaxPool2d(kernel_size, stride=None, padding=0, dilation=1, return_indices=False, ceil_mode=False)
+                        return_indices – if True, will return the max indices along with the outputs. 
     """
     return("You have succesfully called extract_peak as follows:  Detector-->Forward()--->Detect()--->extrac_peak")
 
