@@ -130,9 +130,16 @@ class Detector(torch.nn.Module):
       print("MODELS.PY Making a Prediction/Detection NOW, INSIDE FORWARD, OCT 30 2021")
       print (self.detect(x))   #CALLING DETECT() HERE FOR TEST PURPOSES OCT 30 2021          
 
+      #CODE MAKES IT UP TO HERE, OCT 30, 2021 ---? then calls GetItem??? What?
 
       z = (x - self.input_mean[None, :, None, None].to(x.device)) / self.input_std[None, :, None, None].to(x.device)
       up_activation = []
+      
+
+      PRINT ("LINE 139 MODELS.PY----------------------------------------------")
+      PRINT ("LINE 139 MODELS.PY----------------------------------------------")
+      PRINT ("LINE 139 MODELS.PY----------------------------------------------")
+      PRINT ("LINE 139 MODELS.PY----------------------------------------------")
       
       for i in range(self.n_conv):             #in range 4 basically.
         # Add all the information required for skip connections
@@ -146,6 +153,10 @@ class Detector(torch.nn.Module):
         # Add the skip connection
         if self.use_skip:
           z = torch.cat([z, up_activation[i]], dim=1)
+        print (f'OCT 30, 2021 -------------------------------->This is Z: {z}')
+        print (f'OCT 30, 2021 -------------------------------->This is Z: {z}')
+        print (f'OCT 30, 2021 -------------------------------->This is Z: {z}')
+        
       return self.classifier(z)
 
 

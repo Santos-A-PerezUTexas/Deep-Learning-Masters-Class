@@ -44,6 +44,7 @@ def train(args):
     transform = eval(args.transform, {k: v for k, v in inspect.getmembers(dense_transforms) if inspect.isclass(v)})
     train_data = load_detection_data('dense_data/train', num_workers=4, transform=transform)
     valid_data = load_detection_data('dense_data/valid', num_workers=4)
+    #dataset = DetectionSuperTuxDataset('dense_data/valid', min_size=0)
 
     print ("FROM TRAIN() FINISHED LOAD DATA!!!!!!!!!!!!!!!")
     print ("FROM TRAIN() FINISHED LOAD DATA!!!!!!!!!!!!!!!")
