@@ -69,9 +69,13 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
              3. flattened_tensor = Flattenned maxpooled_heatmap
              4. topk(flattened_tensor, k, dim=None, largest=True, sorted=True, *, out=None)
              5.  What is k for topk()?
+                      k must <= max_det
+                      k must <=the number of points output by max_pool2d. 
+                      https://piazza.com/class/ksjhagmd59d6sg?cid=256
+
              6. Where do I use these min_score=-5, max_det=100 ????
              7. Return no more than max_det peaks per image
-             8. f
+             8. 
              9. Return:  (score, cx, cy) is a tuple with three numbers
 
              RETURN (List of peaks [(score, cx, cy), ...], where cx, cy are the position of a peak and score is the heatmap value at the peak. (score, cx, cy) is a tuple with three numbers)
