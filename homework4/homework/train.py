@@ -100,8 +100,21 @@ def train(args):
             print(f'From the batch of 32, image, peaks, and size, number 25 is IMAGE 25: {img[25]}, PEAK #25: {peaks[25]}, SIZE #25:{size[25]}.')
             #print(f'THE MEAN FOR: image, label, and size number 25 is IMAGE: {img[25].mean}, LABEL: {label[25].mean}, SIZE:{size[25].mean}, respectively.')
             
-            logit = model(img)
-            loss_val = loss(logit, label)
+            print("LINE 103 IN TRAIN, CALLING THE MODEL DETECTOR NOW")
+            print("LINE 103 IN TRAIN, CALLING THE MODEL DETECTOR NOW")
+            print("LINE 103 IN TRAIN, CALLING THE MODEL DETECTOR NOW")
+            print("LINE 103 IN TRAIN, CALLING THE MODEL DETECTOR NOW")
+            
+            detected_peaks = model(img)
+
+            print(""LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW)
+            print(""LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW)
+            print(""LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW)
+            print(""LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW)
+
+            loss_val = loss(detected_peaks, peak)
+            
+            
             i_pred += 1
             print ("Finished making prediction/detection")
 
