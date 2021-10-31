@@ -146,6 +146,11 @@ class Detector(torch.nn.Module):
         # Add all the information required for skip connections
         up_activation.append(z)
         print(f'In detector->Forward LOOP Number {i} AFTER append()')
+
+        #AT THIS POINT, GET_ITEM IS CALLED, WHY?  AND PROGRAM CRASHES, OCT 30, 2021
+        #AT THIS POINT, GET_ITEM IS CALLED, WHY?  AND PROGRAM CRASHES, OCT 30, 2021
+        #AT THIS POINT, GET_ITEM IS CALLED, WHY?  AND PROGRAM CRASHES, OCT 30, 2021
+        
         z = self._modules['conv%d'%i](z)
         print(f'In detector->Forward LOOP Number {i} AFTER Z')
 
