@@ -85,6 +85,9 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
 
               1.  x = torch.tensor([[0,0,0,0,0], [0,1,2,3,0], [0,4,5,6,0],[0,7,8,9,0],[0,0,0,0,0]])
               2. Maxpool = torch.nn.MaxPool2d (kernel_size=3)
+              3. x.vew(-1) is the flattened x, but not what we want, we want x[None,None]
+              4. So y = Maxpool(x[None,None])
+              5. ***RuntimeError: "max_pool2d" not implemented for 'Long'
     
     """ 
     return("You have succesfully called extract_peak as follows:  Detector-->Forward()--->Detect()--->extrac_peak")
