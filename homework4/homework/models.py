@@ -25,7 +25,7 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
        @return: List of peaks [(score, cx, cy), ...], where cx, cy are the position of a peak and score is the
                 heatmap value at the peak. Return no more than max_det peaks per image
 
-      Use maxpool2d and topk:
+      Use *maxpool2d()* and *topk()*:
 
       The Heatmap has 3 channels. MaxPool2d operates channel wise and will return 3 channels..  once we *compare* the 
       maxpool with the heatmap, should  we use a heuristic to combine the channels (eg summation), do we need a 
@@ -38,6 +38,22 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
           ---------->As described in the starter code, extract_peak() is a function that works for one channel of heatmap (H x W).
           ---------->In detect(), you will need to let an image (3 x H x W) pass the called forward() and get a 3-channel heatmap (3 x H x W).
           ---------->Then in detect() you will apply the extract_peak to the 3-channel heatmap three times (by a for loop or list them), then return 3 list of detections.
+
+
+      As noted in the slides, maxpool2d() helps you identify the local maximum by *distributing* the max value to all
+      indexes in a given window. In the provided example, we want to know that 3 is indeed not a local maxima. When 
+      maxpool2d() returns the modified tensor with 5 distributed over the index where 3 was originally located, it 
+      becomes clear that 3 is not greater than or equal to its neighbors.  You need to make use of the information 
+      maxpool2d() provides you with, and generate a new tensor suitable for ***TOPK()***. 
+      You should not pass the raw output of maxpool to topk. The slides also illustrates how you can find the true indexes to
+      generate  the new tensor.
+
+      After max pooling, how does one pick out the actual maxima from the returned tensor? The only way I can think of is
+      by basically manually doing what maxpool2d() is doing, but that obviously defeats the purpose. I know the next steps are
+       to pass a ***flattened** tensor to topk(), but am missing something in the order of operations here.
+
+
+      torch.topk(input, k, dim=None, largest=True, sorted=True, *, out=None)
 
     """
     return("You have succesfully called extract_peak as follows:  Detector-->Forward()--->Detect()--->extrac_peak")
