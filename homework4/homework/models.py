@@ -142,12 +142,13 @@ class Detector(torch.nn.Module):
       print ("LINE 139 MODELS.PY----------------------------------------------")
       
       for i in range(self.n_conv):             #in range 4 basically.
+        print(f'In detector->Forward FIRST LOOP Number {i}')
         # Add all the information required for skip connections
         up_activation.append(z)
         z = self._modules['conv%d'%i](z)
 
       for i in reversed(range(self.n_conv)):
-        print(f'In detector->Forward LOOP Number {i}')
+        print(f'In detector->Forward SECOND LOOP Number {i}')
         z = self._modules['upconv%d'%i](z)
         # Fix the padding
         z = z[:, :, :up_activation[i].size(2), :up_activation[i].size(3)]
