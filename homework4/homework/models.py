@@ -24,6 +24,21 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
        @min_score: Only return peaks greater than min_score
        @return: List of peaks [(score, cx, cy), ...], where cx, cy are the position of a peak and score is the
                 heatmap value at the peak. Return no more than max_det peaks per image
+
+      Use maxpool2d and topk:
+
+      The Heatmap has 3 channels. MaxPool2d operates channel wise and will return 3 channels..  once we *compare* the 
+      maxpool with the heatmap, should  we use a heuristic to combine the channels (eg summation), do we need a 
+      separate convolutional layer to deep learn the right way to  combine channel information, just pass three 
+      separate channels, or something else?
+
+      how to apply peak-extract to a multi-channel heatmap
+          ---------->If you're just working on the extract_peak function, we should be passing one channel at a time to the extract_peak function.
+          ---------->So the "heatmap" input to extract_peak function is just HxW
+          ---------->As described in the starter code, extract_peak() is a function that works for one channel of heatmap (H x W).
+          ---------->In detect(), you will need to let an image (3 x H x W) pass the called forward() and get a 3-channel heatmap (3 x H x W).
+          ---------->Then in detect() you will apply the extract_peak to the 3-channel heatmap three times (by a for loop or list them), then return 3 list of detections.
+
     """
     return("You have succesfully called extract_peak as follows:  Detector-->Forward()--->Detect()--->extrac_peak")
 
