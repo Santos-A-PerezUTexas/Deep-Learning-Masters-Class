@@ -63,12 +63,13 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
                         **Max pooling expects an order-4 tensor as an input, use heatmap[None,None] to convert the input heatmap to an order-4 tensor.
                         **Input size (N, C, H, W), output (N, C, H_{out}, W_{out}) 
 
-             1.  Heatmap [None, None]
+             1. Heatmap [None, None] to convert the input heatmap to an order-4 tensor.
              2. Maxpool = Maxpool2d (kernel_size=max_pool_ks=7, return_indices=True) #return indices?
              3. maxpooled_heatmap =  MaxPool(Heatmap) #identify local maximum by *distributing* max value to all indexes in a given window
              3. flattened_tensor = Flattenned maxpooled_heatmap
              4. topk(flattened_tensor, k, dim=None, largest=True, sorted=True, *, out=None)
              5.  What is k for topk()?
+             6. Where do I use these min_score=-5, max_det=100 ????
 
     """ 
     return("You have succesfully called extract_peak as follows:  Detector-->Forward()--->Detect()--->extrac_peak")
