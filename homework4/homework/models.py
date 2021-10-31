@@ -64,8 +64,9 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
                         **Input size (N, C, H, W), output (N, C, H_{out}, W_{out}) 
 
              1.  Heatmap [None, None]
-             2.  Maxpool2d (kernel_size=max_pool_ks=7, return_indices=True)
-             3.  Flattenned Tensor 
+             2. Maxpool = Maxpool2d (kernel_size=max_pool_ks=7, return_indices=True) #return indices?
+             3. maxpooled_heatmap =  MaxPool(Heatmap) #identify local maximum by *distributing* max value to all indexes in a given window
+             3. flattened_tensor = Flattenned maxpooled_heatmap
              4. topk(flattened_tensor, k, dim=None, largest=True, sorted=True, *, out=None)
              5.  What is k for topk()?
 
