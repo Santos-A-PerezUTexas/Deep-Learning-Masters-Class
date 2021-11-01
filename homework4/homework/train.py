@@ -74,7 +74,7 @@ def train(args):
         #NOV 21, 2021: for img, peaks, size in train_data:
         for img, peaks, size in train_data:        #THIS CALLS GET ITEM 145 TIMES OCT 30 2021
             
-            img, peaks, size  = img.to(device), peaks.to(device),  size.to(device)
+            img, peaks, size  = img.to(device).long(), peaks.to(device).long(),  size.to(device).long()
             #NOV 21, 2021:  img, peaks, size  = img.to(device), peaks.to(device),  size.to(device)
             #img, peaks, size, pickup = img.to(device), peaks.to(device).long(),  size.to(device).long() 
             
