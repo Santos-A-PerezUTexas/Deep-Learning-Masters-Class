@@ -100,7 +100,7 @@ def train(args):
             print (f'Image shape is {img.shape}')
             #Image shape is torch.Size([32, 3, 96, 128])
             print (f'peaks shape is {peaks.shape}')
-            peaks shape is torch.Size([32, 3, 96, 128])
+            #peaks shape is torch.Size([32, 3, 96, 128])
             print (f'size shape is {size.shape}')
             #size shape is torch.Size([32, 2, 96, 128])
             
