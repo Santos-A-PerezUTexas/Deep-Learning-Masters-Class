@@ -94,7 +94,7 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
 
 
 
-        #--------------------------------------BEGING CNN
+        #--------------------------------------BEGIN CNN
 
 class CNNClassifier(torch.nn.Module):
     class Block(torch.nn.Module):
@@ -111,6 +111,7 @@ class CNNClassifier(torch.nn.Module):
 
         def forward(self, x):
             return F.relu(self.b3(self.c3(F.relu(self.b2(self.c2(F.relu(self.b1(self.c1(x)))))))) + self.skip(x))
+            #NOV 1, 2021: Input type (torch.cuda.FloatTensor) and weight type (torch.FloatTensor) should be the same
 
     def __init__(self, layers=[16, 32, 64, 128], n_output_channels=6, kernel_size=3):
         super().__init__()
@@ -120,10 +121,10 @@ class CNNClassifier(torch.nn.Module):
         L = []
         c = 3
         for l in layers:
-            L.append(self.Block(c, l, kernel_size, 2))
+            L.append(self.Block(c, l, kernel_size, 2))   #The Network is composed of a series of blocks w/ three layers each and skip C
             c = l
         self.network = torch.nn.Sequential(*L)
-        self.classifier = torch.nn.Linear(c, n_output_channels)
+        self.classifier = torch.nn.Linear(c, n_output_channels)    #LINEAR LAYER!!!!!!!!???   Nov 1, 2021
 
     def forward(self, x):
         z = self.network((x - self.input_mean[None, :, None, None].to(x.device)) / self.input_std[None, :, None, None].to(x.device))
@@ -225,7 +226,7 @@ class Detector(torch.nn.Module):
         #NOV 1, 2021 remove comment pund sign below
         z = self._modules['conv%d'%i](z)    #NOV 1, 2021: Input type (torch.cuda.FloatTensor) and 
         #Nov 1, 2021: weight type (torch.FloatTensor) should be the same
-
+        #Also line 113
 
         print(f'In detector->Forward LOOP Number {i} AFTER Z')
 
