@@ -2,6 +2,30 @@ from PIL import Image
 from torch.utils.data import Dataset, DataLoader
 from . import dense_transforms
 
+#This is HW3, in here for testing ONLY.  Nov 21, 2021
+
+class DenseSuperTuxDataset(Dataset):
+    def __init__(self, dataset_path, transform=dense_transforms.ToTensor()):
+        from glob import glob
+        from os import path
+        self.files = []
+        for im_f in glob(path.join(dataset_path, '*_im.jpg')):
+            self.files.append(im_f.replace('_im.jpg', ''))
+        self.transform = transform
+
+    def __len__(self):
+        return len(self.files)
+
+    def __getitem__(self, idx):
+        b = self.files[idx]
+        im = Image.open(b + '_im.jpg')
+        lbl = Image.open(b + '_seg.png')
+        if self.transform is not None:
+            im, lbl = self.transform(im, lbl)
+        return im, lbl
+
+
+#BEGIN DETECTION CLASS FOR HW4, ABOVE WAS FOR HW3 for Test purposes
 
 class DetectionSuperTuxDataset(Dataset):
     def __init__(self, dataset_path, transform=dense_transforms.ToTensor(), min_size=20):
