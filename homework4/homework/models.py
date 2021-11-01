@@ -222,11 +222,13 @@ class Detector(torch.nn.Module):
         #AT THIS POINT, GET_ITEM IS CALLED, WHY?  AND PROGRAM CRASHES, OCT 30, 2021
         #AT THIS POINT, GET_ITEM IS CALLED, WHY?  AND PROGRAM CRASHES, OCT 30, 2021
         
+        #NOV 1, 2021 remove comment pund sign below
         z = self._modules['conv%d'%i](z)
+
         print(f'In detector->Forward LOOP Number {i} AFTER Z')
 
       for i in reversed(range(self.n_conv)):
-        print(f'In detector->Forward SECOND LOOP Number {i}')
+        print(f'In REVERSED detector->Forward SECOND LOOP Number {i}')
         z = self._modules['upconv%d'%i](z)
         # Fix the padding
         z = z[:, :, :up_activation[i].size(2), :up_activation[i].size(3)]
