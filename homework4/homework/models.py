@@ -223,7 +223,9 @@ class Detector(torch.nn.Module):
         #AT THIS POINT, GET_ITEM IS CALLED, WHY?  AND PROGRAM CRASHES, OCT 30, 2021
         
         #NOV 1, 2021 remove comment pund sign below
-        z = self._modules['conv%d'%i](z)
+        z = self._modules['conv%d'%i](z)    #NOV 1, 2021: Input type (torch.cuda.FloatTensor) and 
+        #Nov 1, 2021: weight type (torch.FloatTensor) should be the same
+
 
         print(f'In detector->Forward LOOP Number {i} AFTER Z')
 
