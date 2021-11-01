@@ -43,18 +43,19 @@ def train(args):
 
     import inspect
     transform = eval(args.transform, {k: v for k, v in inspect.getmembers(dense_transforms) if inspect.isclass(v)})
-    #train_data = load_detection_data('dense_data/train', num_workers=4, transform=transform)
-    #valid_data = load_detection_data('dense_data/valid', num_workers=4)
+    train_data = load_detection_data('dense_data/train', num_workers=4, transform=transform)
+    valid_data = load_detection_data('dense_data/valid', num_workers=4)
     #dataset = DetectionSuperTuxDataset('dense_data/valid', min_size=0)
 
     #Nov 21, 2021 added below
-    train_data = load_dense_data('dense_data/train', num_workers=4, transform=transform)
-    valid_data = load_dense_data('dense_data/valid', num_workers=4)
+    #train_data = load_dense_data('dense_data/train', num_workers=4, transform=transform)
+    #valid_data = load_dense_data('dense_data/valid', num_workers=4)
 
-    print ("FROM TRAIN() FINISHED LOAD DATA!!!!!!!!!!!!!!!")
-    print ("FROM TRAIN() FINISHED LOAD DATA!!!!!!!!!!!!!!!")
-    print ("FROM TRAIN() FINISHED LOAD DATA!!!!!!!!!!!!!!!")
-    print ("FROM TRAIN() FINISHED LOAD DATA!!!!!!!!!!!!!!!")
+    print ("WARNING: FROM TRAIN() FINISHED LOAD DATA!, NOV 21, 2021:  ADD TOHEAT() TRANSFORMS!!!!!!!!")
+    print ("WARNING: FROM TRAIN() FINISHED LOAD DATA!, NOV 21, 2021:  ADD TOHEAT() TRANSFORMS!!!!!!!!")
+    print ("FROM TRAIN() FINISHED LOAD DATA!, NOV 21, 2021:  ADD TOHEAT() TRANSFORMS!!!!!!!!")
+    print ("WARNING: FROM TRAIN() FINISHED LOAD DATA!, NOV 21, 2021:  ADD TOHEAT() TRANSFORMS!!!!!!!!")
+   
 
     print (f'Size of training set is {len(train_data)}')
     #val = input("PRESS ANY KEY")
@@ -70,10 +71,11 @@ def train(args):
         #batch size is 32
         i_pred = 0
 
-        
+        #NOV 21, 2021: for img, peaks, size in train_data:
         for img, peaks, size in train_data:        #THIS CALLS GET ITEM 145 TIMES OCT 30 2021
             
             img, peaks, size  = img.to(device), peaks.to(device),  size.to(device)
+            #NOV 21, 2021:  img, peaks, size  = img.to(device), peaks.to(device),  size.to(device)
             #img, peaks, size, pickup = img.to(device), peaks.to(device).long(),  size.to(device).long() 
             
             #ToTheatmaps converts ALL THREE OF THESE DETECTIONS  to peak and size tensors.
@@ -98,12 +100,12 @@ def train(args):
             print (f'Image shape is {img.shape}')
             #Image shape is torch.Size([32, 3, 96, 128])
             print (f'peaks shape is {peaks.shape}')
-            #peaks shape is torch.Size([32, 3, 96, 128])
+            peaks shape is torch.Size([32, 3, 96, 128])
             print (f'size shape is {size.shape}')
             #size shape is torch.Size([32, 2, 96, 128])
             
 
-            print(f'From the batch of 32, image, peaks, and size, number 25 is IMAGE 25: {img[25]}, PEAK #25: {peaks[25]}, SIZE #25:{size[25]}.')
+            #print(f'From the batch of 32, image, peaks, and size, number 25 is IMAGE 25: {img[25]}, PEAK #25: {peaks[25]}, SIZE #25:{size[25]}.')
             #print(f'THE MEAN FOR: image, label, and size number 25 is IMAGE: {img[25].mean}, LABEL: {label[25].mean}, SIZE:{size[25].mean}, respectively.')
             
             print("LINE 103 IN TRAIN, CALLING THE MODEL DETECTOR NOW")
@@ -190,6 +192,8 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--continue_training', action='store_true')
     parser.add_argument('-t', '--transform',
                         default='Compose([ColorJitter(0.9, 0.9, 0.9, 0.1), RandomHorizontalFlip(), ToTensor(), ToHeatmap()])')
+    #parser.add_argument('-t', '--transform',
+     #                   default='Compose([ColorJitter(0.9, 0.9, 0.9, 0.1), RandomHorizontalFlip(), ToTensor()])')
 
     args = parser.parse_args()
     train(args)
