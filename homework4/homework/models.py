@@ -192,7 +192,8 @@ class Detector(torch.nn.Module):
       #Implement a forward pass through the network, use forward for training
       #and detect for detection  
       #essentially be the same as HW3 downsample and then upsample back the resolution of the image   
-      #You can use only forward() in training, not detect. You can call detect optionally for inference/visualization
+      #You can use only forward() in training, not detect(). 
+      #You can call detect() optionally for inference/visualization
       # purposes, but it seems to be "necessary" only in the sense that the grader will evaluate and score it. 
       #Yeah so detect() is purely for inference. Training portion is very similar to HW3
 
@@ -279,8 +280,13 @@ class Detector(torch.nn.Module):
                   #max_pool_ks:           Only return points that are larger than a max_pool_ks x max_pool_ks window around the point
                   #min_score:             Only return peaks greater than min_score
                   #return:                 List of peaks [(score, cx, cy), ...], where cx, cy are the position of a peak and score is the
-                  #                        heatmap value at the peak. Return no more than max_det peaks per image
+                  #heatmap value at the peak. Return no more than max_det peaks per image
         
+            #Oct 31, 2021
+            #You can call detect() optionally for inference/visualization
+            #purposes, but it seems to be "necessary" only in the sense that the grader will evaluate and score it. 
+            #Yeah so detect() is purely for inference. Training portion is very similar to HW3
+
         
         print(extract_peak(image))
         return ("MODELS.PY: THIS STRING WAS RETURNED FROM detect():  Class Detector.Forward()--->detect() ****************OCT 30, 2021")              
