@@ -113,6 +113,9 @@ class CNNClassifier(torch.nn.Module):
             return F.relu(self.b3(self.c3(F.relu(self.b2(self.c2(F.relu(self.b1(self.c1(x)))))))) + self.skip(x))
             #NOV 1, 2021: Input type (torch.cuda.FloatTensor) and weight type (torch.FloatTensor) should be the same
 
+
+  #CNN Classifier begins here, the FCN uses ONLY above block.  Nov, 1, 2021
+
     def __init__(self, layers=[16, 32, 64, 128], n_output_channels=6, kernel_size=3):
         super().__init__()
         self.input_mean = torch.Tensor([0.3235, 0.3310, 0.3445])
