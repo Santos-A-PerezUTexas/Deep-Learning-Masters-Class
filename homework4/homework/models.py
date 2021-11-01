@@ -194,6 +194,8 @@ class Detector(torch.nn.Module):
       #essentially be the same as HW3 downsample and then upsample back the resolution of the image   
       #You can use only forward() in training, not detect. You can call detect optionally for inference/visualization
       # purposes, but it seems to be "necessary" only in the sense that the grader will evaluate and score it. 
+      #Yeah so detect() is purely for inference. Training portion is very similar to HW3
+
 
       print("MODELS.PY Making a Prediction/Detection NOW, INSIDE FORWARD, OCT 30 2021")
       print (self.detect(x))   #CALLING DETECT() HERE FOR TEST PURPOSES OCT 30 2021          
