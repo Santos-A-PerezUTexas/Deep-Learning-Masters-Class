@@ -54,7 +54,7 @@ class DetectionSuperTuxDataset(Dataset):
 
     def __getitem__(self, idx):
         import numpy as np
-        print (f'Utils.PY:    DetectionSuperTuxDataset-->Getitem() was just called....... for index {idx}, Oct 30 2021')
+        #print (f'Utils.PY:    DetectionSuperTuxDataset-->Getitem() was just called....... for index {idx}, Oct 30 2021')
         b = self.files[idx]
         im = Image.open(b + '_im.jpg')
         nfo = np.load(b + '_boxes.npz')
