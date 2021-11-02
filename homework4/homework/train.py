@@ -131,6 +131,7 @@ def train(args):
 
           
         save_model(model)
+        print("DONE")
 
   
 
