@@ -251,10 +251,10 @@ class Detector(torch.nn.Module):
       
       for i in range(self.n_conv):             #in range 4 basically.
         
-        print(f'            In detector->Forward FIRST LOOP Number {i}')
+        print(f'            In detector->Forward FIRST LOOP Number {i+1}')
         # Add all the information required for skip connections
         up_activation.append(z)
-        print(f'            In detector->Forward LOOP Number {i} AFTER append()')
+        print(f'            In detector->Forward LOOP Number {i+1} AFTER append()')
         #AT THIS POINT, GET_ITEM IS CALLED, WHY?  AND PROGRAM CRASHES, OCT 30, 2021
         #NOV 1, 2021 CRASH HERE AND LINE 119
         #NOV 1, 2021 CRASH HERE AND LINE 119
