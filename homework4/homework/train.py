@@ -93,7 +93,7 @@ def train(args):
             
             print (f'              (LOOP)LOSS  shape is {loss.shape}')
                         
-            print ("  (Finished making prediction/detection for batch ")
+            print (f'  (LOOP)   Finished making prediction/detection for batch {batch} ')
 
           
         save_model(model)
