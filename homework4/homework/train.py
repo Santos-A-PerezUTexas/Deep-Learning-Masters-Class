@@ -75,7 +75,7 @@ def train(args):
         #NOV 21, 2021: for img, peaks, size in train_data:
         for img, peaks, size in train_data:        #THIS CALLS GET ITEM 145 TIMES OCT 30 2021
             
-            img, peaks, size  = img.to(device).long(), peaks.to(device).long(),  size.to(device).long()
+            img, peaks, size  = img.to(device), peaks.to(device).long(),  size.to(device).long()
             #NOV 21, 2021:  img, peaks, size  = img.to(device), peaks.to(device),  size.to(device)
             #img, peaks, size, pickup = img.to(device), peaks.to(device).long(),  size.to(device).long() 
             
@@ -91,8 +91,10 @@ def train(args):
             """
         
             
-            
-            
+            print (f'IMG is type {img.device}')
+            print (f'IMG is type {img.device}')
+            print (f'IMG is type {img.device}')
+            print (f'IMG is type {img.device}')
             
 
             print (f'MAKING PREDICTION NUMBER {i_pred} WITH logit=model(img)-----------')

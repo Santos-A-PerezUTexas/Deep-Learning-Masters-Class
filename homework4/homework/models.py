@@ -110,6 +110,12 @@ class CNNClassifier(torch.nn.Module):
             self.skip = torch.nn.Conv2d(n_input, n_output, kernel_size=1, stride=stride)
 
         def forward(self, x):
+            print (f'NOV 1, 2021-----:  The input type of X IS  {x.device}  ')
+            print (f'NOV 1, 2021-----:  The input type of X IS  {x.device}  ')
+            print (f'NOV 1, 2021-----:  The input type of X IS  {x.device}  ')
+            print (f'NOV 1, 2021-----:  The input type of X IS  {x.device}  ')
+            print (f'NOV 1, 2021-----:  The input type of X IS  {x.device}  ')
+            
             return F.relu(self.b3(self.c3(F.relu(self.b2(self.c2(F.relu(self.b1(self.c1(x)))))))) + self.skip(x))
             #NOV 1, 2021: Input type (torch.cuda.FloatTensor) and weight type (torch.FloatTensor) should be the same
 
