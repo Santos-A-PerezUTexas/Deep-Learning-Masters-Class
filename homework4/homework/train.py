@@ -108,6 +108,8 @@ def train(args):
         for img, peaks, size in train_data:        #THIS CALLS GET ITEM 145 TIMES OCT 30 2021
             
             img, peaks, size  = img.to(device), peaks.to(device).long(),  size.to(device).long()
+            
+            #PEAKS ARE HEATMAPS************
             #NOV 21, 2021:  img, peaks, size  = img.to(device), peaks.to(device),  size.to(device)           
             #ToTheatmaps converts ALL THREE OF THESE DETECTIONS  to peak and size tensors.
             #Per the assignment:  
