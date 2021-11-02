@@ -246,10 +246,8 @@ class Detector(torch.nn.Module):
       up_activation = []
       
 
-      print ("LINE 139 MODELS.PY---------------------------------------------")
-      print ("LINE 139 MODELS.PY---------------------------------------------")
-      print ("LINE 139 MODELS.PY---------------------------------------------")
-      print ("LINE 139 MODELS.PY---------------------------------------------")
+      print ("------------------DETECTOR-->FORWARD() NOW (MODELS.PY)---------------------------------------------")
+    
       
       for i in range(self.n_conv):             #in range 4 basically.
         
