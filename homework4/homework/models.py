@@ -277,12 +277,6 @@ class Detector(torch.nn.Module):
         if self.use_skip:
           z = torch.cat([z, up_activation[i]], dim=1)
 
-
-
-        print (f'OCT 30, 2021 -------------------------------->This is Z: {z}')
-        print (f'OCT 30, 2021 -------------------------------->This is Z: {z}')
-        print (f'OCT 30, 2021 -------------------------------->This is Z: {z}')
-        
       return self.classifier(z)
 
 
