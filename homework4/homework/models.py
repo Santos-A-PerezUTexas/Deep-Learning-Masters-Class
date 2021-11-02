@@ -260,11 +260,11 @@ class Detector(torch.nn.Module):
         #AT THIS POINT, GET_ITEM IS CALLED, WHY?  AND PROGRAM CRASHES, OCT 30, 2021
         #AT THIS POINT, GET_ITEM IS CALLED, WHY?  AND PROGRAM CRASHES, OCT 30, 2021
         
-        #NOV 1, 2021 CRASH HERE AND LINE 113
-        #NOV 1, 2021 CRASH HERE AND LINE 113
-        #NOV 1, 2021 CRASH HERE AND LINE 113
+        #NOV 1, 2021 CRASH HERE AND LINE 119
+        #NOV 1, 2021 CRASH HERE AND LINE 119
+        #NOV 1, 2021 CRASH HERE AND LINE 119
         #CONVOLUTIONAL LAYER, CLASS CNN's BLOCK, DOES NOT REACH DECON BELOW
-        z = self._modules['conv%d'%i](z)    
+        z = self._modules['conv%d'%i](z)   
         
 
         print(f'In detector->Forward LOOP Number {i} AFTER Z')
