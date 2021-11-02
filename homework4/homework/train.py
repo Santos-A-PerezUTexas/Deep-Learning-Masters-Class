@@ -29,7 +29,7 @@ class FocalLoss(nn.Module):
             target_tensor, 
             weight=self.weight,
             reduction = self.reduction
-        )
+        ).to(input_tensor.device)
 
 
 
@@ -59,6 +59,7 @@ def train(args):
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, weight_decay=1e-5)
     w = torch.as_tensor(DENSE_CLASS_DISTRIBUTION)**(-args.gamma)
+    w=w.to(device)
     loss = torch.nn.CrossEntropyLoss(weight=w / w.mean()).to(device)
     focal_loss = FocalLoss(weight=w / w.mean()).to(device).to(device)
      
@@ -126,6 +127,9 @@ def train(args):
             #loss_val = loss(detected_peaks, peaks)
             focal_Loss= focal_loss(detected_peaks, peaks)
             
+            #Nov 2, 2021:  Output dimesion is [32, 3, 96, 128], the label dimension should be [32, 96, 128], long type integers.
+            #https://piazza.com/class/ksjhagmd59d6sg?cid=776
+
             print (f'              (LOOP)LOSS  shape is {loss.shape}')
                         
             print (f'  (LOOP)   Finished making prediction/detection for batch {batch} ')
