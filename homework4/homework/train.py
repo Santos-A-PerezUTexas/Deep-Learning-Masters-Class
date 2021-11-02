@@ -122,8 +122,8 @@ def train(args):
             print("LINE 103 IN TRAIN, CALLING THE MODEL DETECTOR NOW")
             print("LINE 103 IN TRAIN, CALLING THE MODEL DETECTOR NOW")
             
-            #detected_peaks = model(img)
-            labels = model2(img)
+            detected_peaks = model(img)
+            #labels = model2(img)
 
             print("LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW")
             print("LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW")
