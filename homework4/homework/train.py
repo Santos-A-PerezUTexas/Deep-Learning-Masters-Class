@@ -9,8 +9,6 @@ from . import dense_transforms
 import torch.utils.tensorboard as tb
 DENSE_CLASS_DISTRIBUTION = [0.52683655, 0.02929112, 0.4352989, 0.0044619, 0.00411153]
 
-
-
 def train(args):
     
     from os import path
@@ -23,7 +21,6 @@ def train(args):
 
     train_logger, valid_logger = None, None
     
-
     if args.log_dir is not None:
         train_logger = tb.SummaryWriter(path.join(args.log_dir, 'train'), flush_secs=1)
         valid_logger = tb.SummaryWriter(path.join(args.log_dir, 'valid'), flush_secs=1)
@@ -31,15 +28,9 @@ def train(args):
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, weight_decay=1e-5)
     w = torch.as_tensor(DENSE_CLASS_DISTRIBUTION)**(-args.gamma)
-    #w = w.to(device)  #added Nov 1, 2021
     loss = torch.nn.CrossEntropyLoss(weight=w / w.mean()).to(device)
-    #loss = torch.nn.CrossEntropyLoss().to(device)
      
-
-    
-    print ("FROM TRAIN() ABOUT TO LOAD DATA!!!!!!!!!!!!!!!") 
-   
-    print ("FROM TRAIN() ABOUT TO LOAD DATA!!!!!!!!!!!!!!!")
+    print ("1................FROM TRAIN() ABOUT TO LOAD DATA")
     #val = input("PRESS ANY KEY")
     #print(val)
 
@@ -47,40 +38,26 @@ def train(args):
     transform = eval(args.transform, {k: v for k, v in inspect.getmembers(dense_transforms) if inspect.isclass(v)})
     train_data = load_detection_data('dense_data/train', num_workers=4, transform=transform)
     valid_data = load_detection_data('dense_data/valid', num_workers=4)
-    #dataset = DetectionSuperTuxDataset('dense_data/valid', min_size=0)
 
-    #Nov 21, 2021 added below
-    #train_data = load_dense_data('dense_data/train', num_workers=4, transform=transform)
-    #valid_data = load_dense_data('dense_data/valid', num_workers=4)
-
-    print ("WARNING: FROM TRAIN() FINISHED LOAD DATA!, NOV 21, 2021:  ADD TOHEAT() TRANSFORMS!!!!!!!!")
-    print ("WARNING: FROM TRAIN() FINISHED LOAD DATA!, NOV 21, 2021:  ADD TOHEAT() TRANSFORMS!!!!!!!!")
-    print ("FROM TRAIN() FINISHED LOAD DATA!, NOV 21, 2021:  ADD TOHEAT() TRANSFORMS!!!!!!!!")
-    print ("WARNING: FROM TRAIN() FINISHED LOAD DATA!, NOV 21, 2021:  ADD TOHEAT() TRANSFORMS!!!!!!!!")
-   
-
-    print (f'Size of training set is {len(train_data)}')
-    #val = input("PRESS ANY KEY")
-    #print(val)
+    print (f'2................Size of training set is {len(train_data)}')
+    
 
     global_step = 0
     for epoch in range(1):   #WARNING CHANGE TO args.num_epoch   #WARNING CHANGE TO args.num_epoch
 
-        print("At the beggining of an epoch****************")
+        print(f'***********At the beggining of epoch  {i+1}****************')
         model.train()
         
         #batch size is 32
         #batch size is 32
+
         i_pred = 0
         batch = 0
 
-        #NOV 21, 2021: for img, peaks, size in train_data:
         for img, peaks, size in train_data:        #THIS CALLS GET ITEM 145 TIMES OCT 30 2021
             
             img, peaks, size  = img.to(device), peaks.to(device).long(),  size.to(device).long()
-            #NOV 21, 2021:  img, peaks, size  = img.to(device), peaks.to(device),  size.to(device)
-            #img, peaks, size, pickup = img.to(device), peaks.to(device).long(),  size.to(device).long() 
-            
+            #NOV 21, 2021:  img, peaks, size  = img.to(device), peaks.to(device),  size.to(device)           
             #ToTheatmaps converts ALL THREE OF THESE DETECTIONS  to peak and size tensors.
             #Per the assignment:  
             """
@@ -92,54 +69,31 @@ def train(args):
             Use the extract_peak function to find detected objects.
             """
         
-            print (f'-------------This is batch number {batch}, of size {len(img)} or img.size:{img.size}')
-            print (f'-------------This is batch number {batch}, of size {len(img)} or img.size:{img.size}')
-            print (f'-------------This is batch number {batch}, of size {len(img)} or img.size:{img.size}')
-            
+            print (f'            (IN LOOOP NOW)....-------------This is batch number {batch}, of size {len(img)}')
             batch +=1    
-            print (f'IMG is type {img.device}')
-            print (f'IMG is type {img.device}')
-            print (f'IMG is type {img.device}')
-            print (f'IMG is type {img.device}')
             
 
-            print (f'MAKING PREDICTION NUMBER {i_pred} WITH logit=model(img)-----------')
-            print (f'MAKING PREDICTION NUMBER {i_pred} WITH logit=model(img)-----------')
-            print (f'MAKING PREDICTION NUMBER {i_pred} WITH logit=model(img)-----------')
+            print (f'MAKING PREDICTION NUMBER {i_pred} WITH detected_peaks=model(img)-----------')
             print (f'Image shape is {img.shape}')
             #Image shape is torch.Size([32, 3, 96, 128])
             print (f'peaks shape is {peaks.shape}')
             #peaks shape is torch.Size([32, 3, 96, 128])
             print (f'size shape is {size.shape}')
-            #size shape is torch.Size([32, 2, 96, 128])
-            
-
-            #print(f'From the batch of 32, image, peaks, and size, number 25 is IMAGE 25: {img[25]}, PEAK #25: {peaks[25]}, SIZE #25:{size[25]}.')
-            #print(f'THE MEAN FOR: image, label, and size number 25 is IMAGE: {img[25].mean}, LABEL: {label[25].mean}, SIZE:{size[25].mean}, respectively.')
-            
-            print("LINE 103 IN TRAIN, CALLING THE MODEL DETECTOR NOW")
-            print("LINE 103 IN TRAIN, CALLING THE MODEL DETECTOR NOW")
-            print("LINE 103 IN TRAIN, CALLING THE MODEL DETECTOR NOW")
-            print("LINE 103 IN TRAIN, CALLING THE MODEL DETECTOR NOW")
-            
+            #size shape is torch.Size([32, 2, 96, 128])            
+           
             detected_peaks = model(img)
             #labels = model2(img)
 
-            print("LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW")
-            print("LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW")
-            print("LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW")
-            print("LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW")
-
-            print (f'peaks shape is {peaks.shape}')
-            print (f'DETECTED peaks shape is {detected_peaks.shape}')
-            print (f'peaks shape is {peaks.shape}')
-            print (f'DETECTED peaks shape is {detected_peaks.shape}')
+            
+            print (f'              (LOOP)peaks shape is {peaks.shape}')
+            print (f'              (LOOP) DETECTED peaks shape is {detected_peaks.shape}')
+            print("                   (LOOP)  GOING TO COMPUTE THE LOSS NOW")
             
             loss_val = loss(detected_peaks, peaks)
             
-            
-            i_pred += 1
-            print ("Finished making prediction/detection")
+            print (f'              (LOOP)LOSS  shape is {loss.shape}')
+                        
+            print ("  (Finished making prediction/detection for batch ")
 
           
         save_model(model)
