@@ -1,5 +1,7 @@
 import torch
 import numpy as np
+import torch.nn as nn
+import torch.nn.functional as F
 from torchvision import models
 from torchsummary import summary
 
@@ -8,6 +10,35 @@ from .utils import load_detection_data, load_dense_data
 from . import dense_transforms
 import torch.utils.tensorboard as tb
 DENSE_CLASS_DISTRIBUTION = [0.52683655, 0.02929112, 0.4352989, 0.0044619, 0.00411153]
+
+
+class FocalLoss(nn.Module):
+    
+    def __init__(self, weight=None, 
+                 gamma=2., reduction='none'):
+        nn.Module.__init__(self)
+        self.weight = weight
+        self.gamma = gamma
+        self.reduction = reduction
+        
+    def forward(self, input_tensor, target_tensor):
+        log_prob = F.log_softmax(input_tensor, dim=-1)
+        prob = torch.exp(log_prob)
+        return F.nll_loss(
+            ((1 - prob) ** self.gamma) * log_prob, 
+            target_tensor, 
+            weight=self.weight,
+            reduction = self.reduction
+        )
+
+
+
+
+
+
+
+
+
 
 def train(args):
     
@@ -29,6 +60,7 @@ def train(args):
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, weight_decay=1e-5)
     w = torch.as_tensor(DENSE_CLASS_DISTRIBUTION)**(-args.gamma)
     loss = torch.nn.CrossEntropyLoss(weight=w / w.mean()).to(device)
+    focal_loss = FocalLoss(weight=w / w.mean()).to(device).to(device)
      
     print ("1................FROM TRAIN() ABOUT TO LOAD DATA")
     #val = input("PRESS ANY KEY")
@@ -91,7 +123,8 @@ def train(args):
             print (f'              (LOOP) DETECTED peaks shape is {detected_peaks.shape}')
             print("                   (LOOP)  GOING TO COMPUTE THE LOSS NOW")
             
-            loss_val = loss(detected_peaks, peaks)
+            #loss_val = loss(detected_peaks, peaks)
+            focal_Loss= focal_loss(detected_peaks, peaks)
             
             print (f'              (LOOP)LOSS  shape is {loss.shape}')
                         
