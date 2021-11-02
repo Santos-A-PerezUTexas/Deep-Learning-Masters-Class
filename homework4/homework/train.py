@@ -73,14 +73,16 @@ def train(args):
             batch +=1    
             
 
-            print (f'MAKING PREDICTION NUMBER {i_pred} WITH detected_peaks=model(img)-----------')
-            print (f'Image shape is {img.shape}')
+            print (f'TRAIN() ----->MAKING PREDICTION NUMBER {i_pred+1} WITH detected_peaks=model(img)-----------')
+            print (f'            Image shape is {img.shape}')
             #Image shape is torch.Size([32, 3, 96, 128])
-            print (f'peaks shape is {peaks.shape}')
+            print (f'             peaks shape is {peaks.shape}')
             #peaks shape is torch.Size([32, 3, 96, 128])
-            print (f'size shape is {size.shape}')
+            print (f'              size shape is {size.shape}')
             #size shape is torch.Size([32, 2, 96, 128])            
-           
+            
+            i_pred += 1
+
             detected_peaks = model(img)
             #labels = model2(img)
 
