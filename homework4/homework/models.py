@@ -115,7 +115,7 @@ class CNNClassifier(torch.nn.Module):
             print (f'NOV 1, 2021-----:  The DEVICE of X IS  {x.device}  ')
             print (f'NOV 1, 2021-----:  The DEVICE of X IS  {x.device}  ')
 
-            output = self.c1(x)
+            output = self.c1(x).to(x.device)   #crashes here
             print (f'1   NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
             output = self.b1(output)
             print (f'2   NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
