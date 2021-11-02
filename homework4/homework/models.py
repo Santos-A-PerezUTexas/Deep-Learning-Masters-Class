@@ -17,7 +17,14 @@ import torch.nn.functional as F
 
 def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
     """
-       Your code here.
+       
+       *The detect and extract peaks  take one image of (3,96,128) at a time right, Not a batch
+       
+       *The peaks in the heatmaps we’re training on are bigger than one pixel 
+       (you can have a look at the training heatmaps by using the log function given in the train.py file)
+        and we want to only extract the center point.
+
+
        Extract local maxima (peaks) in a 2d heatmap.
        @heatmap: H x W heatmap containing peaks (similar to your training heatmap)
        @max_pool_ks: Only return points that are larger than a max_pool_ks x max_pool_ks window around the point
