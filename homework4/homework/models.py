@@ -251,10 +251,10 @@ class Detector(torch.nn.Module):
       
       for i in range(self.n_conv):             #in range 4 basically.
         
-        print(f'In detector->Forward FIRST LOOP Number {i}')
+        print(f'            In detector->Forward FIRST LOOP Number {i}')
         # Add all the information required for skip connections
         up_activation.append(z)
-        print(f'In detector->Forward LOOP Number {i} AFTER append()')
+        print(f'            In detector->Forward LOOP Number {i} AFTER append()')
         #AT THIS POINT, GET_ITEM IS CALLED, WHY?  AND PROGRAM CRASHES, OCT 30, 2021
         #NOV 1, 2021 CRASH HERE AND LINE 119
         #NOV 1, 2021 CRASH HERE AND LINE 119
@@ -263,10 +263,10 @@ class Detector(torch.nn.Module):
         z = self._modules['conv%d'%i](z)   
         
 
-        print(f'In detector->Forward LOOP Number {i} AFTER Z')
+        print(f'              In detector->Forward LOOP Number {i} AFTER Z input went through DownConv CNN Block')
 
       for i in reversed(range(self.n_conv)):
-        print(f'In REVERSED detector->Forward SECOND LOOP Number {i}')
+        print(f'                       In REVERSED detector->Forward SECOND LOOP, UPCONV, Number {i}')
         z = self._modules['upconv%d'%i](z)
         # Fix the padding
         z = z[:, :, :up_activation[i].size(2), :up_activation[i].size(3)]
