@@ -45,7 +45,7 @@ def train(args):
     global_step = 0
     for epoch in range(1):   #WARNING CHANGE TO args.num_epoch   #WARNING CHANGE TO args.num_epoch
 
-        print(f'***********At the beggining of epoch  {i+1}****************')
+        print(f'***********At the beggining of epoch  {epoch+1}****************')
         model.train()
         
         #batch size is 32
