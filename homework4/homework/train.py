@@ -15,12 +15,16 @@ DENSE_CLASS_DISTRIBUTION = [0.52683655, 0.02929112, 0.4352989, 0.0044619, 0.0041
 
 class FocalLoss(nn.Module):
     
+     #below removed Nov 2, 2021
+     #def __init__(self, weight=None, 
+     #            gamma=2., reduction='none'):
+    
     def __init__(self, weight=None, 
-                 gamma=2., reduction='none'):
+                 gamma=2.):
         nn.Module.__init__(self)
         self.weight = weight
         self.gamma = gamma
-        self.reduction = reduction
+        #self.reduction = reduction
         
     def forward(self, input_tensor, target_tensor):
 
@@ -32,7 +36,9 @@ class FocalLoss(nn.Module):
         print (f'Shape of new_input_tensor is {new_input_tensor.shape}')
         #print (f'Shape of weights is {self.weight.shape}')
         print (f'Shape of target_tensor is {target_tensor.shape}')
-        loss = F.nll_loss(new_input_tensor,  target_tensor, weight=self.weight, reduction = self.reduction).to(input_tensor.device) 
+        #loss = F.nll_loss(new_input_tensor,  target_tensor, weight=self.weight, reduction = self.reduction).to(input_tensor.device)
+        loss = F.nll_loss(new_input_tensor,  target_tensor, weight=self.weight).to(input_tensor.device) 
+ 
 
         print (f'the shape of loss in focalloss() is {loss.shape}')
 
