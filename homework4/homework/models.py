@@ -116,23 +116,34 @@ class CNNClassifier(torch.nn.Module):
             print (f'NOV 1, 2021-----:  The DEVICE of X IS  {x.device}  ')
 
             output = self.c1(x)
+            print (f'1   NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
             output = self.b1(output)
-            output = F.relu(output)
-            output = self.c2(output)
-            output = self.b2(output)
-            output = F.relu(output)
-            output = self.c3(output)
-            output = self.b3(output) + self.skip(x)
-
-            output = F.relu(output)
+            print (f'2   NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
             
-            print (f'NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
-            print (f'NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
-            print (f'NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
+            output = F.relu(output)
+            print (f'3    NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
+            
+            output = self.c2(output)
+            print (f'4   NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
+            
+            output = self.b2(output)
+            print (f'5    NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
+            
+            output = F.relu(output)
+            print (f'6    NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
+            
+            output = self.c3(output)
+            print (f'7    NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
+            
+            output = self.b3(output) + self.skip(x)
+            print (f'8  NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
+            
+            output = F.relu(output)
+            print (f'FINAL BEFORE RETURN    NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
+            
             output = output.to(x.device)
+            
             print (f'NOV 1, 2021-----:  The DEVICE of OUTPUT IS NOW  {output.device}  ')
-            print (f'NOV 1, 2021-----:  The DEVICE of OUTPUT IS  NOW {output.device}  ')
-            print (f'NOV 1, 2021-----:  The DEVICE of OUTPUT IS  NOW {output.device}  ')
             
             return output
             #NOV 1, 2021: Input type (torch.cuda.FloatTensor) and weight type (torch.FloatTensor) should be the same
