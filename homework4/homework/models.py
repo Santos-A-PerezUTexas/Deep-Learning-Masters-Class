@@ -260,10 +260,12 @@ class Detector(torch.nn.Module):
         #AT THIS POINT, GET_ITEM IS CALLED, WHY?  AND PROGRAM CRASHES, OCT 30, 2021
         #AT THIS POINT, GET_ITEM IS CALLED, WHY?  AND PROGRAM CRASHES, OCT 30, 2021
         
-        #NOV 1, 2021 remove comment pund sign below
-        z = self._modules['conv%d'%i](z)    #NOV 1, 2021: Input type (torch.cuda.FloatTensor) and    CRASH HERE
-        #---- weight type (torch.FloatTensor) should be the same
-        #Also line 113
+        #NOV 1, 2021 CRASH HERE AND LINE 113
+        #NOV 1, 2021 CRASH HERE AND LINE 113
+        #NOV 1, 2021 CRASH HERE AND LINE 113
+        #CONVOLUTIONAL LAYER, CLASS CNN's BLOCK, DOES NOT REACH DECON BELOW
+        z = self._modules['conv%d'%i](z)    
+        
 
         print(f'In detector->Forward LOOP Number {i} AFTER Z')
 
