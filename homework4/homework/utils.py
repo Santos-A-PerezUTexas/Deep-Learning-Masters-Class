@@ -40,9 +40,9 @@ class DetectionSuperTuxDataset(Dataset):
         self.transform = transform
         self.min_size = min_size
         #print("IN INIT OF DETECTION CLASS, this is the size of self.files")
-        print (len(self.files))
+        #print (len(self.files))
         #print("IN INIT OF DETECTION CLASS, this is the shape of self.files")
-        print (self.files)
+        #print (self.files)
 
     def _filter(self, boxes):
         if len(boxes) == 0:
