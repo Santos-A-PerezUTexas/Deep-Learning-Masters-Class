@@ -3,7 +3,7 @@ import numpy as np
 from torchvision import models
 from torchsummary import summary
 
-from .models import Detector, save_model
+from .models import Detector, CNNClassifier, save_model
 from .utils import load_detection_data, load_dense_data
 from . import dense_transforms
 import torch.utils.tensorboard as tb
@@ -17,6 +17,7 @@ def train(args):
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     model = Detector()
+    model2 = CNNClassifier()
     #print(model)
     #summary(model, (3,96,128))
 
@@ -122,6 +123,7 @@ def train(args):
             print("LINE 103 IN TRAIN, CALLING THE MODEL DETECTOR NOW")
             
             #detected_peaks = model(img)
+            labels = model2(img)
 
             print("LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW")
             print("LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW")
