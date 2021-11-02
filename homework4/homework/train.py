@@ -16,8 +16,8 @@ def train(args):
     from os import path
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
-    model = Detector()
-    model2 = CNNClassifier()
+    model = Detector().to(device)
+    model2 = CNNClassifier().to(device)
     #print(model)
     #summary(model, (3,96,128))
 
