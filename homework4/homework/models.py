@@ -117,26 +117,27 @@ class CNNClassifier(torch.nn.Module):
             print (f'NOV 1, 2021-----:  The DEVICE of X IS  {x.device}  ')
 
             output = self.c1(x)    #NOV 1, 2021:  NEVER REACHES THIS POINT!
-            print (f'1   NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
+            print (f'1   NOV 2, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
             output = self.b1(output)
-            print (f'2   NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
+            #print (f'2   NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
             output = F.relu(output)
-            print (f'3    NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
+            #print (f'3    NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
             output = self.c2(output)
-            print (f'4   NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
+            #print (f'4   NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
             output = self.b2(output)
-            print (f'5    NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
+            #print (f'5    NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
             output = F.relu(output)
-            print (f'6    NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
+            #print (f'6    NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
             output = self.c3(output)
-            print (f'7    NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
+            #print (f'7    NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
             output = self.b3(output) + self.skip(x)
-            print (f'8  NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
+            #print (f'8  NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
             output = F.relu(output)
-            print (f'FINAL BEFORE RETURN    NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
+            #print (f'FINAL BEFORE RETURN    NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
             output = output.to(x.device)
-            print (f'NOV 1, 2021-----:  The DEVICE of OUTPUT IS NOW  {output.device}  ')
+            #print (f'NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
             
+            print ("RETURNING OUTPUT FROM FORWARD() OF CNN (DOWNCONV)")
             return output
             
             #NOV 1, 2021: Input type (torch.cuda.FloatTensor) and weight type (torch.FloatTensor) should be the same
