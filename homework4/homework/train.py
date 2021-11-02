@@ -69,7 +69,7 @@ def train(args):
             Use the extract_peak function to find detected objects.
             """
         
-            print (f'            (IN LOOOP NOW)....-------------This is batch number {batch}, of size {len(img)}')
+            print (f'            (IN LOOOP NOW)....-------------This is batch number {batch+1}, of size {len(img)}')
             batch +=1    
             
 
