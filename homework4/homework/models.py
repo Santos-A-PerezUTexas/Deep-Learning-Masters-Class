@@ -110,7 +110,7 @@ class CNNClassifier(torch.nn.Module):
             self.skip = torch.nn.Conv2d(n_input, n_output, kernel_size=1, stride=stride)
 
         def forward(self, x):
-          
+
             print (f'NOV 1, 2021-----:  The DEVICE of X IS  {x.device}  ')
             print (f'NOV 1, 2021-----:  The DEVICE of X IS  {x.device}  ')
             print (f'NOV 1, 2021-----:  The DEVICE of X IS  {x.device}  ')
@@ -174,7 +174,7 @@ class Detector(torch.nn.Module):
 
 #-------------->DETECTOR() UPBLOCK BEGIN
 
-    class UpBlock(torch.nn.Module):
+    class UpBlock(torch.nn.Module):          #DECONVOLUTION
 
         def __init__(self, n_input, n_output, kernel_size=3, stride=2):
             super().__init__()
@@ -199,15 +199,21 @@ class Detector(torch.nn.Module):
         self.use_skip = use_skip             #use_skip initially TRUE
         self.n_conv = len(layers)
         skip_layer_size = [3] + layers[:-1]  #layers[:-1] is [16, 32, 64], so skip_layer_size is [3, 16, 32, 64]
+        
+        #CONVOLUTIONAL LAYERS - CNN BLOCKS
         for i, l in enumerate(layers):
             self.add_module('conv%d' % i, CNNClassifier.Block(c, l, kernel_size, 2))   #ONLY USING NON-LINEAR CNN BLOCKS!
             c = l
+        
+        #DECONVOLUTIONAL LAYERS
         for i, l in list(enumerate(layers))[::-1]:
             self.add_module('upconv%d' % i, self.UpBlock(c, l, kernel_size, 2))
             c = l
             if self.use_skip:
                 c += skip_layer_size[i]
-        self.classifier = torch.nn.Conv2d(c, n_output_channels, 1)
+
+      
+        self.classifier = torch.nn.Conv2d(c, n_output_channels, 1)      #MAY NEED TO CHANGE THIS OUTPUT NOV 1, 2021
 #------------------------------------------------------------------------------>END CONSTRUCTOR FOR DETECTOR NETWORK
        
 
