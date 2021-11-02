@@ -30,7 +30,7 @@ def train(args):
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, weight_decay=1e-5)
     w = torch.as_tensor(DENSE_CLASS_DISTRIBUTION)**(-args.gamma)
-    w = w.to(device)  #added Nov 1, 2021
+    #w = w.to(device)  #added Nov 1, 2021
     loss = torch.nn.CrossEntropyLoss(weight=w / w.mean()).to(device)
     #loss = torch.nn.CrossEntropyLoss().to(device)
      
@@ -63,7 +63,7 @@ def train(args):
     #print(val)
 
     global_step = 0
-    for epoch in range(args.num_epoch):
+    for epoch in range(2):   #WARNING CHANGE TO args.num_epoch
 
         print("At the beggining of an epoch****************")
         model.train()
@@ -116,54 +116,20 @@ def train(args):
             print("LINE 103 IN TRAIN, CALLING THE MODEL DETECTOR NOW")
             print("LINE 103 IN TRAIN, CALLING THE MODEL DETECTOR NOW")
             
-            detected_peaks = model(img)
+            #detected_peaks = model(img)
 
             print("LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW")
             print("LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW")
             print("LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW")
             print("LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW")
 
-            loss_val = loss(detected_peaks, peak)
+            #loss_val = loss(detected_peaks, peak)
             
             
             i_pred += 1
             print ("Finished making prediction/detection")
 
-            if train_logger is not None and global_step % 100 == 0:
-                log(train_logger, img, label, logit, global_step)
-
-            if train_logger is not None:
-                train_logger.add_scalar('loss', loss_val, global_step)
-            conf.add(logit.argmax(1), label)
-
-            optimizer.zero_grad()
-            loss_val.backward()
-            optimizer.step()
-            global_step += 1
-
-        if train_logger:
-            train_logger.add_scalar('global_accuracy', conf.global_accuracy, global_step)
-            train_logger.add_scalar('average_accuracy', conf.average_accuracy, global_step)
-            train_logger.add_scalar('iou', conf.iou, global_step)
-
-        model.eval()
-        val_conf = ConfusionMatrix()
-        for img, label in valid_data:
-            img, label = img.to(device), label.to(device).long()
-            logit = model(img)
-            val_conf.add(logit.argmax(1), label)
-
-        if valid_logger is not None:
-            log(valid_logger, img, label, logit, global_step)
-
-        if valid_logger:
-            valid_logger.add_scalar('global_accuracy', val_conf.global_accuracy, global_step)
-            valid_logger.add_scalar('average_accuracy', val_conf.average_accuracy, global_step)
-            valid_logger.add_scalar('iou', val_conf.iou, global_step)
-
-        if valid_logger is None or train_logger is None:
-            print('epoch %-3d \t acc = %0.3f \t val acc = %0.3f \t iou = %0.3f \t val iou = %0.3f' %
-                  (epoch, conf.global_accuracy, val_conf.global_accuracy, conf.iou, val_conf.iou))
+          
         save_model(model)
 
   
@@ -200,3 +166,42 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     train(args)
+
+
+    """
+      if train_logger is not None and global_step % 100 == 0:
+                log(train_logger, img, label, logit, global_step)
+
+            if train_logger is not None:
+                train_logger.add_scalar('loss', loss_val, global_step)
+            conf.add(logit.argmax(1), label)
+
+            optimizer.zero_grad()
+            loss_val.backward()
+            optimizer.step()
+            global_step += 1
+
+        if train_logger:
+            train_logger.add_scalar('global_accuracy', conf.global_accuracy, global_step)
+            train_logger.add_scalar('average_accuracy', conf.average_accuracy, global_step)
+            train_logger.add_scalar('iou', conf.iou, global_step)
+
+        model.eval()
+        val_conf = ConfusionMatrix()
+        for img, label in valid_data:
+            img, label = img.to(device), label.to(device).long()
+            logit = model(img)
+            val_conf.add(logit.argmax(1), label)
+
+        if valid_logger is not None:
+            log(valid_logger, img, label, logit, global_step)
+
+        if valid_logger:
+            valid_logger.add_scalar('global_accuracy', val_conf.global_accuracy, global_step)
+            valid_logger.add_scalar('average_accuracy', val_conf.average_accuracy, global_step)
+            valid_logger.add_scalar('iou', val_conf.iou, global_step)
+
+        if valid_logger is None or train_logger is None:
+            print('epoch %-3d \t acc = %0.3f \t val acc = %0.3f \t iou = %0.3f \t val iou = %0.3f' %
+                  (epoch, conf.global_accuracy, val_conf.global_accuracy, conf.iou, val_conf.iou))
+    """
