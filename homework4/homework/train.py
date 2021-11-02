@@ -130,7 +130,12 @@ def train(args):
             print("LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW")
             print("LINE 110 IN TRAIN, GOING TO COMNPUTE THE LOSS NOW")
 
-            #loss_val = loss(detected_peaks, peak)
+            print (f'peaks shape is {peaks.shape}')
+            print (f'DETECTED peaks shape is {detected_peaks.shape}')
+            print (f'peaks shape is {peaks.shape}')
+            print (f'DETECTED peaks shape is {detected_peaks.shape}')
+            
+            loss_val = loss(detected_peaks, peaks)
             
             
             i_pred += 1

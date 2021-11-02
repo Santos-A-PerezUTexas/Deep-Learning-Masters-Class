@@ -187,10 +187,10 @@ class Detector(torch.nn.Module):
 #-------------->DETECTOR  UPBLOCK CLASS END 
 
 
-
+#NOV 2, 2021, CHANGED n_output_channels=5 to 3!!!!!
 
 #------------------------------------------------------------------------------>BEGIN CONSTRUCTOR FOR DETECTOR NETWORK
-    def __init__(self, layers=[16, 32, 64, 128], n_output_channels=5, kernel_size=3, use_skip=True):
+    def __init__(self, layers=[16, 32, 64, 128], n_output_channels=3, kernel_size=3, use_skip=True):
         super().__init__()
         self.input_mean = torch.Tensor([0.2788, 0.2657, 0.2629])
         self.input_std = torch.Tensor([0.2064, 0.1944, 0.2252])
