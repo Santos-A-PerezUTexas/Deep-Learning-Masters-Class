@@ -22,14 +22,20 @@ class FocalLoss(nn.Module):
         self.reduction = reduction
         
     def forward(self, input_tensor, target_tensor):
+
+        print ("IN forward of Focal Loss now")
         log_prob = F.log_softmax(input_tensor, dim=-1)
         prob = torch.exp(log_prob)
-        return F.nll_loss(
-            ((1 - prob) ** self.gamma) * log_prob, 
-            target_tensor, 
-            weight=self.weight,
-            reduction = self.reduction
-        ).to(input_tensor.device)
+        
+        new_input_tensor = ((1 - prob) ** self.gamma) * log_prob
+        print (f'Shape of new_input_tensor is {new_input_tensor.shape}')
+        #print (f'Shape of weights is {self.weight.shape}')
+        print (f'Shape of target_tensor is {target_tensor.shape}')
+        loss = F.nll_loss(new_input_tensor,  target_tensor, weight=self.weight, reduction = self.reduction).to(input_tensor.device) 
+
+        print (f'the shape of loss in focalloss() is {loss.shape}')
+
+        return loss
 
 
 
@@ -61,8 +67,13 @@ def train(args):
     w = torch.as_tensor(DENSE_CLASS_DISTRIBUTION)**(-args.gamma)
     w=w.to(device)
     loss = torch.nn.CrossEntropyLoss(weight=w / w.mean()).to(device)
-    focal_loss = FocalLoss(weight=w / w.mean()).to(device).to(device)
-     
+    #focal_loss = FocalLoss(weight=w / w.mean()).to(device).to(device)
+    focal_loss = FocalLoss().to(device).to(device)
+    #NOTE FOCAL LOSS HAS NO WEIGHTS!!
+    #NOTE FOCAL LOSS HAS NO WEIGHTS!!
+    #NOTE FOCAL LOSS HAS NO WEIGHTS!!
+    #NOTE FOCAL LOSS HAS NO WEIGHTS!!
+    
     print ("1................FROM TRAIN() ABOUT TO LOAD DATA")
     #val = input("PRESS ANY KEY")
     #print(val)
@@ -125,12 +136,17 @@ def train(args):
             print("                   (LOOP)  GOING TO COMPUTE THE LOSS NOW")
             
             #loss_val = loss(detected_peaks, peaks)
-            focal_Loss= focal_loss(detected_peaks, peaks)
+
+            print (f'Detected peaks shape is {detected_peaks.shape}') #([32, 3, 96, 128])
+            reduced_peaks = peaks[:, 0, :, :]
+            print (f'reduced peaks dimension is {reduced_peaks.shape} ') #[32, 96, 128]
+
+            focal_Loss= focal_loss(detected_peaks, reduced_peaks)   #peaks or reduced_peaks
             
             #Nov 2, 2021:  Output dimesion is [32, 3, 96, 128], the label dimension should be [32, 96, 128], long type integers.
             #https://piazza.com/class/ksjhagmd59d6sg?cid=776
 
-            print (f'              (LOOP)LOSS  shape is {loss.shape}')
+            print (f'              (LOOP)LOSS  shape is {focal_Loss.shape}')
                         
             print (f'  (LOOP)   Finished making prediction/detection for batch {batch} ')
 
