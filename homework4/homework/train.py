@@ -63,7 +63,7 @@ def train(args):
     #print(val)
 
     global_step = 0
-    for epoch in range(2):   #WARNING CHANGE TO args.num_epoch
+    for epoch in range(1):   #WARNING CHANGE TO args.num_epoch   #WARNING CHANGE TO args.num_epoch
 
         print("At the beggining of an epoch****************")
         model.train()
@@ -71,6 +71,7 @@ def train(args):
         #batch size is 32
         #batch size is 32
         i_pred = 0
+        batch = 0
 
         #NOV 21, 2021: for img, peaks, size in train_data:
         for img, peaks, size in train_data:        #THIS CALLS GET ITEM 145 TIMES OCT 30 2021
@@ -90,7 +91,11 @@ def train(args):
             Use the extract_peak function to find detected objects.
             """
         
+            print (f'-------------This is batch number {batch}, of size {len(img)} or img.size:{img.size}')
+            print (f'-------------This is batch number {batch}, of size {len(img)} or img.size:{img.size}')
+            print (f'-------------This is batch number {batch}, of size {len(img)} or img.size:{img.size}')
             
+            batch +=1    
             print (f'IMG is type {img.device}')
             print (f'IMG is type {img.device}')
             print (f'IMG is type {img.device}')
