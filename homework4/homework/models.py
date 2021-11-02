@@ -110,6 +110,7 @@ class CNNClassifier(torch.nn.Module):
             self.skip = torch.nn.Conv2d(n_input, n_output, kernel_size=1, stride=stride)
 
         def forward(self, x):
+          
             print (f'NOV 1, 2021-----:  The DEVICE of X IS  {x.device}  ')
             print (f'NOV 1, 2021-----:  The DEVICE of X IS  {x.device}  ')
             print (f'NOV 1, 2021-----:  The DEVICE of X IS  {x.device}  ')
@@ -119,33 +120,25 @@ class CNNClassifier(torch.nn.Module):
             print (f'1   NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
             output = self.b1(output)
             print (f'2   NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
-            
             output = F.relu(output)
             print (f'3    NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
-            
             output = self.c2(output)
             print (f'4   NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
-            
             output = self.b2(output)
             print (f'5    NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
-            
             output = F.relu(output)
             print (f'6    NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
-            
             output = self.c3(output)
             print (f'7    NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
-            
             output = self.b3(output) + self.skip(x)
             print (f'8  NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
-            
             output = F.relu(output)
             print (f'FINAL BEFORE RETURN    NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
-            
             output = output.to(x.device)
-            
             print (f'NOV 1, 2021-----:  The DEVICE of OUTPUT IS NOW  {output.device}  ')
             
             return output
+            
             #NOV 1, 2021: Input type (torch.cuda.FloatTensor) and weight type (torch.FloatTensor) should be the same
 
 
@@ -262,7 +255,7 @@ class Detector(torch.nn.Module):
         #AT THIS POINT, GET_ITEM IS CALLED, WHY?  AND PROGRAM CRASHES, OCT 30, 2021
         
         #NOV 1, 2021 remove comment pund sign below
-        z = self._modules['conv%d'%i](z)    #NOV 1, 2021: Input type (torch.cuda.FloatTensor) and 
+        z = self._modules['conv%d'%i](z)    #NOV 1, 2021: Input type (torch.cuda.FloatTensor) and    CRASH HERE
         #---- weight type (torch.FloatTensor) should be the same
         #Also line 113
 
