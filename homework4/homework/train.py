@@ -156,6 +156,9 @@ def train(args):
             print (f'              (LOOP)LOSS  shape is {focal_Loss.shape}')
                         
             print (f'  (LOOP)   Finished making prediction/detection for batch {batch} ')
+
+
+            
             optimizer.zero_grad()
             focal_Loss.backward()
             optimizer.step()
