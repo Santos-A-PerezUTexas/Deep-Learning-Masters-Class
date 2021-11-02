@@ -114,8 +114,18 @@ class CNNClassifier(torch.nn.Module):
             print (f'NOV 1, 2021-----:  The DEVICE of X IS  {x.device}  ')
             print (f'NOV 1, 2021-----:  The DEVICE of X IS  {x.device}  ')
             print (f'NOV 1, 2021-----:  The DEVICE of X IS  {x.device}  ')
-             
-            output = F.relu(self.b3(self.c3(F.relu(self.b2(self.c2(F.relu(self.b1(self.c1(x)))))))) + self.skip(x))
+
+            output = self.c1(x)
+            output = self.b1(output)
+            output = F.relu(output)
+            output = self.c2(output)
+            output = self.b2(output)
+            output = F.relu(output)
+            output = self.c3(output)
+            output = self.b3(output) + self.skip(x)
+
+            output = F.relu(output)
+            
             print (f'NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
             print (f'NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
             print (f'NOV 1, 2021-----:  The DEVICE of OUTPUT IS  {output.device}  ')
@@ -124,7 +134,7 @@ class CNNClassifier(torch.nn.Module):
             print (f'NOV 1, 2021-----:  The DEVICE of OUTPUT IS  NOW {output.device}  ')
             print (f'NOV 1, 2021-----:  The DEVICE of OUTPUT IS  NOW {output.device}  ')
             
-            return 
+            return output
             #NOV 1, 2021: Input type (torch.cuda.FloatTensor) and weight type (torch.FloatTensor) should be the same
 
 
