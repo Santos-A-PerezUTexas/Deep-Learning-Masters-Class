@@ -111,10 +111,8 @@ class CNNClassifier(torch.nn.Module):
 
         def forward(self, x):
 
-            print (f'NOV 1, 2021-----:  The DEVICE of X IS  {x.device}  ')
-            print (f'NOV 1, 2021-----:  The DEVICE of X IS  {x.device}  ')
-            print (f'NOV 1, 2021-----:  The DEVICE of X IS  {x.device}  ')
-            print (f'NOV 1, 2021-----:  The DEVICE of X IS  {x.device}  ')
+            print (f'NOV 2, 2021-----:  IN FORWARD OF CNN BLOCK, X shape IS  {x.shape}  ')
+            
 
             output = self.c1(x)    #NOV 1, 2021:  NEVER REACHES THIS POINT!
             print (f'1   NOV 2, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
@@ -137,7 +135,7 @@ class CNNClassifier(torch.nn.Module):
             output = output.to(x.device)
             #print (f'NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
             
-            print ("RETURNING OUTPUT FROM FORWARD() OF CNN (DOWNCONV)")
+            print ("RETURNING OUTPUT FROM FORWARD() OF CNN BLOCK (DOWNCONV)")
             return output
             
             #NOV 1, 2021: Input type (torch.cuda.FloatTensor) and weight type (torch.FloatTensor) should be the same
