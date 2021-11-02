@@ -242,6 +242,8 @@ class Detector(torch.nn.Module):
       #CODE MAKES IT UP TO HERE, OCT 30, 2021 ---? then calls GetItem??? What?
       print ("LINE 134 MODELS.PY----------------------------------------------")
       z = (x - self.input_mean[None, :, None, None].to(x.device)) / self.input_std[None, :, None, None].to(x.device)
+     
+      
       up_activation = []
       
 
@@ -251,15 +253,12 @@ class Detector(torch.nn.Module):
       print ("LINE 139 MODELS.PY---------------------------------------------")
       
       for i in range(self.n_conv):             #in range 4 basically.
+        
         print(f'In detector->Forward FIRST LOOP Number {i}')
         # Add all the information required for skip connections
         up_activation.append(z)
         print(f'In detector->Forward LOOP Number {i} AFTER append()')
-
         #AT THIS POINT, GET_ITEM IS CALLED, WHY?  AND PROGRAM CRASHES, OCT 30, 2021
-        #AT THIS POINT, GET_ITEM IS CALLED, WHY?  AND PROGRAM CRASHES, OCT 30, 2021
-        #AT THIS POINT, GET_ITEM IS CALLED, WHY?  AND PROGRAM CRASHES, OCT 30, 2021
-        
         #NOV 1, 2021 CRASH HERE AND LINE 119
         #NOV 1, 2021 CRASH HERE AND LINE 119
         #NOV 1, 2021 CRASH HERE AND LINE 119
