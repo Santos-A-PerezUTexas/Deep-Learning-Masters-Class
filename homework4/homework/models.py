@@ -231,7 +231,7 @@ if __name__ == '__main__':
         for k in pickup:
             ax.add_patch(
                 patches.Rectangle((k[0] - 0.5, k[1] - 0.5), k[2] - k[0], k[3] - k[1], facecolor='none', edgecolor='b'))
-        detections = model.detect(im.to(device))
+        detections = model.detect(im.to(device))  #****************************************************************<<<<<<
         for c in range(3):
             for s, cx, cy, w, h in detections[c]:
                 ax.add_patch(patches.Circle((cx, cy), radius=max(2 + s / 2, 0.1), color='rgb'[c]))
