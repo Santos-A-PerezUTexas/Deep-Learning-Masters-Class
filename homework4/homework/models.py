@@ -138,15 +138,13 @@ class Detector(torch.nn.Module):
 ##=============================================================================>  USES Detector.DETECT() METHOD FOR DETECTION
 #OCT 30, 2021
 
-    def forward(self, x):
+    def forward(self, img):
         
 
-      print("MODELS.PY Making a Prediction/Detection NOW, INSIDE FORWARD, OCT 30 2021")
-      print (self.detect(x))   #CALLING DETECT() HERE FOR TEST PURPOSES OCT 30 2021          
+      print("MODELS.PY Making a Prediction/Detection NOW, INSIDE FORWARD")
+      print (self.detect(img))   #CALLING DETECT() HERE FOR TEST PURPOSES           
 
-      #CODE MAKES IT UP TO HERE, OCT 30, 2021 ---? then calls GetItem??? What?
-      print ("LINE 134 MODELS.PY----------------------------------------------")
-      z = (x - self.input_mean[None, :, None, None].to(x.device)) / self.input_std[None, :, None, None].to(x.device)
+      heatmap = (img - self.input_mean[None, :, None, None].to(img.device)) / self.input_std[None, :, None, None].to(img.device)
      
       
       up_activation = []
@@ -159,23 +157,23 @@ class Detector(torch.nn.Module):
         
         print(f'            In detector->Forward FIRST LOOP Number {i+1}')
         # Add all the information required for skip connections
-        up_activation.append(z)
+        up_activation.append(heatmap)
         print(f'            In detector->Forward LOOP Number {i+1} AFTER append()')
-        z = self._modules['conv%d'%i](z)   
+        heatmap = self._modules['conv%d'%i](heatmap)   
         
 
-        print(f'              In detector->Forward LOOP Number {i} AFTER Z input went through DownConv CNN Block')
+        print(f'              In detector->Forward LOOP Number {i} AFTER heatmap input went through DownConv CNN Block')
 
       for i in reversed(range(self.n_conv)):
         print(f'                       In REVERSED detector->Forward SECOND LOOP, UPCONV, Number {i}')
-        z = self._modules['upconv%d'%i](z)
+        heatmap = self._modules['upconv%d'%i](heatmap)
         # Fix the padding
-        z = z[:, :, :up_activation[i].size(2), :up_activation[i].size(3)]
+        heatmap = heatmap[:, :, :up_activation[i].size(2), :up_activation[i].size(3)]
         # Add the skip connection
         if self.use_skip:
-          z = torch.cat([z, up_activation[i]], dim=1)
+          heatmap = torch.cat([heatmap, up_activation[i]], dim=1)
 
-      return self.classifier(z)
+      return self.classifier(heatmap)   #returns heatmap ([32, 3, 96, 128])
 
 
 
