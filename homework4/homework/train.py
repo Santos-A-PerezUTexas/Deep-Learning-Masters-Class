@@ -157,13 +157,10 @@ def train(args):
             heatmap_loss=lossBCE(heatmaps, predicted_heatmaps)   
             #Per https://piazza.com/class/ksjhagmd59d6sg?cid=779
             #peak_loss = BCEWithlogitloss(label_for_peak, model(image)), ToHeatmap(), returns image, label_for_peak (heatmap)
-
-
             #Nov 2, 2021:  Output dimesion is [32, 3, 96, 128], the label dimension should be [32, 96, 128], long type integers.
             #https://piazza.com/class/ksjhagmd59d6sg?cid=776
 
-            print (f'              (LOOP)peak_loss  shape is {peak_loss.shape}')
-                        
+            print (f'              (LOOP)heatmap_loss  shape is {heatmap_loss.shape}')                       
             print (f'  (LOOP)   Finished making prediction/detection for batch {batch} ')
 
 
