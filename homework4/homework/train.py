@@ -107,7 +107,7 @@ def train(args):
 
         for img, peaks, size in train_data:        #THIS CALLS GET ITEM 145 TIMES OCT 30 2021
             
-            img, peaks, size  = img.to(device), peaks.to(device).long(),  size.to(device).long()
+            img, peaks, size  = img.to(device), peaks.to(device),  size.to(device).long()
             
             #PEAKS ARE HEATMAPS************
             #NOV 21, 2021:  img, peaks, size  = img.to(device), peaks.to(device),  size.to(device)           
@@ -150,19 +150,26 @@ def train(args):
             reduced_peaks = peaks[:, 0, :, :]
             print (f'reduced peaks dimension is {reduced_peaks.shape} ') #[32, 96, 128]
 
-            focal_Loss= focal_loss(detected_peaks, reduced_peaks)   #peaks or reduced_peaks
+           #peak_loss= focal_loss(detected_peaks, reduced_peaks)   #peaks or reduced_peaks
             
+                               
+            lossBCE = torch.nn.BCEWithLogitsLoss()
+            peak_loss=lossBCE(peaks, detected_peaks)   #peaks is the heatmap
+            #Per https://piazza.com/class/ksjhagmd59d6sg?cid=779
+            #peak_loss = BCEWithlogitloss(label_for_peak, model(image)), ToHeatmap(), returns image, label_for_peak (heatmap)
+
+
             #Nov 2, 2021:  Output dimesion is [32, 3, 96, 128], the label dimension should be [32, 96, 128], long type integers.
             #https://piazza.com/class/ksjhagmd59d6sg?cid=776
 
-            print (f'              (LOOP)LOSS  shape is {focal_Loss.shape}')
+            print (f'              (LOOP)peak_loss  shape is {peak_loss.shape}')
                         
             print (f'  (LOOP)   Finished making prediction/detection for batch {batch} ')
 
 
             
             optimizer.zero_grad()
-            focal_Loss.backward()
+            peak_loss.backward()
             optimizer.step()
 
           
