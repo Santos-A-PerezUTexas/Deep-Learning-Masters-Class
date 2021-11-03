@@ -4,7 +4,15 @@ import torch.nn.functional as F
 
 
 def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
-    return("You have succesfully called extract_peak as follows:  Detector-->Forward()--->Detect()--->extrac_peak")
+
+    detection_list = [(3,4,5, 0, 0), (3,4,5, 0, 0), (3,4,5, 0, 0) ]
+
+    detection_list.append((3,3,0, 0)) 
+
+    print ("You have succesfully called extract_peak as follows:  Detector-->Forward()--->Detect()--->extrac_peak")
+    print (f'Returning this list:, detection_list')
+    
+    return(detection_list)
 
 
 
