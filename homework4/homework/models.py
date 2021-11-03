@@ -1,6 +1,36 @@
 import torch
 import torch.nn.functional as F
 
+"""
+NOVEMBER 2, 2021
+https://piazza.com/class/ksjhagmd59d6sg?cid=779
+
+After applying ToTensor() and ToHeatmap(), it will return image, label_for_peak (heatmap), label_for_size. 
+For the model training: peak_loss = BCEWithlogitloss(label_for_peak, model(image))
+Yes, the ToHeatmap() just prepare the labels for us.
+
+Detailly:
+
+
+ToHeatmap() (TRANSFORM) will convert the “boxed” objects, to heatmaps with their center “highlighted”, the centers are 1, 
+the pixels further to the center will have lower values (follow Gaussian distribution). Also it will prepare the size label,
+ which has a big circle over the object, the circle has the height and width of the object.
+
+
+Given a center (cx, cy), the height and width will retrieved by label_for_size(B, 0, cx, cy) and label_for_size(B, 1, cx, cy).
+
+
+Yes, you need to train the model (forward), then in the detect(), let the image pass the forward to get the heatmap, 
+then apply extract_peak on the heatmap.
+
+
+
+"""
+
+
+
+
+
 #Oct 22 2021
 
 #torch.nn.functional.max_pool2d(*args, **kwargs)
