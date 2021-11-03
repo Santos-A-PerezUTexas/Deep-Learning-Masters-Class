@@ -105,9 +105,9 @@ def train(args):
         i_pred = 0
         batch = 0
 
-        for img, peaks, size in train_data:        #THIS CALLS GET ITEM 145 TIMES OCT 30 2021
+        for img, heatmaps, size in train_data:        #THIS CALLS GET ITEM 145 TIMES OCT 30 2021
             
-            img, peaks, size  = img.to(device), peaks.to(device),  size.to(device).long()
+            img, heatmaps, size  = img.to(device), heatmaps.to(device),  size.to(device).long()
             
             #PEAKS ARE HEATMAPS************
             #NOV 21, 2021:  img, peaks, size  = img.to(device), peaks.to(device),  size.to(device)           
@@ -129,32 +129,32 @@ def train(args):
             print (f'TRAIN() ----->MAKING PREDICTION NUMBER {i_pred+1} WITH detected_peaks=model(img)-----------')
             print (f'            Image shape is {img.shape}')
             #Image shape is torch.Size([32, 3, 96, 128])
-            print (f'             peaks shape is {peaks.shape}')
+            print (f'             heatmaps shape is {heatmaps.shape}')
             #peaks shape is torch.Size([32, 3, 96, 128])
             print (f'              size shape is {size.shape}')
             #size shape is torch.Size([32, 2, 96, 128])            
             
             i_pred += 1
 
-            detected_peaks = model(img)
+            predicted_heatmaps = model(img)
             #labels = model2(img)
 
             
-            print (f'              (LOOP)peaks shape is {peaks.shape}')
-            print (f'              (LOOP) DETECTED peaks shape is {detected_peaks.shape}')
+            print (f'              (LOOP)heatmaps shape is {heatmaps.shape}')
+            print (f'              (LOOP) Predicted heatmaps shape is {predicted_heatmaps.shape}')
             print("                   (LOOP)  GOING TO COMPUTE THE LOSS NOW")
             
-            #loss_val = loss(detected_peaks, peaks)
+            #loss_val = loss(detected_heatmaps, heatmaps)
 
-            print (f'Detected peaks shape is {detected_peaks.shape}') #([32, 3, 96, 128])
-            reduced_peaks = peaks[:, 0, :, :]
-            print (f'reduced peaks dimension is {reduced_peaks.shape} ') #[32, 96, 128]
+            print (f'Predicted heatmaps shape is {predicted_heatmaps.shape}') #([32, 3, 96, 128])
+            reduced_heatmaps = heatmaps[:, 0, :, :]
+            print (f'reduced heatmaps dimension is {reduced_heatmaps.shape} ') #[32, 96, 128]
 
-           #peak_loss= focal_loss(detected_peaks, reduced_peaks)   #peaks or reduced_peaks
+           #peak_loss= focal_loss(predicted_heatmaps, reduced_heatmaps)   #peaks or reduced_peaks
             
                                
             lossBCE = torch.nn.BCEWithLogitsLoss()
-            peak_loss=lossBCE(peaks, detected_peaks)   #peaks is the heatmap
+            heatmap_loss=lossBCE(heatmaps, predicted_heatmaps)   
             #Per https://piazza.com/class/ksjhagmd59d6sg?cid=779
             #peak_loss = BCEWithlogitloss(label_for_peak, model(image)), ToHeatmap(), returns image, label_for_peak (heatmap)
 
@@ -169,7 +169,7 @@ def train(args):
 
             
             optimizer.zero_grad()
-            peak_loss.backward()
+            heatmap_loss.backward()
             optimizer.step()
 
           
