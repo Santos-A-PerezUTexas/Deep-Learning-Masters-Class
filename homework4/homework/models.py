@@ -7,11 +7,11 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
 
     detection_list = [(3,4,5, 0, 0), (3,4,5, 0, 0), (3,4,5, 0, 0) ]
 
-    detection_list.append((3,3,0, 0)) 
+    detection_list.append((3, 3, 3, 0, 0)) 
 
     print ("You have succesfully called extract_peak as follows:  Detector-->Forward()--->Detect()--->extrac_peak")
     print (f'Returning this list:, detection_list')
-    
+
     return(detection_list)
 
 
@@ -150,7 +150,7 @@ class Detector(torch.nn.Module):
         
 
       print("MODELS.PY Making a Prediction/Detection NOW, INSIDE FORWARD")
-      print (self.detect(img))   #CALLING DETECT() HERE FOR TEST PURPOSES           
+      #print (self.detect(img))   #CALLING DETECT() HERE FOR TEST PURPOSES           
 
       heatmap = (img - self.input_mean[None, :, None, None].to(img.device)) / self.input_std[None, :, None, None].to(img.device)
      
@@ -193,7 +193,13 @@ class Detector(torch.nn.Module):
 
     def detect(self, image):
 
+        three_channel_heatmap = self.forward(image)
         
+        List_of_detection_lists =[]
+
+        for i in range (3):
+          List_of_detection_lists.append(extract_peak(three_channel_heatmap[i]))
+
         print(extract_peak(image))
         return ("MODELS.PY: THIS STRING WAS RETURNED FROM detect():  Class Detector.Forward()--->detect() ****************OCT 30, 2021")              
    
