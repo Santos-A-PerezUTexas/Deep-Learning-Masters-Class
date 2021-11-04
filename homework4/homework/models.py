@@ -33,15 +33,16 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
     heatmap2 = heatmap[None, None] #for Maxpool, shape is NOW torch.Size([1, 1, 96, 128]
     maxpooled_heatmap, indices =  Maxpool(heatmap2)   #torch.Size([1, 1, 96, 128])
     
+    #PER SLIDES -- CANNOT USE MAXPOOL INDICES!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    #indeces looks like this:  
+
+
     """
     Once you apply max pool you will have two tensors. One that is the original heat map,
     and the other that a maxpooled heatmap of the same size. Think about how these two relate 
     to one another in terms of “peaks”. Printing them out helped me.
     """
-
-
-
-
 
 
     k=max_det
@@ -54,7 +55,8 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
       
       You need to make use of the information maxpool2d() provides you with, and 
       ***-->generate a new tensor suitable for ***TOPK()***. 
-      You should not pass the raw output of maxpool to topk. 
+      ********>You should not pass the raw output of maxpool to topk. 
+      ****> CANNOT USE MAXPOOL INDICES
       
       The slides also illustrates how you can find the **true** indexes to
       generate  the new tensor
