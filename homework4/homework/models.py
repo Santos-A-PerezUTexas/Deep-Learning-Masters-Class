@@ -9,8 +9,9 @@ import torch.nn.functional as F
 def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
 
     """
+    Example:
     x2 = torch.tensor([2,2,77,89,1,7,65,100,12,500])
-    f, indices = torch.topk(x2,3)
+    f, indices = torch.topk(x2,3) 
     """
     
 
@@ -28,9 +29,21 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
     #switched it to functional max_pool2d????
     Maxpool =  torch.nn.MaxPool2d(kernel_size=max_pool_ks, return_indices=True, padding=max_pool_ks//2, stride=1)
     
-    heatmap2 = heatmap[None, None] #for Maxpool, shape is torch.Size([1, 1, 96, 128]
-    maxpooled_heatmap, indices =  Maxpool(heatmap2)
+    # Original HEATMAP SHAPE IS    torch.Size([96, 128])
+    heatmap2 = heatmap[None, None] #for Maxpool, shape is NOW torch.Size([1, 1, 96, 128]
+    maxpooled_heatmap, indices =  Maxpool(heatmap2)   #torch.Size([1, 1, 96, 128])
     
+    """
+    Once you apply max pool you will have two tensors. One that is the original heat map,
+    and the other that a maxpooled heatmap of the same size. Think about how these two relate 
+    to one another in terms of “peaks”. Printing them out helped me.
+    """
+
+
+
+
+
+
     k=max_det
     """
       maxpool2d() helps you identify the local maximum by *distributing* the max value to all
