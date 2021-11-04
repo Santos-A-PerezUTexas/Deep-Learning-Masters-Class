@@ -204,11 +204,11 @@ class Detector(torch.nn.Module):
 
     def forward(self, img):
         
-
-      print("111111.                         INSIDE DETECTOR---()FORWARD(), will call CNN BLOCK NEXT, DECONV")
       print (f'--------------------------------------------------------------------------------------')
+      print("||||||||||||STEP 3a||||||||||   INSIDE DETECTOR---()FORWARD(), will call CNN BLOCK NEXT, DECONV")
       print (f'--------------------------------------------------------------------------------------')
-     
+      print (f'                ------>>>>>>>>>>>, image shape is {img.shape}, will be passed to CNN BLOCK and then DECONV')
+        
       #print (self.detect(img))   #CALLING DETECT() HERE FOR TEST PURPOSES           
 
       heatmap = (img - self.input_mean[None, :, None, None].to(img.device)) / self.input_std[None, :, None, None].to(img.device)
@@ -216,12 +216,7 @@ class Detector(torch.nn.Module):
       
       up_activation = []
       
-
-      print("2222222.                         INSIDE DETECTOR---()FORWARD(), will call UPCONV NOW")
-      print (f'--------------------------------------------------------------------------------------')
-      print (f'--------------------------------------------------------------------------------------')
-     
-      
+    
       for i in range(self.n_conv):             #in range 4 basically.
         
         # Add all the information required for skip connections
@@ -239,7 +234,13 @@ class Detector(torch.nn.Module):
         if self.use_skip:
           heatmap = torch.cat([heatmap, up_activation[i]], dim=1)
 
-      return self.classifier(heatmap)   #returns heatmap ([32, 3, 96, 128])
+      output = self.classifier(heatmap)   #returns heatmap ([32, 3, 96, 128])
+      print("||||||||||||STEP 3b||||||||||   INSIDE DETECTOR---()FORWARD(), Just created a heatmap with Image")
+      print (f'--------------------------------------------------------------------------------------')
+      print (f'                ------>>>>>>>>>>>, heatmap shape is {output.shape}, will be passed to CNN BLOCK and then DECONV')
+      
+
+      return output
 
 #ABOVE IS DETECTOR->FORWARD RETURN VALUE heatmap ([32, 3, 96, 128])
 
@@ -252,11 +253,16 @@ class Detector(torch.nn.Module):
 
     def detect(self, image):
 
-        three_channel_heatmap = self.forward(image)
-        
         List_of_detection_lists =[]
 
-        print (f'             NOV 3, 2021------>>>>>>>>>>>, heatmap shape is {three_channel_heatmap.shape} ')
+        
+        print (f'--------------------------------------------------------------------------------------')
+        print("||||||||||||STEP 2||||||||||   INSIDE DETECTOR---()DETECT()")
+        print (f'--------------------------------------------------------------------------------------')
+        print (f'                ------>>>>>>>>>>>, image shape is {image.shape}, will be passed to FORWARD() Next ')
+        
+        three_channel_heatmap = self.forward(image)
+
         #heatmap shape is torch.Size([1, 3, 96, 128])
 
         for i in range (3):
@@ -291,16 +297,20 @@ if __name__ == '__main__':
     Shows detections of your detector
     """
     from .utils import DetectionSuperTuxDataset
-    dataset = DetectionSuperTuxDataset('dense_data/valid', min_size=0)
     import torchvision.transforms.functional as TF
     from pylab import show, subplots
     import matplotlib.patches as patches
 
+    print("||||||||||||STEP 1||||||||||   IN MAIN(), GOING TO LOAD DATA and ITERATE, AND CALL DETECTOR() ")
+    dataset = DetectionSuperTuxDataset('dense_data/valid', min_size=0)
+
+
+
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
     fig, axs = subplots(3, 4)
     model = load_model().eval().to(device)
-    for i, ax in enumerate(axs.flat):
-        print(f'                          IN THE MAIN() LOOP NOW, NUMBER {i}')  #called about 11 times
+    for i, ax in enumerate(axs.flat):    #called about 11 Times
+        
         im, kart, bomb, pickup = dataset[i]
         ax.imshow(TF.to_pil_image(im), interpolation=None)
         for k in kart:
@@ -317,5 +327,5 @@ if __name__ == '__main__':
             for s, cx, cy, w, h in detections[c]:
                 ax.add_patch(patches.Circle((cx, cy), radius=max(2 + s / 2, 0.1), color='rgb'[c]))
         ax.axis('off')
-    print("About to Call SHOW() DID you see anything?")
+    
     show()
