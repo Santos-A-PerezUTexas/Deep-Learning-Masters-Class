@@ -89,8 +89,8 @@ class CNNClassifier(torch.nn.Module):
 
         def forward(self, x):
 
-            print (f'NOV 2, 2021-----:  IN FORWARD OF CNN BLOCK, X shape IS  {x.shape}  ')
-            
+            print (f'                              -----:  IN FORWARD OF CNN BLOCK, X shape IS  {x.shape}  ')
+            print (f'--------------------------------------------------------------------------------------')
 
             output = self.c1(x)    #NOV 1, 2021:  NEVER REACHES THIS POINT!
             #print (f'1   NOV 2, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
@@ -205,7 +205,10 @@ class Detector(torch.nn.Module):
     def forward(self, img):
         
 
-      print("MODELS.PY Making a Prediction/Detection NOW, INSIDE FORWARD")
+     print("111111.                         INSIDE DETECTOR---()FORWARD(), will call CNN BLOCK NEXT, DECONV")
+     print (f'--------------------------------------------------------------------------------------')
+     print (f'--------------------------------------------------------------------------------------')
+     
       #print (self.detect(img))   #CALLING DETECT() HERE FOR TEST PURPOSES           
 
       heatmap = (img - self.input_mean[None, :, None, None].to(img.device)) / self.input_std[None, :, None, None].to(img.device)
@@ -214,19 +217,18 @@ class Detector(torch.nn.Module):
       up_activation = []
       
 
-      print ("------------------DETECTOR-->FORWARD() NOW (MODELS.PY)---------------------------------------------")
-    
+     print("2222222.                         INSIDE DETECTOR---()FORWARD(), will call UPCONV NOW")
+     print (f'--------------------------------------------------------------------------------------')
+     print (f'--------------------------------------------------------------------------------------')
+     
       
       for i in range(self.n_conv):             #in range 4 basically.
         
-        #print(f'            In detector->Forward FIRST LOOP Number {i+1}')
         # Add all the information required for skip connections
         up_activation.append(heatmap)
-       # print(f'            In detector->Forward LOOP Number {i+1} AFTER append()')
         heatmap = self._modules['conv%d'%i](heatmap)   
         
 
-        #print(f'              In detector->Forward LOOP Number {i} AFTER heatmap input went through DownConv CNN Block')
 
       for i in reversed(range(self.n_conv)):
         #print(f'                       In REVERSED detector->Forward SECOND LOOP, UPCONV, Number {i}')
