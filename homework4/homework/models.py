@@ -93,7 +93,7 @@ class CNNClassifier(torch.nn.Module):
             
 
             output = self.c1(x)    #NOV 1, 2021:  NEVER REACHES THIS POINT!
-            print (f'1   NOV 2, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
+            #print (f'1   NOV 2, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
             output = self.b1(output)
             #print (f'2   NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
             output = F.relu(output)
@@ -111,9 +111,9 @@ class CNNClassifier(torch.nn.Module):
             output = F.relu(output)
             #print (f'FINAL BEFORE RETURN    NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
             output = output.to(x.device)
-            #print (f'NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
+            print (f'              DOWNCONV CNN BLOCK, RETURNING:   OUTPUT of shape  {output.shape}  ')
             
-            print ("RETURNING OUTPUT FROM FORWARD() OF CNN BLOCK (DOWNCONV)")
+            
             return output
             
             #NOV 1, 2021: Input type (torch.cuda.FloatTensor) and weight type (torch.FloatTensor) should be the same
@@ -219,17 +219,17 @@ class Detector(torch.nn.Module):
       
       for i in range(self.n_conv):             #in range 4 basically.
         
-        print(f'            In detector->Forward FIRST LOOP Number {i+1}')
+        #print(f'            In detector->Forward FIRST LOOP Number {i+1}')
         # Add all the information required for skip connections
         up_activation.append(heatmap)
-        print(f'            In detector->Forward LOOP Number {i+1} AFTER append()')
+       # print(f'            In detector->Forward LOOP Number {i+1} AFTER append()')
         heatmap = self._modules['conv%d'%i](heatmap)   
         
 
-        print(f'              In detector->Forward LOOP Number {i} AFTER heatmap input went through DownConv CNN Block')
+        #print(f'              In detector->Forward LOOP Number {i} AFTER heatmap input went through DownConv CNN Block')
 
       for i in reversed(range(self.n_conv)):
-        print(f'                       In REVERSED detector->Forward SECOND LOOP, UPCONV, Number {i}')
+        #print(f'                       In REVERSED detector->Forward SECOND LOOP, UPCONV, Number {i}')
         heatmap = self._modules['upconv%d'%i](heatmap)
         # Fix the padding
         heatmap = heatmap[:, :, :up_activation[i].size(2), :up_activation[i].size(3)]
@@ -258,7 +258,7 @@ class Detector(torch.nn.Module):
         #heatmap shape is torch.Size([1, 3, 96, 128])
 
         for i in range (3):
-          print(f'                        ***Calling extract peak at iteration {i+1}')
+          #print(f'                        ***Calling extract peak at iteration {i+1}')
           List_of_detection_lists.append(extract_peak(three_channel_heatmap[0][i]))
 
         print('                                  ^^^^^^This is the list of lists, -> {List_of_detection_lists}')
@@ -282,6 +282,7 @@ def load_model():
     r.load_state_dict(load(path.join(path.dirname(path.abspath(__file__)), 'det.th'), map_location='cpu'))
     return r
 
+#---------------------------------------------------MAIN----------------------------------------------------
 
 if __name__ == '__main__':
     """
