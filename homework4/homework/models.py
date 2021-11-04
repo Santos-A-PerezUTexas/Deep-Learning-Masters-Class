@@ -192,7 +192,9 @@ class Detector(torch.nn.Module):
             self.add_module('upconv%d' % i, self.UpBlock(c, l, kernel_size, 2))
             c = l
             if self.use_skip:
+                print(f'                         ADDING DECONV SKIP, c is {c}<<<<<<<<<<<<<<<<<<<<')
                 c += skip_layer_size[i]
+                print(f'                         JUST ADDED DECONV SKIP, c is NOW {c}<<<<<<<<<<<<<<<<<<<<')
 
       
         self.classifier = torch.nn.Conv2d(c, n_output_channels, 1)      #MAY NEED TO CHANGE THIS OUTPUT NOV 1, 2021
