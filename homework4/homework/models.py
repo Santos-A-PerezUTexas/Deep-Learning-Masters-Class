@@ -216,11 +216,12 @@ class Detector(torch.nn.Module):
         
       #print (self.detect(img))   #CALLING DETECT() HERE FOR TEST PURPOSES           
 
-      print('                           MEAN: Before normalization, img mean for 3 CHANNELS is {img.mean()}')
-      print('                           MEAN: Before normalization, img mean for 3 CHANNELS is {img.mean()}')
+      print(f'                           MEAN: Before normalization, img mean for 3 CHANNELS is {img.mean()}')
+      print(f'                           MEAN: Before normalization, img mean for 3 CHANNELS is {img.mean()}')
       heatmap = (img - self.input_mean[None, :, None, None].to(img.device)) / self.input_std[None, :, None, None].to(img.device)
-      print('                           MEAN: AFter normalization, img  (now HEATMAP) mean for 3 CHANNELS is {heatmap.mean()}')
-      print('                           MEAN: AFter normalization, img  (now HEATMAP) mean for 3 CHANNELS is {heatmap.mean()}')      
+      print("NORMALIZATION:  heatmap = (img - self.input_mean[None, :, None, None].to(img.device)) / self.input_std[None, :, None, None].to(img.device)")
+      print(f'                           MEAN: AFter normalization, img  (now HEATMAP) mean for 3 CHANNELS is {heatmap.mean()}')
+      print(f'                           MEAN: AFter normalization, img  (now HEATMAP) mean for 3 CHANNELS is {heatmap.mean()}')      
       
       up_activation = []
       
