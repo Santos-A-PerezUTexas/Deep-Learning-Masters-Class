@@ -12,8 +12,15 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
     x2 = torch.tensor([2,2,77,89,1,7,65,100,12,500])
     f, indices = torch.topk(x2,3)
     """
-
     
+    #IMPORTANT
+    #@max_pool_ks: Only return points that are larger than a max_pool_ks x max_pool_ks 
+    #window around the point
+    #https://piazza.com/class/ksjhagmd59d6sg?cid=620
+    #The hint means you should only return a value if it is larger than 
+    #all values in a max_pool_ks x max_pool_ks  square around it.
+
+    #switched it to functional max_pool2d????
     Maxpool =  torch.nn.MaxPool2d(kernel_size=max_pool_ks, return_indices=True, padding=max_pool_ks//2, stride=1)
     
     heatmap2 = heatmap[None, None] #for Maxpool, shape is torch.Size([1, 1, 96, 128]
