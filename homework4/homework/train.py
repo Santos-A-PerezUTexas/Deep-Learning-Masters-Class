@@ -11,7 +11,10 @@ from . import dense_transforms
 import torch.utils.tensorboard as tb
 DENSE_CLASS_DISTRIBUTION = [0.52683655, 0.02929112, 0.4352989, 0.0044619, 0.00411153]
 
-
+#NOTE CHANGE THE EPOCHS
+#NOTE CHANGE THE EPOCHS
+#NOTE CHANGE THE EPOCHS
+#NOTE CHANGE THE EPOCHS
 
 class FocalLoss(nn.Module):
     
