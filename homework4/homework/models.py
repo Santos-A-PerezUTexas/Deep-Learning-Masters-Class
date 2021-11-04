@@ -274,9 +274,9 @@ class Detector(torch.nn.Module):
         print("||||||||||||STEP 4||||||||||   JUST CALLED DETECTOR()--->FORWARD(), BACK IN DETECT()")
         print (f'--------------------------------------------------------------------------------------')
         print (f'                ------>>>>>>>>>>>, 3 channel heatmap shape is {three_channel_heatmap.shape}')
-        print (f'                MEAN------>>>>>>>>>>>, 3 channel heatmap mean, channel 0 is {three_channel_heatmap[0].mean}')
-        print (f'                MEAN------>>>>>>>>>>>, 3 channel heatmap mean, channel 1 is {three_channel_heatmap[1].mean}')
-        print (f'                MEAN------>>>>>>>>>>>, 3 channel heatmap mean, channel 2 is {three_channel_heatmap[2].mean}')
+        print (f'                MEAN------>>>>>>>>>>>, 3 channel heatmap mean, channel 0 is {three_channel_heatmap[0][0].mean}')
+        print (f'                MEAN------>>>>>>>>>>>, 3 channel heatmap mean, channel 1 is {three_channel_heatmap[0][1].mean}')
+        print (f'                MEAN------>>>>>>>>>>>, 3 channel heatmap mean, channel 2 is {three_channel_heatmap[0][2].mean}')
 
 
         print (f'                ------>>>>>>>>>>>, NOW WILL GO THROUGH ALL 3 CHANNELS AND CALL EXTRACT_PEAKS()')
