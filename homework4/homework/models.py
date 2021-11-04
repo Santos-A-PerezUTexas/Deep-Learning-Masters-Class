@@ -251,4 +251,5 @@ if __name__ == '__main__':
             for s, cx, cy, w, h in detections[c]:
                 ax.add_patch(patches.Circle((cx, cy), radius=max(2 + s / 2, 0.1), color='rgb'[c]))
         ax.axis('off')
+    print("About to Call SHOW() DID you see anything?")
     show()
