@@ -5,12 +5,24 @@ import torch.nn.functional as F
 
 def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
 
+"""
+x2 = torch.tensor([2,2,77,89,1,7,65,100,12,500])
+
+ torch.topk(x2,3)
+torch.return_types.topk(
+values=tensor([500, 100,  89]),
+indices=tensor([9, 7, 3]))
+
+"""
+    Maxpool =  torch.nn.MaxPool2d(kernel_size=max_pool_ks, return_indices=True)
+
+    heatmap2 = heatmap[None, None] #for Maxpool, shape is torch.Size([1, 1, 96, 128]
+
     detection_list = [(3,4,5, 0, 0), (3,4,5, 0, 0), (3,4,5, 0, 0) ]
 
     detection_list.append((3, 3, 3, 0, 0)) 
 
-    heatmap2 = heatmap[None, None] 
-
+    
     print ("You have succesfully called extract_peak as follows:  Detector-->Forward()--->Detect()--->extrac_peak")
     print(f'                          SHAPE OF HEATMAP in EXTRACTPEAK is {heatmap.shape}, of HEATMAP2, {heatmap2.shape}')
     print (f'Returning this list:, {detection_list}')
