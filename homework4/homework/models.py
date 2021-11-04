@@ -14,7 +14,7 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
     """
 
     
-    Maxpool =  torch.nn.MaxPool2d(kernel_size=max_pool_ks, return_indices=True)
+    Maxpool =  torch.nn.MaxPool2d(kernel_size=max_pool_ks, return_indices=True, padding=max_pool_ks//2, stride=1)
     
     heatmap2 = heatmap[None, None] #for Maxpool, shape is torch.Size([1, 1, 96, 128]
     maxpooled_heatmap, indices =  Maxpool(heatmap2)
