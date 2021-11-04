@@ -98,23 +98,23 @@ class CNNClassifier(torch.nn.Module):
             print (f'--------------------------------------------------------------------------------------')
 
             output = self.c1(x)    #NOV 1, 2021:  NEVER REACHES THIS POINT!
-            #print (f'1   NOV 2, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
+            print (f'1   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
             output = self.b1(output)
-            #print (f'2   NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
+            print (f'2   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
             output = F.relu(output)
-            #print (f'3    NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
+            print (f'3   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
             output = self.c2(output)
-            #print (f'4   NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
+            print (f'4   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
             output = self.b2(output)
-            #print (f'5    NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
+            print (f'5   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
             output = F.relu(output)
-            #print (f'6    NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
+            print (f'6   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
             output = self.c3(output)
-            #print (f'7    NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
-            output = self.b3(output) + self.skip(x)
-            #print (f'8  NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
+            print (f'7   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
+            #output = self.b3(output) + self.skip(x)
+            print (f'8   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
             output = F.relu(output)
-            #print (f'FINAL BEFORE RETURN    NOV 1, 2021-----:  The OUTPUT shape IS  {output.shape}  ')
+            print (f'9   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
             output = output.to(x.device)
             print (f'              DOWNCONV CNN BLOCK, RETURNING:   OUTPUT of shape  {output.shape}  ')
             
@@ -232,6 +232,9 @@ class Detector(torch.nn.Module):
         up_activation.append(heatmap)
         heatmap = self._modules['conv%d'%i](heatmap)   
         
+      print (f'           FORWARD()--->  AFTER DOWNCONV CNN BLOCK, HEATMAP MEAN IS -----:  {heatmap.mean()}  ')
+      print (f'           FORWARD()--->  AFTER DOWNCONV CNN BLOCK, HEATMAP MEAN IS -----:  {heatmap.mean()}  ')
+      print (f'           FORWARD()--->  AFTER DOWNCONV CNN BLOCK, HEATMAP MEAN IS -----:  {heatmap.mean()}  ')
 
 
       for i in reversed(range(self.n_conv)):
@@ -242,8 +245,17 @@ class Detector(torch.nn.Module):
         # Add the skip connection
         if self.use_skip:
           heatmap = torch.cat([heatmap, up_activation[i]], dim=1)
+      
+      print (f'           FORWARD()--->  AFTER UPCONV, HEATMAP MEAN IS -----:  {heatmap.mean()}  ')
+      print (f'           FORWARD()--->  AFTER UPCONV, HEATMAP MEAN IS -----:  {heatmap.mean()}  ')
+      print (f'           FORWARD()--->  AFTER UPCONV, HEATMAP MEAN IS -----:  {heatmap.mean()}  ')
 
       output = self.classifier(heatmap)   #returns heatmap ([32, 3, 96, 128])
+
+      print (f'           FORWARD()--->  AFTER CLASSIFIER, HEATMAP OUTPUT MEAN IS -----:  {output.mean()}  ')
+      print (f'           FORWARD()--->  AFTER CLASSIFIER, HEATMAP OUTPUT MEAN IS -----:  {output.mean()}  ')
+      print (f'           FORWARD()--->  AFTER CLASSIFIER, HEATMAP OUTPUT MEAN IS -----:  {output.mean()}  ')
+
 
       print("||||||||||||STEP 3b||||||||||   INSIDE DETECTOR()--->FORWARD(), Just created a heatmap with Image USING CONV/DECONV Layers")
       print (f'--------------------------------------------------------------------------------------')
