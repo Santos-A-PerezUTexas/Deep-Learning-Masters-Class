@@ -241,6 +241,7 @@ if __name__ == '__main__':
     fig, axs = subplots(3, 4)
     model = load_model().eval().to(device)
     for i, ax in enumerate(axs.flat):
+        print(f'                          IN THE MAIN() LOOP NOW, NUMBER {i}')  #called about 11 times
         im, kart, bomb, pickup = dataset[i]
         ax.imshow(TF.to_pil_image(im), interpolation=None)
         for k in kart:
