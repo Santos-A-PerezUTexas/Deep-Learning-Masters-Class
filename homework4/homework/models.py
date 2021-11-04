@@ -13,6 +13,11 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
     f, indices = torch.topk(x2,3)
     """
     
+
+    print("||||||||||||STEP 5||||||||||   EXTRACT_PEAKS() HAS JUST BEEN CALLED")
+    print (f'--------------------------------------------------------------------------------------')
+         
+
     #IMPORTANT
     #@max_pool_ks: Only return points that are larger than a max_pool_ks x max_pool_ks 
     #window around the point
@@ -268,7 +273,7 @@ class Detector(torch.nn.Module):
         print("||||||||||||STEP 4||||||||||   JUST CALLED DETECTOR()--->FORWARD(), BACK IN DETECT()")
         print (f'--------------------------------------------------------------------------------------')
         print (f'                ------>>>>>>>>>>>, 3 channel heatmap shape is {three_channel_heatmap.shape}')
-        print (f'                ------>>>>>>>>>>>, NOW WILL GO THROUGH ALL 3 CHANNELS TO EXTRACT PEAKS')
+        print (f'                ------>>>>>>>>>>>, NOW WILL GO THROUGH ALL 3 CHANNELS AND CALL EXTRACT_PEAKS()')
         
       
         #heatmap shape is torch.Size([1, 3, 96, 128])
