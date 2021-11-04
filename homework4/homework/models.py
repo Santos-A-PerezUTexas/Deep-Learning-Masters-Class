@@ -205,9 +205,9 @@ class Detector(torch.nn.Module):
     def forward(self, img):
         
 
-     print("111111.                         INSIDE DETECTOR---()FORWARD(), will call CNN BLOCK NEXT, DECONV")
-     print (f'--------------------------------------------------------------------------------------')
-     print (f'--------------------------------------------------------------------------------------')
+      print("111111.                         INSIDE DETECTOR---()FORWARD(), will call CNN BLOCK NEXT, DECONV")
+      print (f'--------------------------------------------------------------------------------------')
+      print (f'--------------------------------------------------------------------------------------')
      
       #print (self.detect(img))   #CALLING DETECT() HERE FOR TEST PURPOSES           
 
@@ -217,9 +217,9 @@ class Detector(torch.nn.Module):
       up_activation = []
       
 
-     print("2222222.                         INSIDE DETECTOR---()FORWARD(), will call UPCONV NOW")
-     print (f'--------------------------------------------------------------------------------------')
-     print (f'--------------------------------------------------------------------------------------')
+      print("2222222.                         INSIDE DETECTOR---()FORWARD(), will call UPCONV NOW")
+      print (f'--------------------------------------------------------------------------------------')
+      print (f'--------------------------------------------------------------------------------------')
      
       
       for i in range(self.n_conv):             #in range 4 basically.
