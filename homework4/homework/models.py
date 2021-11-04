@@ -10,6 +10,7 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
     detection_list.append((3, 3, 3, 0, 0)) 
 
     print ("You have succesfully called extract_peak as follows:  Detector-->Forward()--->Detect()--->extrac_peak")
+    print(f'                          SHAPE OF HEATMAP in EXTRACTPEAK is {heatmap.shape}')
     print (f'Returning this list:, {detection_list}')
 
     return(detection_list)
@@ -207,7 +208,7 @@ class Detector(torch.nn.Module):
 
         print('                                  ^^^^^^This is the list of lists, -> {List_of_detection_lists}')
         print(List_of_detection_lists)
-        print(extract_peak(image))
+        
         return (List_of_detection_lists)              
    
 
