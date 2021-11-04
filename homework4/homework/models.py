@@ -216,9 +216,11 @@ class Detector(torch.nn.Module):
         
       #print (self.detect(img))   #CALLING DETECT() HERE FOR TEST PURPOSES           
 
-      print('                           MEAN: Before normalization, img mean for 3 CHANNELS is {img.mean}')
+      print('                           MEAN: Before normalization, img mean for 3 CHANNELS is {img.mean()}')
+      print('                           MEAN: Before normalization, img mean for 3 CHANNELS is {img.mean()}')
       heatmap = (img - self.input_mean[None, :, None, None].to(img.device)) / self.input_std[None, :, None, None].to(img.device)
-      print('                           MEAN: AFter normalization, img  (now HEATMAP) mean for 3 CHANNELS is {heatmap.mean}')
+      print('                           MEAN: AFter normalization, img  (now HEATMAP) mean for 3 CHANNELS is {heatmap.mean()}')
+      print('                           MEAN: AFter normalization, img  (now HEATMAP) mean for 3 CHANNELS is {heatmap.mean()}')      
       
       up_activation = []
       
@@ -245,7 +247,7 @@ class Detector(torch.nn.Module):
       print("||||||||||||STEP 3b||||||||||   INSIDE DETECTOR()--->FORWARD(), Just created a heatmap with Image USING CONV/DECONV Layers")
       print (f'--------------------------------------------------------------------------------------')
       print (f'                ------>>>>>>>>>>>, heatmap shape is {output.shape}, will be passed RETURNED TO DETECT()')
-      print (f'                MEAN-->>>>>>>>>>>, heatmap MEAN (ALL THREE CHANNELS) is {output.mean}, will be RETURNED TO DETECT()')
+      print (f'                MEAN-->>>>>>>>>>>, heatmap MEAN (ALL THREE CHANNELS) is {output.mean()}, will be RETURNED TO DETECT()')
 
       return output
 
@@ -274,9 +276,9 @@ class Detector(torch.nn.Module):
         print("||||||||||||STEP 4||||||||||   JUST CALLED DETECTOR()--->FORWARD(), BACK IN DETECT()")
         print (f'--------------------------------------------------------------------------------------')
         print (f'                ------>>>>>>>>>>>, 3 channel heatmap shape is {three_channel_heatmap.shape}')
-        print (f'                MEAN------>>>>>>>>>>>, 3 channel heatmap mean, channel 0 is {three_channel_heatmap[0][0].mean}')
-        print (f'                MEAN------>>>>>>>>>>>, 3 channel heatmap mean, channel 1 is {three_channel_heatmap[0][1].mean}')
-        print (f'                MEAN------>>>>>>>>>>>, 3 channel heatmap mean, channel 2 is {three_channel_heatmap[0][2].mean}')
+        print (f'                MEAN------>>>>>>>>>>>, 3 channel heatmap mean, channel 0 is {three_channel_heatmap[0][0].mean()}')
+        print (f'                MEAN------>>>>>>>>>>>, 3 channel heatmap mean, channel 1 is {three_channel_heatmap[0][1].mean()}')
+        print (f'                MEAN------>>>>>>>>>>>, 3 channel heatmap mean, channel 2 is {three_channel_heatmap[0][2].mean()}')
 
 
         print (f'                ------>>>>>>>>>>>, NOW WILL GO THROUGH ALL 3 CHANNELS AND CALL EXTRACT_PEAKS()')
@@ -321,6 +323,8 @@ if __name__ == '__main__':
     import matplotlib.patches as patches
 
     print("||||||||||||STEP 1||||||||||   IN MAIN(), GOING TO LOAD DATA and ITERATE, AND CALL DETECTOR() ")
+    print("||||||||||||STEP 1||||||||||   IN MAIN(), GOING TO LOAD DATA and ITERATE, AND CALL DETECTOR() ")
+    print("||||||||||||STEP 1||||||||||   IN MAIN(), GOING TO LOAD DATA and ITERATE, AND CALL DETECTOR() ")
     dataset = DetectionSuperTuxDataset('dense_data/valid', min_size=0)
 
 
@@ -331,6 +335,7 @@ if __name__ == '__main__':
     for i, ax in enumerate(axs.flat):    #called about 11 Times
         
         im, kart, bomb, pickup = dataset[i]
+        print(f'              MEAN: --->In MAIN(), the mean of the Image just pulled is {img.mean()} ')
         ax.imshow(TF.to_pil_image(im), interpolation=None)
         for k in kart:
             ax.add_patch(
