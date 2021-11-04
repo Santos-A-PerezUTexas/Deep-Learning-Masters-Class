@@ -17,8 +17,11 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
     maxpooled_heatmap, indices =  Maxpool(heatmap2)
     
     print("11111111111111111111222222222222222233333333333333555555555555555555555555555")
-    #print(f'               MAXPOOLED HEATMAP SHAPE IS    {maxpooled_heatmap.shape}')
-    print(f'       This is the MAXPOOLED HEATMAP................{maxpooled_heatmap}')
+    print(f'               HEATMAP SHAPE IS    {heatmap.shape}')
+    print(f'               MAXPOOLED HEATMAP SHAPE IS    {maxpooled_heatmap.shape}')
+    print(f'               MAXPOOLED HEATMAP MEAN  IS    {maxpooled_heatmap.mean()}')
+    
+    #print(f'       This is the MAXPOOLED HEATMAP................{maxpooled_heatmap}')
     #flatten
     #topk
 
