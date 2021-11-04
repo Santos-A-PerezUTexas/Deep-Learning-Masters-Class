@@ -335,7 +335,7 @@ if __name__ == '__main__':
     for i, ax in enumerate(axs.flat):    #called about 11 Times
         
         im, kart, bomb, pickup = dataset[i]
-        print(f'              MEAN: --->In MAIN(), the mean of the Image just pulled is {img.mean()} ')
+        print(f'              MEAN: --->In MAIN(), the mean of the Image just pulled is {im.mean()} ')
         ax.imshow(TF.to_pil_image(im), interpolation=None)
         for k in kart:
             ax.add_patch(
