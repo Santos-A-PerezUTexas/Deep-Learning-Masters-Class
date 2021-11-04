@@ -183,6 +183,7 @@ class Detector(torch.nn.Module):
 
       return self.classifier(heatmap)   #returns heatmap ([32, 3, 96, 128])
 
+#ABOVE IS DETECTOR->FORWARD RETURN VALUE heatmap ([32, 3, 96, 128])
 
 
 
@@ -198,9 +199,14 @@ class Detector(torch.nn.Module):
         List_of_detection_lists =[]
 
         print (f'             NOV 3, 2021------>>>>>>>>>>>, heatmap shape is {three_channel_heatmap.shape} ')
-        for i in range (3):
-          List_of_detection_lists.append(extract_peak(three_channel_heatmap[0]))
+        #heatmap shape is torch.Size([1, 3, 96, 128])
 
+        for i in range (3):
+          print(f'                        ***Calling extract peak at iteration {i+1}')
+          List_of_detection_lists.append(extract_peak(three_channel_heatmap[0][i]))
+
+        print('                                  ^^^^^^This is the list of lists, -> {List_of_detection_lists}')
+        print(List_of_detection_lists)
         print(extract_peak(image))
         return (List_of_detection_lists)              
    
