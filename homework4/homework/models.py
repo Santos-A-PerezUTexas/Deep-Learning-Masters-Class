@@ -269,9 +269,9 @@ class Detector(torch.nn.Module):
 
       output = self.classifier(heatmap)   #returns heatmap ([32, 3, 96, 128])
 
-      print (f'           FORWARD()--->  AFTER CLASSIFIER, HEATMAP OUTPUT MEAN IS -----:  {output.mean()}  ')
-      print (f'           FORWARD()--->  AFTER CLASSIFIER, HEATMAP OUTPUT MEAN IS -----:  {output.mean()}  ')
-      print (f'           FORWARD()--->  AFTER CLASSIFIER, HEATMAP OUTPUT MEAN IS -----:  {output.mean()}  ')
+      print (f'           FORWARD()--->  AFTER CLASSIFIER, HEATMAP OUTPUT MEAN for ONE IMAGE 3 CHANNELS IS -----:  {output[0].mean()}  ')
+      print (f'           FORWARD()--->  AFTER CLASSIFIER, HEATMAP OUTPUT MEAN IS -----:  {output[0].mean()}  ')
+      print (f'           FORWARD()--->  AFTER CLASSIFIER, HEATMAP OUTPUT MEAN IS -----:  {output[0].mean()}  ')
 
 
       print("||||||||||||STEP 3b||||||||||   INSIDE DETECTOR()--->FORWARD(), Just created a heatmap with Image USING CONV/DECONV Layers")

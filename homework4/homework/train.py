@@ -40,7 +40,7 @@ class FocalLoss(nn.Module):
         #print (f'Shape of weights is {self.weight.shape}')
         print (f'Shape of target_tensor is {target_tensor.shape}')
         #loss = F.nll_loss(new_input_tensor,  target_tensor, weight=self.weight, reduction = self.reduction).to(input_tensor.device)
-        loss = F.nll_loss(new_input_tensor,  target_tensor, weight=self.weight).to(input_tensor.device) 
+        loss = F.nll_loss(new_input_tensor,  target_tensor[:, 0, :, :].long(), weight=self.weight).to(input_tensor.device) 
  
 
         print (f'the shape of loss in focalloss() is {loss.shape}')
@@ -97,7 +97,7 @@ def train(args):
     
 
     global_step = 0
-    for epoch in range(20):   #WARNING CHANGE TO args.num_epoch   #WARNING CHANGE TO args.num_epoch
+    for epoch in range(5):   #WARNING CHANGE TO args.num_epoch   #WARNING CHANGE TO args.num_epoch
 
         print(f'***********At the beggining of epoch  {epoch+1}****************')
         model.train()
@@ -157,6 +157,8 @@ def train(args):
             
                                
             lossBCE = torch.nn.BCEWithLogitsLoss()
+            #lossBCE = FocalLoss()
+
             heatmap_loss=lossBCE(heatmaps, predicted_heatmaps)   
             #Per https://piazza.com/class/ksjhagmd59d6sg?cid=779
             #peak_loss = BCEWithlogitloss(label_for_peak, model(image)), ToHeatmap(), returns image, label_for_peak (heatmap)
