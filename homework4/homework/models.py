@@ -38,6 +38,7 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
     topk, indicesTOP = torch.topk(sorted_scores[idx_min:], k)
 
     print (f'>>>>>>>>>>>>>>>>>>>   The top 30 scores above -5 are {topk}')
+    print (f'This is the sorted_scores list, {sorted_scores}')
 
 
 
