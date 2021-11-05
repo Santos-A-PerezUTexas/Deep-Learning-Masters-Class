@@ -43,8 +43,8 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
 
     #topk, indicesTOP = torch.topk(maxpooled_heatmap.view(-1), k)
 
-    #detection_list = [(3,4,5, 0, 0), (3,4,5, 0, 0), (3,4,5, 0, 0) ]
-    #detection_list.append((3, 3, 3, 0, 0)) 
+    print(len(detection_list))
+    print (detection_list)
 
     return(detection_list)
 
