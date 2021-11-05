@@ -31,10 +31,10 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
     Maxpool =  torch.nn.MaxPool2d(kernel_size=max_pool_ks, return_indices=True, padding=max_pool_ks//2, stride=1)
     
     # Original HEATMAP SHAPE IS    torch.Size([96, 128])
-    heatmap2 = heatmap[None, None] #for Maxpool, shape is NOW torch.Size([1, 1, 96, 128]
-    heatmap2 = heatmap2.to(heatmap.device)
+    heatmap_temp = heatmap[None, None] #for Maxpool, shape is NOW torch.Size([1, 1, 96, 128]
+    heatmap_temp = heatmap2.to(heatmap.device)
 
-    maxpooled_heatmap, indices =  Maxpool(heatmap2)   #torch.Size([1, 1, 96, 128])
+    maxpooled_heatmap, indices =  Maxpool(heatmap_temp)   #torch.Size([1, 1, 96, 128])
     
     maxpooled_heatmap = maxpooled_heatmap.to(heatmap.device)
 
@@ -67,6 +67,13 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
       generate  the new tensor
     
     """
+
+    #Nov 5, 2021
+    #1 Iterate through max_pool, omit all scores < min_score
+      #heatmap.view(-1), sorted?
+      
+    #2 Find cx, cy in heatmap for those scores
+    #done
 
     topk, indicesTOP = torch.topk(maxpooled_heatmap.view(-1), k)
 
