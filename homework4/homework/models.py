@@ -30,7 +30,9 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
     1. iterate through maxpooled_heatmap and heatmap
     2. if maxpooled_heatmap[i][j] == heatmap[i][j] then these are the coordinates of a peak
          i.  if the value at this location is greater than -5,
-                    a. store coordinates and the value, append a list I suppose 
+                    a. store coordinates and the value, append a list I suppose
+                       detection_list.append((heatmap[i][j], i, j, 0, 0))
+    3.  
     """  
 
 
