@@ -21,12 +21,22 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
     heatmap_temp = heatmap_temp.to(heatmap.device)
 
     maxpooled_heatmap, maxpool_indices =  Maxpool(heatmap_temp)   #torch.Size([1, 1, 96, 128])
-    
+   
     maxpooled_heatmap = maxpooled_heatmap.to(heatmap.device)
    
     sorted_scores, sorted_idx = maxpooled_heatmap.view(-1).sort()
+
+    """
+    1. iterate through maxpooled_heatmap and heatmap
+    2. if maxpooled_heatmap[i][j] == heatmap[i][j] then these are the coordinates of a peak
+         i.  if the value at this location is greater than -5,
+                    a. store coordinates and the value, append a list I suppose 
+    """  
+
+
+
+
     #find the index, call it idx_min, of the first score which is > min_score
-    #feed that into topk, e.g. sorted_scores[idx_min:]
     
     idx_min = 0
     for i in range(len(sorted_scores)):
@@ -35,7 +45,10 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
         print (f'{i} ...I found the first score > min_score:  {sorted_scores[i]}, its index is {sorted_idx[i]}. idx_min is {i}')
         break
 
+    #feed sorted_scores[idx_min:] into top scores
     topk, indicesTOP = torch.topk(sorted_scores[idx_min:], k)
+
+    #find these topK (30) values in the original heatmap
 
     print (f'>>>>>>>>>>>>>>>>>>>   The top 30 scores above -5 are {topk}')
     print (f'This is the sorted_scores list, {sorted_scores}')
