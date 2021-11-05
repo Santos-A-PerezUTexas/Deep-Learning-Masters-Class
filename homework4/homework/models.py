@@ -8,6 +8,7 @@ import torch.nn.functional as F
 
 def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
 
+    print ("----------------------EXTRACT PEAK CALLED------------------------")
     
     detection_list = []
     k=max_det
@@ -44,13 +45,13 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
       #  if (peak_tensor[i][j]) and (heatmap[i][j] > min_score):
        #   detection_list.append((heatmap[i][j], i, j, 0, 0)) 
 
-    index_tensor = torch.where(new_heatmap>min_sore)
+    index_tensor = torch.where(new_heatmap>min_score)
     print(f'INDEX TENSOR is {index_tensor}and the scores are {new_heatmap[index_tensor]}')
   
 
     #topk, indicesTOP = torch.topk(maxpooled_heatmap.view(-1), k)
 
-    print ("----------------------EXTRACT PEAK CALLED------------------------")
+    
     print (len(detection_list))
     print (detection_list)
 
