@@ -40,7 +40,7 @@ class FocalLoss(nn.Module):
         #print (f'Shape of weights is {self.weight.shape}')
         print (f'Shape of target_tensor is {target_tensor.shape}')
         #loss = F.nll_loss(new_input_tensor,  target_tensor, weight=self.weight, reduction = self.reduction).to(input_tensor.device)
-        loss = F.nll_loss(new_input_tensor,  target_tensor[:, 0, :, :].long(), weight=self.weight).to(input_tensor.device) 
+        loss = F.nll_loss(new_input_tensor,  target_tensor.long(), weight=self.weight).to(input_tensor.device) 
  
 
         print (f'the shape of loss in focalloss() is {loss.shape}')
@@ -159,7 +159,8 @@ def train(args):
             lossBCE = torch.nn.BCEWithLogitsLoss()
             #lossBCE = FocalLoss()
 
-            heatmap_loss=lossBCE(heatmaps, predicted_heatmaps)   
+            heatmap_loss=lossBCE(predicted_heatmaps, heatmaps) 
+
             #Per https://piazza.com/class/ksjhagmd59d6sg?cid=779
             #peak_loss = BCEWithlogitloss(label_for_peak, model(image)), ToHeatmap(), returns image, label_for_peak (heatmap)
             #Nov 2, 2021:  Output dimesion is [32, 3, 96, 128], the label dimension should be [32, 96, 128], long type integers.
