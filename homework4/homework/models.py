@@ -24,7 +24,7 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
    
     maxpooled_heatmap = maxpooled_heatmap.to(heatmap.device)
    
-    sorted_scores, sorted_idx = maxpooled_heatmap.view(-1).sort()
+    
 
     """
     1. iterate through maxpooled_heatmap and heatmap
@@ -32,44 +32,14 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
          i.  if the value at this location is greater than -5,
                     a. store coordinates and the value, append a list I suppose
                        detection_list.append((heatmap[i][j], i, j, 0, 0))
-    3.  
+    3.Return only the topk  
     """  
 
-
-
-
-    #find the index, call it idx_min, of the first score which is > min_score
-    
-    idx_min = 0
-    for i in range(len(sorted_scores)):
-      if sorted_scores[i] > min_score:
-        idx_min = i
-        print (f'{i} ...I found the first score > min_score:  {sorted_scores[i]}, its index is {sorted_idx[i]}. idx_min is {i}')
-        break
-
-    #feed sorted_scores[idx_min:] into top scores
-    topk, indicesTOP = torch.topk(sorted_scores[idx_min:], k)
-
-    #find these topK (30) values in the original heatmap
-
-    print (f'>>>>>>>>>>>>>>>>>>>   The top 30 scores above -5 are {topk}')
-    print (f'This is the sorted_scores list, {sorted_scores}')
-
-
-
-    #print(f'This is the list of sorted maxpool scores, length {len(sorted_scores)} followed by indices --->{sorted_scores}INDICES------>INDICES:{sorted_idx}') 
-    
-    #Nov 5, 2021
-    #1 Iterate through max_pool, omit all scores < min_score
-      #heatmap.view(-1), sorted?
-      #sorted, sorted_idx = maxpooled_heatmap.view(-1).sort()
-
-
-    #2 Find Topk, k=max_det  
-    
-    #3 Find cx, cy in heatmap for those  topk scores
-
-    #3done
+    for i in range (96):
+      for j in range (128):
+          if maxpooled_heatmap[i][j] == heatmap[i][j]:
+            if maxpooled_heatmap[i][j] > min_score:
+              detection_list.append((heatmap[i][j], i, j, 0, 0))
 
     #topk, indicesTOP = torch.topk(maxpooled_heatmap.view(-1), k)
 
