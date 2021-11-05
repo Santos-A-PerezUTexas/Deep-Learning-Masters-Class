@@ -37,8 +37,8 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
 
     for i in range (96):
       for j in range (128):
-          if maxpooled_heatmap[i][j] == heatmap[i][j]:
-            if maxpooled_heatmap[i][j] > min_score:
+          if maxpooled_heatmap[0][0][i][j] == heatmap[i][j]:
+            if maxpooled_heatmap[0][0][i][j] > min_score:
               detection_list.append((heatmap[i][j], i, j, 0, 0))
 
     #topk, indicesTOP = torch.topk(maxpooled_heatmap.view(-1), k)
