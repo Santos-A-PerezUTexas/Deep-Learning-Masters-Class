@@ -35,11 +35,16 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
     3.Return only the topk  
     """  
 
-    for i in range (96):
-      for j in range (128):
-          if maxpooled_heatmap[0][0][i][j] == heatmap[i][j]:
-            if maxpooled_heatmap[0][0][i][j] > min_score:
-              detection_list.append((heatmap[i][j], i, j, 0, 0))
+    #for i in range (96):
+     # for j in range (128):
+      #    if maxpooled_heatmap[0][0][i][j] == heatmap[i][j]:
+       #     if maxpooled_heatmap[0][0][i][j] > min_score:
+        #      detection_list.append((heatmap[i][j], i, j, 0, 0))
+
+    peak_tensor = torch.eq(heatmap, maxpooled_heatmap)
+    
+
+
 
     #topk, indicesTOP = torch.topk(maxpooled_heatmap.view(-1), k)
 
