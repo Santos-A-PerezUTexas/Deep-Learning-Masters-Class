@@ -27,12 +27,17 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
     #all values in a max_pool_ks x max_pool_ks  square around it.
 
     #switched it to functional max_pool2d????
+       
     Maxpool =  torch.nn.MaxPool2d(kernel_size=max_pool_ks, return_indices=True, padding=max_pool_ks//2, stride=1)
     
     # Original HEATMAP SHAPE IS    torch.Size([96, 128])
     heatmap2 = heatmap[None, None] #for Maxpool, shape is NOW torch.Size([1, 1, 96, 128]
+    heatmap2 = heatmap2.to(heatmap.device)
+
     maxpooled_heatmap, indices =  Maxpool(heatmap2)   #torch.Size([1, 1, 96, 128])
     
+    maxpooled_heatmap = maxpooled_heatmap.to(heatmap.device)
+
     #PER SLIDES -- CANNOT USE MAXPOOL INDICES!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     #indeces looks like this:  
