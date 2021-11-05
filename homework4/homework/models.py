@@ -9,8 +9,9 @@ import torch.nn.functional as F
 def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
 
     print("----------------------EXTRACT PEAK CALLED------------------------")
-    
+
     detection_list = []
+    k=max_det
 
     Maxpool =  torch.nn.MaxPool2d(kernel_size=max_pool_ks, return_indices=True, padding=max_pool_ks//2, stride=1)
     
@@ -22,9 +23,7 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
     maxpooled_heatmap, maxpool_indices =  Maxpool(heatmap_temp)   #torch.Size([1, 1, 96, 128])
     
     maxpooled_heatmap = maxpooled_heatmap.to(heatmap.device)
-
-
-    k=max_det
+   
     sorted_scores, sorted_idx = maxpooled_heatmap.view(-1).sort()
     #find the index, call it idx_min, of the first score which is > min_score
     #feed that into topk, e.g. sorted_scores[idx_min:]
@@ -36,6 +35,9 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
         print (f'{i} ...I found the first score > min_score:  {sorted_scores[i]}, its index is {sorted_idx[i]}. idx_min is {i}')
         break
 
+    topk, indicesTOP = torch.topk(sorted_scores[idx_min:], k)
+
+    print (f'>>>>>>>>>>>>>>>>>>>   The top 30 scores above -5 are {topk}')
 
 
 
