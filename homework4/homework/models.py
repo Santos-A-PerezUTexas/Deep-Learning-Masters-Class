@@ -8,101 +8,47 @@ import torch.nn.functional as F
 
 def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
 
-    """
-    Example:
-    x2 = torch.tensor([2,2,77,89,1,7,65,100,12,500])
-    f, indices = torch.topk(x2,3) 
-    """
-    
 
-    print("||||||||||||STEP 5||||||||||   EXTRACT_PEAKS() HAS JUST BEEN CALLED")
-    print (f'--------------------------------------------------------------------------------------')
-         
+    detection_list = []
 
-    #IMPORTANT
-    #@max_pool_ks: Only return points that are larger than a max_pool_ks x max_pool_ks 
-    #window around the point
-    #https://piazza.com/class/ksjhagmd59d6sg?cid=620
-    #The hint means you should only return a value if it is larger than 
-    #all values in a max_pool_ks x max_pool_ks  square around it.
-
-    #switched it to functional max_pool2d????
-       
     Maxpool =  torch.nn.MaxPool2d(kernel_size=max_pool_ks, return_indices=True, padding=max_pool_ks//2, stride=1)
     
     # Original HEATMAP SHAPE IS    torch.Size([96, 128])
-    heatmap_temp = heatmap[None, None] #for Maxpool, shape is NOW torch.Size([1, 1, 96, 128]
-    heatmap_temp = heatmap2.to(heatmap.device)
+    heatmap_temp = heatmap[None, None] 
+    #for Maxpool, shape is NOW torch.Size([1, 1, 96, 128]
+    heatmap_temp = heatmap_temp.to(heatmap.device)
 
-    maxpooled_heatmap, indices =  Maxpool(heatmap_temp)   #torch.Size([1, 1, 96, 128])
+    maxpooled_heatmap, maxpool_indices =  Maxpool(heatmap_temp)   #torch.Size([1, 1, 96, 128])
     
     maxpooled_heatmap = maxpooled_heatmap.to(heatmap.device)
 
-    #PER SLIDES -- CANNOT USE MAXPOOL INDICES!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    #indeces looks like this:  
-
-
-    """
-    Once you apply max pool you will have two tensors. One that is the original heat map,
-    and the other that a maxpooled heatmap of the same size. Think about how these two relate 
-    to one another in terms of “peaks”. Printing them out helped me.
-    """
-
 
     k=max_det
-    """
-      maxpool2d() helps you identify the local maximum by *distributing* the max value to all
-      indexes in a given window. In the provided example, we want to know that 3 is indeed not a 
-      local maxima. When maxpool2d() returns the modified tensor with 5 distributed over the 
-      index where 3 was originally located, it becomes clear that 3 is not greater than or equal
-      to its neighbors.  
-      
-      You need to make use of the information maxpool2d() provides you with, and 
-      ***-->generate a new tensor suitable for ***TOPK()***. 
-      ********>You should not pass the raw output of maxpool to topk. 
-      ****> CANNOT USE MAXPOOL INDICES
-      
-      The slides also illustrates how you can find the **true** indexes to
-      generate  the new tensor
-    
-    """
+    sorted_scores, sorted_idx = maxpooled_heatmap.view(-1).sort()
 
+    print(f'This is the list of sorted maxpool scores, length {len(sorted_scores)} followed by indices --->{sorted_scores}INDICES------>INDICES:{sorted_idx}') 
+    
     #Nov 5, 2021
     #1 Iterate through max_pool, omit all scores < min_score
       #heatmap.view(-1), sorted?
-      
-    #2 Find cx, cy in heatmap for those scores
-    #done
+      #sorted, sorted_idx = maxpooled_heatmap.view(-1).sort()
 
-    topk, indicesTOP = torch.topk(maxpooled_heatmap.view(-1), k)
 
+    #2 Find Topk, k=max_det  
     
-    print(f'               HEATMAP SHAPE IS    {heatmap.shape}')
-    print(f'               MAXPOOLED HEATMAP SHAPE IS    {maxpooled_heatmap.shape}')
-    print(f'               MAXPOOLED HEATMAP MEAN  IS    {maxpooled_heatmap.mean()}')
-    print(f'               Topk is    {topk}')
-    print(f'               Topk indices is    {indicesTOP}')
-    print(f'               MAXPOOL heatmap indices SHAPE is    {indices.shape}')
-    print(f'               MAXPOOL heatmap indices is    {indices}')
-    
-    
-    #print(f'       This is the MAXPOOLED HEATMAP................{maxpooled_heatmap}')
-    #flatten
-    #topk
+    #3 Find cx, cy in heatmap for those  topk scores
 
-    detection_list = [(3,4,5, 0, 0), (3,4,5, 0, 0), (3,4,5, 0, 0) ]
+    #3done
 
-    detection_list.append((3, 3, 3, 0, 0)) 
+    #topk, indicesTOP = torch.topk(maxpooled_heatmap.view(-1), k)
 
-    
-    print ("You have succesfully called extract_peak as follows:  Detector-->Forward()--->Detect()--->extrac_peak")
-    print(f'                          SHAPE OF HEATMAP in EXTRACTPEAK is {heatmap.shape}, of HEATMAP2, {heatmap2.shape}')
-    print (f'Returning this list:, {detection_list}')
+    #detection_list = [(3,4,5, 0, 0), (3,4,5, 0, 0), (3,4,5, 0, 0) ]
+    #detection_list.append((3, 3, 3, 0, 0)) 
 
     return(detection_list)
 
 
+#END----------------------END  extract_peak
 
         #--------------------------------------BEGIN CNN
 
