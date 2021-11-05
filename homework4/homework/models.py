@@ -8,7 +8,8 @@ import torch.nn.functional as F
 
 def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
 
-
+    print("----------------------EXTRACT PEAK CALLED------------------------")
+    
     detection_list = []
 
     Maxpool =  torch.nn.MaxPool2d(kernel_size=max_pool_ks, return_indices=True, padding=max_pool_ks//2, stride=1)
@@ -25,8 +26,20 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
 
     k=max_det
     sorted_scores, sorted_idx = maxpooled_heatmap.view(-1).sort()
+    #find the index, call it idx_min, of the first score which is > min_score
+    #feed that into topk, e.g. sorted_scores[idx_min:]
+    
+    idx_min = 0
+    for i in range(len(sorted_scores)):
+      if sorted_scores[i] > min_score:
+        idx_min = i
+        print (f'{i} ...I found the first score > min_score:  {sorted_scores[i]}, its index is {sorted_idx[i]}. idx_min is {i}')
+        break
 
-    print(f'This is the list of sorted maxpool scores, length {len(sorted_scores)} followed by indices --->{sorted_scores}INDICES------>INDICES:{sorted_idx}') 
+
+
+
+    #print(f'This is the list of sorted maxpool scores, length {len(sorted_scores)} followed by indices --->{sorted_scores}INDICES------>INDICES:{sorted_idx}') 
     
     #Nov 5, 2021
     #1 Iterate through max_pool, omit all scores < min_score
@@ -67,31 +80,30 @@ class CNNClassifier(torch.nn.Module):
 
         def forward(self, x):
 
-            print (f'                              -----:  IN FORWARD OF CNN BLOCK, X shape IS  {x.shape}  ')
-            print (f'--------------------------------------------------------------------------------------')
+            #print (f'                              -----:  IN FORWARD OF CNN BLOCK, X shape IS  {x.shape}  ')
+            #print (f'--------------------------------------------------------------------------------------')
 
             output = self.c1(x)    #NOV 1, 2021:  NEVER REACHES THIS POINT!
-            print (f'1   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
+            #print (f'1   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
             output = self.b1(output)
-            print (f'2   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
+            #print (f'2   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
             output = F.relu(output)
-            print (f'3   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
+            #print (f'3   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
             output = self.c2(output)
-            print (f'4   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
+            #print (f'4   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
             output = self.b2(output)
-            print (f'5   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
+            #print (f'5   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
             output = F.relu(output)
-            print (f'6   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
+            #print (f'6   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
             output = self.c3(output)
-            print (f'7   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
+            #print (f'7   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
             #output = self.b3(output) + self.skip(x)
-            print (f'8   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
+            #print (f'8   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
             output = F.relu(output)
-            print (f'9   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
+            #print (f'9   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
             output = output.to(x.device)
-            print (f'              DOWNCONV CNN BLOCK, RETURNING:   OUTPUT of shape  {output.shape}  ')
-            
-            
+            #print (f'              DOWNCONV CNN BLOCK, RETURNING:   OUTPUT of shape  {output.shape}  ')
+    
             return output
             
             #NOV 1, 2021: Input type (torch.cuda.FloatTensor) and weight type (torch.FloatTensor) should be the same
@@ -165,9 +177,9 @@ class Detector(torch.nn.Module):
             self.add_module('upconv%d' % i, self.UpBlock(c, l, kernel_size, 2))
             c = l
             if self.use_skip:
-                print(f'                         ADDING DECONV SKIP, c is {c}<<<<<<<<<<<<<<<<<<<<')
+                #print(f'                         ADDING DECONV SKIP, c is {c}<<<<<<<<<<<<<<<<<<<<')
                 c += skip_layer_size[i]
-                print(f'                         JUST ADDED DECONV SKIP, c is NOW {c}<<<<<<<<<<<<<<<<<<<<')
+                #print(f'                         JUST ADDED DECONV SKIP, c is NOW {c}<<<<<<<<<<<<<<<<<<<<')
 
       
         self.classifier = torch.nn.Conv2d(c, n_output_channels, 1)      #MAY NEED TO CHANGE THIS OUTPUT NOV 1, 2021
@@ -184,19 +196,14 @@ class Detector(torch.nn.Module):
 
     def forward(self, img):
         
-      print (f'--------------------------------------------------------------------------------------')
-      print("||||||||||||STEP 3a||||||||||   INSIDE DETECTOR()--->FORWARD(), will call CNN BLOCK NEXT, DECONV")
-      print (f'--------------------------------------------------------------------------------------')
-      print (f'                ------>>>>>>>>>>>, image shape is {img.shape}, will be normalized, THEN passed to CNN BLOCK and then DECONV')
+      #print (f'--------------------------------------------------------------------------------------')
+      #print("||||||||||||STEP 3a||||||||||   INSIDE DETECTOR()--->FORWARD(), will call CNN BLOCK NEXT, DECONV")
+      #print (f'--------------------------------------------------------------------------------------')
+      #print (f'                ------>>>>>>>>>>>, image shape is {img.shape}, will be normalized, THEN passed to CNN BLOCK and then DECONV')
         
       #print (self.detect(img))   #CALLING DETECT() HERE FOR TEST PURPOSES           
 
-      print(f'                           MEAN: Before normalization, img mean for 3 CHANNELS is {img.mean()}')
-      print(f'                           MEAN: Before normalization, img mean for 3 CHANNELS is {img.mean()}')
       heatmap = (img - self.input_mean[None, :, None, None].to(img.device)) / self.input_std[None, :, None, None].to(img.device)
-      print("NORMALIZATION:  heatmap = (img - self.input_mean[None, :, None, None].to(img.device)) / self.input_std[None, :, None, None].to(img.device)")
-      print(f'                           MEAN: AFter normalization, img  (now HEATMAP) mean for 3 CHANNELS is {heatmap.mean()}')
-      print(f'                           MEAN: AFter normalization, img  (now HEATMAP) mean for 3 CHANNELS is {heatmap.mean()}')      
       
       up_activation = []
       
@@ -207,13 +214,11 @@ class Detector(torch.nn.Module):
         up_activation.append(heatmap)
         heatmap = self._modules['conv%d'%i](heatmap)   
         
-      print (f'           FORWARD()--->  AFTER DOWNCONV CNN BLOCK, HEATMAP MEAN IS -----:  {heatmap.mean()}  ')
-      print (f'           FORWARD()--->  AFTER DOWNCONV CNN BLOCK, HEATMAP MEAN IS -----:  {heatmap.mean()}  ')
-      print (f'           FORWARD()--->  AFTER DOWNCONV CNN BLOCK, HEATMAP MEAN IS -----:  {heatmap.mean()}  ')
-
+      #print (f'           FORWARD()--->  AFTER DOWNCONV CNN BLOCK, HEATMAP MEAN IS -----:  {heatmap.mean()}  ')
+      
 
       for i in reversed(range(self.n_conv)):
-        #print(f'                       In REVERSED detector->Forward SECOND LOOP, UPCONV, Number {i}')
+      
         heatmap = self._modules['upconv%d'%i](heatmap)
         # Fix the padding
         heatmap = heatmap[:, :, :up_activation[i].size(2), :up_activation[i].size(3)]
@@ -221,28 +226,14 @@ class Detector(torch.nn.Module):
         if self.use_skip:
           heatmap = torch.cat([heatmap, up_activation[i]], dim=1)
       
-      print (f'           FORWARD()--->  AFTER UPCONV, HEATMAP MEAN IS -----:  {heatmap.mean()}  ')
-      print (f'           FORWARD()--->  AFTER UPCONV, HEATMAP MEAN IS -----:  {heatmap.mean()}  ')
-      print (f'           FORWARD()--->  AFTER UPCONV, HEATMAP MEAN IS -----:  {heatmap.mean()}  ')
-
       output = self.classifier(heatmap)   #returns heatmap ([32, 3, 96, 128])
 
-      print (f'           FORWARD()--->  AFTER CLASSIFIER, HEATMAP OUTPUT MEAN for ONE IMAGE 3 CHANNELS IS -----:  {output[0].mean()}  ')
-      print (f'           FORWARD()--->  AFTER CLASSIFIER, HEATMAP OUTPUT MEAN IS -----:  {output[0].mean()}  ')
-      print (f'           FORWARD()--->  AFTER CLASSIFIER, HEATMAP OUTPUT MEAN IS -----:  {output[0].mean()}  ')
-
-
-      print("||||||||||||STEP 3b||||||||||   INSIDE DETECTOR()--->FORWARD(), Just created a heatmap with Image USING CONV/DECONV Layers")
-      print (f'--------------------------------------------------------------------------------------')
-      print (f'                ------>>>>>>>>>>>, heatmap shape is {output.shape}, will be passed RETURNED TO DETECT()')
-      print (f'                MEAN-->>>>>>>>>>>, heatmap MEAN (ALL THREE CHANNELS) is {output.mean()}, will be RETURNED TO DETECT()')
-
+      #print("||||||||||||STEP 3b||||||||||   INSIDE DETECTOR()--->FORWARD(), Just created a heatmap with Image USING CONV/DECONV Layers")
+      #print (f'--------------------------------------------------------------------------------------')
+      
       return output
 
 #ABOVE IS DETECTOR->FORWARD RETURN VALUE heatmap ([32, 3, 96, 128])
-
-
-
 
 
 #------------------------------------------------------------------------------>BEGIN  Detector.DETECT() METHOD FOR DETECTOR NETWORK
@@ -253,33 +244,27 @@ class Detector(torch.nn.Module):
         List_of_detection_lists =[]
 
         
-        print (f'--------------------------------------------------------------------------------------')
-        print("||||||||||||STEP 2||||||||||   INSIDE DETECTOR()--->DETECT()")
-        print (f'--------------------------------------------------------------------------------------')
-        print (f'                ------>>>>>>>>>>>, image shape is {image.shape}, will be passed to FORWARD() Next ')
+        #print (f'--------------------------------------------------------------------------------------')
+        #print("||||||||||||STEP 2||||||||||   INSIDE DETECTOR()--->DETECT()")
+        #print (f'--------------------------------------------------------------------------------------')
+        #print (f'                ------>>>>>>>>>>>, image shape is {image.shape}, will be passed to FORWARD() Next ')
         
         three_channel_heatmap = self.forward(image)
 
 
-        print("||||||||||||STEP 4||||||||||   JUST CALLED DETECTOR()--->FORWARD(), BACK IN DETECT()")
-        print (f'--------------------------------------------------------------------------------------')
-        print (f'                ------>>>>>>>>>>>, 3 channel heatmap shape is {three_channel_heatmap.shape}')
-        print (f'                MEAN------>>>>>>>>>>>, 3 channel heatmap mean, channel 0 is {three_channel_heatmap[0][0].mean()}')
-        print (f'                MEAN------>>>>>>>>>>>, 3 channel heatmap mean, channel 1 is {three_channel_heatmap[0][1].mean()}')
-        print (f'                MEAN------>>>>>>>>>>>, 3 channel heatmap mean, channel 2 is {three_channel_heatmap[0][2].mean()}')
-
-
-        print (f'                ------>>>>>>>>>>>, NOW WILL GO THROUGH ALL 3 CHANNELS AND CALL EXTRACT_PEAKS()')
+        #print("||||||||||||STEP 4||||||||||   JUST CALLED DETECTOR()--->FORWARD(), BACK IN DETECT()")
+        #print (f'--------------------------------------------------------------------------------------')
+        #print (f'                ------>>>>>>>>>>>, 3 channel heatmap shape is {three_channel_heatmap.shape}')
+        #print (f'                ------>>>>>>>>>>>, NOW WILL GO THROUGH ALL 3 CHANNELS AND CALL EXTRACT_PEAKS()')
         
       
         #heatmap shape is torch.Size([1, 3, 96, 128])
 
-        for i in range (3):
-          #print(f'                        ***Calling extract peak at iteration {i+1}')
+        for i in range (3):         
           List_of_detection_lists.append(extract_peak(three_channel_heatmap[0][i]))
 
-        print('                                  ^^^^^^This is the list of lists, -> {List_of_detection_lists}')
-        print(List_of_detection_lists)
+        #print('                                  ^^^^^^This is the list of lists, -> {List_of_detection_lists}')
+        #print(List_of_detection_lists)
         
         return (List_of_detection_lists)              
    
@@ -310,9 +295,7 @@ if __name__ == '__main__':
     from pylab import show, subplots
     import matplotlib.patches as patches
 
-    print("||||||||||||STEP 1||||||||||   IN MAIN(), GOING TO LOAD DATA and ITERATE, AND CALL DETECTOR() ")
-    print("||||||||||||STEP 1||||||||||   IN MAIN(), GOING TO LOAD DATA and ITERATE, AND CALL DETECTOR() ")
-    print("||||||||||||STEP 1||||||||||   IN MAIN(), GOING TO LOAD DATA and ITERATE, AND CALL DETECTOR() ")
+    #print("||||||||||||STEP 1||||||||||   IN MAIN(), GOING TO LOAD DATA and ITERATE, AND CALL DETECTOR() ")
     dataset = DetectionSuperTuxDataset('dense_data/valid', min_size=0)
 
 
@@ -323,7 +306,7 @@ if __name__ == '__main__':
     for i, ax in enumerate(axs.flat):    #called about 11 Times
         
         im, kart, bomb, pickup = dataset[i]
-        print(f'              MEAN: --->In MAIN(), the mean of the Image just pulled is {im.mean()} ')
+        #print(f'              MEAN: --->In MAIN(), the mean of the Image just pulled is {im.mean()} ')
         ax.imshow(TF.to_pil_image(im), interpolation=None)
         for k in kart:
             ax.add_patch(
