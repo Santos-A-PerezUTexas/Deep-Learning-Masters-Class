@@ -8,8 +8,7 @@ import torch.nn.functional as F
 
 def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
 
-    print("----------------------EXTRACT PEAK CALLED------------------------")
-
+    
     detection_list = []
     k=max_det
 
@@ -26,16 +25,6 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
     maxpooled_heatmap = maxpooled_heatmap.to(heatmap.device)
    
     
-
-    """
-    1. iterate through maxpooled_heatmap and heatmap
-    2. if maxpooled_heatmap[i][j] == heatmap[i][j] then these are the coordinates of a peak
-         i.  if the value at this location is greater than -5,
-                    a. store coordinates and the value, append a list I suppose
-                       detection_list.append((heatmap[i][j], i, j, 0, 0))
-    3.Return only the topk  
-    """  
-
     #for i in range (96):
      # for j in range (128):
       #    if maxpooled_heatmap[0][0][i][j] == heatmap[i][j]:
@@ -43,16 +32,22 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
         #      detection_list.append((heatmap[i][j], i, j, 0, 0))
 
     peak_tensor = torch.where(heatmap==maxpooled_heatmap, 1, 0)
-    new_heatmap = peak_tensor * heatmap
-    print(new_heatmap)
 
+    #new_heatmap = peak_tensor * heatmap
+    #topks, idx = torch.topk(new_heatmap.view(-1), k)
+    #print(new_heatmap)
 
+    for i in range (96):
+      for j in range (128):
+        if (peak_tensor[i][j]) and (heatmap[i][j] > min_score):
+          detection_list.append((heatmap[i][j], i, j, 0, 0)) 
 
 
     #topk, indicesTOP = torch.topk(maxpooled_heatmap.view(-1), k)
 
-    #print(len(detection_list))
-    #print (detection_list)
+    print ("----------------------EXTRACT PEAK CALLED------------------------")
+    print (len(detection_list))
+    print (detection_list)
 
     return(detection_list)
 
