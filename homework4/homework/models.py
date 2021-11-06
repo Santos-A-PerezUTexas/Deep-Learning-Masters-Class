@@ -33,6 +33,7 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
         #      detection_list.append((heatmap[i][j], i, j, 0, 0))
 
     peak_tensor = torch.where(heatmap==maxpooled_heatmap, 1, +0)     #0-1 Heatmap W/ Peaks
+    peak_tensor = peak_tensor.to(heatmap.device)
 
     #new_heatmap = peak_tensor * heatmap
     
@@ -54,14 +55,10 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
       if (peak_tensor[i][j]]):
           detection_list.append((heatmap[i][j], i, j, 0, 0))
 
-    index_tensor = torch.where(abs(new_heatmap) > 0)
-
+    #index_tensor = torch.where(abs(new_heatmap) > 0)
     #print(f'INDEX TENSOR size is {len(index_tensor[0])}and the scores are {new_heatmap[index_tensor].mean(), new_heatmap[index_tensor].shape }')
-  
-
-    topk, indicesTOP = torch.topk(new_heatmap.view(-1), k)
-
-    print(len(topk), topk, indicesTOP)
+    #topk, indicesTOP = torch.topk(new_heatmap.view(-1), k)
+    #print(len(topk), topk, indicesTOP)
     
     print (len(detection_list))  #should be < max_det
     print (detection_list)
