@@ -49,10 +49,10 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
       #  if (peak_tensor[i][j]) and (heatmap[i][j] > min_score):
        #   detection_list.append((heatmap[i][j], i, j, 0, 0)) 
 
-
+    # if ((peak_tensor[i][j]) and (len(detection_list) < k) and (heatmap[i][j]>min_score)):
     for i in range (96):
      for j in range (128):
-      if ((peak_tensor[i][j]) and (len(detection_list) < k) ):
+      if ((peak_tensor[i][j]) and (heatmap[i][j]>min_score)):
           detection_list.append((heatmap[i][j], i, j, 0, 0))
 
     #index_tensor = torch.where(abs(new_heatmap) > 0)
