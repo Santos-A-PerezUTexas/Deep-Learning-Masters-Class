@@ -99,6 +99,7 @@ def train(args):
     
 
     global_step = 0
+    
     for epoch in range(5):   #WARNING CHANGE TO args.num_epoch   #WARNING CHANGE TO args.num_epoch
 
         print(f'***********At the beggining of epoch  {epoch+1}****************')
@@ -165,16 +166,9 @@ def train(args):
 
             heatmap_loss=lossBCE(predicted_heatmaps, heatmaps) 
 
-            #Per https://piazza.com/class/ksjhagmd59d6sg?cid=779
-            #peak_loss = BCEWithlogitloss(label_for_peak, model(image)), ToHeatmap(), returns image, label_for_peak (heatmap)
-            #Nov 2, 2021:  Output dimesion is [32, 3, 96, 128], the label dimension should be [32, 96, 128], long type integers.
-            #https://piazza.com/class/ksjhagmd59d6sg?cid=776
+            if train_logger is not None and global_step % 100 == 0:
+                log(train_logger, img, label, logit, global_step)
 
-            print (f'              (LOOP)heatmap_loss  shape is {heatmap_loss.shape}')                       
-            print (f'  (LOOP)   Finished making prediction/detection for batch {batch} ')
-
-
-            
             optimizer.zero_grad()
             heatmap_loss.backward()
             optimizer.step()
