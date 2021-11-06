@@ -54,10 +54,6 @@ class FocalLoss(nn.Module):
 
 
 
-
-
-
-
 def train(args):
     
     from os import path
@@ -82,21 +78,11 @@ def train(args):
     #focal_loss = FocalLoss(weight=w / w.mean()).to(device).to(device)
     focal_loss = FocalLoss().to(device).to(device)
     #NOTE FOCAL LOSS HAS NO WEIGHTS!!
-    #NOTE FOCAL LOSS HAS NO WEIGHTS!!
-    #NOTE FOCAL LOSS HAS NO WEIGHTS!!
-    #NOTE FOCAL LOSS HAS NO WEIGHTS!!
     
-    print ("1................FROM TRAIN() ABOUT TO LOAD DATA")
-    #val = input("PRESS ANY KEY")
-    #print(val)
-
     import inspect
     transform = eval(args.transform, {k: v for k, v in inspect.getmembers(dense_transforms) if inspect.isclass(v)})
     train_data = load_detection_data('dense_data/train', num_workers=4, transform=transform)
     valid_data = load_detection_data('dense_data/valid', num_workers=4)
-
-    print (f'2................Size of training set is {len(train_data)}')
-    
 
     global_step = 0
 
@@ -111,33 +97,16 @@ def train(args):
         i_pred = 0
         batch = 0
 
-        for img, heatmaps, size in train_data:        #THIS CALLS GET ITEM 145 TIMES OCT 30 2021
+        for img, heatmaps, size in train_data:        
             
             img, heatmaps, size  = img.to(device), heatmaps.to(device),  size.to(device).long()
             
-            #PEAKS ARE HEATMAPS************
-            #NOV 21, 2021:  img, peaks, size  = img.to(device), peaks.to(device),  size.to(device)           
-            #ToTheatmaps converts ALL THREE OF THESE DETECTIONS  to peak and size tensors.
-            #Per the assignment:  
-            """
-            The final step of your detector extracts local maxima from each predicted heatmap. Each local maxima corresponds to a positive detection.
-            The function detect() returns a tuple of detections as a list of five numbers per class (i.e., **tuple of three lists): The confidence of the 
-            detection (float, higher means more confident, see evaluation), the x and y location of the object center (center of the predicted bounding box), 
-            and the ***size** of the bounding box (width and height). Your detection function may return up to 100 detections per image, each detection comes with a confidence. 
-            You’ll pay a higher price for getting a high confidence detection wrong. The value of the heatmap at the local maxima (peak score) is a good confidence measure.
-            Use the extract_peak function to find detected objects.
-            """
-        
-            print (f'            (IN LOOOP NOW)....-------------This is batch number {batch+1}, of size {len(img)}')
             batch +=1    
             
 
             print (f'TRAIN() ----->MAKING PREDICTION NUMBER {i_pred+1} WITH detected_peaks=model(img)-----------')
-            print (f'            Image shape is {img.shape}')
             #Image shape is torch.Size([32, 3, 96, 128])
-            print (f'             heatmaps shape is {heatmaps.shape}')
             #peaks shape is torch.Size([32, 3, 96, 128])
-            print (f'              size shape is {size.shape}')
             #size shape is torch.Size([32, 2, 96, 128])            
             
             i_pred += 1
@@ -146,29 +115,20 @@ def train(args):
             #labels = model2(img)
 
             
-            print (f'              (LOOP)heatmaps shape is {heatmaps.shape}')
-            print (f'              (LOOP) Predicted heatmaps shape is {predicted_heatmaps.shape}')
-            print("                   (LOOP)  GOING TO COMPUTE THE LOSS NOW")
-            
             #loss_val = loss(detected_heatmaps, heatmaps)
 
-            print (f'Predicted heatmaps shape is {predicted_heatmaps.shape}') #([32, 3, 96, 128])
+            #([32, 3, 96, 128]) to  [32, 96, 128]
             reduced_heatmaps = heatmaps[:, 0, :, :]
-            print (f'reduced heatmaps dimension is {reduced_heatmaps.shape} ') #[32, 96, 128]
+         
 
-           #peak_loss= focal_loss(predicted_heatmaps, reduced_heatmaps)   #peaks or reduced_peaks
-            
-            print (f'              The dimensions of weight are   {w.shape}, the weights are {w} ') 
-            print (f'              The dimensions of predicted heatmap are   {predicted_heatmaps.shape}, the weights are {w} ') 
-            print (f'              The dimensions of heatmaps  are   {heatmaps.shape}, the weights are {w} ') 
-                              
-            lossBCE = torch.nn.BCEWithLogitsLoss().to(device)
+            #peak_loss= focal_loss(predicted_heatmaps, reduced_heatmaps)   #peaks or reduced_peaks
             #loss = torch.nn.CrossEntropyLoss(weight=w / w.mean()).to(device)
-            
             #lossBCE = FocalLoss()
+            lossBCE = torch.nn.BCEWithLogitsLoss().to(device)
 
             heatmap_loss=lossBCE(predicted_heatmaps, heatmaps) 
 
+            print(f'------------>Curent Loss is {heatmap_loss}')
             if train_logger is not None and global_step % 100 == 0:
                 log(train_logger, img, label, logit, global_step)
 
