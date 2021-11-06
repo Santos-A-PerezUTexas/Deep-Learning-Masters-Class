@@ -2,9 +2,9 @@ import torch
 import torch.nn.functional as F
 
 
-#max_det = 100???
-#max_det = 100???
-#max_det = 100???
+#max_det = 100??
+#max_det = 100??
+#max_det = 100??
 
 def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
 
