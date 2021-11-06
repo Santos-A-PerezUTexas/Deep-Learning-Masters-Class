@@ -162,7 +162,7 @@ def train(args):
             print (f'              The dimensions of predicted heatmap are   {predicted_heatmaps.shape}, the weights are {w} ') 
             print (f'              The dimensions of heatmaps  are   {heatmaps.shape}, the weights are {w} ') 
                               
-            lossBCE = torch.nn.BCEWithLogitsLoss(weight=w / w.mean()).to(device)
+            lossBCE = torch.nn.BCEWithLogitsLoss().to(device)
             #loss = torch.nn.CrossEntropyLoss(weight=w / w.mean()).to(device)
             
             #lossBCE = FocalLoss()
