@@ -15,6 +15,8 @@ DENSE_CLASS_DISTRIBUTION = [0.52683655, 0.02929112, 0.4352989, 0.0044619, 0.0041
 #NOTE CHANGE THE EPOCHS
 #NOTE CHANGE THE EPOCHS
 #NOTE CHANGE THE EPOCHS
+#LOGGER - ARE WE USING CONFUSION MATRIX???
+
 
 class FocalLoss(nn.Module):
     
@@ -156,7 +158,9 @@ def train(args):
            #peak_loss= focal_loss(predicted_heatmaps, reduced_heatmaps)   #peaks or reduced_peaks
             
                                
-            lossBCE = torch.nn.BCEWithLogitsLoss()
+            lossBCE = torch.nn.BCEWithLogitsLoss(weight=w / w.mean()).to(device)
+            #loss = torch.nn.CrossEntropyLoss(weight=w / w.mean()).to(device)
+            
             #lossBCE = FocalLoss()
 
             heatmap_loss=lossBCE(predicted_heatmaps, heatmaps) 
