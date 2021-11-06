@@ -99,7 +99,7 @@ def train(args):
     
 
     global_step = 0
-    
+
     for epoch in range(5):   #WARNING CHANGE TO args.num_epoch   #WARNING CHANGE TO args.num_epoch
 
         print(f'***********At the beggining of epoch  {epoch+1}****************')
@@ -158,7 +158,10 @@ def train(args):
 
            #peak_loss= focal_loss(predicted_heatmaps, reduced_heatmaps)   #peaks or reduced_peaks
             
-                               
+            print (f'              The dimensions of weight are   {w.shape}, the weights are {w} ') 
+            print (f'              The dimensions of predicted heatmap are   {predicted_heatmaps.shape}, the weights are {w} ') 
+            print (f'              The dimensions of heatmaps  are   {heatmaps.shape}, the weights are {w} ') 
+                              
             lossBCE = torch.nn.BCEWithLogitsLoss(weight=w / w.mean()).to(device)
             #loss = torch.nn.CrossEntropyLoss(weight=w / w.mean()).to(device)
             
