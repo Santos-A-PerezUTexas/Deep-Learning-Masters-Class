@@ -45,12 +45,12 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=100):
           if heatmap[cx][cy] > min_score:
             detection_list.append((heatmap[cx][cy], cx, cy, 0, 0))
 
-    if k > len(detection_list):                     
+    if k < len(detection_list):                     
       detection_list = sorted(detection_list)[-k:]
 
     
-    #print ("DETECTION LIST LENGTH AND CONTENTS")
-    #print (len(detection_list))  #should be < max_det
+    print ("DETECTION LIST LENGTH AND CONTENTS")
+    print (len(detection_list))  #should be < max_det
     #print (detection_list)
 
     return(detection_list)
