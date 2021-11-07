@@ -8,7 +8,7 @@ import torch.nn.functional as F
 
 def descalarization(idx, shape):
     res = []
-    N = np.prod(shape)
+    N = torch.tensor(shape)
     for n in shape:
         N //= n
         res.append(idx // N)
