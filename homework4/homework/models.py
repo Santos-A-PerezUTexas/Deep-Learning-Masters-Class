@@ -238,12 +238,7 @@ class Detector(torch.nn.Module):
         for i in range (3):         
           List_of_detection_lists.append(extract_peak(three_channel_heatmap[0][i]))
     
-        print (f'IN DETECT()---------------------, list of detections {len(List_of_detection_lists)}')
-        print (f'IN DETECT()---------------------, list of detections {len(List_of_detection_lists)}')
-        print (f'IN DETECT()---------------------, list of detections {len(List_of_detection_lists)}')
-        print (f'IN DETECT()---------------------, list of detections {len(List_of_detection_lists)}')
-
-
+        
         return (List_of_detection_lists)              
    
 
