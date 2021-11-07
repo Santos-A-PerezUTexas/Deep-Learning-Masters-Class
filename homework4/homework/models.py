@@ -92,7 +92,7 @@ class CNNClassifier(torch.nn.Module):
             #print (f'6   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
             output = self.c3(output)
             #print (f'7   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
-            #output = self.b3(output) + self.skip(x)
+            output = self.b3(output) + self.skip(x)
             #print (f'8   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
             output = F.relu(output)
             #print (f'9   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
