@@ -86,7 +86,7 @@ def train(args):
 
     global_step = 0
 
-    for epoch in range(50):   #WARNING CHANGE TO args.num_epoch   #WARNING CHANGE TO args.num_epoch
+    for epoch in range(args.num_epoch):   #WARNING CHANGE TO args.num_epoch   #WARNING CHANGE TO args.num_epoch
 
         print(f'***********At the beggining of epoch  {epoch+1}****************')
         model.train()
