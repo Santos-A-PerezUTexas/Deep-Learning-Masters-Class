@@ -74,37 +74,10 @@ class CNNClassifier(torch.nn.Module):
             self.skip = torch.nn.Conv2d(n_input, n_output, kernel_size=1, stride=stride)
 
         def forward(self, x):
-
-            #print (f'                              -----:  IN FORWARD OF CNN BLOCK, X shape IS  {x.shape}  ')
-            #print (f'--------------------------------------------------------------------------------------')
-
-            output = self.c1(x)    #NOV 1, 2021:  NEVER REACHES THIS POINT!
-            #print (f'1   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
-            output = self.b1(output)
-            #print (f'2   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
-            output = F.relu(output)
-            #print (f'3   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
-            output = self.c2(output)
-            #print (f'4   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
-            output = self.b2(output)
-            #print (f'5   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
-            output = F.relu(output)
-            #print (f'6   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
-            output = self.c3(output)
-            #print (f'7   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
-            output = self.b3(output) + self.skip(x)
-            #print (f'8   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
-            output = F.relu(output)
-            #print (f'9   DOWNCONV CNN BLOCK-----:  The OUTPUT mean IS  {output.mean()}  ')
-            output = output.to(x.device)
-            #print (f'              DOWNCONV CNN BLOCK, RETURNING:   OUTPUT of shape  {output.shape}  ')
-    
-            return output
-            
-            #NOV 1, 2021: Input type (torch.cuda.FloatTensor) and weight type (torch.FloatTensor) should be the same
-
-
-  #CNN Classifier begins here, the FCN uses ONLY above block.  Nov, 1, 2021
+          return F.relu(self.b3(self.c3(F.relu(self.b2(self.c2(F.relu(self.b1(self.c1(x)))))))) + self.skip(x))
+           
+           
+             #CNN Classifier begins here, the FCN uses ONLY above block.  Nov, 1, 2021
 
     def __init__(self, layers=[16, 32, 64, 128], n_output_channels=6, kernel_size=3):
         super().__init__()
