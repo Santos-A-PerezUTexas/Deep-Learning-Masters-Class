@@ -37,10 +37,10 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=30):
     peak_tensor = torch.where(heatmap==maxpooled_heatmap, 1, 0)     #0-1 Heatmap W/ Peaks
     peak_tensor = peak_tensor.to(heatmap.device)
     z = torch.zeros(heatmap.shape).to(heatmap.device)
-    z.fill_(Nan)
+    z.fill_(-1000000)
    
     peaks = torch.where((peak_tensor)==1, heatmap, z).to(heatmap.device)
-    peaks = torch.where(peaks>min_score, heatmap, z)
+    #peaks = torch.where(peaks>min_score, heatmap, z)
 
     print(f'sorted peaks top 5 is {sorted(peaks.view(-1))[-5:]}')
     print(f'peaks top 5 with topk {torch.topk(peaks.view(-1), 5)[0]}')
@@ -49,7 +49,8 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=30):
     cx, cy = get_idx(torch.topk(peaks.view(-1), k)[1], heatmap.shape)
      
     for i in range(k):
-      detection_list.append((heatmap[cx[i]][cy[i]], cx[i], cy[i],0 ,0))
+      if heatmap[cx[i]][cy[i]] > min_score:
+        detection_list.append((heatmap[cx[i]][cy[i]], cx[i], cy[i],0 ,0))
       
 
     print(f'--------cx is {cx}---------cy is {cy}<-----------------------')
