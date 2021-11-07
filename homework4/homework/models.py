@@ -17,7 +17,7 @@ def get_idx(idx, shape):
         idx %= N
     return tuple(res)
 
-def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=30):
+def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=10000):
 
     print ("----------------------EXTRACT PEAK CALLED------------------------")
 
@@ -49,8 +49,9 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=30):
     cx, cy = get_idx(torch.topk(peaks.view(-1), k)[1], heatmap.shape)
      
     for i in range(k):
-      if heatmap[cx[i]][cy[i]] > min_score:
-        detection_list.append((heatmap[cx[i]][cy[i]], cx[i], cy[i],0 ,0))
+      #print(heatmap[cx[i]][cy[i]])
+      if peaks[cx[i]][cy[i]] > min_score:
+        detection_list.append((peaks[cx[i]][cy[i]], cx[i], cy[i],0 ,0))
       
 
     #print(f'--------cx is {cx}---------cy is {cy}<-----------------------')
