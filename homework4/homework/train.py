@@ -74,9 +74,10 @@ def train(args):
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, weight_decay=1e-5)
     w = torch.as_tensor(DENSE_CLASS_DISTRIBUTION)**(-args.gamma)
     w=w.to(device)
-    loss = torch.nn.CrossEntropyLoss(weight=w / w.mean()).to(device)
+    lossBCE = torch.nn.BCEWithLogitsLoss().to(device)
+    #loss = torch.nn.CrossEntropyLoss(weight=w / w.mean()).to(device)
     #focal_loss = FocalLoss(weight=w / w.mean()).to(device).to(device)
-    focal_loss = FocalLoss().to(device).to(device)
+    #focal_loss = FocalLoss().to(device).to(device)
     #NOTE FOCAL LOSS HAS NO WEIGHTS!!
     
     import inspect
@@ -88,12 +89,9 @@ def train(args):
 
     for epoch in range(args.num_epoch):   #WARNING CHANGE TO args.num_epoch   #WARNING CHANGE TO args.num_epoch
 
-        print(f'***********At the beggining of epoch  {epoch+1}****************')
+       
         model.train()
         
-        #batch size is 32
-        #batch size is 32
-
         i_pred = 0
         batch = 0
 
@@ -102,41 +100,41 @@ def train(args):
             img, heatmaps, size  = img.to(device), heatmaps.to(device),  size.to(device).long()
             
             batch +=1    
-            
+            i_pred += 1
 
-            print (f'TRAIN() ----->MAKING PREDICTION NUMBER {i_pred+1} WITH detected_peaks=model(img)-----------')
+
+            #print (f'TRAIN() ----->MAKING PREDICTION NUMBER {i_pred+1} WITH detected_peaks=model(img)-----------')
             #Image shape is torch.Size([32, 3, 96, 128])
             #peaks shape is torch.Size([32, 3, 96, 128])
             #size shape is torch.Size([32, 2, 96, 128])            
+           
             
-            i_pred += 1
-
             predicted_heatmaps = model(img)
-            #labels = model2(img)
-
+            heatmap_loss=lossBCE(predicted_heatmaps, heatmaps)
             
             #loss_val = loss(detected_heatmaps, heatmaps)
-
             #([32, 3, 96, 128]) to  [32, 96, 128]
-            reduced_heatmaps = heatmaps[:, 0, :, :]
-         
-
+            #reduced_heatmaps = heatmaps[:, 0, :, :]
             #peak_loss= focal_loss(predicted_heatmaps, reduced_heatmaps)   #peaks or reduced_peaks
             #loss = torch.nn.CrossEntropyLoss(weight=w / w.mean()).to(device)
             #lossBCE = FocalLoss()
-            lossBCE = torch.nn.BCEWithLogitsLoss().to(device)
+            
 
-            heatmap_loss=lossBCE(predicted_heatmaps, heatmaps) 
+             
 
             print(f'------------>Curent Loss is {heatmap_loss}')
             if train_logger is not None and global_step % 100 == 0:
                 log(train_logger, img, label, logit, global_step)
+            if train_logger is not None:
+                train_logger.add_scalar('loss', loss_val, global_step)
 
             optimizer.zero_grad()
             heatmap_loss.backward()
             optimizer.step()
+            global_step += 1
 
-          
+        model.eval()
+
         save_model(model)
         print("DONE")
 
