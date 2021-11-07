@@ -42,8 +42,8 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=30):
     peaks = torch.where((peak_tensor)==1, heatmap, z).to(heatmap.device)
     #peaks = torch.where(peaks>min_score, heatmap, z)
 
-    print(f'sorted peaks top 5 is {sorted(peaks.view(-1))[-5:]}')
-    print(f'peaks top 5 with topk {torch.topk(peaks.view(-1), 5)[0]}')
+    #print(f'sorted peaks top 5 is {sorted(peaks.view(-1))[-5:]}')
+    #print(f'peaks top 5 with topk {torch.topk(peaks.view(-1), 5)[0]}')
     
     #topk = torch.topk(peaks.view(-1), k)[0]
     cx, cy = get_idx(torch.topk(peaks.view(-1), k)[1], heatmap.shape)
@@ -53,7 +53,7 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=30):
         detection_list.append((heatmap[cx[i]][cy[i]], cx[i], cy[i],0 ,0))
       
 
-    print(f'--------cx is {cx}---------cy is {cy}<-----------------------')
+    #print(f'--------cx is {cx}---------cy is {cy}<-----------------------')
     #print ("CALLING FOR LOOP------")
     #print (f'heatmap shape size is {heatmap.shape[0]*heatmap.shape[1]} ')
     #for i in range (heatmap.shape[0]*heatmap.shape[1]):
@@ -62,9 +62,9 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=30):
        #   if heatmap[cx][cy] > min_score:
         #    detection_list.append((heatmap[cx][cy], cx, cy,0 ,0))
     
-    #print ("DETECTION LIST LENGTH AND CONTENTS")
-    #print (len(detection_list))  #should be < max_det
-    #print (detection_list)
+    print ("DETECTION LIST LENGTH AND CONTENTS")
+    print (len(detection_list))  #should be < max_det
+    print (detection_list)
     #print ("SORTED DETECTION LIST, first three entires")
     #print(sorted(detection_list)[-3:])
 
@@ -76,9 +76,9 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=30):
       detection_list = sorted(detection_list)[-k:]
 
     
-    #print ("DETECTION LIST LENGTH AND CONTENTS")
+    print ("EXTRACT_PEAK()---------------DETECTION LIST LENGTH")
     print (len(detection_list))  #should be < max_det
-    print (detection_list)
+    #print (detection_list)
     #print ("SORTED DETECTION LIST LENGTH AND CONTENTS")
 
 
@@ -238,6 +238,11 @@ class Detector(torch.nn.Module):
           List_of_detection_lists.append(extract_peak(three_channel_heatmap[0][i]))
     
         print (f'IN DETECT()---------------------, list of detections {len(List_of_detection_lists)}')
+        print (f'IN DETECT()---------------------, list of detections {len(List_of_detection_lists)}')
+        print (f'IN DETECT()---------------------, list of detections {len(List_of_detection_lists)}')
+        print (f'IN DETECT()---------------------, list of detections {len(List_of_detection_lists)}')
+
+
         return (List_of_detection_lists)              
    
 
