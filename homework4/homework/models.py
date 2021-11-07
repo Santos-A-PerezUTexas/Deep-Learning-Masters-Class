@@ -17,7 +17,7 @@ def get_idx(idx, shape):
         idx %= N
     return tuple(res)
 
-def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=100):
+def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=30):
 
     print ("----------------------EXTRACT PEAK CALLED------------------------")
 
