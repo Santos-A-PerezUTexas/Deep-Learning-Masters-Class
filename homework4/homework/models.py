@@ -36,7 +36,11 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=30):
 
     peak_tensor = torch.where(heatmap==maxpooled_heatmap, 1, 0)     #0-1 Heatmap W/ Peaks
     peak_tensor = peak_tensor.to(heatmap.device)
-     
+    z = torch.zeros(heatmap.shape).to(heatmap.device)
+    z.fill_(-10000)
+    peaks = torch.where(peak_tensor==1, heatmap, z).to(heatmap.device)
+    peaks2 = torch.where(peaks>min_score, heatmap, z).to(heatmap.device)
+
     #print ("CALLING FOR LOOP------")
     #print (f'heatmap shape size is {heatmap.shape[0]*heatmap.shape[1]} ')
     for i in range (heatmap.shape[0]*heatmap.shape[1]):
@@ -220,6 +224,7 @@ class Detector(torch.nn.Module):
         for i in range (3):         
           List_of_detection_lists.append(extract_peak(three_channel_heatmap[0][i]))
     
+        print (f'IN DETECT()---------------------, list of detections {len(List_of_detection_lists)}')
         return (List_of_detection_lists)              
    
 
