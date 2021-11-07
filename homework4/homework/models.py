@@ -6,7 +6,9 @@ import torch.nn.functional as F
 #max_det = 100??
 #max_det = 100??
 
-def get_idx(idx, shape):
+def get_idx(idx):
+    
+    shape=(96,128)
     res = []
     N = 12288
     for n in shape:
@@ -43,7 +45,8 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
 
     peak_tensor = torch.where(heatmap==maxpooled_heatmap, 1, 0)     #0-1 Heatmap W/ Peaks
     peak_tensor = peak_tensor.to(heatmap.device)
-
+     
+    
     #new_heatmap = peak_tensor * heatmap
     
     #topks, idx = torch.topk(new_heatmap.view(-1), k)
@@ -59,10 +62,20 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
        #   detection_list.append((heatmap[i][j], i, j, 0, 0)) 
 
     # if ((peak_tensor[i][j]) and (len(detection_list) < k) and (heatmap[i][j]>min_score)):
-    for i in range (96):
-     for j in range (128):
-      if ((peak_tensor[i][j]==1)):   # and (heatmap[i][j]>min_score)and (len(detection_list) < k)):
-          detection_list.append((heatmap[i][j], i, j, 0, 0))
+    #for i in range (96):
+     #for j in range (128):
+      #if ((peak_tensor[i][j]==1)):   # and (heatmap[i][j]>min_score)and (len(detection_list) < k)):
+       #   detection_list.append((heatmap[i][j], i, j, 0, 0))
+
+    for i in range (12288):
+      if peak_tensor.view(-1)[i]:
+          c=get_idx(i)
+          detection_list.append((heatmap[c[0]][c[1]], c[0], c[1], 0, 0))    
+    
+
+
+
+
 
     #index_tensor = torch.where(abs(new_heatmap) > 0)
     #print(f'INDEX TENSOR size is {len(index_tensor[0])}and the scores are {new_heatmap[index_tensor].mean(), new_heatmap[index_tensor].shape }')
