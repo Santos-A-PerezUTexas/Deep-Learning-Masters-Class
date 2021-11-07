@@ -6,9 +6,9 @@ import torch.nn.functional as F
 #max_det = 100??
 #max_det = 100??
 
-def descalarization(idx, shape):
+def get_idx(idx, shape):
     res = []
-    N = torch.tensor(shape)
+    N = 12288
     for n in shape:
         N //= n
         res.append(idx // N)
