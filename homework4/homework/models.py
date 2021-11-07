@@ -43,7 +43,7 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=30):
       if peak_tensor.view(-1)[i]:
           cx, cy=get_idx(i, heatmap.shape)
           if heatmap[cx][cy] > min_score:
-            detection_list.append((heatmap[cx][cy], cx, cy, 0, 0))
+            detection_list.append((heatmap[cx][cy], cx, cy,0 ,0))
     
     #print ("DETECTION LIST LENGTH AND CONTENTS")
     #print (len(detection_list))  #should be < max_det
@@ -59,10 +59,10 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=30):
       detection_list = sorted(detection_list)[-k:]
 
     
-    print ("DETECTION LIST LENGTH AND CONTENTS")
-    print (len(detection_list))  #should be < max_det
-    print (detection_list)
-    print ("SORTED DETECTION LIST LENGTH AND CONTENTS")
+    #print ("DETECTION LIST LENGTH AND CONTENTS")
+    #print (len(detection_list))  #should be < max_det
+    #print (detection_list)
+    #print ("SORTED DETECTION LIST LENGTH AND CONTENTS")
 
 
     return(detection_list)
