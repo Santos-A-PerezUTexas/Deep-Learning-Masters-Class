@@ -6,6 +6,15 @@ import torch.nn.functional as F
 #max_det = 100??
 #max_det = 100??
 
+def descalarization(idx, shape):
+    res = []
+    N = np.prod(shape)
+    for n in shape:
+        N //= n
+        res.append(idx // N)
+        idx %= N
+    return tuple(res)
+
 def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
 
     print ("----------------------EXTRACT PEAK CALLED------------------------")
@@ -32,7 +41,7 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
        #     if maxpooled_heatmap[0][0][i][j] > min_score:
         #      detection_list.append((heatmap[i][j], i, j, 0, 0))
 
-    peak_tensor = torch.where(heatmap==maxpooled_heatmap, 1, +0)     #0-1 Heatmap W/ Peaks
+    peak_tensor = torch.where(heatmap==maxpooled_heatmap, 1, 0)     #0-1 Heatmap W/ Peaks
     peak_tensor = peak_tensor.to(heatmap.device)
 
     #new_heatmap = peak_tensor * heatmap
@@ -52,7 +61,7 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
     # if ((peak_tensor[i][j]) and (len(detection_list) < k) and (heatmap[i][j]>min_score)):
     for i in range (96):
      for j in range (128):
-      if ((peak_tensor[i][j]) and (heatmap[i][j]>min_score)and (len(detection_list) < k)):
+      if ((peak_tensor[i][j]==1)):   # and (heatmap[i][j]>min_score)and (len(detection_list) < k)):
           detection_list.append((heatmap[i][j], i, j, 0, 0))
 
     #index_tensor = torch.where(abs(new_heatmap) > 0)
