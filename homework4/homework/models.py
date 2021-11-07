@@ -164,13 +164,7 @@ class Detector(torch.nn.Module):
 
     def forward(self, img):
         
-      #print (f'--------------------------------------------------------------------------------------')
-      #print("||||||||||||STEP 3a||||||||||   INSIDE DETECTOR()--->FORWARD(), will call CNN BLOCK NEXT, DECONV")
-      #print (f'--------------------------------------------------------------------------------------')
-      #print (f'                ------>>>>>>>>>>>, image shape is {img.shape}, will be normalized, THEN passed to CNN BLOCK and then DECONV')
-        
-      #print (self.detect(img))   #CALLING DETECT() HERE FOR TEST PURPOSES           
-
+     
       heatmap = (img - self.input_mean[None, :, None, None].to(img.device)) / self.input_std[None, :, None, None].to(img.device)
       
       up_activation = []
@@ -181,9 +175,7 @@ class Detector(torch.nn.Module):
         # Add all the information required for skip connections
         up_activation.append(heatmap)
         heatmap = self._modules['conv%d'%i](heatmap)   
-        
-      #print (f'           FORWARD()--->  AFTER DOWNCONV CNN BLOCK, HEATMAP MEAN IS -----:  {heatmap.mean()}  ')
-      
+           
 
       for i in reversed(range(self.n_conv)):
       
@@ -194,12 +186,8 @@ class Detector(torch.nn.Module):
         if self.use_skip:
           heatmap = torch.cat([heatmap, up_activation[i]], dim=1)
       
-      output = self.classifier(heatmap)   #returns heatmap ([32, 3, 96, 128])
-
-      #print("||||||||||||STEP 3b||||||||||   INSIDE DETECTOR()--->FORWARD(), Just created a heatmap with Image USING CONV/DECONV Layers")
-      #print (f'--------------------------------------------------------------------------------------')
-      
-      return output
+          
+      return self.classifier(heatmap)  #returns heatmap ([32, 3, 96, 128])
 
 #ABOVE IS DETECTOR->FORWARD RETURN VALUE heatmap ([32, 3, 96, 128])
 
@@ -212,28 +200,14 @@ class Detector(torch.nn.Module):
         List_of_detection_lists =[]
 
         
-        #print (f'--------------------------------------------------------------------------------------')
-        #print("||||||||||||STEP 2||||||||||   INSIDE DETECTOR()--->DETECT()")
-        #print (f'--------------------------------------------------------------------------------------')
-        #print (f'                ------>>>>>>>>>>>, image shape is {image.shape}, will be passed to FORWARD() Next ')
-        
         three_channel_heatmap = self.forward(image)
 
-
-        #print("||||||||||||STEP 4||||||||||   JUST CALLED DETECTOR()--->FORWARD(), BACK IN DETECT()")
-        #print (f'--------------------------------------------------------------------------------------')
-        #print (f'                ------>>>>>>>>>>>, 3 channel heatmap shape is {three_channel_heatmap.shape}')
-        #print (f'                ------>>>>>>>>>>>, NOW WILL GO THROUGH ALL 3 CHANNELS AND CALL EXTRACT_PEAKS()')
-        
-      
+            
         #heatmap shape is torch.Size([1, 3, 96, 128])
 
         for i in range (3):         
           List_of_detection_lists.append(extract_peak(three_channel_heatmap[0][i]))
-
-        #print('                                  ^^^^^^This is the list of lists, -> {List_of_detection_lists}')
-        #print(List_of_detection_lists)
-        
+    
         return (List_of_detection_lists)              
    
 
