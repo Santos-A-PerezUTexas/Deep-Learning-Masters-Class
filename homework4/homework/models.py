@@ -66,11 +66,15 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=30):
      #for j in range (128):
       #if ((peak_tensor[i][j]==1)):   # and (heatmap[i][j]>min_score)and (len(detection_list) < k)):
        #   detection_list.append((heatmap[i][j], i, j, 0, 0))
+    
+    new_heat = torch.tensor((96,128))
+    new_heat = new_heat.to(heatmap.device)
 
     for i in range (12288):
       if peak_tensor.view(-1)[i]:
-          c=get_idx(i)
-          detection_list.append((heatmap[c[0]][c[1]], c[0], c[1], 0, 0))    
+          cx, cy=get_idx(i)
+          detection_list.append((heatmap[cx][cy], cx, cy, 0, 0))
+          #new_heat   =     
     
 
 
