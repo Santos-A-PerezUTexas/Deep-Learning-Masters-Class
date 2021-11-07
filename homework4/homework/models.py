@@ -45,14 +45,17 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=100):
           if heatmap[cx][cy] > min_score:
             detection_list.append((heatmap[cx][cy], cx, cy, 0, 0))
     
-    print ("DETECTION LIST LENGTH AND CONTENTS")
-    print (len(detection_list))  #should be < max_det
-    print (detection_list)
-    print ("SORTED DETECTION LIST, first three entires")
-    print(sorted(detection_list[-2:]))
+    #print ("DETECTION LIST LENGTH AND CONTENTS")
+    #print (len(detection_list))  #should be < max_det
+    #print (detection_list)
+    #print ("SORTED DETECTION LIST, first three entires")
+    #print(sorted(detection_list)[-3:])
 
     if k < len(detection_list): 
-      print(".....................TRUNCATING LONG LIST...........................")                    
+      print(".....................TRUNCATING LONG LIST...........................")
+      print(".....................TRUNCATING LONG LIST...........................")  
+      print(".....................TRUNCATING LONG LIST...........................")  
+      print(".....................TRUNCATING LONG LIST...........................")                      
       detection_list = sorted(detection_list)[-k:]
 
     
