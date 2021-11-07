@@ -17,7 +17,7 @@ def get_idx(idx, shape):
         idx %= N
     return tuple(res)
 
-def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
+def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=100):
 
     print ("----------------------EXTRACT PEAK CALLED------------------------")
 
@@ -25,8 +25,8 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
     k=max_det
     Maxpool =  torch.nn.MaxPool2d(kernel_size=max_pool_ks, return_indices=True, padding=max_pool_ks//2, stride=1)
     
-    print(f'k is {k}, max_pool_ks is {max_pool_ks}, and max_det is {max_det}')
-    print(f'heatmap shape {heatmap.shape}')
+    #print(f'k is {k}, max_pool_ks is {max_pool_ks}, and max_det is {max_det}')
+    #print(f'heatmap shape {heatmap.shape}')
     heatmap4D = heatmap[None, None]   # reduced=torch.Size([1, 1, 96, 128], heatmap=torch.Size([96, 128])
     heatmap4D = heatmap4D.to(heatmap.device)
     maxpooled_heatmap, maxpool_indices =  Maxpool(heatmap4D)  
@@ -37,8 +37,8 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
     peak_tensor = torch.where(heatmap==maxpooled_heatmap, 1, 0)     #0-1 Heatmap W/ Peaks
     peak_tensor = peak_tensor.to(heatmap.device)
      
-    print ("CALLING FOR LOOP------")
-    print (f'heatmap shape size is {heatmap.shape[0]*heatmap.shape[1]} ')
+    #print ("CALLING FOR LOOP------")
+    #print (f'heatmap shape size is {heatmap.shape[0]*heatmap.shape[1]} ')
     for i in range (heatmap.shape[0]*heatmap.shape[1]):
       if peak_tensor.view(-1)[i]:
           cx, cy=get_idx(i, heatmap.shape)
@@ -48,9 +48,9 @@ def extract_peak(heatmap, max_pool_ks=7, min_score=-5, max_det=100):
     detection_list = sorted(detection_list)[-k:]
 
     
-    print ("DETECTION LIST LENGTH AND CONTENTS")
-    print (len(detection_list))  #should be < max_det
-    print (detection_list)
+    #print ("DETECTION LIST LENGTH AND CONTENTS")
+    #print (len(detection_list))  #should be < max_det
+    #print (detection_list)
 
     return(detection_list)
 
