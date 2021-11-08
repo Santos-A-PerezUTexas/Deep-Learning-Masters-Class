@@ -77,8 +77,8 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=10000):
       detection_list = sorted(detection_list)[-k:]
 
     
-    print ("EXTRACT_PEAK()---------------DETECTION LIST LENGTH")
-    print (len(detection_list))  #should be < max_det
+    #print ("EXTRACT_PEAK()---------------DETECTION LIST LENGTH")
+    #print (len(detection_list))  #should be < max_det
     #print (detection_list)
     #print ("SORTED DETECTION LIST LENGTH AND CONTENTS")
 
@@ -235,7 +235,7 @@ class Detector(torch.nn.Module):
             
         #heatmap shape is torch.Size([1, 3, 96, 128])
 
-        for i in range (3):         
+        for i in range (three_channel_heatmap.shape[1]):         
           List_of_detection_lists.append(extract_peak(three_channel_heatmap[0][i]))
     
         
