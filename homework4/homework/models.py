@@ -51,7 +51,7 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=10000):
     for i in range(k):
       #print(heatmap[cx[i]][cy[i]])
       if peaks[cx[i]][cy[i]] > min_score:
-        detection_list.append((peaks[cx[i]][cy[i]], cx[i], cy[i],0 ,0))
+        detection_list.append((peaks[cx[i]][cy[i]].float(), cx[i], cy[i],0.,0.))
       
 
     #print(f'--------cx is {cx}---------cy is {cy}<-----------------------')
@@ -63,9 +63,9 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=10000):
        #   if heatmap[cx][cy] > min_score:
         #    detection_list.append((heatmap[cx][cy], cx, cy,0 ,0))
     
-    print ("DETECTION LIST LENGTH AND CONTENTS")
-    print (len(detection_list))  #should be < max_det
-    print (detection_list)
+    #print ("DETECTION LIST LENGTH AND CONTENTS")
+    #print (len(detection_list))  #should be < max_det
+    #print (detection_list)
     #print ("SORTED DETECTION LIST, first three entires")
     #print(sorted(detection_list)[-3:])
 
