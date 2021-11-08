@@ -17,24 +17,24 @@ def get_idx(idx, shape):
         idx %= N
     return tuple(res)
 
-def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=10000):
+def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=31):
 
-    print ("----------------------EXTRACT PEAK CALLED------------------------")
+    #print ("----------------------EXTRACT PEAK CALLED------------------------")
 
     detection_list = []
     k=max_det
-    Maxpool =  torch.nn.MaxPool2d(kernel_size=max_pool_ks, return_indices=True, padding=max_pool_ks//2, stride=1)
+    Maxpool =  torch.nn.MaxPool2d(kernel_size=max_pool_ks, return_indices=False, padding=max_pool_ks//2, stride=1)
     
     #print(f'k is {k}, max_pool_ks is {max_pool_ks}, and max_det is {max_det}')
     #print(f'heatmap shape {heatmap.shape}')
     heatmap4D = heatmap[None, None]   # reduced=torch.Size([1, 1, 96, 128], heatmap=torch.Size([96, 128])
     heatmap4D = heatmap4D.to(heatmap.device)
-    maxpooled_heatmap, maxpool_indices =  Maxpool(heatmap4D)  
+    maxpooled_heatmap  =  Maxpool(heatmap4D)  
 
     maxpooled_heatmap = maxpooled_heatmap[0][0]   #torch.Size([96, 128])
     maxpooled_heatmap = maxpooled_heatmap.to(heatmap.device)
 
-    peak_tensor = torch.where(heatmap==maxpooled_heatmap, 1, 0)     #0-1 Heatmap W/ Peaks
+    peak_tensor = torch.where((heatmap==maxpooled_heatmap) & (heatmap>min_score), 1, 0)     #0-1 Heatmap W/ Peaks
     peak_tensor = peak_tensor.to(heatmap.device)
     z = torch.zeros(heatmap.shape).to(heatmap.device)
     z.fill_(-1000000)
@@ -45,8 +45,11 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=10000):
     #print(f'sorted peaks top 5 is {sorted(peaks.view(-1))[-5:]}')
     #print(f'peaks top 5 with topk {torch.topk(peaks.view(-1), 5)[0]}')
     
-    #topk = torch.topk(peaks.view(-1), k)[0]
-    cx, cy = get_idx(torch.topk(peaks.view(-1), k)[1], heatmap.shape)
+    #topk = torch.topk(peaks.view(-1), k)[0]  #these are the scores
+     
+    topk_idx = torch.topk(peaks.view(-1), k)[1]
+    
+    cx, cy = get_idx(topk_idx, heatmap.shape)
      
     for i in range(k):
       #print(heatmap[cx[i]][cy[i]])
@@ -64,8 +67,8 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=10000):
         #    detection_list.append((heatmap[cx][cy], cx, cy,0 ,0))
     
     #print ("DETECTION LIST LENGTH AND CONTENTS")
-    #print (len(detection_list))  #should be < max_det
-    #print (detection_list)
+    print (len(detection_list))  #should be < max_det
+    print (detection_list)
     #print ("SORTED DETECTION LIST, first three entires")
     #print(sorted(detection_list)[-3:])
 
