@@ -76,7 +76,7 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=30):
       #print (f'NOW SERVING INDEX {topk_idx[i]}') 
       if peaks[cx][cy] > min_score:
         #print(f'i {i}, peaks[cx][cy] {peaks[cx][cy]},cx {cx}, cy{cy}' )
-        detection_list.append((peaks[cx][cy].float(), cx, cy,0.,0.))
+        detection_list.append((peaks[cx][cy].float(), cx, cy, 0., 0.))
       
 
 
