@@ -17,7 +17,7 @@ def get_idx(idx, shape):
         idx %= N
     return tuple(res)
 
-def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=31):
+def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=30):
 
     #print ("----------------------EXTRACT PEAK CALLED------------------------")
 
@@ -29,7 +29,7 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=31):
     #print(f'heatmap shape {heatmap.shape}')
     heatmap4D = heatmap[None, None]   # reduced=torch.Size([1, 1, 96, 128], heatmap=torch.Size([96, 128])
     heatmap4D = heatmap4D.to(heatmap.device)
-    maxpooled_heatmap  =  Maxpool(heatmap4D)  
+    maxpooled_heatmap  =  Maxpool(heatmap4D).to(heatmap.device)  
 
     maxpooled_heatmap = maxpooled_heatmap[0][0]   #torch.Size([96, 128])
     maxpooled_heatmap = maxpooled_heatmap.to(heatmap.device)
@@ -47,14 +47,25 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=31):
     
     #topk = torch.topk(peaks.view(-1), k)[0]  #these are the scores
      
-    topk_idx = torch.topk(peaks.view(-1), k)[1]
+    topk_idx = torch.topk(peaks.view(-1), k)[1].to(heatmap.device)
     
-    cx, cy = get_idx(topk_idx, heatmap.shape)
-     
-    for i in range(k):
-      #print(heatmap[cx[i]][cy[i]])
+    #cx, cy = get_idx(topk_idx, heatmap.shape)
+    
+    print(f'Topk returned ---------------{len(topk_idx)} ----------- values')
+    
+    for  i in topk_idx:
+      cx, cy = get_idx(i, heatmap.shape) 
       if peaks[cx[i]][cy[i]] > min_score:
+        print(i, peaks[cx[i]][cy[i]],cx[i], cy[i] )
         detection_list.append((peaks[cx[i]][cy[i]].float(), cx[i], cy[i],0.,0.))
+      
+
+
+    #for i in range(k):
+      #print(heatmap[cx[i]][cy[i]])
+      #if peaks[cx[i]][cy[i]] > min_score:
+       # print(i, peaks[cx[i]][cy[i]],cx[i], cy[i] )
+        #detection_list.append((peaks[cx[i]][cy[i]].float(), cx[i], cy[i],0.,0.))
       
 
     #print(f'--------cx is {cx}---------cy is {cy}<-----------------------')
@@ -67,8 +78,8 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=31):
         #    detection_list.append((heatmap[cx][cy], cx, cy,0 ,0))
     
     #print ("DETECTION LIST LENGTH AND CONTENTS")
-    print (len(detection_list))  #should be < max_det
-    print (detection_list)
+    #print (len(detection_list))  #should be < max_det
+    #print (detection_list)
     #print ("SORTED DETECTION LIST, first three entires")
     #print(sorted(detection_list)[-3:])
 
@@ -238,7 +249,7 @@ class Detector(torch.nn.Module):
             
         #heatmap shape is torch.Size([1, 3, 96, 128])
 
-        for i in range (three_channel_heatmap.shape[1]):         
+        for i in reversed(range(three_channel_heatmap.shape[1])):         
           List_of_detection_lists.append(extract_peak(three_channel_heatmap[0][i]))
     
         
