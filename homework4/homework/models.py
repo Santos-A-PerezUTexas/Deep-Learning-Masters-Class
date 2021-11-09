@@ -47,17 +47,25 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=30):
     
     #topk = torch.topk(peaks.view(-1), k)[0]  #these are the scores
      
+    #Get 10,000=k topk ONLY if there are AT LEAST k peaks > min_score.
+    #  Otherwise, topk with less than k, but HOW MANY?  #of peaks
+    #How do I get the #of peaks > min_score???
+
     topk_idx = torch.topk(peaks.view(-1), k)[1].to(heatmap.device)
     
     #cx, cy = get_idx(topk_idx, heatmap.shape)
     
-    print(f'Topk returned ---------------{len(topk_idx)} ----------- values')
+    #print(f'Topk returned ---------------{len(topk_idx)} ----------- values')
+    print(f'Topk  RIGHT HERE---------------{topk_idx.shape} ----------- ')
+    
     
     for  i in topk_idx:
-      cx, cy = get_idx(i, heatmap.shape) 
-      if peaks[cx[i]][cy[i]] > min_score:
-        print(i, peaks[cx[i]][cy[i]],cx[i], cy[i] )
-        detection_list.append((peaks[cx[i]][cy[i]].float(), cx[i], cy[i],0.,0.))
+      cx, cy = get_idx(i, heatmap.shape)
+      print(f'{topk_idx}')
+      print (f'NOW SERVING INDEX {topk_idx[i]}') 
+      if peaks[cx][cy] > min_score:
+        #print(f'i {i}, peaks[cx][cy] {peaks[cx][cy]},cx {cx}, cy{cy}' )
+        detection_list.append((peaks[cx][cy].float(), cx, cy,0.,0.))
       
 
 
