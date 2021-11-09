@@ -263,12 +263,12 @@ class Detector(torch.nn.Module):
         List_of_detection_lists =[]
 
         
-        three_channel_heatmap = self.forward(image)
+        three_channel_heatmap = self.forward(image).to(image.device)
 
             
         #heatmap shape is torch.Size([1, 3, 96, 128])
 
-        for i in reversed(range(three_channel_heatmap.shape[1])):         
+        for i in range(three_channel_heatmap.shape[1]):         
           List_of_detection_lists.append(extract_peak(three_channel_heatmap[0][i]))
     
         
