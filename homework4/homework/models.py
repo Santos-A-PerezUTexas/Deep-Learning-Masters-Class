@@ -25,8 +25,6 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=30):
     k=max_det
     Maxpool =  torch.nn.MaxPool2d(kernel_size=max_pool_ks, return_indices=False, padding=max_pool_ks//2, stride=1)
     
-    #print(f'k is {k}, max_pool_ks is {max_pool_ks}, and max_det is {max_det}')
-    #print(f'heatmap shape {heatmap.shape}')
     heatmap4D = heatmap[None, None]   # reduced=torch.Size([1, 1, 96, 128], heatmap=torch.Size([96, 128])
     heatmap4D = heatmap4D.to(heatmap.device)
     maxpooled_heatmap  =  Maxpool(heatmap4D).to(heatmap.device)  
@@ -49,14 +47,7 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=30):
     
     #topk = torch.topk(peaks.view(-1), k)[0]  #these are the scores
      
-    
-    
-    
-    #Get 10,000=k topk ONLY if there are AT LEAST k peaks > min_score.
-    #  Otherwise, topk with less than k, but HOW MANY?  #of peaks
-    #How do I get the #of peaks > min_score???
-
-    #
+   
     
     if number_of_peaks > k:
       topk_idx = torch.topk(peaks.view(-1), k)[1].to(heatmap.device)
@@ -72,10 +63,7 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=30):
     
     for  i in topk_idx:
       cx, cy = get_idx(i, heatmap.shape)
-     # print(f'{topk_idx}')
-      #print (f'NOW SERVING INDEX {topk_idx[i]}') 
       if peaks[cx][cy] > min_score:
-        #print(f'i {i}, peaks[cx][cy] {peaks[cx][cy]},cx {cx}, cy{cy}' )
         detection_list.append((peaks[cx][cy].float(), cx, cy, 0., 0.))
       
 
@@ -100,16 +88,7 @@ def extract_peak(heatmap, max_pool_ks=3, min_score=-5, max_det=30):
     #print (len(detection_list))  #should be < max_det
     #print (detection_list)
     #print ("SORTED DETECTION LIST, first three entires")
-    #print(sorted(detection_list)[-3:])
-
-    if k < len(detection_list): 
-      print(".....................TRUNCATING LONG LIST...........................")
-      print(".....................TRUNCATING LONG LIST...........................")  
-      print(".....................TRUNCATING LONG LIST...........................")  
-      print(".....................TRUNCATING LONG LIST...........................")                      
-      detection_list = sorted(detection_list)[-k:]
-
-    
+    #print(sorted(detection_list)[-3:])   
     #print ("EXTRACT_PEAK()---------------DETECTION LIST LENGTH")
     #print (len(detection_list))  #should be < max_det
     #print (detection_list)
