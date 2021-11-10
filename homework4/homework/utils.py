@@ -2,6 +2,30 @@ from PIL import Image
 from torch.utils.data import Dataset, DataLoader
 from . import dense_transforms
 
+#This is HW3, in here for testing ONLY.  Nov 21, 2021
+
+class DenseSuperTuxDataset(Dataset):
+    def __init__(self, dataset_path, transform=dense_transforms.ToTensor()):
+        from glob import glob
+        from os import path
+        self.files = []
+        for im_f in glob(path.join(dataset_path, '*_im.jpg')):
+            self.files.append(im_f.replace('_im.jpg', ''))
+        self.transform = transform
+
+    def __len__(self):
+        return len(self.files)
+
+    def __getitem__(self, idx):
+        b = self.files[idx]
+        im = Image.open(b + '_im.jpg')
+        lbl = Image.open(b + '_seg.png')
+        if self.transform is not None:
+            im, lbl = self.transform(im, lbl)
+        return im, lbl
+
+
+#BEGIN DETECTION CLASS FOR HW4, ABOVE WAS FOR HW3 for Test purposes
 
 class DetectionSuperTuxDataset(Dataset):
     def __init__(self, dataset_path, transform=dense_transforms.ToTensor(), min_size=20):
@@ -15,10 +39,10 @@ class DetectionSuperTuxDataset(Dataset):
             self.files.append(im_f.replace('_im.jpg', ''))
         self.transform = transform
         self.min_size = min_size
-        print("IN INIT OF DETECTION CLASS, this is the size of self.files")
-        print (len(self.files))
-        print("IN INIT OF DETECTION CLASS, this is the shape of self.files")
-        print (self.files)
+        #print("IN INIT OF DETECTION CLASS, this is the size of self.files")
+        #print (len(self.files))
+        #print("IN INIT OF DETECTION CLASS, this is the shape of self.files")
+        #print (self.files)
 
     def _filter(self, boxes):
         if len(boxes) == 0:
@@ -30,11 +54,32 @@ class DetectionSuperTuxDataset(Dataset):
 
     def __getitem__(self, idx):
         import numpy as np
-        print ("Good news, you made it to getitem, thanks to the for loop in train!!!!!!!!!!!!!")
+        #print (f'Utils.PY:    DetectionSuperTuxDataset-->Getitem() was just called....... for index {idx}, Oct 30 2021')
         b = self.files[idx]
         im = Image.open(b + '_im.jpg')
         nfo = np.load(b + '_boxes.npz')
+        #print(f'From get_item, this is KARTS array from NPZ file, item {idx} in nfo variable:')
+        #print(nfo['karts'])
+        #print("From get_item, this is BOMBS array from NPZ file in nfo variable:")
+        #print(nfo['bombs'])
+        #print("From get_item, this is PICKUPS array from NPZ file in nfo variable:")
+        #print(nfo['pickup'])
+
+
         data = im, self._filter(nfo['karts']), self._filter(nfo['bombs']), self._filter(nfo['pickup'])
+        
+        #self._filter(nfo['karts']), etc, are the DETECTIONS.. we are LEARNING THESE.
+        #ToTheatmaps converts ALL THREE OF THESE DETECTIONS  to peak and size tensors.
+        #Per the assignment:  
+        """
+        The final step of your detector extracts local maxima from each predicted heatmap. Each local maxima corresponds to a positive detection.
+        The function detect() returns a tuple of detections as a list of five numbers per class (i.e., tuple of three lists): The confidence of the 
+        detection (float, higher means more confident, see evaluation), the x and y location of the object center (center of the predicted bounding box), 
+        and the ***size** of the bounding box (width and height). Your detection function may return up to 100 detections per image, each detection comes with a confidence. 
+        You’ll pay a higher price for getting a high confidence detection wrong. The value of the heatmap at the local maxima (peak score) is a good confidence measure.
+        Use the extract_peak function to find detected objects.
+        """
+        
         if self.transform is not None:
             data = self.transform(*data)
         return data
@@ -44,6 +89,10 @@ def load_detection_data(dataset_path, num_workers=0, batch_size=32, **kwargs):
     dataset = DetectionSuperTuxDataset(dataset_path, **kwargs)
     print("LOADED DATASET SANTOS, this one below:")
     print(dataset_path)
+    return DataLoader(dataset, num_workers=num_workers, batch_size=batch_size, shuffle=True, drop_last=True)
+
+def load_dense_data(dataset_path, num_workers=0, batch_size=32, **kwargs):
+    dataset = DenseSuperTuxDataset(dataset_path, **kwargs)
     return DataLoader(dataset, num_workers=num_workers, batch_size=batch_size, shuffle=True, drop_last=True)
 
 
