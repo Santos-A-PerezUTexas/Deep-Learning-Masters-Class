@@ -5,6 +5,10 @@ from torch.utils.data import Dataset, DataLoader
 import torchvision.transforms.functional as TF
 from . import dense_transforms
 
+#https://piazza.com/class/ksjhagmd59d6sg?cid=446
+#https://piazza.com/class/ksjhagmd59d6sg?cid=828
+
+
 RESCUE_TIMEOUT = 30
 TRACK_OFFSET = 15
 DATASET_PATH = 'drive_data'
