@@ -10,21 +10,31 @@ def control(aim_point, current_vel):
     :return: a pystk.Action (set acceleration, brake, steer, drift)
     
     The point (-1,-1) is the top left of the screen and (1, 1) the bottom right.
+    The aim point is a point on the center of the track 15 meters away
 
     pystk.Action.steer the steering angle of the kart normalized to -1 … 1
     pystk.Action.acceleration the acceleration of the kart normalized to 0 … 1
     pystk.Action.brake boolean indicator for braking
     pystk.Action.drift a special action that makes the kart drift, useful for tight turns
     pystk.Action.nitro burns nitro for fast acceleration
+
+
+    https://piazza.com/class/ksjhagmd59d6sg?cid=975
+    How do you interpret velocity in the game? Is it X meters per frame, which is a step in the game?
+
+
+
     """
   
     pystk.Action.steer = 0
     pystk.Action.drift = 0
-    pystk.Action.brake = 1
+    pystk.Action.brake = 0
     pystk.Action.acceleration = 0
 
-    #print(f'aim_point is {aim_point}')
-    #print(f'velocity is {current_vel}')
+    #just use aim_point[0] to steer
+
+    print(f'aim_point shape is {aim_point.shape}, aimpoint[0] is {aim_point[0]}, aimpoint[1] is {aim_point[1]}')
+    print(f'velocity is {current_vel}')
 
     action = pystk.Action()
 
