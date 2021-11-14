@@ -18,7 +18,16 @@ def control(aim_point, current_vel):
     pystk.Action.nitro burns nitro for fast acceleration
     """
   
+    pystk.Action.steer = 0
+    pystk.Action.drift = 0
+    pystk.Action.brake = 1
+    pystk.Action.acceleration = 0
+
+    print(f'aim_point is {aim_point}')
+    print(f'velocity is {current_vel}')
+
     action = pystk.Action()
+
 
     #action = pystk.Action.acceleration(), pystk.Action.brake(),  pystk.Action.steer(), pystk.Action.drift()
 
