@@ -15,12 +15,13 @@ def control(aim_point, current_vel):
     pystk.Action.acceleration the acceleration of the kart normalized to 0 … 1
     pystk.Action.brake boolean indicator for braking
     pystk.Action.drift a special action that makes the kart drift, useful for tight turns
-  pystk.Action.nitro burns nitro for fast acceleration
+    pystk.Action.nitro burns nitro for fast acceleration
     """
   
     action = pystk.Action()
 
-    #action = pystk.Action.acceleration(), pystk.Action.brake,  
+    #action = pystk.Action.acceleration(), pystk.Action.brake(),  pystk.Action.steer(), pystk.Action.drift()
+
 
     """
     Your code here
