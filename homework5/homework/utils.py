@@ -155,7 +155,7 @@ class PyTux:
             with io.BytesIO() as buff:
               fig.savefig(buff, format='raw')
               buff.seek(0)
-              data= np.frombuffer(buff.getvalue(), dtype=np.uint8)
+              data = np.frombuffer(buff.getvalue(), dtype=np.uint8)              
             w, h = fig.canvas.get_width_height()
             im = data.reshape((int(h), int(w), -1))
             frames.append(im)
@@ -168,7 +168,7 @@ class PyTux:
         
         if verbose:
           import imageio
-          imageio.mimwrite("test.np4", frames, fps=30, bitrate=1000000)
+          imageio.mimwrite("test.mp4", frames, fps=30, bitrate=1000000)
 
 
         #delete end

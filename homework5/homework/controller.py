@@ -23,8 +23,8 @@ def control(aim_point, current_vel):
     pystk.Action.brake = 1
     pystk.Action.acceleration = 0
 
-    print(f'aim_point is {aim_point}')
-    print(f'velocity is {current_vel}')
+    #print(f'aim_point is {aim_point}')
+    #print(f'velocity is {current_vel}')
 
     action = pystk.Action()
 
