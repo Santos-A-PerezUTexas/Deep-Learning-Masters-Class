@@ -26,15 +26,17 @@ def control(aim_point, current_vel):
 
     """
   
-    pystk.Action.steer = 0
+    pystk.Action.steer = aimpoint[0]  #Steering and relative aim point use different units. Use the aim point 
+    #and a tuned scaling factor to select the amount of normalized steering.
+    
     pystk.Action.drift = 0
     pystk.Action.brake = 0
-    pystk.Action.acceleration = 0
+    pystk.Action.acceleration = 1
 
     #just use aim_point[0] to steer
 
-    print(f'aim_point shape is {aim_point.shape}, aimpoint[0] is {aim_point[0]}, aimpoint[1] is {aim_point[1]}')
-    print(f'velocity is {current_vel}')
+    #print(f'aim_point shape is {aim_point.shape}, aimpoint[0] is {aim_point[0]}, aimpoint[1] is {aim_point[1]}')
+    #print(f'velocity is {current_vel}')
 
     action = pystk.Action()
 
@@ -45,7 +47,7 @@ def control(aim_point, current_vel):
     """
     Your code here
     https://piazza.com/class/ksjhagmd59d6sg?cid=358
-    
+
     Hint: Skid if the steering angle is too large.
     Hint: Target a constant velocity.
     
