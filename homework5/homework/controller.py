@@ -31,13 +31,15 @@ def control(aim_point, current_vel):
     
     pystk.Action.drift = 0
     pystk.Action.brake = 0
-    pystk.Action.acceleration = 0
+    pystk.Action.acceleration = 10
     
     if current_vel < .08:
-      pystk.Action.acceleration = 1
+      print ("ACCELERATING")
+      pystk.Action.acceleration = 10
 
     if current_vel < .06:
-      pystk.Action.acceleration = 2
+      print ("ACCELERATING")
+      pystk.Action.acceleration = 20
 
     #just use aim_point[0] to steer
 
