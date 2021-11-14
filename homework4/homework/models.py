@@ -122,7 +122,7 @@ class Detector(torch.nn.Module):
         return [
         
                  [  
-                    (s, x, y, float(size[0, 0, y, x]), float(size[0, 1, y, x]))
+                    (s, x, y, float(size[0, 0, y, x]), float(size[0, 1, y, x]))  #returns a list of five-tuples
               
                         for s, x, y in extract_peak(c, max_det=30, **kwargs) 
                  
