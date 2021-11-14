@@ -22,12 +22,15 @@ def control(aim_point, current_vel):
     https://piazza.com/class/ksjhagmd59d6sg?cid=975
     How do you interpret velocity in the game? Is it X meters per frame, which is a step in the game?
 
+    https://piazza.com/class/ksjhagmd59d6sg?cid=805
+    Hi, I just have a question on the steering function. I assume that -1 will turn the wheel "all the way"
+    to the left (45 degrees to the left from the [0,0] vector) and 1 will steer it to the right by 45 degrees?
 
 
     """
     action = pystk.Action()
 
-    action.steer = 1 #aim_point[0]  #Steering and relative aim point use different units. Use the aim point 
+    action.steer = aim_point[1]  #Steering and relative aim point use different units. Use the aim point 
     #and a tuned scaling factor to select the amount of normalized steering.
     
     action.drift = 0
@@ -35,17 +38,17 @@ def control(aim_point, current_vel):
     action.acceleration = 0
     
     if current_vel < .08:
-      print ("ACCELERATING")
+      print ("           1 ACCELERATING")
       action.acceleration = 1
 
     if current_vel < .06:
-      print ("ACCELERATING")
-      action.acceleration = 20
+      print ("                      2 ACCELERATING")
+      action.acceleration = 1
 
     #just use aim_point[0] to steer
 
-    #print(f'aim_point shape is {aim_point.shape}, aimpoint[0] is {aim_point[0]}, aimpoint[1] is {aim_point[1]}')
-    print(f'velocity is {current_vel}')
+    print(f'aimpoint[0] is {aim_point[0]}, aimpoint[1] is {aim_point[1]}')
+    print(f'                                      velocity is {current_vel}')
 
     action = pystk.Action()
 
