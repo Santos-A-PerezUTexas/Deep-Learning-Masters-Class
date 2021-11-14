@@ -25,21 +25,22 @@ def control(aim_point, current_vel):
 
 
     """
-  
-    pystk.Action.steer = aim_point[0]  #Steering and relative aim point use different units. Use the aim point 
+    action = pystk.Action()
+
+    action.steer = 1 #aim_point[0]  #Steering and relative aim point use different units. Use the aim point 
     #and a tuned scaling factor to select the amount of normalized steering.
     
-    pystk.Action.drift = 0
-    pystk.Action.brake = 0
-    pystk.Action.acceleration = 10
+    action.drift = 0
+    action.brake = 0
+    action.acceleration = 0
     
     if current_vel < .08:
       print ("ACCELERATING")
-      pystk.Action.acceleration = 10
+      action.acceleration = 1
 
     if current_vel < .06:
       print ("ACCELERATING")
-      pystk.Action.acceleration = 20
+      action.acceleration = 20
 
     #just use aim_point[0] to steer
 
