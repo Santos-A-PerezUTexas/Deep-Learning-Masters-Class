@@ -4,11 +4,23 @@ import pystk
 def control(aim_point, current_vel):
     """
     Set the Action for the low-level controller
+
     :param aim_point: Aim point, in screen coordinate frame [-1..1]
     :param current_vel: Current velocity of the kart
     :return: a pystk.Action (set acceleration, brake, steer, drift)
+    
+    The point (-1,-1) is the top left of the screen and (1, 1) the bottom right.
+
+    pystk.Action.steer the steering angle of the kart normalized to -1 … 1
+    pystk.Action.acceleration the acceleration of the kart normalized to 0 … 1
+    pystk.Action.brake boolean indicator for braking
+    pystk.Action.drift a special action that makes the kart drift, useful for tight turns
+  pystk.Action.nitro burns nitro for fast acceleration
     """
+  
     action = pystk.Action()
+
+    #action = pystk.Action.acceleration(), pystk.Action.brake,  
 
     """
     Your code here
