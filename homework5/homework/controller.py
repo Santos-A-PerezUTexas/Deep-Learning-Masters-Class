@@ -26,17 +26,23 @@ def control(aim_point, current_vel):
 
     """
   
-    pystk.Action.steer = aimpoint[0]  #Steering and relative aim point use different units. Use the aim point 
+    pystk.Action.steer = aim_point[0]  #Steering and relative aim point use different units. Use the aim point 
     #and a tuned scaling factor to select the amount of normalized steering.
     
     pystk.Action.drift = 0
     pystk.Action.brake = 0
-    pystk.Action.acceleration = 1
+    pystk.Action.acceleration = 0
+    
+    if current_vel < .08:
+      pystk.Action.acceleration = 1
+
+    if current_vel < .06:
+      pystk.Action.acceleration = 2
 
     #just use aim_point[0] to steer
 
     #print(f'aim_point shape is {aim_point.shape}, aimpoint[0] is {aim_point[0]}, aimpoint[1] is {aim_point[1]}')
-    #print(f'velocity is {current_vel}')
+    print(f'velocity is {current_vel}')
 
     action = pystk.Action()
 
