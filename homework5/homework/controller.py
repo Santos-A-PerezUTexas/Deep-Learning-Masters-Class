@@ -33,24 +33,29 @@ def control(aim_point, current_vel):
     #Steering and relative aim point use different units. Use the aim point 
     #and a tuned scaling factor to select the amount of normalized steering.
     
-    action.steer = aim_point[0]  
+    action.steer = aim_point[0]+.1  
     action.brake = False
     action.acceleration = 10
     
     #print (current_vel)
-    if abs(aim_point[0]<=.5):
+    if abs(aim_point[0])<=.5:
       action.drift = False
 
-    if abs(aim_point[0]>.5):
+    if abs(aim_point[0])>.5:
       action.drift = True
       action.acceleration = 0
+      #action.steer = aim_point[0]*.5
+
+    if (abs(aim_point[0])>.6) and current_vel > 16:
+      action.brake = True
+
 
 
     #if current_vel < 19:
      # print (f'           ACCELERATING, current speed is {current_vel}')
       #action.acceleration = 1
 
-    if current_vel > 22:
+    if current_vel > 20:
       #print (f'                       DE-ACCELERATING, current speed is {current_vel}')
       #action.acceleration = 0
       action.brake = True
