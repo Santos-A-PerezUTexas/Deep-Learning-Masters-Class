@@ -43,8 +43,10 @@ def train(args):
 
             prediction = model(img)
             # Continuous version of focal loss
-            loss_val = MSEloss(prediction, coordinates)
+            loss_val = MSEloss(prediction, coordinates).mean()
             
+            #print(f'       the shape of loss_val is {loss_val.shape}')
+            #print(loss_val,  coordinates[0], prediction[0])
 
             if train_logger is not None and global_step % 100 == 0:
                 log(train_logger, img, gt_det, det, global_step)
