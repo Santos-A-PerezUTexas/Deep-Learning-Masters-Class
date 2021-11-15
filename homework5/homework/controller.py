@@ -50,7 +50,7 @@ def control(aim_point, current_vel):
       action.brake = True
 
 
-    if current_vel > 20:
+    if current_vel > 18:
       #print (f'                       DE-ACCELERATING, current speed is {current_vel}')
       #action.acceleration = 0
       action.brake = True
