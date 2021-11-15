@@ -70,6 +70,9 @@ class Planner(torch.nn.Module):
         self.classifier = torch.nn.Conv2d(c, n_class, 1)
         self.size = torch.nn.Conv2d(c, 2, 1)
 
+        self.linear_c = torch.nn.Linear(640*480, 2)
+        #use out = out.reshape(out.size(0), -1) after it goes through up_sampling
+
 
 
     def forward(self, img):
@@ -101,10 +104,15 @@ class Planner(torch.nn.Module):
             # Add the skip connection
             if self.use_skip:
                 z = torch.cat([z, up_activation[i]], dim=1)
-
+            
+            print("                          before")
+            print (z.shape)
+            z = self.linear_c(z)
+            print("                          after")
             print (z.shape)
             
-            z = spatial_argmax(z)
+            #z = spatial_argmax(z)  ---- training data is [-1...1] not sure here.
+
         return z
 
 
