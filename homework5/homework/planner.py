@@ -90,12 +90,19 @@ class Planner(torch.nn.Module):
          structure to predict a heatmap and extract the peak using a spatial argmax layer 
 
         """
-        z = (x - self.input_mean[None, :, None, None].to(x.device)) / self.input_std[None, :, None, None].to(x.device)
+        z = (img - self.input_mean[None, :, None, None].to(img.device)) / self.input_std[None, :, None, None].to(img.device)
         up_activation = []
+        
+        print("                          before DOWN DOWN DOWN SAMPLING")
+        print (z.shape)
+
         for i in range(self.n_conv):
             # Add all the information required for skip connections
             up_activation.append(z)
             z = self._modules['conv%d' % i](z)
+
+        print("                          before UPSAMPLING")
+        print (z.shape)
 
         for i in reversed(range(self.n_conv)):
             z = self._modules['upconv%d' % i](z)
