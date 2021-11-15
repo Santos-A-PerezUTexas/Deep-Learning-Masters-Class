@@ -52,15 +52,15 @@ class Planner(torch.nn.Module):
     def forward(self, img):
     
      
-      print(f'1    img shape is {img.shape}')
+      #print(f'1    img shape is {img.shape}')
       out = self.layer1(img)
       #out = self.layer2(out)
-      print(f'2        out.shape is {out.shape}')
+      #print(f'2        out.shape is {out.shape}')
       out = out.reshape(out.size(0), -1)
       #out = self.drop_out(out)
-      print(f'3       out.shape is {out.shape}')
+      #print(f'3       out.shape is {out.shape}')
       out = self.fc1(out)
-      print(f'4       out.shape is {out.shape}')
+      #print(f'4       out.shape is {out.shape}')
       #out = self.fc2(out)
                    
       return out
