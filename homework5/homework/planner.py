@@ -74,8 +74,6 @@ class Planner(torch.nn.Module):
 
     def forward(self, img):
 
-
-
         """
         Predict the aim point in image coordinate, given the supertuxkart image
         @img: (B,3,96,128)
@@ -89,6 +87,25 @@ class Planner(torch.nn.Module):
          structure to predict a heatmap and extract the peak using a spatial argmax layer 
 
         """
+        z = (x - self.input_mean[None, :, None, None].to(x.device)) / self.input_std[None, :, None, None].to(x.device)
+        up_activation = []
+        for i in range(self.n_conv):
+            # Add all the information required for skip connections
+            up_activation.append(z)
+            z = self._modules['conv%d' % i](z)
+
+        for i in reversed(range(self.n_conv)):
+            z = self._modules['upconv%d' % i](z)
+            # Fix the padding
+            z = z[:, :, :up_activation[i].size(2), :up_activation[i].size(3)]
+            # Add the skip connection
+            if self.use_skip:
+                z = torch.cat([z, up_activation[i]], dim=1)
+
+            print (z.shape)
+            
+            z = spatial_argmax(z)
+        return z
 
 
 
