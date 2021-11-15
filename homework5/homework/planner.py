@@ -20,107 +20,50 @@ def spatial_argmax(logit):
 class Planner(torch.nn.Module):
 
 
-    class Block(torch.nn.Module):
-        def __init__(self, n_input, n_output, kernel_size=3, stride=2):
-            super().__init__()
-            self.c1 = torch.nn.Conv2d(n_input, n_output, kernel_size=kernel_size, padding=kernel_size // 2,
-                                      stride=stride)
-            self.c2 = torch.nn.Conv2d(n_output, n_output, kernel_size=kernel_size, padding=kernel_size // 2)
-            self.c3 = torch.nn.Conv2d(n_output, n_output, kernel_size=kernel_size, padding=kernel_size // 2)
-            self.b1 = torch.nn.BatchNorm2d(n_output)
-            self.b2 = torch.nn.BatchNorm2d(n_output)
-            self.b3 = torch.nn.BatchNorm2d(n_output)
-            self.skip = torch.nn.Conv2d(n_input, n_output, kernel_size=1, stride=stride)
-
-        def forward(self, x):
-            return F.relu(self.b3(self.c3(F.relu(self.b2(self.c2(F.relu(self.b1(self.c1(x)))))))) + self.skip(x))
-
-
-    class UpBlock(torch.nn.Module):
-        def __init__(self, n_input, n_output, kernel_size=3, stride=2):
-            super().__init__()
-            self.c1 = torch.nn.ConvTranspose2d(n_input, n_output, kernel_size=kernel_size, padding=kernel_size // 2,
-                                               stride=stride, output_padding=1)
-
-        def forward(self, x):
-            return F.relu(self.c1(x))
-
-
-
-
-    def __init__(self, layers=[16, 32, 64, 128], n_class=3, kernel_size=3, use_skip=True):
+    def __init__(self, layers=[], n_input_channels=3, kernel_size=3):
+      
+      super().__init__()
         
-        super().__init__()
-        self.input_mean = torch.Tensor([0.2788, 0.2657, 0.2629])
-        self.input_std = torch.Tensor([0.2064, 0.1944, 0.2252])
+        
+      c = n_input_channels    #3 in our case
 
-        c = 3
-        self.use_skip = use_skip
-        self.n_conv = len(layers)
-        skip_layer_size = [3] + layers[:-1]
-        for i, l in enumerate(layers):
-            self.add_module('conv%d' % i, self.Block(c, l, kernel_size, 2))
-            c = l
-        # Produce lower res output
-        for i, l in list(enumerate(layers))[::-1]:
-            self.add_module('upconv%d' % i, self.UpBlock(c, l, kernel_size, 2))
-            c = l
-            if self.use_skip:
-                c += skip_layer_size[i]
-        self.classifier = torch.nn.Conv2d(c, n_class, 1)
-        self.size = torch.nn.Conv2d(c, 2, 1)
-
-        self.linear_c = torch.nn.Linear(640*480, 2)
-        #use out = out.reshape(out.size(0), -1) after it goes through up_sampling
-
-
-
+      self.layer1 = torch.nn.Sequential(
+      
+            torch.nn.Conv2d(c, 32, kernel_size=5, stride=1, padding=5//2),#output is 32 channels of 64x64 images
+            torch.nn.ReLU(),
+            #torch.nn.MaxPool2d(kernel_size=2, stride=1)
+            
+            )    #This produces 32x32 image and 32 channels
+            
+      self.layer2 = torch.nn.Sequential(
+            torch.nn.Conv2d(32, 64, kernel_size=5, stride=1, padding=2),  #32 input channels from layer1 (32x32 dims also), 64 output channels
+            torch.nn.ReLU(),
+            torch.nn.MaxPool2d(kernel_size=2, stride=2, padding=0))                  #down-sampling, or pooling, to produce a 32 x 32 output of layer 2 (reducing from 64x64).
+        
+      #self.drop_out = nn.Dropout()
+        
+      self.fc1 = torch.nn.Linear(32 * 12288, 2)   #this takes 32x32 image of layer1 or 2, 32 channels
+       
+    
+        
+      #self.fc2 = torch.nn.Linear(100, 6)      #10 OUTPUTS, Changed to 6
+    
+    
     def forward(self, img):
-
-        """
-        Predict the aim point in image coordinate, given the supertuxkart image
-        @img: (B,3,96,128)
-        return (B,2)
-        
-        Use:  spatial_argmax(heatmap or logit), which returns return: A tensor of size BS x 2
-        the soft-argmax in normalized coordinates (-1 .. 1)
-
-        Your planner model is a torch.nn.Module that takes as input an image tensor and outputs
-         the aiming point in image coordinates (x:0..127, y:0..95). We recommend using an encoder-decoder
-         structure to predict a heatmap and extract the peak using a spatial argmax layer 
-
-        """
-        z = (img - self.input_mean[None, :, None, None].to(img.device)) / self.input_std[None, :, None, None].to(img.device)
-        up_activation = []
-        
-        print("                          before DOWN DOWN DOWN SAMPLING")
-        print (z.shape)
-
-        for i in range(self.n_conv):
-            # Add all the information required for skip connections
-            up_activation.append(z)
-            z = self._modules['conv%d' % i](z)
-
-        print("                          before UPSAMPLING")
-        print (z.shape)
-
-        for i in reversed(range(self.n_conv)):
-            z = self._modules['upconv%d' % i](z)
-            # Fix the padding
-            z = z[:, :, :up_activation[i].size(2), :up_activation[i].size(3)]
-            # Add the skip connection
-            if self.use_skip:
-                z = torch.cat([z, up_activation[i]], dim=1)
-            
-            print("                          before")
-            print (z.shape)
-            z = self.linear_c(z)
-            print("                          after")
-            print (z.shape)
-            
-            #z = spatial_argmax(z)  ---- training data is [-1...1] not sure here.
-
-        return z
+    
+     
+      print(f'1    img shape is {img.shape}')
+      out = self.layer1(img)
+      #out = self.layer2(out)
+      print(f'2        out.shape is {out.shape}')
+      out = out.reshape(out.size(0), -1)
+      #out = self.drop_out(out)
+      print(f'3       out.shape is {out.shape}')
+      out = self.fc1(out)
+      print(f'4       out.shape is {out.shape}')
+      #out = self.fc2(out)
+                   
+      return out
 
 
 
