@@ -35,9 +35,9 @@ def control(aim_point, current_vel):
     
     action.steer = aim_point[0]  
     action.brake = False
-    action.acceleration = 10
+    action.acceleration = 1
     
-
+    print (current_vel)
     if abs(aim_point[0]<=.5):
       action.drift = False
 
@@ -57,9 +57,6 @@ def control(aim_point, current_vel):
 
     #print(f'aimpoint[0] is {aim_point[0]}, aimpoint[1] is {aim_point[1]}')
     #print(f'                                      velocity is {current_vel}')
-
-    action = pystk.Action()
-
 
     #action = pystk.Action.acceleration(), pystk.Action.brake(),  pystk.Action.steer(), pystk.Action.drift()
 
