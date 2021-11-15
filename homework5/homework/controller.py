@@ -25,30 +25,38 @@ def control(aim_point, current_vel):
     https://piazza.com/class/ksjhagmd59d6sg?cid=805
     Hi, I just have a question on the steering function. I assume that -1 will turn the wheel "all the way"
     to the left (45 degrees to the left from the [0,0] vector) and 1 will steer it to the right by 45 degrees?
-
+    The standard "max speed" is around 22-23 if holding straight and accelerator set to 1.
 
     """
     action = pystk.Action()
 
-    action.steer = aim_point[1]  #Steering and relative aim point use different units. Use the aim point 
+    #Steering and relative aim point use different units. Use the aim point 
     #and a tuned scaling factor to select the amount of normalized steering.
     
-    action.drift = 0
-    action.brake = 0
-    action.acceleration = 0
+    action.steer = aim_point[0]  
+    action.brake = False
+    action.acceleration = 10
     
-    if current_vel < .08:
-      print ("           1 ACCELERATING")
-      action.acceleration = 1
 
-    if current_vel < .06:
-      print ("                      2 ACCELERATING")
-      action.acceleration = 1
+    if abs(aim_point[0]<=.5):
+      action.drift = False
+
+    if abs(aim_point[0]>.5):
+      action.drift = True
+
+
+    #if current_vel < 19:
+     # print (f'           ACCELERATING, current speed is {current_vel}')
+      #action.acceleration = 1
+
+    if current_vel > 22:
+      print (f'                       DE-ACCELERATING, current speed is {current_vel}')
+      action.acceleration = 0
 
     #just use aim_point[0] to steer
 
-    print(f'aimpoint[0] is {aim_point[0]}, aimpoint[1] is {aim_point[1]}')
-    print(f'                                      velocity is {current_vel}')
+    #print(f'aimpoint[0] is {aim_point[0]}, aimpoint[1] is {aim_point[1]}')
+    #print(f'                                      velocity is {current_vel}')
 
     action = pystk.Action()
 
