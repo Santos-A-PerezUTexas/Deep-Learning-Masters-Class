@@ -5,10 +5,6 @@ from torch.utils.data import Dataset, DataLoader
 import torchvision.transforms.functional as TF
 from . import dense_transforms
 
-#https://piazza.com/class/ksjhagmd59d6sg?cid=446
-#https://piazza.com/class/ksjhagmd59d6sg?cid=828
-
-
 RESCUE_TIMEOUT = 30
 TRACK_OFFSET = 15
 DATASET_PATH = 'drive_data'
@@ -20,7 +16,7 @@ class SuperTuxDataset(Dataset):
         from glob import glob
         from os import path
         self.data = []
-        for f in glob(path.join(dataset_path, '*.csv')):   #csv files are [-1...1]
+        for f in glob(path.join(dataset_path, '*.csv')):
             i = Image.open(f.replace('.csv', '.png'))
             i.load()
             self.data.append((i, np.loadtxt(f, dtype=np.float32, delimiter=',')))
@@ -82,8 +78,6 @@ class PyTux:
                               data
         :return: Number of steps played
         """
-        import io #delete
-
         if self.k is not None and self.k.config.track == track:
             self.k.restart()
             self.k.step()
@@ -106,8 +100,6 @@ class PyTux:
         if verbose:
             import matplotlib.pyplot as plt
             fig, ax = plt.subplots(1, 1)
-
-        frames = []
 
         for t in range(max_frames):
 
@@ -150,28 +142,9 @@ class PyTux:
                     ap = self._point_on_track(kart.distance_down_track + TRACK_OFFSET, track)
                     ax.add_artist(plt.Circle(WH2*(1+aim_point_image), 2, ec='g', fill=False, lw=1.5))
                 plt.pause(1e-3)
-            #delete start
-            
-            with io.BytesIO() as buff:
-              fig.savefig(buff, format='raw')
-              buff.seek(0)
-              data = np.frombuffer(buff.getvalue(), dtype=np.uint8)              
-            w, h = fig.canvas.get_width_height()
-            im = data.reshape((int(h), int(w), -1))
-            frames.append(im)
-            #delete end
 
             self.k.step(action)
             t += 1
-
-        #Delete Start
-        
-        if verbose:
-          import imageio
-          imageio.mimwrite("test.mp4", frames, fps=30, bitrate=1000000)
-
-
-        #delete end
         return t, kart.overall_distance / track.length
 
     def close(self):
