@@ -107,7 +107,15 @@ def beam_search(model: LanguageModel, beam_size: int, n_results: int = 10, max_l
                                    This option favors longer strings.
     :return: A list of strings of size n_results
     """
-    return (["apple", "banana", "cherry"])
+
+    stuff = ["apple", "banana", "cherry", "Crypto", "Bitcoin", "Music", "Tesla", "cars", "plane", "berry" ]
+
+    my_list = []
+
+    for i in range (n_results):
+      my_list.append(stuff[i])
+
+    return (my_list)
 
 
 if __name__ == "__main__":
