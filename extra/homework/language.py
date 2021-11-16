@@ -5,6 +5,25 @@ from . import utils
 def log_likelihood(model: LanguageModel, some_text: str):
     """
     
+    NOV 15: https://piazza.com/class/ksjhagmd59d6sg?cid=1033
+
+    This case is like you have a bag of balls in different colors (characters), you know the distribution,
+    like there are 3 red balls ®, 4 green balls (G), 5 blue ball (G) in the bag. The prob_next_ball = [3/12, 4/12, 5/12]
+
+    Then you keep drawing balls, write down the color of the ball, and put it back.
+
+    The balls are like characters, and finally you have a sequence like R G B B G R …
+
+    The prob_next_char will come from the language model.
+
+    Please see the example of “Categorical” in the following link, to see how to sample (draw) a number
+    based on a given distribution (given by the language model)
+
+    https://pytorch.org/docs/stable/distributions.html
+
+
+    INSTRUCTIONS:
+
     This function takes a string as input and returns the log probability 
     of that string under the current language model. Test your implementation using the Bigram 
     or AdjacentLanguageModel.
