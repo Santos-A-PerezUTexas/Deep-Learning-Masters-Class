@@ -48,7 +48,8 @@ def log_likelihood(model: LanguageModel, some_text: str):
     :param some_text:
     :return: float
     """
-    raise NotImplementedError('log_likelihood')
+    
+    return (.008)
 
 
 def sample_random(model: LanguageModel, max_length: int = 100):
@@ -62,7 +63,8 @@ def sample_random(model: LanguageModel, max_length: int = 100):
     :param max_length: The maximum sentence length
     :return: A string
     """
-    raise NotImplementedError('sample_random')
+    return("Returned from Sample Random")
+
 
 
 class TopNHeap:
@@ -105,7 +107,7 @@ def beam_search(model: LanguageModel, beam_size: int, n_results: int = 10, max_l
                                    This option favors longer strings.
     :return: A list of strings of size n_results
     """
-    raise NotImplementedError('beam_search')
+    return (["apple", "banana", "cherry"])
 
 
 if __name__ == "__main__":
