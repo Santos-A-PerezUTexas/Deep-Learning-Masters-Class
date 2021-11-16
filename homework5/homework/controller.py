@@ -37,6 +37,9 @@ def control(aim_point, current_vel):
     action.brake = False
     action.acceleration = 10
     
+    #if abs(aim_point[0])<.2:
+     # action.acceleration = 100
+
     #print (current_vel)
     if abs(aim_point[0])<=.5:
       action.drift = False
@@ -47,13 +50,10 @@ def control(aim_point, current_vel):
       #action.steer = aim_point[0]*.5
    
     if (abs(aim_point[0])>.6) and current_vel > 15:
-      action.brake = True
-   
-   
+      action.brake = True 
 
     if current_vel > 21:
-      #print (f'                       DE-ACCELERATING, current speed is {current_vel}')
-      #action.acceleration = 0
+      
       action.brake = True
 
     """
