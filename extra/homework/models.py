@@ -74,10 +74,13 @@ class AdjacentLanguageModel(LanguageModel):
         return (prob/prob.sum(dim=0, keepdim=True)).log()
 
 
-class TCN(torch.nn.Module, LanguageModel):
+class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES NOT inherit from Language Model
     class CausalConv1dBlock(torch.nn.Module):
+        
+        
         def __init__(self, in_channels, out_channels, kernel_size, dilation):
             """
+            
             Your code here.
             Implement a Causal convolution followed by a non-linearity (e.g. ReLU).
             Optionally, repeat this pattern a few times and add in a residual block
@@ -91,16 +94,36 @@ class TCN(torch.nn.Module, LanguageModel):
         def forward(self, x):
             raise NotImplementedError('CausalConv1dBlock.forward')
 
-    def __init__(self):
+    
+    
+    
+    
+    
+    def __init__(self, layers=[32,64,128,256]):   #added layers 11/16/2021
+        
         """
-        Your code here
-
+        Your code here  (BEGIN TCN CONSTRUCTOR)
+        
+        http://www.philkr.net/dl_class/lectures/sequence_modeling/07.html
+        
         Hint: Try to use many layers small (channels <=50) layers instead of a few very large ones
         Hint: The probability of the first character should be a parameter
         use torch.nn.Parameter to explicitly create it.
         """
-        raise NotImplementedError('TCN.__init__')
-
+        
+        super().__init__()
+        c = len(char_set)
+        L = []
+        total_dilation = 1
+        for l in layers:
+            L.append(torch.nn.ConstantPad1d((2*total_dilation,0), 0))
+            L.append(torch.nn.Conv1d(c, l, 3, dilation=total_dilation))
+            L.append(torch.nn.ReLU())
+            total_dilation *= 2
+            c = l
+        self.network = torch.nn.Sequential(*L)
+        self.classifier = torch.nn.Conv1d(c, len(char_set), 1)
+        
     def forward(self, x):
         """
         Your code here
@@ -109,7 +132,11 @@ class TCN(torch.nn.Module, LanguageModel):
         @x: torch.Tensor((B, vocab_size, L)) a batch of one-hot encodings
         @return torch.Tensor((B, vocab_size, L+1)) a batch of log-likelihoods or logits
         """
-        raise NotImplementedError('TCN.forward')
+        return self.classifier(self.network(x))
+        
+        
+        
+        
 
     def predict_all(self, some_text):
         """
@@ -120,6 +147,14 @@ class TCN(torch.nn.Module, LanguageModel):
         """
         raise NotImplementedError('TCN.predict_all')
 
+        
+        
+        
+        
+        
+        
+        
+        
 
 def save_model(model):
     from os import path
