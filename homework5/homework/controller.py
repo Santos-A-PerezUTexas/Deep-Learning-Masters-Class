@@ -39,7 +39,7 @@ def control(aim_point, current_vel):
     action.nitro = True
     action.acceleration = 1
     
-    if abs(aim_point[0])<.1:
+    if abs(aim_point[0])<.15:
       action.nitro = True         #NITROOOOOOOO
       #print("NITRO")
 
@@ -50,6 +50,7 @@ def control(aim_point, current_vel):
     if abs(aim_point[0])<=.5:
       action.drift = False
     
+    #comment 
     
     direction_steer = np.sign(aim_point[0])
     if abs(aim_point[0])>.9:
@@ -65,6 +66,7 @@ def control(aim_point, current_vel):
       #print (f'SLIGHT tight curve ahead, speed is {current_vel}, steering at {aim_point[0]}, acceleration {action.acceleration}, brake {action.brake}')
       action.drift = True
       action.acceleration = 0.00
+      #action.nitro = False 
       
    
     if (abs(aim_point[0])>.7) and current_vel > 15:
