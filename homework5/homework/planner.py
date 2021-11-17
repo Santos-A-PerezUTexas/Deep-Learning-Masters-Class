@@ -90,17 +90,18 @@ class Planner(torch.nn.Module):
     def forward(self, img):
     
      
-      print(f'1    img shape is {img.shape}')
+      #print(f'1    img shape is {img.shape}')
       
       out = self.layer1(img)
-      print(f'After Layer 1        out.shape is {out.shape}')
+      #print(f'After Layer 1        out.shape is {out.shape}')
       
       out = self.layerUPCONV(out)
-      print(f'After UPCONV        out.shape is {out.shape}')
+      #print(f'After UPCONV        out.shape is {out.shape}')
       
       out = self.layer2(out)
-      print(f'After Layer 2        out.shape is {out.shape}')
+      #print(f'After Layer 2        out.shape is {out.shape}')
       
+      argm = spatial_argmax(out[:,0 ,:, :])
 
       
       out = out.reshape(out.size(0), -1)
