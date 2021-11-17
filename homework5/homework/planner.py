@@ -109,7 +109,7 @@ class Planner(torch.nn.Module):
       
       #ARGMAX
               
-      return out
+      return argm
 
 
 
