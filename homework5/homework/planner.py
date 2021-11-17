@@ -58,7 +58,7 @@ class Planner(torch.nn.Module):
         
       c = n_input_channels    #3 in our case
 
-      self.layer1 = torch.nn.Sequential(
+      selfg.layer1 = torch.nn.Sequential(
       
             torch.nn.Conv2d(c, 32, kernel_size=5, stride=1, padding=5//2),#output is 32 channels of 64x64 images
             torch.nn.ReLU(),
