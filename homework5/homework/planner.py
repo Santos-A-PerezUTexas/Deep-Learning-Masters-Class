@@ -58,21 +58,36 @@ class Planner(torch.nn.Module):
         
       c = n_input_channels    #3 in our case
 
-      selfg.layer1 = torch.nn.Sequential(
+      self.layer1 = torch.nn.Sequential(
       
             torch.nn.Conv2d(c, 32, kernel_size=5, stride=1, padding=5//2),#output is 32 channels of 64x64 images
             torch.nn.ReLU(),
-            #torch.nn.MaxPool2d(kernel_size=2, stride=1)
             
-            )    #This produces 32x32 image and 32 channels
+            )    
+
+
+      self.layerUPCONV = torch.nn.Sequential(
+      
+            torch.nn.ConvTranspose2d(32, 16, kernel_size=5, padding=5 // 2, stride=1, output_padding=1),
+            torch.nn.ReLU(),
             
+            )    
+
+
       self.layer2 = torch.nn.Sequential(
             torch.nn.Conv2d(32, 64, kernel_size=5, stride=1, padding=2),  #32 input channels from layer1 (32x32 dims also), 64 output channels
             torch.nn.ReLU(),
-            torch.nn.MaxPool2d(kernel_size=2, stride=2, padding=0))                  #down-sampling, or pooling, to produce a 32 x 32 output of layer 2 (reducing from 64x64).
-        
+      
+      )          
+
+
+
+
       #self.drop_out = nn.Dropout()
         
+
+
+
       self.fc1 = torch.nn.Linear(32 * 12288, 2)   #this takes 32x32 image of layer1 or 2, 32 channels
        
     
