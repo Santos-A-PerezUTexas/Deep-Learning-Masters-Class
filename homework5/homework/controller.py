@@ -61,11 +61,11 @@ def control(aim_point, current_vel):
       action.acceleration = 0.00
       
    
-    if (abs(aim_point[0])>.6) and current_vel > 15:
+    if (abs(aim_point[0])>.7) and current_vel > 15:
       action.brake = True 
       #print (f'tight curve ahead, speed is {current_vel}, steering at {aim_point[0]}, acceleration {action.acceleration}, brake {action.brake}')
 
-    if current_vel > 21:
+    if current_vel > 24:
       
       action.brake = True
 
