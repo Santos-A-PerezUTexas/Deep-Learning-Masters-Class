@@ -80,20 +80,11 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         
         
         def __init__(self, in_channels, out_channels, kernel_size, dilation):
-            """
-            Your code here.
-            Implement a Causal convolution followed by a non-linearity (e.g. ReLU).
-            Optionally, repeat this pattern a few times and add in a residual block
-            :param in_channels: Conv1d parameter
-            :param out_channels: Conv1d parameter
-            :param kernel_size: Conv1d parameter
-            :param dilation: Conv1d parameter
-            """
+          
             self.pad1d = torch.nn.ConstantPad1d((2*dilation,0), 0)
             self.c1 = torch.nn.Conv1d(in_channels, out_channels, kernel_size=kernel_size, padding=kernel_size // 2, dilation=total_dilation)
-            #self.b1 = torch.nn.BatchNorm2d(out_channels)
-                        
-            
+            #self.b1 = torch.nn.BatchNorm2d(out_channels)               
+         
         def forward(self, x):
             return F.relu(self.c1(self.pad1d(x)))
 
@@ -102,19 +93,54 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
     
     
     
-    def __init__(self, layers=[32,64,128,256]):   #added layers 11/16/2021
+    def __init__(self, layers=[8,16,32], char_set):   #<---------------------------added char_set 11/16/2021
         
         """
-        Your code here  (BEGIN TCN CONSTRUCTOR)
-        
+       
+        Your TCN model will use a CausalConv1dBlock. This block combines causal 1D convolution with a non-linearity (e.g. ReLU).
+        The main TCN then stacks multiple dilated CausalConv1dBlock’s to build a complete model. Use a 1x1 convolution to produce the output.
+        TCN.predict_all should use TCN.forward to compute the log-probability from a single sentence.
+
+        Hint: Make sure TCN.forward uses batches of data.  <---------------------------*******
+
+        Hint: Make sure TCN.predict_all returns log-probabilities, not logits.
+
+        Hint: Store the distribution of the first character as a parameter of the model torch.nn.Parameter
+
+        Hint: Try to keep your model manageable and small. The master solution trains in 15 min on a GPU.
+
+
         http://www.philkr.net/dl_class/lectures/sequence_modeling/07.html
         
         Hint: Try to use many layers small (channels <=50) layers instead of a few very large ones
         Hint: The probability of the first character should be a parameter
         use torch.nn.Parameter to explicitly create it.
+        
+        torch.nn.Parameter
+        torch.nn.functional.log_softmax
+        torch.nn.ConstantPad1d
+        
+        
+        https://stackoverflow.com/questions/50935345/understanding-torch-nn-parameter
+        
+        class NN_Network(nn.Module):
+            def __init__(self,in_dim,hid,out_dim):
+                 super(NN_Network, self).__init__()
+                 self.linear1 = nn.Linear(in_dim,hid)
+                 self.linear2 = nn.Linear(hid,out_dim)
+                 self.linear1.weight = torch.nn.Parameter(torch.zeros(in_dim,hid))
+                 self.linear1.bias = torch.nn.Parameter(torch.ones(hid))
+                 self.linear2.weight = torch.nn.Parameter(torch.zeros(in_dim,hid))
+                 self.linear2.bias = torch.nn.Parameter(torch.ones(hid))
+    
         """
         
         super().__init__()
+        
+        #ADD PROBABILITY AS PARAMETER HERE<------------------
+        
+        #self.conv.weight = torch.nn.Parameter(weight)
+        
         c = len(char_set)
         L = []
         total_dilation = 1
@@ -128,14 +154,15 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         self.classifier = torch.nn.Conv1d(c, len(char_set), 1)
         
     def forward(self, x):
+
         """
-        Your code here
         Return the logit for the next character for prediction for any substring of x
 
         @x: torch.Tensor((B, vocab_size, L)) a batch of one-hot encodings
         @return torch.Tensor((B, vocab_size, L+1)) a batch of log-likelihoods or logits
         """
-        return self.classifier(self.network(x))
+        
+        return self.classifier(self.network(x))    # shape ([128, 29, 256]), 128 batches, 29 character alphabet or vocab_size, 256 letters in the string
         
         
         
