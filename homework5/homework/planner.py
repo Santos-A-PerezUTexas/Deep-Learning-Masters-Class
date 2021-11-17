@@ -61,6 +61,7 @@ class Planner(torch.nn.Module):
       self.layer1 = torch.nn.Sequential(
       
             torch.nn.Conv2d(c, 32, kernel_size=5, stride=2, padding=5//2), 
+            torch.nn.BatchNorm2d(32),
             torch.nn.ReLU(),
             
             )    
@@ -69,6 +70,7 @@ class Planner(torch.nn.Module):
       self.layerUPCONV = torch.nn.Sequential(
       
             torch.nn.ConvTranspose2d(32, 16, kernel_size=5, padding=5 // 2, stride=2, output_padding=1),
+            torch.nn.BatchNorm2d(16),
             torch.nn.ReLU(),
             
             )    
@@ -76,12 +78,12 @@ class Planner(torch.nn.Module):
 
       self.layer2 = torch.nn.Sequential(
             torch.nn.Conv2d(16, 1, kernel_size=5, stride=1, padding=5//2), 
+            torch.nn.BatchNorm2d(1),
             torch.nn.ReLU(),
-      
-      )          
+            )          
 
 
-      self.fc1 = torch.nn.Linear(12288, 2)   #this takes 32x32 image of layer1 or 2, 32 channels
+      self.final = torch.nn.Linear(12288, 2)   #this takes 32x32 image of layer1 or 2, 32 channels
        
     
             
@@ -102,7 +104,7 @@ class Planner(torch.nn.Module):
 
       
       out = out.reshape(out.size(0), -1)
-      out = self.fc1(out)
+      out = self.final(out)
       
       #ARGMAX
               
