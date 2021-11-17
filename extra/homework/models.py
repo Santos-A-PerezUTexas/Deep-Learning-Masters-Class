@@ -24,8 +24,7 @@ class LanguageModel(object):
         :param some_text: A string containing characters in utils.vocab, may be an empty string!
         :return: torch.Tensor((len(utils.vocab), len(some_text)+1)) of log-probabilities
         """
-        raise NotImplementedError('Abstract function LanguageModel.predict_all')
-
+        
     def predict_next(self, some_text):
         """
         NOT PART OF EXTRA CREDIT, SEPT 21
