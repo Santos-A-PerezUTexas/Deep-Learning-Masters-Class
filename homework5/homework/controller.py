@@ -1,4 +1,5 @@
 import pystk
+import numpy as np
 
 
 def control(aim_point, current_vel):
@@ -35,7 +36,7 @@ def control(aim_point, current_vel):
     
     action.steer = aim_point[0]  
     action.brake = False
-    action.acceleration = 10
+    action.acceleration = 1
     
     #if abs(aim_point[0])<.2:
      # action.acceleration = 100
@@ -43,14 +44,26 @@ def control(aim_point, current_vel):
     #print (current_vel)
     if abs(aim_point[0])<=.5:
       action.drift = False
-
-    if abs(aim_point[0])>.5:
-      action.drift = True
+    
+    
+    direction_steer = np.sign(aim_point[0])
+    if abs(aim_point[0])>.9:
+      action.steer = .95*(abs(aim_point[0])*direction_steer)
       action.acceleration = 0
-      #action.steer = aim_point[0]*.5
+
+    if (abs(aim_point[0])>.45) and (abs(aim_point[0])<=.7):
+      action.drift = True
+      action.acceleration = 0.1
+
+    if (abs(aim_point[0])>.7):
+      #print (f'SLIGHT tight curve ahead, speed is {current_vel}, steering at {aim_point[0]}, acceleration {action.acceleration}, brake {action.brake}')
+      action.drift = True
+      action.acceleration = 0.00
+      
    
     if (abs(aim_point[0])>.6) and current_vel > 15:
       action.brake = True 
+      #print (f'tight curve ahead, speed is {current_vel}, steering at {aim_point[0]}, acceleration {action.acceleration}, brake {action.brake}')
 
     if current_vel > 21:
       
