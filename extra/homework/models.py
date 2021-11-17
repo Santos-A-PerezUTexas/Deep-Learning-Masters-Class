@@ -1,4 +1,5 @@
 import torch
+import torch.nn.functional as F
 
 from . import utils
 
@@ -80,7 +81,6 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         
         def __init__(self, in_channels, out_channels, kernel_size, dilation):
             """
-            
             Your code here.
             Implement a Causal convolution followed by a non-linearity (e.g. ReLU).
             Optionally, repeat this pattern a few times and add in a residual block
@@ -89,10 +89,13 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
             :param kernel_size: Conv1d parameter
             :param dilation: Conv1d parameter
             """
-            raise NotImplementedError('CausalConv1dBlock.__init__')
-
+            self.pad1d = torch.nn.ConstantPad1d((2*dilation,0), 0)
+            self.c1 = torch.nn.Conv1d(in_channels, out_channels, kernel_size=kernel_size, padding=kernel_size // 2, dilation=total_dilation)
+            #self.b1 = torch.nn.BatchNorm2d(out_channels)
+                        
+            
         def forward(self, x):
-            raise NotImplementedError('CausalConv1dBlock.forward')
+            return F.relu(self.c1(self.pad1d(x)))
 
     
     
