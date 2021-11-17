@@ -60,7 +60,7 @@ class Planner(torch.nn.Module):
 
       self.layer1 = torch.nn.Sequential(
       
-            torch.nn.Conv2d(c, 32, kernel_size=5, stride=1, padding=5//2),#output is 32 channels of 64x64 images
+            torch.nn.Conv2d(c, 32, kernel_size=5, stride=2, padding=5//2), 
             torch.nn.ReLU(),
             
             )    
@@ -68,47 +68,44 @@ class Planner(torch.nn.Module):
 
       self.layerUPCONV = torch.nn.Sequential(
       
-            torch.nn.ConvTranspose2d(32, 16, kernel_size=5, padding=5 // 2, stride=1, output_padding=1),
+            torch.nn.ConvTranspose2d(32, 16, kernel_size=5, padding=5 // 2, stride=2, output_padding=1),
             torch.nn.ReLU(),
             
             )    
 
 
       self.layer2 = torch.nn.Sequential(
-            torch.nn.Conv2d(32, 64, kernel_size=5, stride=1, padding=2),  #32 input channels from layer1 (32x32 dims also), 64 output channels
+            torch.nn.Conv2d(16, 1, kernel_size=5, stride=1, padding=5//2), 
             torch.nn.ReLU(),
       
       )          
 
 
-
-
-      #self.drop_out = nn.Dropout()
-        
-
-
-
-      self.fc1 = torch.nn.Linear(32 * 12288, 2)   #this takes 32x32 image of layer1 or 2, 32 channels
+      self.fc1 = torch.nn.Linear(12288, 2)   #this takes 32x32 image of layer1 or 2, 32 channels
        
     
-        
-      #self.fc2 = torch.nn.Linear(100, 6)      #10 OUTPUTS, Changed to 6
-    
-    
+            
     def forward(self, img):
     
      
-      #print(f'1    img shape is {img.shape}')
+      print(f'1    img shape is {img.shape}')
+      
       out = self.layer1(img)
-      #out = self.layer2(out)
-      #print(f'2        out.shape is {out.shape}')
+      print(f'After Layer 1        out.shape is {out.shape}')
+      
+      out = self.layerUPCONV(out)
+      print(f'After UPCONV        out.shape is {out.shape}')
+      
+      out = self.layer2(out)
+      print(f'After Layer 2        out.shape is {out.shape}')
+      
+
+      
       out = out.reshape(out.size(0), -1)
-      #out = self.drop_out(out)
-      #print(f'3       out.shape is {out.shape}')
       out = self.fc1(out)
-      #print(f'4       out.shape is {out.shape}')
-      #out = self.fc2(out)
-                   
+      
+      #ARGMAX
+              
       return out
 
 
