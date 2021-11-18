@@ -58,10 +58,11 @@ def control(aim_point, current_vel):
       action.steer = (abs(aim_point[0])*direction_steer)
       action.acceleration = 0
       action.acceleration = False
+      #action.nitro = False
 
     if (abs(aim_point[0])>.45) and (abs(aim_point[0])<=.7):
       action.drift = True
-      action.acceleration = 0.1
+      action.acceleration = 0.1  #.1
 
     if (abs(aim_point[0])>.7):
       #print (f'SLIGHT tight curve ahead, speed is {current_vel}, steering at {aim_point[0]}, acceleration {action.acceleration}, brake {action.brake}')
@@ -75,9 +76,9 @@ def control(aim_point, current_vel):
       action.nitro = False
       #print (f'tight curve ahead, speed is {current_vel}, steering at {aim_point[0]}, acceleration {action.acceleration}, brake {action.brake}')
 
-    if current_vel > 24:
-      
+    if current_vel > 23:    #24
       action.brake = True
+      #action.nitro = False
 
     """
     Your code here
