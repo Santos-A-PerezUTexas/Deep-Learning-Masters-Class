@@ -39,7 +39,7 @@ def control(aim_point, current_vel):
     action.nitro = True
     action.acceleration = 1
     
-    if abs(aim_point[0])<.15:
+    if abs(aim_point[0])<.2:
       action.nitro = True         #NITROOOOOOOO
       #print("NITRO")
 
@@ -53,8 +53,9 @@ def control(aim_point, current_vel):
     #comment 
     
     direction_steer = np.sign(aim_point[0])
+
     if abs(aim_point[0])>.9:
-      action.steer = .95*(abs(aim_point[0])*direction_steer)
+      action.steer = (abs(aim_point[0])*direction_steer)
       action.acceleration = 0
       action.acceleration = False
 
