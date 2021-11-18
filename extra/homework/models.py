@@ -52,6 +52,9 @@ class Bigram(LanguageModel):
         from os import path
         self.first, self.transition = torch.load(path.join(path.dirname(path.abspath(__file__)), 'bigram.th'))
 
+
+    #bigram predictALL
+
     def predict_all(self, some_text):
         return torch.cat((self.first[:, None], self.transition.t().matmul(utils.one_hot(some_text))), dim=1)
 

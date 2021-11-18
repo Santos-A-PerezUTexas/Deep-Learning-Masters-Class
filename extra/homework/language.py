@@ -2,6 +2,7 @@ from .models import LanguageModel, AdjacentLanguageModel, Bigram, load_model
 from . import utils
 
 
+
 def log_likelihood(model: LanguageModel, 
                    some_text: str):
     """
@@ -103,7 +104,7 @@ class TopNHeap:
         elif self.elements[0] < e:
             heapreplace(self.elements, e)
 
-
+#############################################B  E   A  M   S E A R CH ###############
 def beam_search(model: LanguageModel, 
                 beam_size: int, 
                 n_results: int = 10, 
@@ -143,12 +144,24 @@ def beam_search(model: LanguageModel,
     """
 
     print (f'Inside of beam_search, returning list of strings of size n_results size: {n_results}')
-    print (model.predict_all("test").shape) #torch.Size([28,5])
+    print (model.predict_next("")) #torch.Size([28])
+    print (model.predict_next("")) #torch.Size([28])
+    
     stuff = ["apple", "banana", "cherry", "Crypto", "Bitcoin", "Music", "Tesla", "cars", "plane", "berry" ]
+
+
+
+    #generate a string no longer than max_length
+
+    #string = model.predict_next("")
+    #for i in range (max_length):
+     # string = model.predict_next(string)
 
     my_list = []
 
     for i in range (n_results):
+      #generate a string
+      #append the string to my_list
       my_list.append(stuff[i])
 
     return (my_list)
