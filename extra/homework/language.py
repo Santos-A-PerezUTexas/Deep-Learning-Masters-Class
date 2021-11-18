@@ -148,7 +148,7 @@ def beam_search(model: LanguageModel,
     
     print (f'Inside of beam_search, returning list of strings of size n_results size: {n_results}')
     
-    stringD = ""
+    stringD = "hello"
     my_list = []
     
     for i in range (n_results):
