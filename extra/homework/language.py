@@ -48,7 +48,10 @@ def log_likelihood(model: LanguageModel, some_text: str):
     :param some_text:
     :return: float
     """
-    
+    #output = model(some_text)
+    print ("Inside Log Likelikelihood")
+    print (some_text)
+
     return (.008)
 
 
