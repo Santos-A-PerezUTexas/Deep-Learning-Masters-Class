@@ -47,6 +47,13 @@ class SpeechDataset(Dataset):
             self.data += self.data[:max_len]
 
         if transform is not None:
+            print("--------------------------------------------------------------------")
+            print("Applying the one hot transform")
+            print("--------------------------------------------------------------------")
+            print("--------------------------------------------------------------------")
+            print("Applying the one hot transform")
+            print("--------------------------------------------------------------------")
+            
             self.data = transform(self.data)
 
     def __len__(self):
@@ -67,13 +74,14 @@ class SpeechDataset(Dataset):
 
 def load_data(dataset_path, num_workers=0, batch_size=32, **kwargs):
     dataset = SpeechDataset(dataset_path, **kwargs)
-    print("LOADED DATASET SANTOS, this one below:")
-    #print(dataset_path)
+    print("load_data()------->LOADED DATASET SANTOS, this one below:")
+    print(dataset_path)
     return DataLoader(dataset, num_workers=num_workers, batch_size=batch_size, shuffle=True, drop_last=True)
 
 if __name__ == "__main__":
     print ("Starting execution of utils.py")
     
+    """
     data = SpeechDataset('data/valid.txt', max_len=None)
     print('Dataset size BEFORE TRANSFORM is ', len(data))
 
@@ -93,7 +101,7 @@ if __name__ == "__main__":
 
     print("-------------------------------")
     
-    print("tranforming data to one hot now")
+    #print("From main()------>tranforming data to one hot now")
 
     data = SpeechDataset('data/valid.txt', transform=one_hot, max_len=None)
     
@@ -107,8 +115,11 @@ if __name__ == "__main__":
     #for i in range(min(len(data), 3)):
      #   print(data[i])
 
+     """
+
+    print("--------------------------------------------------------------------")
     print ("USING THE LOADER NOW")
-    train_data = load_data('data/valid.txt',  transform=one_hot, max_len=None)
+    train_data = load_data('data/train.txt',  transform=one_hot, max_len=None)
     #train_data = load_data('data/valid.txt',  max_len=None)
     #Transform did not work, raised stack exception: load_data('data/valid.txt',  transform=one_hot, max_len=None)  
     for s in train_data:
