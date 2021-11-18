@@ -148,12 +148,15 @@ def beam_search(model: LanguageModel,
     
     print (f'Inside of beam_search, returning list of strings of size n_results size: {n_results}')
     
-    stringD = "hello"
+    stringD = ""
     my_list = []
+    my_heap = TopNHeap()
     
     for i in range (n_results):
       for i in range (max_length):
-        prob_next = model.predict_next(stringD) 
+        prob_next = model.predict_next(stringD)
+        prob_all =  model.predict_all(stringD)
+        print(f'the shape of prob_all is {prob_all.shape}')
         max_i = torch.argmax(model.predict_next(stringD))
         #print ("---------------------------------------------------")
         #print (prob_next) #torch.Size([28])
