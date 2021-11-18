@@ -2,7 +2,8 @@ from .models import LanguageModel, AdjacentLanguageModel, Bigram, load_model
 from . import utils
 
 
-def log_likelihood(model: LanguageModel, some_text: str):
+def log_likelihood(model: LanguageModel, 
+                   some_text: str):
     """
     
     NOV 15: https://piazza.com/class/ksjhagmd59d6sg?cid=1033
@@ -50,13 +51,19 @@ def log_likelihood(model: LanguageModel, some_text: str):
     """
     #output = model(some_text)
     #print ("Inside Log Likelikelihood")
-    output = model.predict_all(some_text) 
-    print (some_text)
-    print (output)
-    #return (.008)
+    #output = model.predict_all(some_text) 
+    #output = model.predict_next(some_text) #self.predict_all(some_text)[:, -1]
+    
+    #print (some_text)
+    #print (output)
+    output = .008
+    return output
+    
 
 
-def sample_random(model: LanguageModel, max_length: int = 100):
+def sample_random(model: LanguageModel, 
+                  max_length: int = 100):
+    
     """
     Your code here.
 
@@ -67,6 +74,8 @@ def sample_random(model: LanguageModel, max_length: int = 100):
     :param max_length: The maximum sentence length
     :return: A string
     """
+    
+    
     return("Returned from Sample Random")
 
 
@@ -95,7 +104,11 @@ class TopNHeap:
             heapreplace(self.elements, e)
 
 
-def beam_search(model: LanguageModel, beam_size: int, n_results: int = 10, max_length: int = 100, average_log_likelihood: bool = False):
+def beam_search(model: LanguageModel, 
+                beam_size: int, 
+                n_results: int = 10, 
+                max_length: int = 100, 
+                average_log_likelihood: bool = False):
     """
     Your code here
 
@@ -112,7 +125,8 @@ def beam_search(model: LanguageModel, beam_size: int, n_results: int = 10, max_l
     :return: A list of strings of size n_results
     """
 
-    print ("Inside beam_search, returning A list of strings of size n_results")
+    print (f'Inside of beam_search, returning list of strings of size n_results size: {n_results}')
+    print (model.predict_next("test")[0]) #torch.Size([28])
     stuff = ["apple", "banana", "cherry", "Crypto", "Bitcoin", "Music", "Tesla", "cars", "plane", "berry" ]
 
     my_list = []
