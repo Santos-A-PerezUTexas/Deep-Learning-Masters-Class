@@ -62,12 +62,15 @@ if __name__ == "__main__":
     print('Dataset size ', len(data))
 
     print (f'data[0] is {data[0]}')
-    print (f'data[1] is {data[1]}')
-    print (f'data[2] is {data[2]}')
+    print (f'data[1] is {data[1]}')  #is i did not know mr.
+    print (f'data[2] is {data[2]}')  #is cronkite personally.
+    print (f'data[1][x] is {data[1][14]}')
+    print (f'data[2][x] is {data[2][15]}')
+
     
     print (f'data[0] size is {len(data[0])}')
-    print (f'data[1] size is {len(data[1])}')
-    print (f'data[2] size is {len(data[2])}')
+    print (f'data[1] size is {len(data[1])}')  #data[1] size is 18
+    print (f'data[2] size is {len(data[2])}')  #data[2] size is 20
 
     #for i in range(min(len(data), 10)):
      #   print(data[i])
