@@ -39,6 +39,15 @@ def control(aim_point, current_vel):
     action.nitro = True
     action.acceleration = 1
     
+    if aim_point[1] < 0:
+      t=1
+      #print ("Facing Front")
+
+    if aim_point[1] > 0:
+      t=1
+      action.acceleration = 0
+      #print ("LOOK BEHIND YOU")
+
     if abs(aim_point[0])<.2:
       action.nitro = True         #NITROOOOOOOO
       #print("NITRO")
