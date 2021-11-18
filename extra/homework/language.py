@@ -150,7 +150,7 @@ def beam_search(model: LanguageModel,
     
     stringD = ""
     my_list = []
-    my_heap = TopNHeap()
+    my_heap = TopNHeap(beam_size)
     
     for i in range (n_results):
       for i in range (max_length):
@@ -164,13 +164,14 @@ def beam_search(model: LanguageModel,
         #print(prob_next[max_i])
         #print (vocab[max_i])
         stringD = stringD + vocab[max_i]
+        my_heap.add(prob_next[max_i])   #MY HEAP HEAP
         if vocab[max_i] == '.':
           break
       #print (stringD)
       my_list.append(stringD)
     
     
-    
+    print(f'THE HEAP----------------> {my_heap.elements}')
     print (max_length)
 
     stuff = ["apple", "banana", "cherry", "Crypto", "Bitcoin", "Music", "Tesla", "cars", "plane", "berry" ]
