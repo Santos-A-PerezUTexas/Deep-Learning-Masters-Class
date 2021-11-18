@@ -49,10 +49,11 @@ def log_likelihood(model: LanguageModel, some_text: str):
     :return: float
     """
     #output = model(some_text)
-    print ("Inside Log Likelikelihood")
+    #print ("Inside Log Likelikelihood")
+    output = model.predict_all(some_text) 
     print (some_text)
-
-    return (.008)
+    print (output)
+    #return (.008)
 
 
 def sample_random(model: LanguageModel, max_length: int = 100):
@@ -111,6 +112,7 @@ def beam_search(model: LanguageModel, beam_size: int, n_results: int = 10, max_l
     :return: A list of strings of size n_results
     """
 
+    print ("Inside beam_search, returning A list of strings of size n_results")
     stuff = ["apple", "banana", "cherry", "Crypto", "Bitcoin", "Music", "Tesla", "cars", "plane", "berry" ]
 
     my_list = []
