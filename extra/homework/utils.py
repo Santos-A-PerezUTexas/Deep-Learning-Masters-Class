@@ -97,7 +97,8 @@ if __name__ == "__main__":
      #   print(data[i])
 
     print ("USING THE LOADER NOW")
-    train_data = load_data('data/valid.txt', transform=one_hot, max_len=None)
-
-    for s, e in train_data:
-      print("Sex")
+    train_data = load_data('data/valid.txt', transform=one_hot,  max_len=None)
+    #Transform did not work, raised stack exception: load_data('data/valid.txt',  transform=one_hot, max_len=None)  
+    for s in train_data:
+      print ("Hello World")
+      print (s)
