@@ -116,6 +116,23 @@ def beam_search(model: LanguageModel,
       * No two returned sentences are the same
       * the `log_likelihood` of each returned sentence is as large as possible
 
+    Each column is a slot, there are up to max_legth such slots
+    Rows are 0-27,  tells you how probable each letter is in each slot (column)
+
+
+    slot:1   2  3   4
+
+    letter
+
+    a    .5  .2  .1  .9 
+    b    .7  .4   0  .2
+    c    .1  .6  .5  .4
+
+    These are the highest values for the slots:
+
+        1   2   3   4             1   2   3   4
+       .7  .6  .5 .9              b   c   c   a    = sentence
+
     :param model: A LanguageModel
     :param beam_size: The size of the beam in beam search (number of sentences to keep around)
     :param n_results: The number of results to return
@@ -126,7 +143,7 @@ def beam_search(model: LanguageModel,
     """
 
     print (f'Inside of beam_search, returning list of strings of size n_results size: {n_results}')
-    print (model.predict_next("test")[0]) #torch.Size([28])
+    print (model.predict_next("test")[0].size) #torch.Size([28])
     stuff = ["apple", "banana", "cherry", "Crypto", "Bitcoin", "Music", "Tesla", "cars", "plane", "berry" ]
 
     my_list = []
