@@ -41,6 +41,7 @@ def control(aim_point, current_vel):
     
     if aim_point[1] < 0:
       t=1
+      action.nitro = True
       #print ("Facing Front")
 
     if aim_point[1] > 0:
