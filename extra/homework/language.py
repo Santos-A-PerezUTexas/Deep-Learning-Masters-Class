@@ -145,7 +145,7 @@ def beam_search(model: LanguageModel,
 
     print (f'Inside of beam_search, returning list of strings of size n_results size: {n_results}')
     print (model.predict_next("")) #torch.Size([28])
-    print (model.predict_next("")) #torch.Size([28])
+    print (argmax(model.predict_next(""))) #torch.Size([28])
     
     stuff = ["apple", "banana", "cherry", "Crypto", "Bitcoin", "Music", "Tesla", "cars", "plane", "berry" ]
 
