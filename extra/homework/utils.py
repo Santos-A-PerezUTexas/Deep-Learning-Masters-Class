@@ -63,12 +63,16 @@ if __name__ == "__main__":
 
     print (f'data[0] is {data[0]}')
     print (f'data[1] is {data[1]}')
-    
+    print (f'data[0] size is {data[0]}')
+    print (f'data[1] size is {data[1].shape}')
 
     #for i in range(min(len(data), 10)):
      #   print(data[i])
 
+    print("-------------------------------")
+    
     print("tranforming data to one hot now")
+
     data = SpeechDataset('data/valid.txt', transform=one_hot, max_len=None)
     
     print (f'data[0] size is {data[0].shape}')
