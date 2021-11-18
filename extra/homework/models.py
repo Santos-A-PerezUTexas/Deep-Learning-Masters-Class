@@ -92,7 +92,7 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
     
     
     
-    def __init__(self, layers=[8,16,32], char_set):   #<---------------------------added char_set 11/16/2021
+    def __init__(self, layers=[8,16,32], char_set="string"):   #<---------------------------added char_set 11/16/2021
         
         """
        

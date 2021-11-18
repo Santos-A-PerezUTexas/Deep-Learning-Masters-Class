@@ -56,12 +56,24 @@ class SpeechDataset(Dataset):
 
 
 if __name__ == "__main__":
+    print ("Starting execution of utils.py")
+    
     data = SpeechDataset('data/valid.txt', max_len=None)
     print('Dataset size ', len(data))
-    for i in range(min(len(data), 10)):
-        print(data[i])
 
+    print (f'data[0] is {data[0]}')
+    print (f'data[1] is {data[1]}')
+    
+
+    #for i in range(min(len(data), 10)):
+     #   print(data[i])
+
+    print("tranforming data to one hot now")
     data = SpeechDataset('data/valid.txt', transform=one_hot, max_len=None)
-    print('Dataset size ', len(data))
-    for i in range(min(len(data), 3)):
-        print(data[i])
+    
+    print (f'data[0] size is {data[0].shape}')
+    print (f'data[1] size is {data[1].shape}')
+
+    #print('Dataset size ', len(data))
+    #for i in range(min(len(data), 3)):
+     #   print(data[i])
