@@ -59,7 +59,7 @@ if __name__ == "__main__":
     print ("Starting execution of utils.py")
     
     data = SpeechDataset('data/valid.txt', max_len=None)
-    print('Dataset size ', len(data))
+    print('Dataset size BEFORE TRANSFORM is ', len(data))
 
     print (f'data[0] is {data[0]}')
     print (f'data[1] is {data[1]}')  #is i did not know mr.
@@ -85,6 +85,8 @@ if __name__ == "__main__":
     print (f'data[1] size is {data[1].shape}')
     print (f'data[2] size is {data[2].shape}')
 
-    #print('Dataset size ', len(data))
+    print('TRANSFORMED Dataset size ', len(data))  #856
+    print('TRANSFORMED Dataset shape ', data.size)  
+    
     #for i in range(min(len(data), 3)):
      #   print(data[i])
