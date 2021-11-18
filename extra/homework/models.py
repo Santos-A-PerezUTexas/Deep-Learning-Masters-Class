@@ -91,7 +91,8 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
     
     
     
-    
+    #--------------->TCN INIT
+
     def __init__(self, layers=[8,16,32], char_set="string"):   #<---------------------------added char_set 11/16/2021
         
         """
@@ -152,6 +153,8 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         self.network = torch.nn.Sequential(*L)
         self.classifier = torch.nn.Conv1d(c, len(char_set), 1)
         
+
+    #--------------------------TCN FORWARD()
     def forward(self, x):
 
         """
@@ -159,6 +162,10 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
 
         @x: torch.Tensor((B, vocab_size, L)) a batch of one-hot encodings
         @return torch.Tensor((B, vocab_size, L+1)) a batch of log-likelihoods or logits
+
+        Crash "Given groups=1, weight of size [8, 6, 3], expected input[1, 28, 102] to have 6 channels,
+         but got 28 channels instead
+
         """
         
         return self.classifier(self.network(x))    # shape ([128, 29, 256]), 128 batches, 29 character alphabet or vocab_size, 256 letters in the string
