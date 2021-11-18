@@ -1,5 +1,7 @@
 from .models import LanguageModel, AdjacentLanguageModel, Bigram, load_model
 from . import utils
+import torch
+import string
 
 
 
@@ -142,14 +144,25 @@ def beam_search(model: LanguageModel,
                                    This option favors longer strings.
     :return: A list of strings of size n_results
     """
-
-    print (f'Inside of beam_search, returning list of strings of size n_results size: {n_results}')
-    print (model.predict_next("")) #torch.Size([28])
-    print (argmax(model.predict_next(""))) #torch.Size([28])
+    vocab = string.ascii_lowercase + ' .'
     
+    print (f'Inside of beam_search, returning list of strings of size n_results size: {n_results}')
+    
+    stringD = ""
+    for i in range (2):
+      prob_next = model.predict_next(stringD) 
+      max_i = torch.argmax(model.predict_next(""))
+      print ("---------------------------------------------------")
+      #print (prob_next) #torch.Size([28])
+      #print (max_i) #torch.Size([28])
+      #print(prob_next[max_i])
+      print (vocab[max_i])
+      stringD = stringD + vocab[max_i]
+
+    print (stringD)
+
     stuff = ["apple", "banana", "cherry", "Crypto", "Bitcoin", "Music", "Tesla", "cars", "plane", "berry" ]
-
-
+    print ("---------------------------------------------------")
 
     #generate a string no longer than max_length
 
