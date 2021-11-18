@@ -63,8 +63,11 @@ if __name__ == "__main__":
 
     print (f'data[0] is {data[0]}')
     print (f'data[1] is {data[1]}')
-    print (f'data[0] size is {data[0]}')
-    print (f'data[1] size is {data[1].shape}')
+    print (f'data[2] is {data[2]}')
+    
+    print (f'data[0] size is {len(data[0])}')
+    print (f'data[1] size is {len(data[1])}')
+    print (f'data[2] size is {len(data[2])}')
 
     #for i in range(min(len(data), 10)):
      #   print(data[i])
@@ -77,6 +80,7 @@ if __name__ == "__main__":
     
     print (f'data[0] size is {data[0].shape}')
     print (f'data[1] size is {data[1].shape}')
+    print (f'data[2] size is {data[2].shape}')
 
     #print('Dataset size ', len(data))
     #for i in range(min(len(data), 3)):
