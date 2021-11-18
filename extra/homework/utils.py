@@ -50,8 +50,12 @@ class SpeechDataset(Dataset):
 
     def __getitem__(self, idx):
         s, e = self.range[idx]
+        print (f'index is {idx}, s is {s}, and e is {e}')
+        print (f'self.range[idx] is {self.range[idx]}')
+        #index is 752, s is 79351, and e is 79418
         if isinstance(self.data, str):
-            return self.data[s:e]
+            print (f'Based on above numbers, returning self.data[s:e]: {self.data[s:e]} ')
+            return self.data[s:e]        #if it's a string, return s to e substring only
         return self.data[:, s:e]
 
 def load_data(dataset_path, num_workers=0, batch_size=32, **kwargs):
@@ -101,4 +105,4 @@ if __name__ == "__main__":
     #Transform did not work, raised stack exception: load_data('data/valid.txt',  transform=one_hot, max_len=None)  
     for s in train_data:
       print ("Hello World")
-      print (s)
+      #print (s)
