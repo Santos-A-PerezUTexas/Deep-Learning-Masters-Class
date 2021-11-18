@@ -61,6 +61,8 @@ class SpeechDataset(Dataset):
             print (f'Based on above numbers, returning self.data[s:e]: {self.data[s:e]} ')
             return self.data[s:e]        #if it's a string, return s to e substring only
         print ("NOT A STRING")
+        print (f'returning self.data[:, s:e]  : {self.data[:, s:e].shape}')
+        #shape of self.data[:, s:e] is ([28, s-e])
         return self.data[:, s:e]
 
 def load_data(dataset_path, num_workers=0, batch_size=32, **kwargs):
