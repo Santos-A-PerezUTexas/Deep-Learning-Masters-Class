@@ -143,7 +143,7 @@ def beam_search(model: LanguageModel,
     """
 
     print (f'Inside of beam_search, returning list of strings of size n_results size: {n_results}')
-    print (model.predict_next("test")[0].size) #torch.Size([28])
+    print (model.predict_all("test").shape) #torch.Size([28,5])
     stuff = ["apple", "banana", "cherry", "Crypto", "Bitcoin", "Music", "Tesla", "cars", "plane", "berry" ]
 
     my_list = []
