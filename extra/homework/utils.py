@@ -2,7 +2,7 @@ import re
 import string
 
 import torch
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader
 
 vocab = string.ascii_lowercase + ' .'
 
@@ -54,6 +54,11 @@ class SpeechDataset(Dataset):
             return self.data[s:e]
         return self.data[:, s:e]
 
+def load_data(dataset_path, num_workers=0, batch_size=32, **kwargs):
+    dataset = SpeechDataset(dataset_path, **kwargs)
+    print("LOADED DATASET SANTOS, this one below:")
+    #print(dataset_path)
+    return DataLoader(dataset, num_workers=num_workers, batch_size=batch_size, shuffle=True, drop_last=True)
 
 if __name__ == "__main__":
     print ("Starting execution of utils.py")
@@ -86,7 +91,13 @@ if __name__ == "__main__":
     print (f'data[2] size is {data[2].shape}')
 
     print('TRANSFORMED Dataset size ', len(data))  #856
-    print('TRANSFORMED Dataset shape ', data.size)  
+    #print('TRANSFORMED Dataset shape ', data.dtype)  
     
     #for i in range(min(len(data), 3)):
      #   print(data[i])
+
+    print ("USING THE LOADER NOW")
+    train_data = load_data('data/valid.txt', transform=one_hot, max_len=None)
+
+    for s, e in train_data:
+      print("Sex")
