@@ -149,33 +149,42 @@ def beam_search(model: LanguageModel,
     print (f'Inside of beam_search, returning list of strings of size n_results size: {n_results}')
     
     stringD = ""
-    for i in range (2):
-      prob_next = model.predict_next(stringD) 
-      max_i = torch.argmax(model.predict_next(""))
-      print ("---------------------------------------------------")
-      #print (prob_next) #torch.Size([28])
-      #print (max_i) #torch.Size([28])
-      #print(prob_next[max_i])
-      print (vocab[max_i])
-      stringD = stringD + vocab[max_i]
-
-    print (stringD)
+    my_list = []
+    
+    for i in range (n_results):
+      for i in range (max_length):
+        prob_next = model.predict_next(stringD) 
+        max_i = torch.argmax(model.predict_next(stringD))
+        #print ("---------------------------------------------------")
+        #print (prob_next) #torch.Size([28])
+        #print (max_i) #torch.Size([28])
+        #print(prob_next[max_i])
+        #print (vocab[max_i])
+        stringD = stringD + vocab[max_i]
+        if vocab[max_i] == '.':
+          break
+      #print (stringD)
+      my_list.append(stringD)
+    
+    
+    
+    print (max_length)
 
     stuff = ["apple", "banana", "cherry", "Crypto", "Bitcoin", "Music", "Tesla", "cars", "plane", "berry" ]
-    print ("---------------------------------------------------")
-
+    print ("-----------THE LIST----------------------------------------")
+    print (my_list)
     #generate a string no longer than max_length
 
     #string = model.predict_next("")
     #for i in range (max_length):
      # string = model.predict_next(string)
 
-    my_list = []
+   
 
-    for i in range (n_results):
+    #for i in range (n_results):
       #generate a string
       #append the string to my_list
-      my_list.append(stuff[i])
+     # my_list.append(stuff[i])
 
     return (my_list)
 
