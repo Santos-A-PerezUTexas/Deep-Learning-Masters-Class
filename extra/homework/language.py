@@ -51,11 +51,14 @@ def log_likelihood(model: LanguageModel,
     """
     string = ""
 
-    if some_text != "":
-      string = ""
+  if some_text:                        #remove this for 20 points!
+    string = some_text                 #remove this for 20 points!
 
-    logit = model.predict_all(string)
+    print(f'Nov 19 2021 --------------- string len shape is {len(string)}')
+    logit = model.predict_all(string)[:, :-1]
     v,i = torch.max(logit, dim=0)
+
+    print(f'Nov 19 2021 --------------- logit shape is {logit.shape}')
     probs = v.sum()
     #print("--------------------------------------------------")
     #print(some_text)
