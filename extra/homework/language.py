@@ -29,20 +29,22 @@ def log_likelihood(model: LanguageModel,
     
     
     
-    Your code here
+    Hint: Remember that the language model can take an empty string as input
 
-    Evaluate the log-likelihood of a given string.
+    Hint: Recall that LanguageModel.predict_all returns the log probabilities of the next characters for all substrings.
 
-    Hint: utils.one_hot might come in handy
+    Hint: The log-likelihood is the sum of all individual likelihoods, not the average
 
     :param model: A LanguageModel
     :param some_text:
     :return: float
     """
 
-    s_onehot = one_hot(some_text)
-    probs = model.predict_all(some_text).mean().log()
-    
+    logit = model.predict_next(some_text)
+    probs = logit.sum()
+    print (f'probs is {probs}')
+    print (logit.shape)
+
     #print (f'                                      TEXT IN LIKELIHOOD: {some_text}')
     #output = model(some_text)
     #print ("Inside Log Likelikelihood")
@@ -52,7 +54,7 @@ def log_likelihood(model: LanguageModel,
     #print (some_text)
     #print (output)
     output = .008
-    return output
+    return probs
     
 
 
