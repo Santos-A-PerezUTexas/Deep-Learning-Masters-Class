@@ -2,6 +2,7 @@ import torch
 import torch.nn.functional as F
 
 from . import utils
+from .utils import one_hot
 
 #NOTE THIS IS JUST TO TEST THE GRADER, NOV 15 2021
 
@@ -181,23 +182,30 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
 
         """
         
-        #print("-----------------------------------------------------------------")
-        #print ("In FORWARD()")
+        print("-----------------------------------------------------------------")
+        print ("In FORWARD()")
         #print("-----------------------------------------------------------------")
         
-        #print(f'Nov 19, shape of x is {x.shape}')
+        print(f'Nov 19, shape of x is {x.shape}')
 
         self.prob = x[:, :, 0]
 
+        #print(f'                     the self.prob shape is {self.prob.shape}')
         output = self.network(x)
         
         #print(f'Nov 19, shape of first output is {output.shape}')
 
-        output = self.classifier(output)
+        output = self.classifier(output) 
         
-       # print(f'Nov 19, shape of second output is {output.shape}')
+        print(f'Nov 19, shape of CLASSIFICATION is {output.shape}')
+        print ("END FORWARD()")
+        print("-----------------------------------------------------------------")
+        
+        #output = output + torch.cat((output, self.prob[0,:]), dim=0)
+        
+        #print(f'Nov 200000, shape of second output is {output.shape}')
 
-
+        
         return    output  # shape ([128, 29, 256]), 128 batches, 29 character alphabet or vocab_size, 256 letters in the string
         
         
@@ -211,7 +219,17 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         @some_text: a string
         @return torch.Tensor((vocab_size, len(some_text)+1)) of log-likelihoods (not logits!)
         """
-        raise NotImplementedError('TCN.predict_all')
+        
+        one_hotx = one_hot(some_text)
+
+        print (f'in predict_all, sometext is {some_text}')
+        print (f'in predict all one_hotx shape is {one_hotx.shape}')
+
+        output = self.forward(one_hotx)
+
+        print (f'in predict all output shape is {output.shape}')
+        
+        return(output)
 
         
         
