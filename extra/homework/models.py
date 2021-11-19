@@ -96,7 +96,7 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
     
     #--------------->TCN INIT
 
-    def __init__(self, layers=[8,16], char_set="string"):   #<---------------------------added char_set 11/16/2021
+    def __init__(self, layers=[28,16], char_set="string"):   #<---------------------------added char_set 11/16/2021
         
         """
        
@@ -108,15 +108,19 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
 
         Hint: Make sure TCN.predict_all returns log-probabilities, not logits.
 
-        Hint: Store the distribution of the first character as a parameter of the model torch.nn.Parameter
+        Hint: Store the distribution of the first character as a parameter of the 
+        model torch.nn.Parameter
 
-        Hint: Try to keep your model manageable and small. The master solution trains in 15 min on a GPU.
+        Hint: Try to keep your model manageable and small. The master solution trains
+         in 15 min on a GPU.
 
 
         http://www.philkr.net/dl_class/lectures/sequence_modeling/07.html
         
         Hint: Try to use many layers small (channels <=50) layers instead of a few very large ones
-        Hint: The probability of the first character should be a parameter
+        
+        
+        ***-->Hint: The probability of the first character should be a parameter
         use torch.nn.Parameter to explicitly create it.
         
         torch.nn.Parameter
@@ -144,7 +148,12 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         
         #self.conv.weight = torch.nn.Parameter(weight)
         
-        c = len(char_set)
+        prob = torch.nn.Parameter(torch.zeros(28))
+
+        c = 28 
+
+        print(f'------------->length of char set is {c}')
+
         L = []
         total_dilation = 1
         for l in layers:
