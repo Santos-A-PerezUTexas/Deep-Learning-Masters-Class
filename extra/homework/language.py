@@ -94,7 +94,7 @@ def sample_random(model: LanguageModel,
     
     for i in range (max_length):
       prob_next = model.predict_next(stringD)
-      random_i = torch.distributions.categorical.Categorical(logits=prob_next)
+      random_i = torch.distributions.categorical.Categorical(logits=prob_next).sample()
       stringD = stringD + vocab[random_i]
       if vocab[random_i] == '.':
         break
