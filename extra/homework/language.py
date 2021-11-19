@@ -52,7 +52,7 @@ def log_likelihood(model: LanguageModel,
     #print (some_text)
     #print (output)
     output = .008
-    return output
+    return probs
     
 
 
