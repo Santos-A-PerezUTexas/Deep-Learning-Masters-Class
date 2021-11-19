@@ -3,6 +3,7 @@ import torch.nn.functional as F
 
 from . import utils
 from .utils import one_hot
+from .language import log_likelihood
 
 #NOTE THIS IS JUST TO TEST THE GRADER, NOV 15 2021
 
@@ -77,6 +78,9 @@ class AdjacentLanguageModel(LanguageModel):
             prob[1:, 1:] += 0.5*one_hot[:-1]
         return (prob/prob.sum(dim=0, keepdim=True)).log()
 
+#==============================================TCN===========================================
+
+
 
 class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES NOT inherit from Language Model
     class CausalConv1dBlock(torch.nn.Module):
@@ -97,7 +101,7 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
     
     #--------------->TCN INIT
 
-    def __init__(self, layers=[28,16], char_set="string"):   #<---------------------------added char_set 11/16/2021
+    def __init__(self, layers=[28,16,8], char_set="string"):   #<---------------------------added char_set 11/16/2021
         
         """
        
@@ -169,12 +173,15 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         
 
     #--------------------------TCN FORWARD()
-    def forward(self, x):
+    #--------------------------TCN FORWARD()
+    #--------------------------TCN FORWARD()
+    
+    def forward(self, x):  #x is a sequence of any length
 
         """
         Return the logit for the next character for prediction for any substring of x
 
-        @x: torch.Tensor((B, vocab_size, L)) a batch of one-hot encodings
+        @x: torch.Tensor((B, vocab_size, L)) a batch of one-hot encodings, (32,28, L)
         @return torch.Tensor((B, vocab_size, L+1)) a batch of log-likelihoods or logits
 
         Crash "Given groups=1, weight of size [8, 6, 3], expected input[1, 28, 102] to have 6 channels,
@@ -218,6 +225,9 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
 
         @some_text: a string
         @return torch.Tensor((vocab_size, len(some_text)+1)) of log-likelihoods (not logits!)
+        
+        RETURN  (28,  L+1)  - Log Likelikelyhoods
+
         """
         
         one_hotx = one_hot(some_text)
