@@ -10,7 +10,17 @@ def log_likelihood(model: LanguageModel,
                    some_text: str):
     """
     
+
+    NOV 19:  https://piazza.com/class/ksjhagmd59d6sg?cid=1075
+    The log-likelihood is a single number, predict_all output an array of [28, n+1]. For a *single* 28-dim vector, 
+    you will need only one of them that represents the current character.
+          
+    
+    
     NOV 15: https://piazza.com/class/ksjhagmd59d6sg?cid=1033
+
+
+
 
    
     INSTRUCTIONS:
