@@ -61,14 +61,14 @@ class SpeechDataset(Dataset):
 
     def __getitem__(self, idx):
         s, e = self.range[idx]
-        print (f'index is {idx}, s is {s}, and e is {e}')
-        print (f'self.range[idx] is {self.range[idx]}, and e-s is {e-s}')
+        #print (f'index is {idx}, s is {s}, and e is {e}')
+        #print (f'self.range[idx] is {self.range[idx]}, and e-s is {e-s}')
         #index is 752, s is 79351, and e is 79418
         if isinstance(self.data, str):
-            print (f'Based on above numbers, returning self.data[s:e]: {self.data[s:e]} ')
+            #print (f'Based on above numbers, returning self.data[s:e]: {self.data[s:e]} ')
             return self.data[s:e]        #if it's a string, return s to e substring only
-        print ("NOT A STRING")
-        print (f'returning self.data[:, s:e]  : {self.data[:, s:e].shape}')
+       # print ("NOT A STRING")
+        #print (f'returning self.data[:, s:e]  : {self.data[:, s:e].shape}')
         #shape of self.data[:, s:e] is ([28, s-e])
         return self.data[:, s:e]
 
@@ -124,5 +124,4 @@ if __name__ == "__main__":
     #train_data = load_data('data/valid.txt',  max_len=None)
     #Transform did not work, raised stack exception: load_data('data/valid.txt',  transform=one_hot, max_len=None)  
     for s in train_data:
-      print ("Hello World")
-      #print (s)
+      print (s[0])#torch.Size([32, 28, 250])
