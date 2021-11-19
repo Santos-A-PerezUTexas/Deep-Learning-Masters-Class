@@ -89,8 +89,17 @@ def sample_random(model: LanguageModel,
     :return: A string
     """
     
+    stringD = ""
+    vocab = string.ascii_lowercase + ' .'
     
-    return("Returned from Sample Random")
+    for i in range (max_length):
+      prob_next = model.predict_next(stringD)
+      random_i = torch.distributions.categorical.Categorical(logits=prob_next)
+      stringD = stringD + vocab[random_i]
+      if vocab[random_i] == '.':
+        break
+    
+    return(stringD)
 
 
 
