@@ -59,22 +59,10 @@ def log_likelihood(model: LanguageModel,
     v,i = torch.max(logit, dim=0)
 
     #print(f'Nov 19 2021 --------------- logit shape is {logit.shape}')
-    probs = v.sum()
-    #print("--------------------------------------------------")
-    #print(some_text)
-    #print (f'probs is {probs}')
-    #print (logit.shape)
 
-    #print (f'                                      TEXT IN LIKELIHOOD: {some_text}')
-    #output = model(some_text)
-    #print ("Inside Log Likelikelihood")
-    #output = model.predict_all(some_text) 
-    #output = model.predict_next(some_text) #self.predict_all(some_text)[:, -1]
-    
-    #print (some_text)
-    #print (output)
-    output = .008
-    return probs
+    LL = v.sum()
+
+    return LL
     
 
 
@@ -200,41 +188,21 @@ def beam_search(model: LanguageModel,
       for i in range (max_length):
         prob_next = model.predict_next(stringD)
         prob_all =  model.predict_all(stringD)
-        
-        #print(f'the shape of prob_all is {prob_all.shape}')
-
         max_i = torch.argmax(model.predict_next(stringD))
-        #print ("---------------------------------------------------")
-        #print (prob_next) #torch.Size([28])
-        #print (max_i) #torch.Size([28])
-        #print(prob_next[max_i])
-        #print (vocab[max_i])
         stringD = stringD + vocab[max_i]
         my_heap.add(prob_next[max_i])   #MY HEAP HEAP
         if vocab[max_i] == '.':
           break
-      #print (stringD)
+      
       my_list.append(stringD)
     
     
-    print(f'THE HEAP----------------> {my_heap.elements}')
-    print (max_length)
+    #print(f'THE HEAP----------------> {my_heap.elements}')
+    #print (max_length)
 
-    stuff = ["apple", "banana", "cherry", "Crypto", "Bitcoin", "Music", "Tesla", "cars", "plane", "berry" ]
-    print ("-----------THE LIST----------------------------------------")
-    print (my_list)
-    #generate a string no longer than max_length
-
-    #string = model.predict_next("")
-    #for i in range (max_length):
-     # string = model.predict_next(string)
-
-   
-
-    #for i in range (n_results):
-      #generate a string
-      #append the string to my_list
-     # my_list.append(stuff[i])
+    #print ("-----------THE LIST----------------------------------------")
+    #print (my_list)
+    
 
     return (my_list)
 
