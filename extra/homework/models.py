@@ -148,7 +148,8 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         
         #self.conv.weight = torch.nn.Parameter(weight)
         
-        prob = torch.nn.Parameter(torch.zeros(28))
+        prob = torch.nn.Parameter(torch.zeros(32, 28))
+        print (f'shape of prob is {prob.shape}')
 
         c = 28 
 
@@ -180,7 +181,13 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
 
         """
         
+        print("-----------------------------------------------------------------")
+        print ("In FORWARD()")
+        print("-----------------------------------------------------------------")
+        
         print(f'Nov 19, shape of x is {x.shape}')
+
+        self.prob = x[:, :, 0]
 
         output = self.network(x)
         
