@@ -22,7 +22,7 @@ def train(args):
     train_data = load_data('data/train.txt',  transform=one_hot)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, weight_decay=1e-5)
     loss = torch.nn.CrossEntropyLoss()
-
+    MSEloss = torch.nn.MSELoss(reduction='none')
     loss_val = 0
     
     for epoch in range(args.num_epoch):
@@ -50,8 +50,8 @@ def train(args):
         #print (f'The batch_labels shape  is {batch_labels.shape}')
         
 
-        loss_val = loss(prediction, batch_labels)
-        
+        #loss_val = loss(prediction, batch_labels)
+        loss_val = MSEloss(prediction, batch_labels).mean()
         
         optimizer.zero_grad()
         loss_val.backward()
