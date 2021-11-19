@@ -30,7 +30,9 @@ def train(args):
       model.train()
       
       print (f'Epoch {epoch}, loss is {loss_val}')
-        
+
+      i= 0
+
       for batch in train_data:
 
         #batch is torch.Size([32, 28, 250])
@@ -42,16 +44,22 @@ def train(args):
         #must learn to recreate the last column INDICES
         #so that batch_label 32,249 contains the indices corresponding to the letter
 
+
         prediction = model(batch_data)  #[:, 0, :] 
        
-        #print (f'The prediction shape  is {prediction.shape}')
+        print (f'The prediction shape  is {prediction.shape}, epoch {epoch}, batch {i}')
+        print (f'The batch  data  is {batch_data.shape}, epoch {epoch}, batch {i}')
+        print (f'The batch  label  is {batch_labels.shape}, epoch {epoch}, batch {i}')
+        
+        i+=1  
+        
         #print (f'The prediction type  is {prediction.dtype}')
         
         #print (f'The batch_labels shape  is {batch_labels.shape}')
         
 
-        #loss_val = loss(prediction, batch_labels)
-        loss_val = MSEloss(prediction, batch_labels).mean()
+        loss_val = loss(prediction, batch_labels)
+        #loss_val = MSEloss(prediction, batch_labels).mean()
         
         optimizer.zero_grad()
         loss_val.backward()
