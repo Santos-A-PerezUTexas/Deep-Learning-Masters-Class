@@ -33,9 +33,17 @@ def train(args):
 
         batch_data = batch[:,:,:-1]
         batch_labels = batch[:,:,1:].argmax(dim=1)
+        #batch data is one hot encoded, so this gives you the index where the one's are, e.g
+        #the actual letter, but this label does not include the first column! so network
+        #must learn to recreate the last column INDICES
+        #so that batch_label 32,249 contains the indices corresponding to the letter
 
         prediction = model(batch_data) 
        
+        print (f'The prediction shape  is {prediction.shape}')
+        print (f'The batch_labels shape  is {batch_labels.shape}')
+        
+
         loss_val = loss(prediction, batch_labels)
         
         optimizer.zero_grad()

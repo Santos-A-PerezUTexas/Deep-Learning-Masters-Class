@@ -198,7 +198,7 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         print(f'Nov 19, shape of second output is {output.shape}')
 
 
-        return     # shape ([128, 29, 256]), 128 batches, 29 character alphabet or vocab_size, 256 letters in the string
+        return    output  # shape ([128, 29, 256]), 128 batches, 29 character alphabet or vocab_size, 256 letters in the string
         
         
         
