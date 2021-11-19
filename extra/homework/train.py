@@ -23,6 +23,25 @@ def train(args):
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, weight_decay=1e-5)
     loss = torch.nn.CrossEntropyLoss()
 
+    for epoch in range(args.num_epoch):
+
+      model.train()
+      
+      for batch in train_data:
+
+        #batch is torch.Size([32, 28, 250])
+
+        batch_data = batch[:,:,:-1]
+        batch_label = batch[:,:,1:].argmax(dim=1)
+
+        prediction = model(batch_data) 
+
+        labels = 5   #CHANGE LABELS!
+
+        loss_val = loss(prediction, labels)
+        optimizer.zero_grad()
+        loss_val.backward()
+        optimizer.step()
 
 
     save_model(model)
