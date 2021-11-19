@@ -96,7 +96,7 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
     
     #--------------->TCN INIT
 
-    def __init__(self, layers=[8,16,32], char_set="string"):   #<---------------------------added char_set 11/16/2021
+    def __init__(self, layers=[8,16], char_set="string"):   #<---------------------------added char_set 11/16/2021
         
         """
        
@@ -171,7 +171,18 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
 
         """
         
-        return self.classifier(self.network(x))    # shape ([128, 29, 256]), 128 batches, 29 character alphabet or vocab_size, 256 letters in the string
+        print(f'Nov 19, shape of x is {x.shape}')
+
+        output = self.network(x)
+        
+        print(f'Nov 19, shape of first output is {output.shape}')
+
+        output = self.classifier(output)
+        
+        print(f'Nov 19, shape of second output is {output.shape}')
+
+
+        return     # shape ([128, 29, 256]), 128 batches, 29 character alphabet or vocab_size, 256 letters in the string
         
         
         
