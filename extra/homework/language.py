@@ -68,8 +68,19 @@ def sample_random(model: LanguageModel,
                   max_length: int = 100):
     
     """
-    Your code here.
-
+    https://piazza.com/class/ksjhagmd59d6sg?cid=1033
+    
+    >>> m =torch.distributions.categorical.Categorical(torch.tensor([ 0.25, 0.25, 0.25, 0.25 ]))
+    https://pytorch.org/docs/stable/distributions.html
+    
+    CLASStorch.distributions.categorical.Categorical(probs=None, logits=None, validate_args=None)
+    make sure use “logit = language_model_output”.
+    
+    --->LanguageModel class has a method of predict_next(), which will give you the distribution.
+    ---->predict_next can take an empty string
+    
+    
+    
     Sample a random sentence from the language model.
     Terminate once you reach a period '.'
 
