@@ -23,10 +23,14 @@ def train(args):
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, weight_decay=1e-5)
     loss = torch.nn.CrossEntropyLoss()
 
+    loss_val = 0
+    
     for epoch in range(args.num_epoch):
 
       model.train()
       
+      print (f'Epoch {epoch}, loss is {loss_val}')
+        
       for batch in train_data:
 
         #batch is torch.Size([32, 28, 250])
@@ -40,13 +44,14 @@ def train(args):
 
         prediction = model(batch_data)  #[:, 0, :] 
        
-        print (f'The prediction shape  is {prediction.shape}')
-        print (f'The prediction type  is {prediction.dtype}')
+        #print (f'The prediction shape  is {prediction.shape}')
+        #print (f'The prediction type  is {prediction.dtype}')
         
-        print (f'The batch_labels shape  is {batch_labels.shape}')
+        #print (f'The batch_labels shape  is {batch_labels.shape}')
         
 
         loss_val = loss(prediction, batch_labels)
+        
         
         optimizer.zero_grad()
         loss_val.backward()
