@@ -39,11 +39,18 @@ def log_likelihood(model: LanguageModel,
     :param some_text:
     :return: float
     """
+    string = ""
 
-    logit = model.predict_next(some_text)
-    probs = logit.sum()
-    print (f'probs is {probs}')
-    print (logit.shape)
+    if some_text != "":
+      string = ""
+
+    logit = model.predict_all(string)
+    v,i = torch.max(logit, dim=0)
+    probs = v.sum()
+    #print("--------------------------------------------------")
+    #print(some_text)
+    #print (f'probs is {probs}')
+    #print (logit.shape)
 
     #print (f'                                      TEXT IN LIKELIHOOD: {some_text}')
     #output = model(some_text)
