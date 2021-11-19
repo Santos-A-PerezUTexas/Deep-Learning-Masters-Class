@@ -32,13 +32,12 @@ def train(args):
         #batch is torch.Size([32, 28, 250])
 
         batch_data = batch[:,:,:-1]
-        batch_label = batch[:,:,1:].argmax(dim=1)
+        batch_labels = batch[:,:,1:].argmax(dim=1)
 
         prediction = model(batch_data) 
-
-        labels = 5   #CHANGE LABELS!
-
-        loss_val = loss(prediction, labels)
+       
+        loss_val = loss(prediction, batch_labels)
+        
         optimizer.zero_grad()
         loss_val.backward()
         optimizer.step()
