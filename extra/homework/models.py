@@ -182,11 +182,11 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
 
         """
         
-        print("-----------------------------------------------------------------")
-        print ("In FORWARD()")
+        #print("-----------------------------------------------------------------")
+        #print ("In FORWARD()")
         #print("-----------------------------------------------------------------")
         
-        print(f'Nov 19, shape of x is {x.shape}')
+        #print(f'Nov 19, shape of x is {x.shape}')
 
         self.prob = x[:, :, 0]
 
@@ -197,9 +197,9 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
 
         output = self.classifier(output) 
         
-        print(f'Nov 19, shape of CLASSIFICATION is {output.shape}')
-        print ("END FORWARD()")
-        print("-----------------------------------------------------------------")
+        #print(f'Nov 19, shape of CLASSIFICATION is {output.shape}')
+        #print ("END FORWARD()")
+        #print("-----------------------------------------------------------------")
         
         #output = output + torch.cat((output, self.prob[0,:]), dim=0)
         
