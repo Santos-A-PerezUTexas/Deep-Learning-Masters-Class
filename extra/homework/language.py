@@ -51,14 +51,14 @@ def log_likelihood(model: LanguageModel,
     """
     string = ""
 
-  if some_text:                        #remove this for 20 points!
-    string = some_text                 #remove this for 20 points!
+    if some_text:                        #remove this for 20 points!
+      string = some_text                 #remove this for 20 points!
 
-    print(f'Nov 19 2021 --------------- string len shape is {len(string)}')
+    #print(f'Nov 19 2021 --------------- string len shape is {len(string)}')
     logit = model.predict_all(string)[:, :-1]
     v,i = torch.max(logit, dim=0)
 
-    print(f'Nov 19 2021 --------------- logit shape is {logit.shape}')
+    #print(f'Nov 19 2021 --------------- logit shape is {logit.shape}')
     probs = v.sum()
     #print("--------------------------------------------------")
     #print(some_text)
@@ -147,7 +147,17 @@ def beam_search(model: LanguageModel,
                 max_length: int = 100, 
                 average_log_likelihood: bool = False):
     """
-    Your code here
+    
+    Nov 19 2021
+
+
+    https://piazza.com/class/ksjhagmd59d6sg?cid=1086
+
+    Generate several sentences and try to find the top n sentences with highest log_likelihood.
+    But since we have 28 choices for up to max_length characters, do we need to calculate  all
+    the choices and then feed into the TopNHeap list?    
+
+
 
     Use beam search for find the highest likelihood generations, such that:
       * No two returned sentences are the same
