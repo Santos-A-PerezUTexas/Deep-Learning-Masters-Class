@@ -50,7 +50,7 @@ class SpeechDataset(Dataset):
         sentence = re.compile(r'[^.]*\.')
         self.data = space.sub(' ',period.sub('.',reg.sub('', Data)))  #removes spacing after period?
         
-        print ("the size of data is {len(self.data)}")
+        print (f'the size of data is {len(self.data)}')
         if max_len is None:
             self.range = [(m.start(), m.end()) for m in sentence.finditer(self.data)]
         else:
