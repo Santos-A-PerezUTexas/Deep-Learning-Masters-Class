@@ -47,9 +47,9 @@ def train(args):
 
         prediction = model(batch_data)  #[:, 0, :] 
        
-        print (f'The prediction shape  is {prediction.shape}, epoch {epoch}, batch {i}')
-        print (f'The batch  data  is {batch_data.shape}, epoch {epoch}, batch {i}')
-        print (f'The batch  label  is {batch_labels.shape}, epoch {epoch}, batch {i}')
+        #print (f'The prediction shape  is {prediction.shape}, epoch {epoch}, batch {i}')
+        #print (f'The batch  data  is {batch_data.shape}, epoch {epoch}, batch {i}')
+        #print (f'The batch  label  is {batch_labels.shape}, epoch {epoch}, batch {i}')
         
         i+=1  
         
