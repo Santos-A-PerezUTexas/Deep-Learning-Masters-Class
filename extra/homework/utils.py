@@ -50,7 +50,7 @@ class SpeechDataset(Dataset):
         sentence = re.compile(r'[^.]*\.')
         self.data = space.sub(' ',period.sub('.',reg.sub('', Data)))  #removes spacing after period?
         
-        print (f'the size of data is {len(self.data)}')
+        #print (f'the size of data is {len(self.data)}')
         if max_len is None:
             self.range = [(m.start(), m.end()) for m in sentence.finditer(self.data)]
         else:
@@ -66,7 +66,7 @@ class SpeechDataset(Dataset):
 
     def __getitem__(self, idx):
         s, e = self.range[idx]
-        print (f'self range is {self.range[idx]}')
+        #print (f'self range is {self.range[idx]}')
         #print (f'index is {idx}, s is {s}, and e is {e}')
         #print (f'self.range[idx] is {self.range[idx]}, and e-s is {e-s}')
         #index is 752, s is 79351, and e is 79418

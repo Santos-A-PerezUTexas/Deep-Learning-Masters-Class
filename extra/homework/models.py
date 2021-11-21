@@ -169,7 +169,7 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
             total_dilation *= 2
             c = l
         self.network = torch.nn.Sequential(*L)
-        self.classifier = torch.nn.Conv1d(c, 28, 1)
+        self.classifier = torch.nn.Conv1d(c, 28, 1, padding=0)
         
 
     #--------------------------TCN FORWARD()

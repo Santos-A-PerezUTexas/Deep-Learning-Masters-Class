@@ -47,15 +47,15 @@ def train(args):
 
         prediction = model(batch_data)  #[:, 0, :] 
        
-        #print (f'The prediction shape  is {prediction.shape}, epoch {epoch}, batch {i}')
-        #print (f'The batch  data  is {batch_data.shape}, epoch {epoch}, batch {i}')
+        print (f'1   The prediction shape  is {prediction.shape}, epoch {epoch}, batch {i}')
+        print (f'2   The batch  data shape  is {batch_data.shape}, epoch {epoch}, batch {i}')
         #print (f'The batch  label  is {batch_labels.shape}, epoch {epoch}, batch {i}')
         
         i+=1  
         
         #print (f'The prediction type  is {prediction.dtype}')
         
-        #print (f'The batch_labels shape  is {batch_labels.shape}')
+        print (f'3    The batch_labels shape  is {batch_labels.shape}')
         
 
         loss_val = Crossloss(prediction, batch_labels)
