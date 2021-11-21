@@ -113,7 +113,7 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
 
         Hint: Make sure TCN.predict_all returns log-probabilities, not logits.
 
-        Hint: Store the distribution of the first character as a parameter of the 
+        ***Hint: Store the distribution of the first character as a parameter of the 
         model torch.nn.Parameter
 
         Hint: Try to keep your model manageable and small. The master solution trains
@@ -169,7 +169,7 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
             total_dilation *= 2
             c = l
         self.network = torch.nn.Sequential(*L)
-        self.classifier = torch.nn.Conv1d(c, 28, 1, padding=0)
+        self.classifier = torch.nn.Conv1d(c, 28, 1)
         
 
     #--------------------------TCN FORWARD()
@@ -193,10 +193,18 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         #print ("In FORWARD()")
         #print("-----------------------------------------------------------------")
         
-        #print(f'Nov 19, shape of x is {x.shape}')
+        print(f'Nov 19, shape of x is {x.shape}')
 
-        self.prob = x[:, :, 0]
+        self.prob = torch.rand(x.shape[0], x.shape[1], 1)
+        self.prob = torch.nn.Parameter(self.prob)
 
+        print (f"The NEW logit is NEW NEW --- {self.prob.shape}")
+        
+        x = torch.cat((x,self.prob),dim=2)
+
+        print(f'Nov 21, the NEW shape of x is {x.shape}')
+
+        
         #print(f'                     the self.prob shape is {self.prob.shape}')
         output = self.network(x)
         
