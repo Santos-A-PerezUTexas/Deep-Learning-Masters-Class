@@ -34,7 +34,9 @@ def control(aim_point, current_vel):
     #Steering and relative aim point use different units. Use the aim point 
     #and a tuned scaling factor to select the amount of normalized steering.
     
-    action.steer = aim_point[0]  
+    steer_dir = aim_point[0]
+
+    action.steer = steer_dir  
     action.brake = False
     action.nitro = True
     action.acceleration = 1
@@ -49,7 +51,7 @@ def control(aim_point, current_vel):
       action.acceleration = 0
       #print ("LOOK BEHIND YOU")
 
-    if abs(aim_point[0])<.2:
+    if abs(steer_dir)<.2:
       action.nitro = True         #NITROOOOOOOO
       #print("NITRO")
 
@@ -57,31 +59,42 @@ def control(aim_point, current_vel):
      # action.acceleration = 100
 
     #print (current_vel)
-    if abs(aim_point[0])<=.5:
+    if abs(steer_dir)<=.5:
       action.drift = False
     
     #comment 
     
     direction_steer = np.sign(aim_point[0])
 
-    if abs(aim_point[0])>.9:
-      action.steer = (abs(aim_point[0])*direction_steer)
+    
+
+    #print (aim_point[0])
+
+    if steer_dir > 1:
+      steer_dir = 1
+
+    if steer_dir < -1:
+      steer_dir = -1
+    
+
+    if abs(steer_dir)>.9:
+      action.steer = (abs(steer_dir)*direction_steer)
       action.acceleration = 0
       action.acceleration = False
       #action.nitro = False
 
-    if (abs(aim_point[0])>.45) and (abs(aim_point[0])<=.7):
+    if (abs(steer_dir)>.45) and (abs(aim_point[0])<=.7):
       action.drift = True
       action.acceleration = 0.1  #.1
 
-    if (abs(aim_point[0])>.7):
+    if (abs(steer_dir)>.7):
       #print (f'SLIGHT tight curve ahead, speed is {current_vel}, steering at {aim_point[0]}, acceleration {action.acceleration}, brake {action.brake}')
       action.drift = True
       action.acceleration = 0.00
       #action.nitro = False 
       
    
-    if (abs(aim_point[0])>.7) and current_vel > 15:
+    if (abs(steer_dir)>.7) and current_vel > 15:
       action.brake = True 
       action.nitro = False
       #print (f'tight curve ahead, speed is {current_vel}, steering at {aim_point[0]}, acceleration {action.acceleration}, brake {action.brake}')
@@ -90,27 +103,7 @@ def control(aim_point, current_vel):
       action.brake = True
       #action.nitro = False
 
-    """
-    Your code here
-    https://piazza.com/class/ksjhagmd59d6sg?cid=358
-
-    Hint: Skid if the steering angle is too large.
-    Hint: Target a constant velocity.
     
-    Hint: Steering and relative aim point use different units. Use the aim point and a tuned scaling factor
-    to select the amount of normalized steering.
-    
-    Hint: Make sure that your controller is able to complete all levels before proceeding to the next part of 
-          the homework because you will use your controller to build the training set for your planner.
-          
-    Hint: Use action.acceleration (0..1) to change the velocity. Try targeting a target_velocity (e.g. 20).
-    Hint: Use action.brake to True/False to brake (optionally)
-
-    Hint: Use action.steer to turn the kart towards the aim_point, clip the steer angle to -1..1
-    Hint: You may want to use action.drift=True for wide turns (it will turn faster)
-
-    """
-
     return action
 
 
