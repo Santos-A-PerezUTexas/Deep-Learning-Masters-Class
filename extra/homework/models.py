@@ -196,13 +196,13 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         #print(f'Nov 19, shape of x is {x.shape}')
 
         self.param = torch.rand(x.shape[0], x.shape[1], 1)
-        #
+        
 
-        #print (f"The NEW logit is NEW NEW --- {self.param.shape}")
+       # print (f"The SHAPE OF PARAM --- {self.param.shape}")
         
         x = torch.cat((x,self.param),dim=2)
 
-        #print(f'Nov 21, the NEW shape of x is {x.shape}')
+        #print(f'Nov 21, the NEW shape of x is {x.shape}')   #([32, 28, 1])
 
         
         #print(f'                     the self.param shape is {self.param.shape}')

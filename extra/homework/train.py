@@ -41,13 +41,13 @@ def train(args):
       model.train()
       
       print (f'Epoch {epoch}, loss is {loss_val}')
-      print (f'The prediction shape  is {prediction_shape}, epoch {epoch}') #([32, 28, 250])
-      print (f'The batch  data shape  is {data_shape}, epoch {epoch}') #[32, 28, 249])
-      print (f'The batch  label shape  is {labels_shape}, epoch {epoch}') #([32, 250])
+      #print (f'The prediction shape  is {prediction_shape}, epoch {epoch}') #([32, 28, 250])
+      #print (f'The batch  data shape  is {data_shape}, epoch {epoch}') #[32, 28, 249])
+      #print (f'The batch  label shape  is {labels_shape}, epoch {epoch}') #([32, 250])
 
-      print (f'Last two batch  labels {some_labels}')
-      print (f'Last data input is {some_data}')
-      print (f'Last two predictions {some_predictions}')
+      #print (f'Last two batch  labels {some_labels}')
+      #print (f'Last data input is {some_data}')
+      #print (f'Last two predictions {some_predictions}')
       
       
       
