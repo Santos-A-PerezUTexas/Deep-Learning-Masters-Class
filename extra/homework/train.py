@@ -46,8 +46,9 @@ def train(args):
       print (f'The batch  label shape  is {labels_shape}, epoch {epoch}') #([32, 250])
 
       print (f'Last two batch  labels {some_labels}')
-      print (f'Last two predictions {some_predictions}')
       print (f'Last data input is {some_data}')
+      print (f'Last two predictions {some_predictions}')
+      
       
       
       for batch in train_data:
