@@ -46,7 +46,7 @@ def train(args):
       print (f'The batch  label shape  is {labels_shape}, epoch {epoch}') #([32, 250])
 
       print (f'Last two batch  labels {some_labels}')
-      print (f'Last predictions {some_predictions}')
+      print (f'Last two predictions {some_predictions}')
       print (f'Last data input is {some_data}')
       
       
@@ -70,13 +70,16 @@ def train(args):
         #print (f'The prediction type  is {prediction.dtype}')        
         #print (f'3    The batch_labels shape  is {batch_labels.shape}')
         
-        labels_shape =  batch_labels.shape
-        data_shape = batch_data.shape
-        prediction_shape = prediction.shape
       
-        some_labels = batch_labels[0, 248:249]
-        some_data = batch_data[0, :, 248:248]
-        some_predictions = prediction[0, :, 248:249]
+        labels_shape =  batch_labels.shape    #([32, 250])
+        data_shape = batch_data.shape         #[32, 28, 249])
+        prediction_shape = prediction.shape   #([32, 28, 250])
+      
+
+
+        some_labels = batch_labels[0, 248:250]
+        some_data = batch_data[0, :, 248:249]
+        some_predictions = prediction[0, :, 248:250]
 
 
         loss_val = Crossloss(prediction, batch_labels)
