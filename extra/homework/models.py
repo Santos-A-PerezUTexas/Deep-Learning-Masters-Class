@@ -195,7 +195,7 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         
         #print(f'Nov 19, shape of x is {x.shape}')
 
-        self.param = torch.rand(x.shape[0], x.shape[1], 1)
+        self.param = torch.nn.Parameter(torch.rand(x.shape[0], x.shape[1], 1))
         
 
        # print (f"The SHAPE OF PARAM --- {self.param.shape}")
