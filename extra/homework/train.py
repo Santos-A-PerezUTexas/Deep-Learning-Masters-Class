@@ -21,18 +21,28 @@ def train(args):
 
     train_data = load_data('data/train.txt',  transform=one_hot)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, weight_decay=1e-5)
+    
+    
     Crossloss = torch.nn.CrossEntropyLoss()
-    MSEloss = torch.nn.MSELoss(reduction='none')
+    MSEloss = torch.nn.MSELoss(reduction='none')  #NOT USING
     loss_val = 0
     
+
+    
+    labels_shape =  0
+    data_shape = 0
+    prediction_shape = 0
+
     for epoch in range(args.num_epoch):
 
       model.train()
       
       print (f'Epoch {epoch}, loss is {loss_val}')
+      print (f'The prediction shape  is {prediction_shape}, epoch {epoch}') #([32, 28, 250])
+      print (f'The batch  data shape  is {data_shape}, epoch {epoch}') #[32, 28, 249])
+      print (f'The batch  label shape  is {labels_shape}, epoch {epoch}') #([32, 250])
 
-      i= 0
-
+      
       for batch in train_data:
 
         #batch is torch.Size([32, 28, 250])
@@ -49,17 +59,18 @@ def train(args):
 
 
         prediction = model(batch_data)  #[:, 0, :] 
-       
-        print (f'1   The prediction shape  is {prediction.shape}, epoch {epoch}, batch {i}')
-        print (f'2   The batch  data shape  is {batch_data.shape}, epoch {epoch}, batch {i}')
-        #print (f'The batch  label  is {batch_labels.shape}, epoch {epoch}, batch {i}')
         
-        i+=1  
+        #print (f'The prediction type  is {prediction.dtype}')        
+        #print (f'3    The batch_labels shape  is {batch_labels.shape}')
         
-        #print (f'The prediction type  is {prediction.dtype}')
-        
-        print (f'3    The batch_labels shape  is {batch_labels.shape}')
-        
+        labels_shape =  batch_labels.shape
+        data_shape = batch_data.shape
+        prediction_shape = prediction.shape
+      
+        some_labels = batch_labels[0, 248:249]
+        some_data = batch_data[0, :, 248:248]
+        some_predictions = prediction[0, :, 248:249]
+
 
         loss_val = Crossloss(prediction, batch_labels)
         #loss_val = MSEloss(prediction, batch_labels).mean()

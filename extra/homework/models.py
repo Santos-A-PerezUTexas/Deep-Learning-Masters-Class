@@ -193,19 +193,19 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         #print ("In FORWARD()")
         #print("-----------------------------------------------------------------")
         
-        print(f'Nov 19, shape of x is {x.shape}')
+        #print(f'Nov 19, shape of x is {x.shape}')
 
-        self.prab = torch.rand(x.shape[0], x.shape[1], 1)
-        #self.prab = torch.nn.Parameter(self.prab)
+        self.param = torch.rand(x.shape[0], x.shape[1], 1)
+        #
 
-        print (f"The NEW logit is NEW NEW --- {self.prab.shape}")
+        #print (f"The NEW logit is NEW NEW --- {self.param.shape}")
         
-        x = torch.cat((x,self.prab),dim=2)
+        x = torch.cat((x,self.param),dim=2)
 
-        print(f'Nov 21, the NEW shape of x is {x.shape}')
+        #print(f'Nov 21, the NEW shape of x is {x.shape}')
 
         
-        #print(f'                     the self.prob shape is {self.prob.shape}')
+        #print(f'                     the self.param shape is {self.param.shape}')
         output = self.network(x)
         
         #print(f'Nov 19, shape of first output is {output.shape}')
