@@ -118,15 +118,15 @@ class PyTux:
             print ("Inside FOR loop line 118")
             state.update()  
             print ("Updated state")
-            track.update()  #rollout calls this method and exits (Nov 23, 2021)
+            #track.update()  #rollout calls this method and exits (Nov 23, 2021)
             print ("Did updates")
             kart = state.players[0].kart
-
-            if np.isclose(kart.overall_distance / track.length, 1.0, atol=2e-3):
-                print ("inside loop at 125")
-                if verbose:
-                    print("Finished at t=%d" % t)
-                break
+            print (track.length)
+            #if np.isclose(kart.overall_distance / track.length, 1.0, atol=2e-3):
+             #   print ("inside loop at 125")
+              #  if verbose:
+               #     print("Finished at t=%d" % t)
+                #break
 
             proj = np.array(state.players[0].camera.projection).T
             view = np.array(state.players[0].camera.view).T
