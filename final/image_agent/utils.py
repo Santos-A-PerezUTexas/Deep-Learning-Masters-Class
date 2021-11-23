@@ -78,7 +78,7 @@ class PyTux:
                               data
         :return: Number of steps played
         """
-        print ("CALLING ROLLOUT")
+        print ("INSIDE OF ROLLOUT")
         print (f'self.k is {self.k}')
         if self.k is not None and self.k.config.track == track:
             self.k.restart()
@@ -86,15 +86,22 @@ class PyTux:
             print ("Line 85")
         else:
             print ("Line 87")
+            print (f'self.k is {self.k}')
             if self.k is not None:
+                print ("Stopping")
                 self.k.stop()
                 del self.k
             config = pystk.RaceConfig(num_kart=1, laps=1, track=track)
             config.players[0].controller = pystk.PlayerConfig.Controller.PLAYER_CONTROL
-
+            
+            print ("Line 96")
             self.k = pystk.Race(config)
+            print (f'self.k is {self.k}')
+            print ("Line 98")
             self.k.start()
+            print ("Line 99")
             self.k.step()
+            print ("END OF WHILE LOOP IN ROLLOUT")
 
         state = pystk.WorldState()
         track = pystk.Track()
@@ -208,6 +215,7 @@ if __name__ == '__main__':
 
 
         while n < args.steps_per_track:
+            print ("In while loop calling rollout()")
             steps, how_far = pytux.rollout(track, noisy_control, max_frames=1000, verbose=args.verbose, data_callback=collect)
             print(steps, how_far)
             # Add noise after the first round
