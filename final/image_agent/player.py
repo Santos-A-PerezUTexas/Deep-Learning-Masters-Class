@@ -66,8 +66,11 @@ class Team:
                  rescue:       bool (optional. no clue where you will end up though.)
                  steer:        float -1..1 steering angle
         """
+        #he agent also sees an image for each player, from which it can infer where the puck is and
+        # where the other teams players are.
+
         # TODO: Change me. I'm just cruising straight  Changed
-        #print (player_state[0]['camera']['aspect'])
+        print (player_state[0]['kart']['location'])
         #[dict(acceleration=1, steer=-.2, nitro=True, fire=True)] * self.num_players
 
         return [dict(acceleration=1, steer=-.2, nitro=True, fire=True), dict(acceleration=1, steer=.2, fire=True) ]
