@@ -20,10 +20,15 @@ class Team:
                  'kiki', 'konqi', 'nolok', 'pidgin', 'puffy', 'sara_the_racer', 'sara_the_wizard', 'suzanne', 'tux',
                  'wilber', 'xue'. Default: 'tux'
         """
+
+
         """
            TODO: feel free to edit or delete any of the code below
         """
         self.team, self.num_players = team, num_players
+
+        print (['tux']* num_players)
+
         return ['tux'] * num_players
 
     def act(self, player_state, player_image):
@@ -61,5 +66,7 @@ class Team:
                  rescue:       bool (optional. no clue where you will end up though.)
                  steer:        float -1..1 steering angle
         """
-        # TODO: Change me. I'm just cruising straight
-        return [dict(acceleration=1, steer=0)] * self.num_players
+        # TODO: Change me. I'm just cruising straight  Changed
+        print (player_state[0]['camera']['aspect'])
+
+        return [dict(acceleration=1, steer=-.1)] * self.num_players
