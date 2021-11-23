@@ -78,10 +78,14 @@ class PyTux:
                               data
         :return: Number of steps played
         """
+        print ("CALLING ROLLOUT")
+        print (f'self.k is {self.k}')
         if self.k is not None and self.k.config.track == track:
             self.k.restart()
             self.k.step()
+            print ("Line 85")
         else:
+            print ("Line 87")
             if self.k is not None:
                 self.k.stop()
                 del self.k
@@ -101,6 +105,7 @@ class PyTux:
             import matplotlib.pyplot as plt
             fig, ax = plt.subplots(1, 1)
 
+        print ("UPDATING STATE LINE 105 utils.py")
         for t in range(max_frames):
 
             state.update()
@@ -181,6 +186,8 @@ if __name__ == '__main__':
         makedirs(args.output)
     except OSError:
         pass
+    print ("In main line 198, creating pytux object")
+    print (args.track)
     pytux = PyTux()
     for track in args.track:
         n, images_per_track = 0, args.n_images // len(args.track)
