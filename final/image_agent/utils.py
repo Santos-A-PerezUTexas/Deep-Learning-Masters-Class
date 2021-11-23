@@ -93,6 +93,7 @@ class PyTux:
                 del self.k
             config = pystk.RaceConfig(num_kart=1, laps=1, track=track)
             config.players[0].controller = pystk.PlayerConfig.Controller.PLAYER_CONTROL
+            config.mode = config.RaceMode.SOCCER
             
             print ("Line 96")
             self.k = pystk.Race(config)
