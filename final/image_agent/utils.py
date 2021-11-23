@@ -94,7 +94,7 @@ class PyTux:
             config = pystk.RaceConfig(num_kart=1, laps=1, track=track)
             config.players[0].controller = pystk.PlayerConfig.Controller.PLAYER_CONTROL
             config.mode = config.RaceMode.SOCCER
-            
+
             print ("Line 96")
             self.k = pystk.Race(config)
             print (f'self.k is {self.k}')
@@ -113,15 +113,17 @@ class PyTux:
             import matplotlib.pyplot as plt
             fig, ax = plt.subplots(1, 1)
 
-        print ("UPDATING STATE LINE 105 utils.py")
+        print ("UPDATING STATE LINE 116 utils.py")
         for t in range(max_frames):
-
-            state.update()
-            track.update()
-
+            print ("Inside FOR loop line 118")
+            state.update()  
+            print ("Updated state")
+            track.update()  #rollout calls this method and exits (Nov 23, 2021)
+            print ("Did updates")
             kart = state.players[0].kart
 
             if np.isclose(kart.overall_distance / track.length, 1.0, atol=2e-3):
+                print ("inside loop at 125")
                 if verbose:
                     print("Finished at t=%d" % t)
                 break
@@ -132,6 +134,7 @@ class PyTux:
             aim_point_world = self._point_on_track(kart.distance_down_track+TRACK_OFFSET, track)
             aim_point_image = self._to_image(aim_point_world, proj, view)
             if data_callback is not None:
+                print ("Calling data_callback, or collect(), to generate data, L135")
                 data_callback(t, np.array(self.k.render_data[0].image), aim_point_image)
 
             if planner:
@@ -139,6 +142,7 @@ class PyTux:
                 aim_point_image = planner(TF.to_tensor(image)[None]).squeeze(0).cpu().detach().numpy()
 
             current_vel = np.linalg.norm(kart.velocity)
+            print ("CALLING THE CONTROLLER LINE 142")
             action = controller(aim_point_image, current_vel)
 
             if current_vel < 1.0 and t - last_rescue > RESCUE_TIMEOUT:
@@ -206,6 +210,7 @@ if __name__ == '__main__':
             from PIL import Image
             from os import path
             global n
+            print ("Collect() has been called to generate images")
             id = n if n < images_per_track else np.random.randint(0, n + 1)
             if id < images_per_track:
                 fn = path.join(args.output, track + '_%05d' % id)
