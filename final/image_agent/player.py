@@ -67,6 +67,6 @@ class Team:
                  steer:        float -1..1 steering angle
         """
         # TODO: Change me. I'm just cruising straight  Changed
-        print (player_state[0]['camera']['aspect'])
+        #print (player_state[0]['camera']['aspect'])
 
-        return [dict(acceleration=1, steer=-.1)] * self.num_players
+        return [dict(acceleration=1, steer=-.2, nitro=True, fire=True)] * self.num_players
