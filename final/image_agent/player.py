@@ -29,7 +29,7 @@ class Team:
 
         print (['tux']* num_players)
 
-        return ['tux'] * num_players
+        return ['tux', 'kiki'] 
 
     def act(self, player_state, player_image):
         """
@@ -68,5 +68,6 @@ class Team:
         """
         # TODO: Change me. I'm just cruising straight  Changed
         #print (player_state[0]['camera']['aspect'])
+        #[dict(acceleration=1, steer=-.2, nitro=True, fire=True)] * self.num_players
 
-        return [dict(acceleration=1, steer=-.2, nitro=True, fire=True)] * self.num_players
+        return [dict(acceleration=1, steer=-.2, nitro=True, fire=True), dict(acceleration=1, steer=.2, fire=True) ]
