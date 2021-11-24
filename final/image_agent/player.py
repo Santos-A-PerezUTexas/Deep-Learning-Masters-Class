@@ -70,7 +70,7 @@ class Team:
         # where the other teams players are.
 
         # TODO: Change me. I'm just cruising straight  Changed
-        print (player_state[0]['kart']['location'])
+        #print (player_state[0]['kart']['location'])
         #[dict(acceleration=1, steer=-.2, nitro=True, fire=True)] * self.num_players
 
-        return [dict(acceleration=1, steer=-.2, nitro=True, fire=True), dict(acceleration=1, steer=.2, fire=True) ]
+        return [dict(acceleration=1, steer=1, nitro=True, fire=True), dict(acceleration=1, steer=0, fire=True) ]
