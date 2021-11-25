@@ -90,7 +90,7 @@ class VideoRecorder(BaseRecorder):
             print(soccer_state['ball']['location'])
             #INSERT CODE HERE TO SAVE IMAGES AND BALL LOCATION TO CVS FILE
             #INSERT CODE HERE TO SAVE IMAGES AND BALL LOCATION TO CVS FILE
-            #convert coordinates!!!!!!!!!!!!!!!!!!!!!!! 
+            #convert coordinates!!!!!!!!!!!!!!!!!!!!!! 
             self.collect(team1_images[0], soccer_state['ball']['location'])
             print (len(team1_images[0])) #300
             print (len(team1_images[0][0])) #400
