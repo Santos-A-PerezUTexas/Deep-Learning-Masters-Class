@@ -87,11 +87,17 @@ class VideoRecorder(BaseRecorder):
     def __call__(self, team1_state, team2_state, soccer_state, actions, team1_images=None, team2_images=None):
         if team1_images and team2_images:
             print ("Putting Images in Grid, ball location:")
-            print(soccer_state['ball']['location'])
+            print(tuple(soccer_state['ball']['location']))
             #INSERT CODE HERE TO SAVE IMAGES AND BALL LOCATION TO CVS FILE
             #INSERT CODE HERE TO SAVE IMAGES AND BALL LOCATION TO CVS FILE
             #convert coordinates!!!!!!!!!!!!!!!!!!!!!! 
-            self.collect(team1_images[0], soccer_state['ball']['location'])
+            x=soccer_state['ball']['location'][0]
+            y=soccer_state['ball']['location'][2]
+            xy = np.random.rand(2)
+            xy[0] = x
+            xy[1] = y
+            #self.collect(team1_images[0], soccer_state['ball']['location'])
+            self.collect(team1_images[0], xy)
             print (len(team1_images[0])) #300
             print (len(team1_images[0][0])) #400
             print (len(team1_images[0][0][0])) #3
@@ -117,7 +123,7 @@ class VideoRecorder(BaseRecorder):
         id = n #if n < images_per_track else np.random.randint(0, n + 1)
         fn = path.join('/content/cs342/final/data/', 'ice_hockey' + '_%05d' % id)
         Image.fromarray(im).save(fn + '.png')
-        with open(fn + '.csv', 'w') as f:
+        with open(fn + '.csv', 'w') as f: 
           f.write('%0.1f,%0.1f' % tuple(pt))
         n += 1
 
