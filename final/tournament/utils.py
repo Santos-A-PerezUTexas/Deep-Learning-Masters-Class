@@ -124,6 +124,7 @@ class VideoRecorder(BaseRecorder):
         id = file_no #if n < images_per_track else np.random.randint(0, n + 1)
         fn = path.join('/content/cs342/final/data/', 'ice_hockey' + '_%05d' % id)
         Image.fromarray(im).save(fn + '.png')
+        #print(f'image size is {Image.fromarray(im).size} ')
         with open(fn + '.csv', 'w') as f: 
           f.write('%0.1f,%0.1f' % tuple(pt))
         file_no += 1
