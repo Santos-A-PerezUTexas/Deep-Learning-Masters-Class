@@ -89,7 +89,14 @@ class VideoRecorder(BaseRecorder):
             print ("Putting Images in Grid, ball location:")
             print(soccer_state['ball']['location'])
             #INSERT CODE HERE TO SAVE IMAGES AND BALL LOCATION TO CVS FILE
-            #INSERT CODE HERE TO SAVE IMAGES AND BALL LOCATION TO CVS FILE 
+            #INSERT CODE HERE TO SAVE IMAGES AND BALL LOCATION TO CVS FILE
+            #convert coordinates!!!!!!!!!!!!!!!!!!!!!!! 
+            self.collect(team1_images[0], soccer_state['ball']['location'])
+            print (len(team1_images[0])) #300
+            print (len(team1_images[0][0])) #400
+            print (len(team1_images[0][0][0])) #3
+            
+            
             self._writer.append_data(np.array(video_grid(team1_images, team2_images,
                                                          'Utexas Cici Blue: %d' % soccer_state['score'][1],
                                                          'Utexas Santos Red: %d' % soccer_state['score'][0])))
@@ -101,6 +108,19 @@ class VideoRecorder(BaseRecorder):
     def __del__(self):
         if hasattr(self, '_writer'):
             self._writer.close()
+    
+    def collect(_, im, pt):
+        from PIL import Image
+        from os import path
+        n = 1 #global n
+        print ("Collect() has been called to generate images")
+        id = n #if n < images_per_track else np.random.randint(0, n + 1)
+        fn = path.join('/content/cs342/final/data/', 'ice_hockey' + '_%05d' % id)
+        Image.fromarray(im).save(fn + '.png')
+        with open(fn + '.csv', 'w') as f:
+          f.write('%0.1f,%0.1f' % tuple(pt))
+        n += 1
+
 
 
 class StateRecorder(BaseRecorder):
