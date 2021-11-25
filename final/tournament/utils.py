@@ -91,8 +91,8 @@ class VideoRecorder(BaseRecorder):
             #INSERT CODE HERE TO SAVE IMAGES AND BALL LOCATION TO CVS FILE
             #INSERT CODE HERE TO SAVE IMAGES AND BALL LOCATION TO CVS FILE 
             self._writer.append_data(np.array(video_grid(team1_images, team2_images,
-                                                         'Utexas Blue: %d' % soccer_state['score'][1],
-                                                         'Utexas Red: %d' % soccer_state['score'][0])))
+                                                         'Utexas Cici Blue: %d' % soccer_state['score'][1],
+                                                         'Utexas Santos Red: %d' % soccer_state['score'][0])))
         else:
             print ("            No  Images, calling map_image, ball location:")
             print(soccer_state['ball']['location'])
