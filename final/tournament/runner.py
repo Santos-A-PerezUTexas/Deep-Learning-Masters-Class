@@ -299,7 +299,7 @@ if __name__ == '__main__':
 
         # Start the match
         #match = Match(use_graphics=team1.agent_type == 'image' or team2.agent_type == 'image')
-        #Hack to generate AI v AI match and images...
+        #Hack to generate AI v AI match and 3D images...
         match = Match(use_graphics=True)
 
         try:
