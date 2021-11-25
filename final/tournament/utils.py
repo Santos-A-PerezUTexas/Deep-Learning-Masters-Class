@@ -86,10 +86,16 @@ class VideoRecorder(BaseRecorder):
 
     def __call__(self, team1_state, team2_state, soccer_state, actions, team1_images=None, team2_images=None):
         if team1_images and team2_images:
+            print ("Putting Images in Grid, ball location:")
+            print(soccer_state['ball']['location'])
+            #INSERT CODE HERE TO SAVE IMAGES AND BALL LOCATION TO CVS FILE
+            #INSERT CODE HERE TO SAVE IMAGES AND BALL LOCATION TO CVS FILE 
             self._writer.append_data(np.array(video_grid(team1_images, team2_images,
-                                                         'Blue: %d' % soccer_state['score'][1],
-                                                         'Red: %d' % soccer_state['score'][0])))
+                                                         'Utexas Blue: %d' % soccer_state['score'][1],
+                                                         'Utexas Red: %d' % soccer_state['score'][0])))
         else:
+            print ("            No  Images, calling map_image, ball location:")
+            print(soccer_state['ball']['location'])
             self._writer.append_data(np.array(map_image(team1_state, team2_state, soccer_state)))
 
     def __del__(self):
