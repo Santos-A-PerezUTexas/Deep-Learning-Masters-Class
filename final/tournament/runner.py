@@ -298,7 +298,10 @@ if __name__ == '__main__':
             recorder = recorder & utils.StateRecorder(args.record_state)
 
         # Start the match
-        match = Match(use_graphics=team1.agent_type == 'image' or team2.agent_type == 'image')
+        #match = Match(use_graphics=team1.agent_type == 'image' or team2.agent_type == 'image')
+        #Hack to generate AI v AI match and images...
+        match = Match(use_graphics=True)
+
         try:
             result = match.run(team1, team2, args.num_players, args.num_frames, max_score=args.max_score,
                                initial_ball_location=args.ball_location, initial_ball_velocity=args.ball_velocity,
