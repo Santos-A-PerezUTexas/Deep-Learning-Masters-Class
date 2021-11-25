@@ -89,9 +89,8 @@ class VideoRecorder(BaseRecorder):
         if team1_images and team2_images:
             print ("Putting Images in Grid, ball location:")
             print(tuple(soccer_state['ball']['location']))
-            #INSERT CODE HERE TO SAVE IMAGES AND BALL LOCATION TO CVS FILE
-            #INSERT CODE HERE TO SAVE IMAGES AND BALL LOCATION TO CVS FILE
-            #convert coordinates!!!!!!!!!!!!!!!!!!!!!! 
+           
+            #convert/normalize coordinates!!!!!!!!!!!!!!!!!!!!!! 
             x=soccer_state['ball']['location'][0]
             y=soccer_state['ball']['location'][2]
             xy = np.random.rand(2)
