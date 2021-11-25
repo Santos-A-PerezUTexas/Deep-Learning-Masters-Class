@@ -112,6 +112,8 @@ class StateRecorder(BaseRecorder):
         from pickle import dump
         data = dict(team1_state=team1_state, team2_state=team2_state, soccer_state=soccer_state, actions=actions)
         if self._record_images:
+            print ("...............Adding team images to the pickle..., below the soccerball location:")
+            print(soccer_state['ball']['location'])
             data['team1_images'] = team1_images
             data['team2_images'] = team2_images
         dump(dict(data), self._f)
