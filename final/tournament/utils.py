@@ -1,6 +1,7 @@
 import numpy as np
 from enum import IntEnum
 
+file_no = 1
 
 class Team(IntEnum):
     RED = 0
@@ -118,14 +119,15 @@ class VideoRecorder(BaseRecorder):
     def collect(_, im, pt):
         from PIL import Image
         from os import path
-        n = 1 #global n
+        #global n  #global n
+        global file_no 
         print ("Collect() has been called to generate images")
-        id = n #if n < images_per_track else np.random.randint(0, n + 1)
+        id = file_no #if n < images_per_track else np.random.randint(0, n + 1)
         fn = path.join('/content/cs342/final/data/', 'ice_hockey' + '_%05d' % id)
         Image.fromarray(im).save(fn + '.png')
         with open(fn + '.csv', 'w') as f: 
           f.write('%0.1f,%0.1f' % tuple(pt))
-        n += 1
+        file_no += 1
 
 
 
