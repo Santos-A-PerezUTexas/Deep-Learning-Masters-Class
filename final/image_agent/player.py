@@ -1,3 +1,5 @@
+import math 
+
 
 class Team:
     agent_type = 'image'
@@ -74,7 +76,7 @@ class Team:
         #[dict(acceleration=1, steer=-.2, nitro=True, fire=True)] * self.num_players
         print ("                   ENTERING ACT()                    ")
         print ("---------------------------ACT() BLOCK BEGIN---------------------")
-        print("\n 1........ACT()  player_state[0][kart][location]\n")
+        print("\n 1........ACT()  player_state[0][kart][location] FLOOR\n")
         print(player_state[0]['kart']['location'])
         print(f"\n    2.......ACT() player_state[0][kart][front] \n")
         print (player_state[0]['kart']['front'])   
