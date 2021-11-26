@@ -87,7 +87,7 @@ class VideoRecorder(BaseRecorder):
 
     def __call__(self, team1_state, team2_state, soccer_state, actions, team1_images=None, team2_images=None):
         if team1_images and team2_images:
-            print ("/n VideoRecorder() in utils.py ----- Putting Images in Grid, ball location: /n")
+            print ("\n VideoRecorder() in utils.py ----- Putting Images in Grid, ball location: \n")
             print(tuple(soccer_state['ball']['location']))
            
             #convert/normalize coordinates!!!!!!!!!!!!!!!!!!!!!! 
@@ -123,7 +123,7 @@ class VideoRecorder(BaseRecorder):
         from os import path
         #global n  #global n
         global file_no 
-        print ("/nCollect() has been called to generate images, hurray!/n")
+        print ("\n Collect() has been called to generate images, hurray! \n ")
         id = file_no #if n < images_per_track else np.random.randint(0, n + 1)
         fn = path.join('/content/cs342/final/data/', 'ice_hockey' + '_%05d' % id)
         Image.fromarray(im).save(fn + '.png')
@@ -143,7 +143,7 @@ class StateRecorder(BaseRecorder):
         from pickle import dump
         data = dict(team1_state=team1_state, team2_state=team2_state, soccer_state=soccer_state, actions=actions)
         if self._record_images:
-            print ("/n...............Adding team images to the pickle..., below the soccerball location:/n")
+            print ("\n...............Adding team images to the pickle..., below the soccerball location:\n")
             print(soccer_state['ball']['location'])
             data['team1_images'] = team1_images
             data['team2_images'] = team2_images
