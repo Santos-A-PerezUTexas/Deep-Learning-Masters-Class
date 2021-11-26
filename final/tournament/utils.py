@@ -102,8 +102,8 @@ class VideoRecorder(BaseRecorder):
             #print (len(team1_images[0][0])) #400
             #print (len(team1_images[0][0][0])) #3
             
-            x_kart = team1_state[0]['kart']['location'][0]
-            y_kart = team1_state[0]['kart']['location'][2]
+            x_kart = team2_state[0]['kart']['location'][0]
+            y_kart = team2_state[0]['kart']['location'][2]
             x=x_kart
             y=y_kart
 
