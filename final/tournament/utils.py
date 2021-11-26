@@ -98,14 +98,17 @@ class VideoRecorder(BaseRecorder):
             xy[1] = y
             #self.collect(team1_images[0], soccer_state['ball']['location'])
             self.collect(team1_images[0], xy)
-            print (len(team1_images[0])) #300
-            print (len(team1_images[0][0])) #400
-            print (len(team1_images[0][0][0])) #3
-            
+            #print (len(team1_images[0])) #300
+            #print (len(team1_images[0][0])) #400
+            #print (len(team1_images[0][0][0])) #3
             
             self._writer.append_data(np.array(video_grid(team1_images, team2_images,
-                                                         'Utexas Cici Blue: %d' % soccer_state['score'][1],
-                                                         'Utexas Santos Red: %d' % soccer_state['score'][0])))
+                                                        'X Puck Location: %d' % x,
+                                                        'Y Puck Location: %d' % y)))
+        
+            #self._writer.append_data(np.array(video_grid(team1_images, team2_images,
+             #                                            'Utexas Cici Blue: %d' % soccer_state['score'][1],
+              #                                           'Utexas Santos Red: %d' % soccer_state['score'][0])))
         else:
             print ("            No  Images, calling map_image, ball location:")
             print(soccer_state['ball']['location'])
