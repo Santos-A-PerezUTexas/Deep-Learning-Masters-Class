@@ -73,14 +73,16 @@ class Team:
         #print (player_state[0]['kart']['location'])
         #[dict(acceleration=1, steer=-.2, nitro=True, fire=True)] * self.num_players
         print ("                   ENTERING ACT()                    ")
-        print(" 1........ACT()  player_state[0][kart][location]")
+        print ("---------------------------ACT() BLOCK BEGIN---------------------")
+        print("\n 1........ACT()  player_state[0][kart][location]\n")
         print(player_state[0]['kart']['location'])
-        print(f"    2.......ACT() player_state[0][kart][front] ")
+        print(f"\n    2.......ACT() player_state[0][kart][front] \n")
         print (player_state[0]['kart']['front'])   
-        print(f"      3......ACT() player_state[0][camera][projection]")
+        print(f"\n      3......ACT() player_state[0][camera][projection]\n")
         print (player_state[0]['camera']['projection'])
-        print(f"         4......ACT() player_state[0][camera][view]")
+        print(f"\n         4......ACT() player_state[0][camera][view]\n")
         print (player_state[0]['camera']['view'])
+        print ("---------------------------ACT() BLOCK END---------------------")
         
         
         return [dict(acceleration=1, steer=1, nitro=True, fire=True), dict(acceleration=1, steer=0, fire=True) ]
