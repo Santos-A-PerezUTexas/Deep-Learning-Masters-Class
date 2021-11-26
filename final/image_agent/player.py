@@ -72,5 +72,11 @@ class Team:
         # TODO: Change me. I'm just cruising straight  Changed
         #print (player_state[0]['kart']['location'])
         #[dict(acceleration=1, steer=-.2, nitro=True, fire=True)] * self.num_players
-
+        print ("                   ENTERING ACT()                    ")
+        print(f' 1........ACT()  player_state[0]['kart']['location']  {player_state[0]['kart']['location']}')
+        print(f'    2.......ACT() player_state[0]['kart']['front']   {player_state[0]['kart']['front'] }')
+        print(f'      3......ACT() player_state[0]['camera']['projection']    {player_state[0]['camera']['projection']}')
+        print(f'         4......ACT() player_state[0]['camera']['view']    {player_state[0]['camera']['view']}')
+        
+        
         return [dict(acceleration=1, steer=1, nitro=True, fire=True), dict(acceleration=1, steer=0, fire=True) ]
