@@ -108,7 +108,7 @@ class VideoRecorder(BaseRecorder):
             
             aim_point_image = self._to_image(xz, proj, view)  #normalize xz in range -1...1
             
-            print (f'the aim_point_image is {the aim_point_image}')
+            print (f'the aim_point_image is {aim_point_image}')
             
             self.collect(team1_images[0], aim_point_image)
             #self.collect(team1_images[0], xz)  #updated to above on 11/27/2021 to normalize xz in range -1...1
