@@ -7,7 +7,7 @@ from . import dense_transforms
 
 RESCUE_TIMEOUT = 30
 TRACK_OFFSET = 15
-DATASET_PATH = 'drive_data'
+DATASET_PATH = '/content/cs342/final/data'
 
 
 class SuperTuxDataset(Dataset):
