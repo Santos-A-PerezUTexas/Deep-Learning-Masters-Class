@@ -3,12 +3,13 @@ from enum import IntEnum
 
 file_no = 1
 
-class Team(IntEnum):
+class Team(IntEnum):   #Two methods, video_grid() and map_image() (as well as map_image()-->_to_coord(x) 
+    
     RED = 0
     BLUE = 1
 
 
-def video_grid(team1_images, team2_images, team1_state='', team2_state=''):
+def video_grid(team1_images, team2_images, team1_state='', team2_state=''):  #class Team
     from PIL import Image, ImageDraw
     grid = np.hstack((np.vstack(team1_images), np.vstack(team2_images)))
     grid = Image.fromarray(grid)
@@ -20,7 +21,7 @@ def video_grid(team1_images, team2_images, team1_state='', team2_state=''):
     return grid
 
 
-def map_image(team1_state, team2_state, soccer_state, resolution=512, extent=65, anti_alias=1):
+def map_image(team1_state, team2_state, soccer_state, resolution=512, extent=65, anti_alias=1):  #class Team
     BG_COLOR = (0xee, 0xee, 0xec)
     RED_COLOR = (0xa4, 0x00, 0x00)
     BLUE_COLOR = (0x20, 0x4a, 0x87)
@@ -28,9 +29,12 @@ def map_image(team1_state, team2_state, soccer_state, resolution=512, extent=65,
     from PIL import Image, ImageDraw
     r = Image.new('RGB', (resolution*anti_alias, resolution*anti_alias), BG_COLOR)
 
-    def _to_coord(x):
+    def _to_coord(x):                                                           #class Team-->def map_image()---->def _to_coord(x)
         return resolution * anti_alias * (x + extent) / (2 * extent)
 
+    
+    #--------------------------------------CLASS TEAM-->def map_image() BEGIN  -----------------------------------------------#
+    
     draw = ImageDraw.Draw(r)
     # Let's draw the goal line
     draw.line([(_to_coord(x), _to_coord(y)) for x, _, y in soccer_state['goal_line'][0]], width=5*anti_alias, fill=RED_COLOR)
@@ -92,12 +96,26 @@ class VideoRecorder(BaseRecorder):
            
             #convert/normalize coordinates!!!!!!!!!!!!!!!!!!!!!! 
             x=soccer_state['ball']['location'][0]
-            y=soccer_state['ball']['location'][2]
-            xy = np.random.rand(2)
-            xy[0] = x
-            xy[1] = y
+            z=soccer_state['ball']['location'][2]
+            xz = np.random.rand(2)
+            xz[0] = x
+            xz[1] = z
             #self.collect(team1_images[0], soccer_state['ball']['location'])
-            self.collect(team1_images[0], xy)
+            
+            
+            proj = np.array(team1_state[0]['camera']['projection']).T
+            view = np.array(team1_state[0]['camera']['view']).T
+            
+            aim_point_image = self._to_image(xz, proj, view)  #normalize xz in range -1...1
+            
+            print (f'the aim_point_image is {the aim_point_image}')
+            
+            self.collect(team1_images[0], aim_point_image)
+            #self.collect(team1_images[0], xz)  #updated to above on 11/27/2021 to normalize xz in range -1...1
+            
+            
+            
+            
             #print (len(team1_images[0])) #300
             #print (len(team1_images[0][0])) #400
             #print (len(team1_images[0][0][0])) #3
@@ -106,6 +124,8 @@ class VideoRecorder(BaseRecorder):
             y_kart = team2_state[0]['kart']['location'][2]
             x=x_kart
             y=y_kart
+            
+           
 
             self._writer.append_data(np.array(video_grid(team1_images, team2_images,
                                                         'X Kart Location: %d' % x,
@@ -122,6 +142,10 @@ class VideoRecorder(BaseRecorder):
     def __del__(self):
         if hasattr(self, '_writer'):
             self._writer.close()
+    
+    def _to_image(x, proj, view):
+        p = proj @ view @ np.array(list(x) + [1])
+        return np.clip(np.array([p[0] / p[-1], -p[1] / p[-1]]), -1, 1)
     
     def collect(_, im, pt):
         from PIL import Image
