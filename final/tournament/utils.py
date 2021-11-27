@@ -105,17 +105,18 @@ class VideoRecorder(BaseRecorder):
             
             proj = np.array(team1_state[0]['camera']['projection']).T
             view = np.array(team1_state[0]['camera']['view']).T
-            
+            print (f'the view is {view.shape}, the proj is {proj.shape}')
+                        
             aim_point_image = self._to_image(xz, proj, view)  #normalize xz in range -1...1
-            
             print (f'the aim_point_image is {aim_point_image}')
+            
+            #NOTE:  TEST FOR THE CASE WHERE PUCK IS OFF FRAME!  WHAT LABEL???
+            #NOTE:  TEST FOR THE CASE WHERE PUCK IS OFF FRAME!  WHAT LABEL???
+            #NOTE:  TEST FOR THE CASE WHERE PUCK IS OFF FRAME!  WHAT LABEL???
+            #NOTE:  TEST FOR THE CASE WHERE PUCK IS OFF FRAME!  WHAT LABEL???
             
             self.collect(team1_images[0], aim_point_image)
             #self.collect(team1_images[0], xz)  #updated to above on 11/27/2021 to normalize xz in range -1...1
-            
-            
-            
-            
             #print (len(team1_images[0])) #300
             #print (len(team1_images[0][0])) #400
             #print (len(team1_images[0][0][0])) #3
@@ -124,27 +125,25 @@ class VideoRecorder(BaseRecorder):
             y_kart = team2_state[0]['kart']['location'][2]
             x=x_kart
             y=y_kart
-            
-           
-
+        
             self._writer.append_data(np.array(video_grid(team1_images, team2_images,
                                                         'X Kart Location: %d' % x,
                                                         'Y Kart Location: %d' % y)))
-        
             #self._writer.append_data(np.array(video_grid(team1_images, team2_images,
-             #                                            'Utexas Cici Blue: %d' % soccer_state['score'][1],
-              #                                           'Utexas Santos Red: %d' % soccer_state['score'][0])))
-        else:
-            print ("            No  Images, calling map_image, ball location:")
-            print(soccer_state['ball']['location'])
+             #                                            'Utexas Blue: %d' % soccer_state['score'][1],
+              #                                           'Utexas Red: %d' % soccer_state['score'][0])))
+        else:            
             self._writer.append_data(np.array(map_image(team1_state, team2_state, soccer_state)))
 
     def __del__(self):
         if hasattr(self, '_writer'):
             self._writer.close()
     
-    def _to_image(x, proj, view):
-        p = proj @ view @ np.array(list(x) + [1])
+    def _to_image(self, x, proj, view):
+        op = np.array(list(x) + [1] + [1])
+        print (f' the shapes proj, view, op:  {proj.shape}, {view.shape}, {op.shape}')
+        p = proj @ view @ op
+        print (f'......................and p is {p}')
         return np.clip(np.array([p[0] / p[-1], -p[1] / p[-1]]), -1, 1)
     
     def collect(_, im, pt):
