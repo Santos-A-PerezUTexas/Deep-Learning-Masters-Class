@@ -96,10 +96,12 @@ class VideoRecorder(BaseRecorder):
            
             #convert/normalize coordinates!!!!!!!!!!!!!!!!!!!!!! 
             x=soccer_state['ball']['location'][0]
+            y = soccer_state['ball']['location'][1] 
             z=soccer_state['ball']['location'][2]
-            xz = np.random.rand(2)
-            xz[0] = x
-            xz[1] = z
+            xyz = np.random.rand(3)
+            xyz[0] = x
+            xyz[0] = y
+            xyz[2] = z
             #self.collect(team1_images[0], soccer_state['ball']['location'])
             
             
@@ -107,7 +109,7 @@ class VideoRecorder(BaseRecorder):
             view = np.array(team1_state[0]['camera']['view']).T
             print (f'the view is {view.shape}, the proj is {proj.shape}')
                         
-            aim_point_image = self._to_image(xz, proj, view)  #normalize xz in range -1...1
+            aim_point_image = self._to_image(xyz, proj, view)  #normalize xz in range -1...1
             print (f'the aim_point_image is {aim_point_image}')
             
             #NOTE:  TEST FOR THE CASE WHERE PUCK IS OFF FRAME!  WHAT LABEL???
@@ -140,7 +142,7 @@ class VideoRecorder(BaseRecorder):
             self._writer.close()
     
     def _to_image(self, x, proj, view):
-        op = np.array(list(x) + [1] + [1])
+        op = np.array(list(x) + [1])
         print (f' the shapes proj, view, op:  {proj.shape}, {view.shape}, {op.shape}')
         p = proj @ view @ op
         print (f'......................and p is {p}')
