@@ -34,7 +34,7 @@ class Team:
         """
         self.team, self.num_players = team, num_players
 
-        print (['tux']* num_players)
+        #print (['tux']* num_players)
 
         return ['tux', 'kiki'] 
 
@@ -85,7 +85,7 @@ class Team:
         
                 
         print ("---------------------------ACT() BLOCK BEGIN---------------------")
-        print(planner.forward(player_image))
+        #print(planner.forward(player_image))
         #print(planner)
 
 
