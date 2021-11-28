@@ -91,6 +91,10 @@ class VideoRecorder(BaseRecorder):
 
     def __call__(self, team1_state, team2_state, soccer_state, actions, team1_images=None, team2_images=None):
         if team1_images and team2_images:
+            
+            out_of_frame = False
+            is_behind = False
+
             print ("\n VideoRecorder() in utils.py ----- Putting Images in Grid, ball location: \n")
             print(tuple(soccer_state['ball']['location']))
            
@@ -109,7 +113,7 @@ class VideoRecorder(BaseRecorder):
             view = np.array(team1_state[0]['camera']['view']).T
             print (f'the view is {view.shape}, the proj is {proj.shape}')
                         
-            aim_point_image = self._to_image(xyz, proj, view)  #normalize xz in range -1...1
+            aim_point_image, out_of_frame = self._to_image(xyz, proj, view)  #normalize xz in range -1...1
             print (f'the aim_point_image is {aim_point_image}')
             
             #NOTE:  TEST FOR THE CASE WHERE PUCK IS OFF FRAME!  WHAT LABEL???
@@ -165,7 +169,7 @@ class VideoRecorder(BaseRecorder):
         print (f'......................and p, result of matrix matmul, (in _to_image) is {p}')
         #[-27.2785505  -18.0448781  -82.57477566 -81.49220145]
 
-        return clipped_aim_point
+        return clipped_aim_point, out_of_frame
     
     def collect(_, im, pt):
         from PIL import Image
