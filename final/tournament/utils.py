@@ -152,10 +152,10 @@ class VideoRecorder(BaseRecorder):
         y = -p[1] / p[-1]
 
         if abs(x) > 1:
-          print ("NOTE----------------->We got a coordinate > 1!!!")
+          print ("NOTE-------------------------------------------------------->We got a coordinate > 1!!!")
           out_of_frame = True 
           print (x)
-          quit()
+          #quit()
           
 
         aimpoint = np.array([x, y])
