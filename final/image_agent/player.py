@@ -1,4 +1,5 @@
 import math 
+from .planner import Planner, load_model 
 
 
 class Team:
@@ -11,6 +12,10 @@ class Team:
         """
         self.team = None
         self.num_players = None
+
+        #Nov 28, 2021:
+
+        self.planner = load_model()
 
     def new_match(self, team: int, num_players: int) -> list:
         """
