@@ -83,11 +83,10 @@ class Team:
         
         planner = load_model()
         
-        #print(planner.forward(player_image))
-
-        
+                
         print ("---------------------------ACT() BLOCK BEGIN---------------------")
-        print(planner)
+        print(planner.forward(player_image))
+        #print(planner)
 
 
         #print ("\n Predicted coordinates are: \n -------------\n", x)
