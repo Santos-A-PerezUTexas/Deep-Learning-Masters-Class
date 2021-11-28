@@ -205,10 +205,12 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         #https://piazza.com/class/ksjhagmd59d6sg?cid=1229
         #Then concatenate it with the output of TCN.
         #Then concatenate it with the output of TCN.
+        #The P( next | “”) is the parameter you defined, and will learn from the data later.
+
 
        
         
-      #x = torch.cat((x,self.param),dim=2)
+        #x = torch.cat((x,self.param),dim=2)
 
         #print(f'Nov 21, the NEW shape of x is {x.shape}')   #([32, 28, 1])
 
@@ -221,7 +223,7 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         #print(f'Nov 28, shape of CLASSIFIER output is {output.shape}')
         #print (f"The SHAPE OF PARAM --- {self.param.shape}")
         
-        output = torch.cat((output,self.param),dim=2)
+        output = torch.cat((self.param, output),dim=2)
         
         #print(f'Nov 19, shape of CLASSIFICATION is {output.shape}')
         #print ("END FORWARD()")
