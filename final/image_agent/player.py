@@ -75,7 +75,7 @@ class Team:
         """
         #he agent also sees an image for each player, from which it can infer where the puck is and
         # where the other teams players are.
-
+        #comment Nov 28, 2021 6:40pm
         # TODO: Change me. I'm just cruising straight  Changed
         #print (player_state[0]['kart']['location'])
         #[dict(acceleration=1, steer=-.2, nitro=True, fire=True)] * self.num_players
