@@ -199,6 +199,12 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
 
         self.param = torch.nn.Parameter(torch.rand(x.shape[0], x.shape[1], 1))
         
+        #this EXPLAINS IT ALL!!!!!!!!!!!!!!:  NOV 28 2021
+        #https://piazza.com/class/ksjhagmd59d6sg?cid=1229
+        #https://piazza.com/class/ksjhagmd59d6sg?cid=1229
+
+
+
 
        # print (f"The SHAPE OF PARAM --- {self.param.shape}")
         
