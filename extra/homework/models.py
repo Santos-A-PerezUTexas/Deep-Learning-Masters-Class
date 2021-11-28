@@ -198,27 +198,30 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         #print(f'Nov 19, shape of x is {x.shape}')
 
         self.param = torch.nn.Parameter(torch.rand(x.shape[0], x.shape[1], 1))
-        
+        first_char_distribution = torch.nn.Parameter(torch.rand(x.shape[0], x.shape[1], 1))
+
         #this EXPLAINS IT ALL!!!!!!!!!!!!!!:  NOV 28 2021
         #https://piazza.com/class/ksjhagmd59d6sg?cid=1229
         #https://piazza.com/class/ksjhagmd59d6sg?cid=1229
+        #Then concatenate it with the output of TCN.
+        #Then concatenate it with the output of TCN.
 
-
-
-
-       # print (f"The SHAPE OF PARAM --- {self.param.shape}")
+       
         
-        x = torch.cat((x,self.param),dim=2)
+      #x = torch.cat((x,self.param),dim=2)
 
         #print(f'Nov 21, the NEW shape of x is {x.shape}')   #([32, 28, 1])
 
         
         #print(f'                     the self.param shape is {self.param.shape}')
         output = self.network(x)
-        
-        #print(f'Nov 19, shape of first output is {output.shape}')
 
-        output = self.classifier(output) 
+        output = self.classifier(output)
+
+        #print(f'Nov 28, shape of CLASSIFIER output is {output.shape}')
+        #print (f"The SHAPE OF PARAM --- {self.param.shape}")
+        
+        output = torch.cat((output,self.param),dim=2)
         
         #print(f'Nov 19, shape of CLASSIFICATION is {output.shape}')
         #print ("END FORWARD()")
