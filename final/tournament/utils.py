@@ -139,7 +139,7 @@ class VideoRecorder(BaseRecorder):
 
     def __del__(self):
         if hasattr(self, '_writer'):
-            self._writer.close()
+            self._writer.close() #
     
     def _to_image(self, x, proj, view):
         op = np.array(list(x) + [1])
