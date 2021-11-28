@@ -67,7 +67,7 @@ class Team:
         :return: dict  The action to be taken as a dictionary. For example `dict(acceleration=1, steer=0.25)`.
                  acceleration: float 0..1
                  brake:        bool Brake will reverse if you do not accelerate (good for backing up)
-                 drift:        bool (optional. unless you want to turn faster)
+                 drift:        bool (optional, unless you want to turn faster)
                  fire:         bool (optional. you can hit the puck with a projectile)
                  nitro:        bool (optional)
                  rescue:       bool (optional. no clue where you will end up though.)
