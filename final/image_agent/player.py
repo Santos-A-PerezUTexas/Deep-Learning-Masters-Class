@@ -15,7 +15,7 @@ class Team:
 
         #Nov 28, 2021:
 
-        self.planner = load_model()
+        
 
     def new_match(self, team: int, num_players: int) -> list:
         """
@@ -79,16 +79,27 @@ class Team:
         # TODO: Change me. I'm just cruising straight  Changed
         #print (player_state[0]['kart']['location'])
         #[dict(acceleration=1, steer=-.2, nitro=True, fire=True)] * self.num_players
-        print ("                   ENTERING ACT()                    ")
+        print ("                   ENTERING ACT()    NOV 28 2021                  ")
+        
+        planner = load_model()
+        
+        #print(planner.forward(player_image))
+
+        
         print ("---------------------------ACT() BLOCK BEGIN---------------------")
-        print("\n 1........ACT()  player_state[0][kart][location] FLOOR\n")
-        print(player_state[0]['kart']['location'])
-        print(f"\n    2.......ACT() player_state[0][kart][front] \n")
-        print (player_state[0]['kart']['front'])   
-        print(f"\n      3......ACT() player_state[0][camera][projection]\n")
-        print (player_state[0]['camera']['projection'])
-        print(f"\n         4......ACT() player_state[0][camera][view]\n")
-        print (player_state[0]['camera']['view'])
+        print(planner)
+
+
+        #print ("\n Predicted coordinates are: \n -------------\n", x)
+        
+        #print("\n 1........ACT()  player_state[0][kart][location] FLOOR\n")
+        #print(player_state[0]['kart']['location'])
+        #print(f"\n    2.......ACT() player_state[0][kart][front] \n")
+        #print (player_state[0]['kart']['front'])   
+        #print(f"\n      3......ACT() player_state[0][camera][projection]\n")
+        #print (player_state[0]['camera']['projection'])
+        #print(f"\n         4......ACT() player_state[0][camera][view]\n")
+        #print (player_state[0]['camera']['view'])
         print ("---------------------------ACT() BLOCK END---------------------")
         
         
