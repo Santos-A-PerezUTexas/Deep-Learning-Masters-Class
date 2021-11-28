@@ -145,8 +145,18 @@ class VideoRecorder(BaseRecorder):
         op = np.array(list(x) + [1])
         print (f' the shapes proj, view, op:  {proj.shape}, {view.shape}, {op.shape}')
         p = proj @ view @ op
-        print (f'......................and p is {p}')
-        return np.clip(np.array([p[0] / p[-1], -p[1] / p[-1]]), -1, 1)
+
+        x = p[0] / p[-1]   #p is [float, float, float, float]
+        y = -p[1] / p[-1]
+
+        aimpoint = np.array([x, y])
+
+        clipped_aim_point = np.clip(aimpoint, -1, 1) 
+        
+        print (f'......................and p, result of matrix matmul, (in _to_image) is {p}')
+        #[-27.2785505  -18.0448781  -82.57477566 -81.49220145]
+
+        return clipped_aim_point
     
     def collect(_, im, pt):
         from PIL import Image
