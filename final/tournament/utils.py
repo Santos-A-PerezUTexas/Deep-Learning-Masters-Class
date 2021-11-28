@@ -142,12 +142,21 @@ class VideoRecorder(BaseRecorder):
             self._writer.close() #
     
     def _to_image(self, x, proj, view):
+
+        out_of_frame = False
         op = np.array(list(x) + [1])
         print (f' the shapes proj, view, op:  {proj.shape}, {view.shape}, {op.shape}')
         p = proj @ view @ op
 
         x = p[0] / p[-1]   #p is [float, float, float, float]
         y = -p[1] / p[-1]
+
+        if abs(x) > 1:
+          print ("NOTE----------------->We got a coordinate > 1!!!")
+          out_of_frame = True 
+          print (x)
+          quit()
+          
 
         aimpoint = np.array([x, y])
 
