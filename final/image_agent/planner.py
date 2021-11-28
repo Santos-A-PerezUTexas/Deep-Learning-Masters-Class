@@ -52,5 +52,5 @@ def load_model():
     from torch import load
     from os import path
     r = Planner()
-    r.load_state_dict(load(path.join(path.dirname(path.abspath(__file__)), 'planner.th'), map_location='cpu'))
+    r.load_state_dict(load(path.join(path.dirname(path.abspath(__file__)), '/content/cs342/final/image_agent/planner.th'), map_location='cpu'))
     return r

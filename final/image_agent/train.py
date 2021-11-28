@@ -37,6 +37,8 @@ def train(args):
 
             pred = model(img)
             loss_val = loss(pred, label)
+            #print ("\n Predicted point is .....", pred[0])
+            #print ("Actual point is: ", label[0])
 
             if train_logger is not None:
                 train_logger.add_scalar('loss', loss_val, global_step)
