@@ -95,8 +95,8 @@ class VideoRecorder(BaseRecorder):
             out_of_frame = False
             is_behind = False
 
-            print ("\n VideoRecorder() in utils.py ----- Putting Images in Grid, ball location: \n")
-            print(tuple(soccer_state['ball']['location']))
+            #print ("\n VideoRecorder() in utils.py ----- Putting Images in Grid, ball location: \n")
+            #print(tuple(soccer_state['ball']['location']))
            
             #convert/normalize coordinates!!!!!!!!!!!!!!!!!!!!!! 
             x=soccer_state['ball']['location'][0]
@@ -104,17 +104,17 @@ class VideoRecorder(BaseRecorder):
             z=soccer_state['ball']['location'][2]
             xyz = np.random.rand(3)
             xyz[0] = x
-            xyz[0] = y
+            xyz[1] = y
             xyz[2] = z
             #self.collect(team1_images[0], soccer_state['ball']['location'])
             
             
             proj = np.array(team1_state[0]['camera']['projection']).T
             view = np.array(team1_state[0]['camera']['view']).T
-            print (f'the view is {view.shape}, the proj is {proj.shape}')
+            #print (f'the view is {view.shape}, the proj is {proj.shape}')
                         
             aim_point_image, out_of_frame = self._to_image(xyz, proj, view)  #normalize xz in range -1...1
-            print (f'the aim_point_image is {aim_point_image}')
+            #print (f'the aim_point_image is {aim_point_image}')
             
             #NOTE:  TEST FOR THE CASE WHERE PUCK IS OFF FRAME!  WHAT LABEL???
             #NOTE:  TEST FOR THE CASE WHERE PUCK IS OFF FRAME!  WHAT LABEL???
@@ -149,11 +149,13 @@ class VideoRecorder(BaseRecorder):
 
         out_of_frame = False
         op = np.array(list(x) + [1])
-        print (f' the shapes proj, view, op:  {proj.shape}, {view.shape}, {op.shape}')
+        #print (f' the shapes proj, view, op:  {proj.shape}, {view.shape}, {op.shape}')
         p = proj @ view @ op
 
         x = p[0] / p[-1]   #p is [float, float, float, float]
         y = -p[1] / p[-1]
+
+        print(f'          NOV 28:   x is {x}, y is {y}, p[-1] is {p[-1]}')
 
         if abs(x) > 1:
           print ("NOTE-------------------------------------------------------->We got a coordinate > 1!!!")
@@ -166,7 +168,7 @@ class VideoRecorder(BaseRecorder):
 
         clipped_aim_point = np.clip(aimpoint, -1, 1) 
         
-        print (f'......................and p, result of matrix matmul, (in _to_image) is {p}')
+        #print (f'......................and p, result of matrix matmul, (in _to_image) is {p}')
         #[-27.2785505  -18.0448781  -82.57477566 -81.49220145]
 
         return clipped_aim_point, out_of_frame
