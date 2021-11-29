@@ -3,7 +3,7 @@ import numpy as np
 from collections import namedtuple
 
 TRACK_NAME = 'icy_soccer_field'
-MAX_FRAMES = 1000
+MAX_FRAMES = 2000
 TIMEOUT_SLACK = 2   # seconds
 TIMEOUT_STEP = 0.1  # seconds
 file_no = 1
