@@ -40,7 +40,7 @@ class Team:
 
         #print (['tux']* num_players)
 
-        return ['tux', 'kiki']
+        return ['tux', 'tux']
 
     def front_flag(self, puck_loc, threshold=2.0):
         #puck_loc => puck_loc -- model output
