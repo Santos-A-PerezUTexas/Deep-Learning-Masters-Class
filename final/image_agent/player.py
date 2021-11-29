@@ -170,7 +170,7 @@ class Team:
           output1 = turn_right
 
         if x2 > 0:
-          print ("\n Player 2 turning right
+          print ("\n Player 2 turning right")
           output2=turn_right
 
 
