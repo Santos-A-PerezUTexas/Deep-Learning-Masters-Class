@@ -135,8 +135,8 @@ class Team:
         is_behind_1 = False
         is_behind_2 = False
         
-        is_behind_1 = np.sign(y1.detach().numpy()) and abs(y1)>1
-        is_behind_2 = np.sign(y2.detach().numpy()) and abs(y2)>1
+        is_behind_1 = np.sign(y1.detach().numpy()) and abs(y1)>=1
+        is_behind_2 = np.sign(y2.detach().numpy()) and abs(y2)>=1
 
         
         forward_drive =  dict(acceleration=1, steer=0, brake = False)
@@ -154,9 +154,11 @@ class Team:
 
         if is_behind_1:
           output1 =  backward_aimpoint_1
+          print ("                          PUCK IS BEHIND<-------------------------")
           
         if is_behind_2:
           output2 =  backward_aimpoint_2
+          print ("                          PUCK IS BEHIND<-------------------------")
           
 
          
