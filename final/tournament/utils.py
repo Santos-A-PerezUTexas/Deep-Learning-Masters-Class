@@ -155,7 +155,7 @@ class VideoRecorder(BaseRecorder):
         x = p[0] / p[-1]   #p is [float, float, float, float]
         y = -p[1] / p[-1]
 
-        print(f'          NOV 28:   x is {x}, y is {y}, p[-1] is {p[-1]}')
+        #print(f'          NOV 28:   x is {x}, y is {y}, p[-1] is {p[-1]}')
 
         if abs(x) > 1:
           print ("NOTE-------------------------------------------------------->We got a coordinate > 1!!!")
@@ -198,8 +198,8 @@ class StateRecorder(BaseRecorder):
         from pickle import dump
         data = dict(team1_state=team1_state, team2_state=team2_state, soccer_state=soccer_state, actions=actions)
         if self._record_images:
-            print ("\n...............Adding team images to the pickle..., below the soccerball location:\n")
-            print(soccer_state['ball']['location'])
+            #print ("\n...............Adding team images to the pickle..., below the soccerball location:\n")
+            #print(soccer_state['ball']['location'])
             data['team1_images'] = team1_images
             data['team2_images'] = team2_images
         dump(dict(data), self._f)
