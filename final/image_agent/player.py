@@ -174,10 +174,10 @@ class Team:
           output2=turn_right
 
 
-        print ("\n Player 1 Velocity is:  ", player_state[0]['kart']['veolcity'])
+        print ("\n Player 1 Velocity is:  ", player_state[0]['kart']['velocity'])
         print ("\n Player 1 Location is:  ", player_state[0]['kart']['location'])
         
-        print ("\n Player 2 Velocity is:  ", player_state[1]['kart']['veolcity'])
+        print ("\n Player 2 Velocity is:  ", player_state[1]['kart']['velocity'])
         print ("\n Player 2 Location is:  ", player_state[1]['kart']['location'])
 
         print (msg)
