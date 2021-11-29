@@ -95,15 +95,16 @@ class Team:
         print ("LOADED MODULE")
         #aim_point_image = self.P(TF.to_tensor(player_image)[None]).squeeze(0).cpu().detach().numpy()
         
-        aim_point_image = self.Planner(TF.to_tensor(player_image[0])[None]).squeeze(0)
+        aim_point_image_Player1 = self.Planner(TF.to_tensor(player_image[0])[None]).squeeze(0)
+        aim_point_image_Player2 = self.Planner(TF.to_tensor(player_image[1])[None]).squeeze(0)
 
         #aim_point_image = aim_point_image.detach().cpu().numpy()  
  
         print ("---------------------------ACT() BLOCK BEGIN---------------------")
         #print(planner.forward(player_image))
         #print(planner)
-        print ("\n these are the aim point coords for the ball: \n",  aim_point_image)
-        print ("\n Front flag is--->", self.front_flag(aim_point_image) )
+        print ("\n these are the aim point coords for the ball: \n",  aim_point_image_Player1)
+        print ("\n Front flag is--->", self.front_flag(aim_point_image_Player1) )
 
         #print ("\n Predicted coordinates are: \n -------------\n", x)
         
@@ -118,14 +119,45 @@ class Team:
         print ("---------------------------ACT() BLOCK END---------------------")
         
 
-        forward =  dict(acceleration=1, steer=0, brake = False)
-        backward = dict(acceleration=0, steer=0, brake = True)
+        #these are the coords ONLY for player 1's view
+        #these are the coords ONLY for player 1's view
+        #these are the coords ONLY for player 1's view
+        
+        x1 =aim_point_image_Player1[0]     
+        y1 = aim_point_image_Player1[1]     
+
+        
+        x2 = aim_point_image_Player2[0]     
+        y2 = aim_point_image_Player2[1]     
+
+        
+        is_behind_1 = False
+        is_behind_2 = False
+        
+        is_behind_1 = np.sign(y1) and abs(y1)>1
+        is_behind_2 = np.sign(y2) and abs(y2)>1
+
+        
+        forward_drive =  dict(acceleration=1, steer=0, brake = False)
+        backward_drive = dict(acceleration=0, steer=0, brake = True)
         turn_left = dict(acceleration=1, steer=-1, brake = False)
         turn_right =dict(acceleration=1, steer=1, brake = False)
    
-        forward_aimpoint = forward =  dict(acceleration=1, steer=0, brake = False)
+        forward_aimpoint_1 = dict(acceleration=1, steer=x1, brake = False)
+        backward_aimpoint_1 = dict(acceleration=0, steer=x1, brake = True)
+        forward_aimpoint_2 = dict(acceleration=1, steer=x2, brake = False)
+        backward_aimpoint_2 = dict(acceleration=0, steer=x2, brake = True)
+      
+        output1 = forward_aimpoint_1
+        output2 = forward_aimpoint_2
 
-        output1 = dict(acceleration=1, steer=1, nitro=True, fire=True)
-        output2 = dict(acceleration=1, steer=0, fire=True)
+        if is_behind_1:
+          output1 =  backward_aimpoint_1
+          
+        if is_behind_2:
+          output2 =  backward_aimpoint_2
+          
 
+         
+        
         return [output1, output2]
