@@ -39,7 +39,13 @@ class Team:
 
         #print (['tux']* num_players)
 
-        return ['tux', 'kiki'] 
+        return ['tux', 'kiki']
+
+    def front_flag(self, puck_loc, threshold=2.0):
+        #puck_loc => puck_loc -- model output
+
+        x=puck_loc[0]
+        return (x>(200-threshold)) and (x<(200+threshold))
 
     def act(self, player_state, player_image):
         """
@@ -90,12 +96,14 @@ class Team:
         #aim_point_image = self.P(TF.to_tensor(player_image)[None]).squeeze(0).cpu().detach().numpy()
         
         aim_point_image = self.Planner(TF.to_tensor(player_image[0])[None]).squeeze(0)
+
         #aim_point_image = aim_point_image.detach().cpu().numpy()  
  
         print ("---------------------------ACT() BLOCK BEGIN---------------------")
         #print(planner.forward(player_image))
         #print(planner)
-
+        print ("\n these are the aim point coords for the ball: \n",  aim_point_image)
+        print ("\n Front flag is--->", self.front_flag(aim_point_image) )
 
         #print ("\n Predicted coordinates are: \n -------------\n", x)
         
@@ -109,5 +117,15 @@ class Team:
         #print (player_state[0]['camera']['view'])
         print ("---------------------------ACT() BLOCK END---------------------")
         
-        
-        return [dict(acceleration=1, steer=1, nitro=True, fire=True), dict(acceleration=1, steer=0, fire=True) ]
+
+        forward =  dict(acceleration=1, steer=0, brake = False)
+        backward = dict(acceleration=0, steer=0, brake = True)
+        turn_left = dict(acceleration=1, steer=-1, brake = False)
+        turn_right =dict(acceleration=1, steer=1, brake = False)
+   
+        forward_aimpoint = forward =  dict(acceleration=1, steer=0, brake = False)
+
+        output1 = dict(acceleration=1, steer=1, nitro=True, fire=True)
+        output2 = dict(acceleration=1, steer=0, fire=True)
+
+        return [output1, output2]
