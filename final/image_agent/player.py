@@ -13,6 +13,8 @@ class Team:
         """
         self.team = None
         self.num_players = None
+        self.Planner = load_model()
+        self.Planner.eval()
 
         #Nov 28, 2021:
 
@@ -82,12 +84,14 @@ class Team:
         #[dict(acceleration=1, steer=-.2, nitro=True, fire=True)] * self.num_players
         print ("                   ENTERING ACT()    NOV 28 2021                  ")
         
-        self.P = load_model().eval()
+       
         
         print ("LOADED MODULE")
         #aim_point_image = self.P(TF.to_tensor(player_image)[None]).squeeze(0).cpu().detach().numpy()
-        #aim_point_image = self.P(TF.to_tensor(player_image)).cpu().detach().numpy()  
-
+        
+        aim_point_image = self.Planner(TF.to_tensor(player_image[0])[None]).squeeze(0)
+        #aim_point_image = aim_point_image.detach().cpu().numpy()  
+ 
         print ("---------------------------ACT() BLOCK BEGIN---------------------")
         #print(planner.forward(player_image))
         #print(planner)
