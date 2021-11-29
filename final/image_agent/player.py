@@ -1,6 +1,7 @@
 import math 
 from .planner import Planner, load_model
 import torchvision.transforms.functional as TF 
+import numpy as np
 
 
 class Team:
@@ -134,8 +135,8 @@ class Team:
         is_behind_1 = False
         is_behind_2 = False
         
-        is_behind_1 = np.sign(y1) and abs(y1)>1
-        is_behind_2 = np.sign(y2) and abs(y2)>1
+        is_behind_1 = np.sign(y1.detach().numpy()) and abs(y1)>1
+        is_behind_2 = np.sign(y2.detach().numpy()) and abs(y2)>1
 
         
         forward_drive =  dict(acceleration=1, steer=0, brake = False)
