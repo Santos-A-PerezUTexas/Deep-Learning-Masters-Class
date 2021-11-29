@@ -93,7 +93,7 @@ class Team:
         
        
         
-        print ("LOADED MODULE")
+        
         #aim_point_image = self.P(TF.to_tensor(player_image)[None]).squeeze(0).cpu().detach().numpy()
         
         aim_point_image_Player1 = self.Planner(TF.to_tensor(player_image[0])[None]).squeeze(0)
@@ -104,7 +104,7 @@ class Team:
         print ("---------------------------ACT() BLOCK BEGIN---------------------")
         #print(planner.forward(player_image))
         #print(planner)
-        print ("\n these are the aim point coords for the ball: \n",  aim_point_image_Player1)
+        print ("\n these are the aim point coords for the Player 1: \n",  aim_point_image_Player1)
         print ("\n Front flag is--->", self.front_flag(aim_point_image_Player1) )
 
         #print ("\n Predicted coordinates are: \n -------------\n", x)
@@ -135,8 +135,11 @@ class Team:
         is_behind_1 = False
         is_behind_2 = False
         
-        is_behind_1 = np.sign(y1.detach().numpy()) and abs(y1)>=1
-        is_behind_2 = np.sign(y2.detach().numpy()) and abs(y2)>=1
+        if y1 >= 1:
+          is_behind_1 = True
+
+        if y2 >= 1:
+          is_behind_2 = True
 
         
         forward_drive =  dict(acceleration=1, steer=0, brake = False)
@@ -149,17 +152,21 @@ class Team:
         forward_aimpoint_2 = dict(acceleration=1, steer=x2, brake = False)
         backward_aimpoint_2 = dict(acceleration=0, steer=x2, brake = True)
       
+        msg =  "                   PUCK IS IN FRONT <----------------------" 
+
         output1 = forward_aimpoint_1
         output2 = forward_aimpoint_2
 
         if is_behind_1:
           output1 =  backward_aimpoint_1
-          print ("                          PUCK IS BEHIND<-------------------------")
+          msg = "\n                          PUCK IS BEHIND<-------------------------\n"
           
         if is_behind_2:
           output2 =  backward_aimpoint_2
-          print ("                          PUCK IS BEHIND<-------------------------")
+          msg = "\n                          PUCK IS BEHIND<-------------------------\n"
           
+        
+        print (msg)
 
          
         
