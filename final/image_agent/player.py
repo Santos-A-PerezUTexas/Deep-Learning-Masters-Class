@@ -16,6 +16,8 @@ class Team:
         self.num_players = None
         self.Planner = load_model()
         self.Planner.eval()
+        self.frame = 1
+        self.forward_next = False
 
         #Nov 28, 2021:
 
@@ -173,12 +175,25 @@ class Team:
           print ("\n Player 2 turning right")
           output2=turn_right
 
+        if player_state[0]['kart']['velocity'][2] < 2 and self.frame > 10 and self.forward_next == False:
+          output1 = backward_drive
+          self.forward_next = True
+
+        if player_state[1]['kart']['velocity'][2] < 2 and self.frame > 10 and self.forward_next == False:
+          output2 = backward_drive
+          self.forward_next = True
+
+
 
         print ("\n Player 1 Velocity is:  ", player_state[0]['kart']['velocity'])
         print ("\n Player 1 Location is:  ", player_state[0]['kart']['location'])
         
         print ("\n Player 2 Velocity is:  ", player_state[1]['kart']['velocity'])
         print ("\n Player 2 Location is:  ", player_state[1]['kart']['location'])
+
+        print ("\n Frame Number--------*&*************> ", self.frame)
+
+        self.frame += 1
 
         print (msg)
         print ("*********x1 and x2 are:--->", x1, x2)
