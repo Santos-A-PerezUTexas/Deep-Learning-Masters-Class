@@ -166,9 +166,11 @@ class Team:
           msg = "\n                          PUCK IS BEHIND<-------------------------\n"
           
         if x1 > 0:
+          print ("\n Player 1 turning right")
           output1 = turn_right
 
         if x2 > 0:
+          print ("\n Player 2 turning right
           output2=turn_right
 
 
