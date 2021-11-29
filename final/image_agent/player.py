@@ -86,7 +86,7 @@ class Team:
         
         print ("LOADED MODULE")
         #aim_point_image = self.P(TF.to_tensor(player_image)[None]).squeeze(0).cpu().detach().numpy()
-        aim_point_image = self.P(TF.to_tensor(player_image)).cpu().detach().numpy()  
+        #aim_point_image = self.P(TF.to_tensor(player_image)).cpu().detach().numpy()  
 
         print ("---------------------------ACT() BLOCK BEGIN---------------------")
         #print(planner.forward(player_image))
