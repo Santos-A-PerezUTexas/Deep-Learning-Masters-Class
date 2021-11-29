@@ -35,8 +35,18 @@ def train(args):
         for img, label in train_data:
             img, label = img.to(device), label.to(device)
 
+            h, w = img.size()[2], img.size()[3]
+
+
             pred = model(img)
-            loss_val = loss(pred, label)
+            x,y = label.chunk(2, dim=1)
+
+            xy = torch.cat((x.clamp(min=0.0,max=w),    y.clamp(min=0.0,max=h)),  dim=1)
+            xy = xy.to(device)
+
+            loss_val = loss(pred, xy)
+            #loss_val = loss(pred, label)
+
             #print ("\n Predicted point is .....", pred[0])
             #print ("Actual point is: ", label[0])
 
