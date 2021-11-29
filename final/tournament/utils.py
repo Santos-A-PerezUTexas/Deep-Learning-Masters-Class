@@ -178,7 +178,7 @@ class VideoRecorder(BaseRecorder):
         from os import path
         #global n  #global n
         global file_no 
-        print ("\n Collect() has been called to generate images, hurray! \n ")
+        #print ("\n Collect() has been called to generate images \n ")
         id = file_no #if n < images_per_track else np.random.randint(0, n + 1)
         fn = path.join('/content/cs342/final/data/', 'ice_hockey' + '_%05d' % id)
         Image.fromarray(im).save(fn + '.png')
