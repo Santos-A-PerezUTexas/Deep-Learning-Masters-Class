@@ -117,7 +117,7 @@ class Team:
         #print (player_state[0]['camera']['projection'])
         #print(f"\n         4......ACT() player_state[0][camera][view]\n")
         #print (player_state[0]['camera']['view'])
-        print ("---------------------------ACT() BLOCK END---------------------")
+        
         
 
         #these are the coords ONLY for player 1's view
@@ -165,9 +165,16 @@ class Team:
           output2 =  backward_aimpoint_2
           msg = "\n                          PUCK IS BEHIND<-------------------------\n"
           
-        
+        if x1 > 0:
+          output1 = turn_right
+
+        if x2 > 0:
+          output2=turn_right
+
+
+
         print (msg)
         print ("*********x1 and x2 are:--->", x1, x2)
          
-        
+        print ("\n---------------------------ACT() BLOCK END---------------------\n")
         return [output1, output2]
