@@ -1,5 +1,6 @@
 import math 
-from .planner import Planner, load_model 
+from .planner import Planner, load_model
+import torchvision.transforms.functional as TF 
 
 
 class Team:
@@ -81,9 +82,12 @@ class Team:
         #[dict(acceleration=1, steer=-.2, nitro=True, fire=True)] * self.num_players
         print ("                   ENTERING ACT()    NOV 28 2021                  ")
         
-        planner = load_model()
+        self.P = load_model().eval()
         
-                
+        print ("LOADED MODULE")
+        #aim_point_image = self.P(TF.to_tensor(player_image)[None]).squeeze(0).cpu().detach().numpy()
+        aim_point_image = self.P(TF.to_tensor(player_image))  
+
         print ("---------------------------ACT() BLOCK BEGIN---------------------")
         #print(planner.forward(player_image))
         #print(planner)
