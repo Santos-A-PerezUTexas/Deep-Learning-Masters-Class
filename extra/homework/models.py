@@ -161,7 +161,7 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         print(f'------------->length of char set is {c}')
 
         L = []
-        total_dilation = 2 # starting dilation at 2, not 1?????
+        total_dilation = 1 # starting dilation at 2, not 1?????
         for l in layers:
             L.append(torch.nn.ConstantPad1d((2*total_dilation,0), 0))
             L.append(torch.nn.Conv1d(c, l, kernel_size=3, dilation=total_dilation))
