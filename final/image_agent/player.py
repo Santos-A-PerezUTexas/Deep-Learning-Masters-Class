@@ -167,7 +167,7 @@ class Team:
           
         
         print (msg)
-
+        print ("*********x1 and x2 are:--->", x1, x2)
          
         
         return [output1, output2]
