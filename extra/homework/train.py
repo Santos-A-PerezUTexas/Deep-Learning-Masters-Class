@@ -55,11 +55,11 @@ def train(args):
 
         #batch is torch.Size([32, 28, 250])
 
-        batch_data = batch[:,:,:-1]
+        batch_data = batch[:, :, :-1]   #remove last column
         #batch_labels = batch[:,:,1:].argmax(dim=1)
-        batch_labels = batch.argmax(dim=1)
         
-        
+        batch_labels = batch.argmax(dim=1)   
+             
         #batch data is one hot encoded, so this gives you the index where the one's are, e.g
         #the actual letter, but this label does not include the first column! so network
         #must learn to recreate the last column INDICES
