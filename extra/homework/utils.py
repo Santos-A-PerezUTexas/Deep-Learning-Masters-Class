@@ -78,11 +78,16 @@ class SpeechDataset(Dataset):
         #shape of self.data[:, s:e] is ([28, s-e])
         return self.data[:, s:e]   #how to randomize this?
 
+
+
+
 def load_data(dataset_path, num_workers=0, batch_size=32, **kwargs):
     dataset = SpeechDataset(dataset_path, **kwargs)
     print("load_data()------->LOADED DATASET SANTOS, this one below:")
     print(dataset_path)
     return DataLoader(dataset, num_workers=num_workers, batch_size=batch_size, shuffle=True, drop_last=True)
+
+
 
 if __name__ == "__main__":
     print ("Starting execution of utils.py")

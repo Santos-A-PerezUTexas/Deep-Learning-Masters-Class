@@ -10,9 +10,17 @@ def log_likelihood(model: LanguageModel,
                    some_text: str):
    
     text = utils.one_hot(some_text)
-    predict_all = model.predict_all(some_text)[:, 0:len(some_text)]
-    likelihoods = torch.mm(predict_all.t(), text)
-    return sum(likelihoods.diag()) 
+    size_of_string = len(some_text)
+    all_predictions = model.predict_all(some_text)
+    #print ("\n Size of all prediction is", all_predictions.shape)
+    all_predictions = all_predictions[:, 0:size_of_string]
+    #print ("\n New Size of all prediction is", all_predictions.shape)
+    
+    likelihoods = torch.mm(all_predictions.t(), text)   #multiply text one hot encoded by predictions
+
+    output = sum(likelihoods.diag()) 
+
+    return  output
 
 
 def sample_random(model: LanguageModel, 
