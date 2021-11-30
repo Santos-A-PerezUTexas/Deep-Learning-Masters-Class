@@ -10,17 +10,24 @@ def log_likelihood(model: LanguageModel,
                    some_text: str):
    
     text = utils.one_hot(some_text)
-    size_of_string = len(some_text)
+    
+
+    #how probable is the string some_text under this model?
+
     all_predictions = model.predict_all(some_text)
-    print ("\n Size of all_predictions is", all_predictions.shape) #([28, 7])
-    all_predictions = all_predictions[:, 0:size_of_string]
-    print ("\n New Size of all_predictions is", all_predictions.shape) #torch.Size([28, 6])
-    
-    likelihoods = torch.mm(all_predictions.t(), text)   #multiply text one hot encoded by predictions
-    
-    print ("\n Size of one hot encoded text is ", text.shape) #([28, 6]))
-    print ("\n  Size of TRANSPOSE all_predictions is", all_predictions.t().shape) #([6, 28])
-    print ("\n  Size of likelihoods  is",likelihoods.shape) #([6, 6])
+    #print ("\n Size of all_predictions is", all_predictions.shape) #([28, 7])
+    all_predictions = all_predictions[:, :-1]  #remove last character prediction 
+    #print ("\n New Size of all_predictions is", all_predictions.shape) #torch.Size([28, 6])
+        
+    likelihoods = all_predictions.t() @ text #multiply  one hot encoded text matrix by predictions matrix
+
+    #this obtains the likelihood of the specific character at a specidic position
+    #shape is len(some_text) x len(some_text) (e.g 6x6) 
+
+
+    #print ("\n Size of one hot encoded text is ", text.shape) #([28, 6]))
+    #print ("\n  Size of TRANSPOSE all_predictions is", all_predictions.t().shape) #([6, 28])
+    #print ("\n  Size of likelihoods  is",likelihoods.shape) #([6, 6])
     
     
 
