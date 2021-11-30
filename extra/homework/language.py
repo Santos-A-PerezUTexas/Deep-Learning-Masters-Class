@@ -12,13 +12,19 @@ def log_likelihood(model: LanguageModel,
     text = utils.one_hot(some_text)
     size_of_string = len(some_text)
     all_predictions = model.predict_all(some_text)
-    #print ("\n Size of all prediction is", all_predictions.shape)
+    print ("\n Size of all_predictions is", all_predictions.shape)
     all_predictions = all_predictions[:, 0:size_of_string]
-    #print ("\n New Size of all prediction is", all_predictions.shape)
+    print ("\n New Size of all_predictions is", all_predictions.shape)
     
     likelihoods = torch.mm(all_predictions.t(), text)   #multiply text one hot encoded by predictions
+    
+    print ("\n Size of one hot encoded text is ", text.shape)
+    print ("\n  Size of TRANSPOSE all_predictions is", all_predictions.t().shape)
+    
+    
 
-    output = sum(likelihoods.diag()) 
+
+    output = sum(likelihoods.diag()) #The log-likelihood is the sum of all individual likelihoods, not the average
 
     return  output
 
