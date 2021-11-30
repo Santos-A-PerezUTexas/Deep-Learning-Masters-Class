@@ -66,11 +66,15 @@ def train(args):
         #so that batch_label 32,249 contains the indices corresponding to the letter
 
 
-        prediction = model(batch_data)  #[:, 0, :] 
-        
+        prediction = model(batch_data)  #[32, 28, 249] input--->[32, 28, 250] prediction
+        #prediction = model(batch)
+
         #print (f'The prediction type  is {prediction.dtype}')        
         #print (f'3    The batch_labels shape  is {batch_labels.shape}')
         
+        #If we have Input: “abcd”
+        #then the output is: P( next | “”), P( next | “a”), P( next | “ab”), P( next | “abc”), P( next | “abcd”)
+        #The P( next | “”) is the parameter you defined, and will learn from the data later.
       
         labels_shape =  batch_labels.shape    #([32, 250])
         data_shape = batch_data.shape         #[32, 28, 249])
