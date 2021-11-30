@@ -197,7 +197,7 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         
         #print(f'Nov 19, shape of x is {x.shape}')
 
-        self.param = torch.nn.Parameter(torch.rand(x.shape[0], x.shape[1], 1))
+        #self.param = torch.nn.Parameter(torch.rand(x.shape[0], x.shape[1], 1))
         first_char_distribution = torch.nn.Parameter(torch.rand(x.shape[0], x.shape[1], 1))
 
         #this EXPLAINS IT ALL!!!!!!!!!!!!!!:  NOV 28 2021
@@ -223,7 +223,7 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         #print(f'Nov 28, shape of CLASSIFIER output is {output.shape}')
         #print (f"The SHAPE OF PARAM --- {self.param.shape}")
         
-        output = torch.cat((self.param, output),dim=2)
+        output = torch.cat((first_char_distribution, output),dim=2)
         
         #print(f'Nov 19, shape of CLASSIFICATION is {output.shape}')
         #print ("END FORWARD()")
