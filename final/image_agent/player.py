@@ -164,7 +164,7 @@ class Team:
         print("\n\n Player 1~~~~~~~~~~~ aimpoint predicted, aimpoint actual:", aim_point_image_Player1, 
                aim_point_image_actual_1)
 
-        use_actual_coords = True    #OMIT THIS DEC 1 2021
+        use_actual_coords = False    #OMIT THIS DEC 1 2021
 
         if use_actual_coords:
           x1 = aim_point_image_actual_1[0]     
@@ -194,13 +194,30 @@ class Team:
         print ("\n ^^^^^^^^^^^^^^^ VELOCITIES^^^^^^^^^^^^^^^^ \n")
         print (player_state[0]['kart']['velocity'])
         print (player_state[1]['kart']['velocity'])
-        
 
-        if player_state[0]['kart']['velocity'][2] > 1:
+        print ("\n ^^^^^^^^^^^^^^^ KART FRONT COORDS^^^^^^^^^^^^^^^^ \n")
+        print (player_state[0]['kart']['front'])
+        print (player_state[1]['kart']['front'])
+
+
+        print ("\n ^^^^^^^^^^^^^^^ KART COORDS^^^^^^^^^^^^^^^^ \n")
+
+        print (player_state[0]['kart']['location'])
+        print (player_state[1]['kart']['location'])
+
+        print ("\n ^^^^^^^^^^^^^^^ KART ROTATION^^^^^^^^^^^^^^^^ \n")
+
+        print (player_state[0]['kart']['rotation'])
+        print (player_state[1]['kart']['rotation'])
+
+        print ("\n ^^^^^^^^^^^^^^^ BALL  COORDS^^^^^^^^^^^^^^^^ \n"
+
+
+        if player_state[0]['kart']['velocity'][2] > 5:
           output1 = backward_aimpoint_1
 
 
-        if player_state[0]['kart']['velocity'][2] > 1:
+        if player_state[0]['kart']['velocity'][2] > 3:
           output2 = backward_aimpoint_2
 
          
