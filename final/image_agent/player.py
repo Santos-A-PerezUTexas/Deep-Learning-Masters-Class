@@ -24,9 +24,9 @@ class Team:
           self.Planner = load_model()
           self.Planner.eval()
 
-        #Nov 28, 2021:
 
-        
+
+
 
     def new_match(self, team: int, num_players: int) -> list:
         """
@@ -49,11 +49,18 @@ class Team:
 
         return ['tux', 'tux']
 
+
+
+
     def front_flag(self, puck_loc, threshold=2.0):
         #puck_loc => puck_loc -- model output
 
         x=puck_loc[0]
         return (x>(200-threshold)) and (x<(200+threshold))
+
+
+
+
 
     def act(self, player_state, player_image):
         """
