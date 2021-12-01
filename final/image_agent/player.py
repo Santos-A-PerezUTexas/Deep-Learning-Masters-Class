@@ -148,7 +148,25 @@ class Team:
         if y2 >= 1:
           is_behind_2 = True
 
-        
+        #ERASE BEGIN DEC 1, 2021-----------------------------------------
+
+        x=soccer_state['ball']['location'][0]
+        y = soccer_state['ball']['location'][1] 
+        z=soccer_state['ball']['location'][2]
+        xyz = np.random.rand(3)
+        xyz[0] = x
+        xyz[1] = y
+        xyz[2] = z
+        proj = np.array(player_state[0]['camera']['projection']).T
+        view = np.array(player_state[0]['camera']['view']).T
+        aim_point_image_actual_1 = self._to_image(xyz, proj, view) 
+
+
+        #ERASE END DEC 1, 2021-------------------------------------------
+
+
+
+
         forward_drive =  dict(acceleration=1, steer=0, brake = False)
         backward_drive = dict(acceleration=0, steer=0, brake = True)
         turn_left = dict(acceleration=1, steer=-1, brake = False)
