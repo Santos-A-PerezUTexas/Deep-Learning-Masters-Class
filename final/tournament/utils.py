@@ -157,14 +157,14 @@ class VideoRecorder(BaseRecorder):
             #print (len(team1_images[0][0])) #400
             #print (len(team1_images[0][0][0])) #3
             
-            x_kart = team2_state[0]['kart']['location'][0]
-            y_kart = team2_state[0]['kart']['location'][2]
-            x=x_kart
-            y=y_kart
+            #x_kart = team2_state[0]['kart']['location'][0]
+            #y_kart = team2_state[0]['kart']['location'][2]
+            #x=x_kart
+            #y=y_kart
         
             self._writer.append_data(np.array(video_grid(team1_images, team2_images,
-                                                        'X Kart Location: %d' % x,
-                                                        'Y Kart Location: %d' % y)))
+                                                        'X1 Ball  Location: %d' % aim_point_image[0],
+                                                        'Y1 Ball  Location: %d' % aim_point_image[1])))
             #self._writer.append_data(np.array(video_grid(team1_images, team2_images,
              #                                            'Utexas Blue: %d' % soccer_state['score'][1],
               #                                           'Utexas Red: %d' % soccer_state['score'][0])))
