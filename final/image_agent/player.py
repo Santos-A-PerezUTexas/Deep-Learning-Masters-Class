@@ -181,9 +181,9 @@ class Team:
         turn_left = dict(acceleration=1, steer=-1, brake = False)
         turn_right =dict(acceleration=1, steer=1, brake = False)
    
-        forward_aimpoint_1 = dict(acceleration=1, steer=x1, brake = False)
+        forward_aimpoint_1 = dict(acceleration=1, steer=x1, brake = False, drift=True)
         backward_aimpoint_1 = dict(acceleration=0, steer=x1, brake = True)
-        forward_aimpoint_2 = dict(acceleration=1, steer=x2, brake = False)
+        forward_aimpoint_2 = dict(acceleration=1, steer=x2, brake = False, drift=True)
         backward_aimpoint_2 = dict(acceleration=0, steer=x2, brake = True)
       
         msg =  "                   PUCK IS IN FRONT <----------------------" 
@@ -191,11 +191,16 @@ class Team:
         output1 = forward_aimpoint_1
         output2 = forward_aimpoint_2
 
-        if player_state[0]['kart']['velocity'][2] > 5:
+        print ("\n ^^^^^^^^^^^^^^^ VELOCITIES^^^^^^^^^^^^^^^^ \n")
+        print (player_state[0]['kart']['velocity'])
+        print (player_state[1]['kart']['velocity'])
+        
+
+        if player_state[0]['kart']['velocity'][2] > 1:
           output1 = backward_aimpoint_1
 
 
-        if player_state[0]['kart']['velocity'][2] > 5:
+        if player_state[0]['kart']['velocity'][2] > 1:
           output2 = backward_aimpoint_2
 
          
