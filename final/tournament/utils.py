@@ -126,8 +126,15 @@ class VideoRecorder(BaseRecorder):
             
             #heatmap = pystk.RenderData(team1_images[0]) 
               
+            if heatmap1:
+              heatmap1[0] = heatmap1[0] >> 24
+              heatmap1[1] = heatmap1[1] >> 24
+              #heatmap2 = heatmap2 >> 24
+              print ("\n==============heatmap shape is  ", heatmap1[0].shape)
+              print ("\n==============image shape is  ", team1_images[0].shape)
+              
 
-            self.collect(team1_images[0], aim_point_image)
+            self.collect(team1_images[0], heatmap1[0], aim_point_image)
             #self.collect(team1_images[0], xz)  #updated to above on 11/27/2021 to normalize xz in range -1...1
             #print (len(team1_images[0])) #300
             #print (len(team1_images[0][0])) #400
@@ -179,7 +186,7 @@ class VideoRecorder(BaseRecorder):
 
         return clipped_aim_point, out_of_frame
     
-    def collect(_, im, pt):
+    def collect(_, im, heatmap, pt):
         from PIL import Image
         from os import path
         #global n  #global n
@@ -188,6 +195,8 @@ class VideoRecorder(BaseRecorder):
         id = file_no #if n < images_per_track else np.random.randint(0, n + 1)
         fn = path.join('/content/cs342/final/data/', 'ice_hockey' + '_%05d' % id)
         Image.fromarray(im).save(fn + '.png')
+        Image.fromarray(heatmap).save(fn + '_heatmap.png')
+        
         #print(f'image size is {Image.fromarray(im).size} ')
         with open(fn + '.csv', 'w') as f: 
           f.write('%0.1f,%0.1f' % tuple(pt))
