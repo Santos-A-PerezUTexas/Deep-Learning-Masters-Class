@@ -161,6 +161,15 @@ class Team:
         view = np.array(player_state[0]['camera']['view']).T
         aim_point_image_actual_1 = self._to_image(xyz, proj, view) 
 
+        print("\n\n ~~~~~~~~~~~ aimpoint predicted, aimpoint actual:", aim_point_image_Player1, 
+               aim_point_image_actual_1)
+
+        use_actual_coords = True
+
+        if use_actual_coords:
+          x1 = aim_point_image_actual_1[0]     
+          y1 = aim_point_image_actual_1[1]
+        
 
         #ERASE END DEC 1, 2021-------------------------------------------
 
@@ -182,45 +191,5 @@ class Team:
         output1 = forward_aimpoint_1
         output2 = forward_aimpoint_2
 
-        if is_behind_1:
-          output1 =  backward_aimpoint_1
-          msg = "\n                          PUCK IS BEHIND<-------------------------\n"
-          
-        if is_behind_2:
-          output2 =  backward_aimpoint_2
-          msg = "\n                          PUCK IS BEHIND<-------------------------\n"
-          
-        if x1 > 0:
-          print ("\n Player 1 turning right")
-          output1 = turn_right
-
-        if x2 > 0:
-          print ("\n Player 2 turning right")
-          output2=turn_right
-
-        if player_state[0]['kart']['velocity'][2] < 2 and self.frame > 10 and self.forward_next == False:
-          output1 = backward_drive
-          self.forward_next = True
-
-        if player_state[1]['kart']['velocity'][2] < 2 and self.frame > 10 and self.forward_next == False:
-          output2 = backward_drive
-          self.forward_next = True
-
-
-
-        print ("\n Player 1 Velocity is:  ", player_state[0]['kart']['velocity'])
-        print ("\n Player 1 Location is:  ", player_state[0]['kart']['location'])
-        
-        print ("\n Player 2 Velocity is:  ", player_state[1]['kart']['velocity'])
-        print ("\n Player 2 Location is:  ", player_state[1]['kart']['location'])
-
-        print ("\n Frame Number--------*&*************> ", self.frame)
-
-        self.frame += 1
-
-        print (msg)
-        print ("*********x1 and x2 are:--->", x1, x2)
-
-
-        print ("\n---------------------------ACT() BLOCK END---------------------\n")
+       
         return [output1, output2]
