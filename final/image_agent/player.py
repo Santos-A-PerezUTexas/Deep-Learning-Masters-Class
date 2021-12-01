@@ -51,7 +51,21 @@ class Team:
 
 
 
+        def _to_image(self, x, proj, view):  #DEC 1, 2021: ERASE THIS..................
 
+        out_of_frame = False
+        op = np.array(list(x) + [1])
+        p = proj @ view @ op
+        x = p[0] / p[-1]   #p is [float, float, float, float]
+        y = -p[1] / p[-1]
+        
+        aimpoint = np.array([x, y])
+
+        clipped_aim_point = np.clip(aimpoint, -1, 1) 
+        
+        
+        return clipped_aim_point
+            
     def front_flag(self, puck_loc, threshold=2.0):
         #puck_loc => puck_loc -- model output
 
