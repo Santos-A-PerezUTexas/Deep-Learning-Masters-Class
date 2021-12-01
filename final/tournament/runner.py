@@ -194,6 +194,8 @@ class Match:
 
         race_config = RaceConfig(track=TRACK_NAME, mode=RaceConfig.RaceMode.SOCCER, num_kart=2 * num_player)
         race_config.players.pop()
+
+
         for i in range(num_player):
             race_config.players.append(self._make_config(0, hasattr(team1, 'is_ai') and team1.is_ai, t1_cars[i % len(t1_cars)]))
             race_config.players.append(self._make_config(1, hasattr(team2, 'is_ai') and team2.is_ai, t2_cars[i % len(t2_cars)]))
@@ -221,6 +223,8 @@ class Match:
             if self._use_graphics:
                 team1_images = [np.array(race.render_data[i].image) for i in range(0, len(race.render_data), 2)]
                 team2_images = [np.array(race.render_data[i].image) for i in range(1, len(race.render_data), 2)]
+                bitshift_team1 = [race.render_data[i].instance for i in range(0, len(race.render_data), 2)]
+                bitshift_team2 = [race.render_data[i].instance for i in range(1, len(race.render_data), 2)]
 
             # Have each team produce actions (in parallel)
             if t1_type == 'image':

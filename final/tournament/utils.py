@@ -122,7 +122,8 @@ class VideoRecorder(BaseRecorder):
             #NOTE:  TEST FOR THE CASE WHERE PUCK IS OFF FRAME!  WHAT LABEL???
             #NOTE:  TEST FOR THE CASE WHERE PUCK IS OFF FRAME!  WHAT LABEL???
             
-            #heatmap = pystk.RenderData 
+            #heatmap = pystk.RenderData(team1_images[0]) 
+              
 
             self.collect(team1_images[0], aim_point_image)
             #self.collect(team1_images[0], xz)  #updated to above on 11/27/2021 to normalize xz in range -1...1
