@@ -131,16 +131,18 @@ class VideoRecorder(BaseRecorder):
               
               heatmap1[0] = heatmap1[0] >> 24
 
-              puck_flag = False
+              puck_flag = 0
               for i in range (300):
                 for j in range (400):
                   if heatmap1[0][i][j]  == 8:
-                    puck_flag = True
+                    puck_flag = 1
               
             if puck_flag:
               print ("\n Found Puck")
+              
 
             if not puck_flag:
+              
               print ("\n You're out of Puck")
 
               #heatmap1[1] = heatmap1[1] >> 24
@@ -149,7 +151,7 @@ class VideoRecorder(BaseRecorder):
               #print ("\n==============image shape is  ", team1_images[0].shape)
               
 
-            self.collect(team1_images[0], heatmap1[0], aim_point_image)
+            self.collect(team1_images[0], puck_flag, aim_point_image)
             #self.collect(team1_images[0], xz)  #updated to above on 11/27/2021 to normalize xz in range -1...1
             #print (len(team1_images[0])) #300
             #print (len(team1_images[0][0])) #400
@@ -201,7 +203,7 @@ class VideoRecorder(BaseRecorder):
 
         return clipped_aim_point, out_of_frame
     
-    def collect(_, im, heatmap, pt):
+    def collect(_, im, puck_flag, pt):
         from PIL import Image
         from os import path
         #global n  #global n
@@ -215,6 +217,8 @@ class VideoRecorder(BaseRecorder):
         #print(f'image size is {Image.fromarray(im).size} ')
         with open(fn + '.csv', 'w') as f: 
           f.write('%0.1f,%0.1f' % tuple(pt))
+        with open(fn + 'puck_flag.csv', 'w') as f: 
+          f.write('%0.1f' % puck_flag)
         file_no += 1
 
 
