@@ -225,7 +225,7 @@ class Match:
                 team2_images = [np.array(race.render_data[i].image) for i in range(1, len(race.render_data), 2)]
                 heatmap_team1 = [race.render_data[i].instance for i in range(0, len(race.render_data), 2)]
                 heatmap_team2 = [race.render_data[i].instance for i in range(1, len(race.render_data), 2)]
-
+            #test
             # Have each team produce actions (in parallel)
             if t1_type == 'image':
                 team1_actions_delayed = self._r(team1.act)(team1_state, team1_images)
