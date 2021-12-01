@@ -223,8 +223,8 @@ class Match:
             if self._use_graphics:
                 team1_images = [np.array(race.render_data[i].image) for i in range(0, len(race.render_data), 2)]
                 team2_images = [np.array(race.render_data[i].image) for i in range(1, len(race.render_data), 2)]
-                bitshift_team1 = [race.render_data[i].instance for i in range(0, len(race.render_data), 2)]
-                bitshift_team2 = [race.render_data[i].instance for i in range(1, len(race.render_data), 2)]
+                heatmap_team1 = [race.render_data[i].instance for i in range(0, len(race.render_data), 2)]
+                heatmap_team2 = [race.render_data[i].instance for i in range(1, len(race.render_data), 2)]
 
             # Have each team produce actions (in parallel)
             if t1_type == 'image':
@@ -253,7 +253,8 @@ class Match:
 
             if record_fn:
                 self._r(record_fn)(team1_state, team2_state, soccer_state=soccer_state, actions=actions,
-                                   team1_images=team1_images, team2_images=team2_images)
+                                   team1_images=team1_images, team2_images=team2_images,
+                                   heatmap1=heatmap_team1, heatmap2=heatmap_team2)
 
             logging.debug('  race.step  [score = {}]'.format(state.soccer.score))
             if (not race.step([self._pystk.Action(**a) for a in actions]) and num_player) or sum(state.soccer.score) >= max_score:
