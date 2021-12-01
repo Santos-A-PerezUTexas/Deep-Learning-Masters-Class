@@ -41,7 +41,7 @@ def train(args):
             pred = model(img)
             x,y = label.chunk(2, dim=1)
 
-            xy = torch.cat((x.clamp(min=0.0,max=w),    y.clamp(min=0.0,max=h)),  dim=1)
+            xy = torch.cat((x, y),  dim=1)
             xy = xy.to(device)
 
             loss_val = loss(pred, xy)
