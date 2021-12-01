@@ -131,12 +131,18 @@ class VideoRecorder(BaseRecorder):
               
               heatmap1[0] = heatmap1[0] >> 24
 
-              for i in range 400:
-                for j in range 300:
-                  if heatmap[0][i][j]  == 8:
-                    print ("FOUND A PUCK")
-              print (heatmap1[0])
+              puck_flag = False
+              for i in range (300):
+                for j in range (400):
+                  if heatmap1[0][i][j]  == 8:
+                    puck_flag = True
               
+            if puck_flag:
+              print ("\n Found Puck")
+
+            if not puck_flag:
+              print ("\n You're out of Puck")
+
               #heatmap1[1] = heatmap1[1] >> 24
               #heatmap2 = heatmap2 >> 24
               #print ("\n==============heatmap shape is  ", heatmap1[0].shape)
