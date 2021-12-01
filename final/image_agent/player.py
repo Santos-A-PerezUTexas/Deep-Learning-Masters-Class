@@ -210,7 +210,7 @@ class Team:
         print (player_state[0]['kart']['rotation'])
         print (player_state[1]['kart']['rotation'])
 
-        print ("\n ^^^^^^^^^^^^^^^ BALL  COORDS^^^^^^^^^^^^^^^^ \n"
+        print ("\n ^^^^^^^^^^^^^^^ BALL  COORDS^^^^^^^^^^^^^^^^ \n")
 
 
         if player_state[0]['kart']['velocity'][2] > 5:
