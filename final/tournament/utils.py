@@ -130,6 +130,11 @@ class VideoRecorder(BaseRecorder):
               
               
               heatmap1[0] = heatmap1[0] >> 24
+
+              for i in range 400:
+                for j in range 300:
+                  if heatmap[0][i][j]  == 8:
+                    print ("FOUND A PUCK")
               print (heatmap1[0])
               
               #heatmap1[1] = heatmap1[1] >> 24
