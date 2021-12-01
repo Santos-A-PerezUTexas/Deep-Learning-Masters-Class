@@ -1,5 +1,6 @@
 import numpy as np
 from enum import IntEnum
+import pystk 
 
 file_no = 1
 
@@ -121,6 +122,8 @@ class VideoRecorder(BaseRecorder):
             #NOTE:  TEST FOR THE CASE WHERE PUCK IS OFF FRAME!  WHAT LABEL???
             #NOTE:  TEST FOR THE CASE WHERE PUCK IS OFF FRAME!  WHAT LABEL???
             
+            #heatmap = pystk.RenderData 
+
             self.collect(team1_images[0], aim_point_image)
             #self.collect(team1_images[0], xz)  #updated to above on 11/27/2021 to normalize xz in range -1...1
             #print (len(team1_images[0])) #300
