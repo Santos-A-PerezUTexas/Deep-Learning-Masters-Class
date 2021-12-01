@@ -62,7 +62,7 @@ class Team:
 
 
 
-    def act(self, player_state, player_image):
+    def act(self, player_state, player_image, soccer_state = None):
         """
         This function is called once per timestep. You're given a list of player_states and images.
 
@@ -110,6 +110,7 @@ class Team:
               
         if self.planner:
           
+          print ("USING PLANNER USING PLANNER USING PLANNER USING PLANNER ")
           aim_point_image_Player1 = self.Planner(TF.to_tensor(player_image[0])[None]).squeeze(0)
           aim_point_image_Player2 = self.Planner(TF.to_tensor(player_image[1])[None]).squeeze(0)
 
