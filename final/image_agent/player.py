@@ -161,10 +161,10 @@ class Team:
         view = np.array(player_state[0]['camera']['view']).T
         aim_point_image_actual_1 = self._to_image(xyz, proj, view) 
 
-        print("\n\n ~~~~~~~~~~~ aimpoint predicted, aimpoint actual:", aim_point_image_Player1, 
+        print("\n\n Player 1~~~~~~~~~~~ aimpoint predicted, aimpoint actual:", aim_point_image_Player1, 
                aim_point_image_actual_1)
 
-        use_actual_coords = True
+        use_actual_coords = True    #OMIT THIS DEC 1 2021
 
         if use_actual_coords:
           x1 = aim_point_image_actual_1[0]     
