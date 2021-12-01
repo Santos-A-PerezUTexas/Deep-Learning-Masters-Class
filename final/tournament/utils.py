@@ -163,8 +163,8 @@ class VideoRecorder(BaseRecorder):
             #y=y_kart
         
             self._writer.append_data(np.array(video_grid(team1_images, team2_images,
-                                                        'X1 Ball  Location: %d' % aim_point_image[0],
-                                                        'Y1 Ball  Location: %d' % aim_point_image[1])))
+                                                        'X1 Ball  Location: %f' % aim_point_image[0],
+                                                        'Y1 Ball  Location: %f' % aim_point_image[1])))
             #self._writer.append_data(np.array(video_grid(team1_images, team2_images,
              #                                            'Utexas Blue: %d' % soccer_state['score'][1],
               #                                           'Utexas Red: %d' % soccer_state['score'][0])))
