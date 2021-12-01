@@ -191,11 +191,11 @@ class Team:
         output1 = forward_aimpoint_1
         output2 = forward_aimpoint_2
 
-        if player_state[0]['kart']['velocity'] > 5:
+        if player_state[0]['kart']['velocity'][2] > 5:
           output1 = backward_aimpoint_1
 
 
-        if player_state[0]['kart']['velocity'] > 5:
+        if player_state[0]['kart']['velocity'][2] > 5:
           output2 = backward_aimpoint_2
 
          
