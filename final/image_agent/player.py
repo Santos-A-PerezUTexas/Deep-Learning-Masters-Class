@@ -49,9 +49,8 @@ class Team:
 
         return ['tux', 'tux']
 
-
-
-        def _to_image(self, x, proj, view):  #DEC 1, 2021: ERASE THIS..................
+    
+    def _to_image(self, x, proj, view):  #DEC 1, 2021: ERASE THIS..................
 
         out_of_frame = False
         op = np.array(list(x) + [1])
