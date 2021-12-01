@@ -14,10 +14,15 @@ class Team:
         """
         self.team = None
         self.num_players = None
-        self.Planner = load_model()
-        self.Planner.eval()
         self.frame = 1
         self.forward_next = False
+
+        self.planner = True
+
+        if self.planner:
+
+          self.Planner = load_model()
+          self.Planner.eval()
 
         #Nov 28, 2021:
 
@@ -93,47 +98,26 @@ class Team:
         #[dict(acceleration=1, steer=-.2, nitro=True, fire=True)] * self.num_players
         print ("                   ENTERING ACT()    NOV 28 2021                  ")
         
-       
-        
-        
-        #aim_point_image = self.P(TF.to_tensor(player_image)[None]).squeeze(0).cpu().detach().numpy()
-        
-        aim_point_image_Player1 = self.Planner(TF.to_tensor(player_image[0])[None]).squeeze(0)
-        aim_point_image_Player2 = self.Planner(TF.to_tensor(player_image[1])[None]).squeeze(0)
-
-        #aim_point_image = aim_point_image.detach().cpu().numpy()  
- 
+      
         print ("---------------------------ACT() BLOCK BEGIN---------------------")
-        #print(planner.forward(player_image))
-        #print(planner)
-        print ("\n these are the aim point coords for the Player 1: \n",  aim_point_image_Player1)
-        print ("\n Front flag is--->", self.front_flag(aim_point_image_Player1) )
+              
+        if self.planner:
+          
+          aim_point_image_Player1 = self.Planner(TF.to_tensor(player_image[0])[None]).squeeze(0)
+          aim_point_image_Player2 = self.Planner(TF.to_tensor(player_image[1])[None]).squeeze(0)
 
-        #print ("\n Predicted coordinates are: \n -------------\n", x)
-        
-        #print("\n 1........ACT()  player_state[0][kart][location] FLOOR\n")
-        #print(player_state[0]['kart']['location'])
-        #print(f"\n    2.......ACT() player_state[0][kart][front] \n")
-        #print (player_state[0]['kart']['front'])   
-        #print(f"\n      3......ACT() player_state[0][camera][projection]\n")
-        #print (player_state[0]['camera']['projection'])
-        #print(f"\n         4......ACT() player_state[0][camera][view]\n")
-        #print (player_state[0]['camera']['view'])
-        
-        
+          x1 = aim_point_image_Player1[0]     
+          y1 = aim_point_image_Player1[1]     
+          x2 = aim_point_image_Player2[0]     
+          y2 = aim_point_image_Player2[1]     
 
-        #these are the coords ONLY for player 1's view
-        #these are the coords ONLY for player 1's view
-        #these are the coords ONLY for player 1's view
-        
-        x1 =aim_point_image_Player1[0]     
-        y1 = aim_point_image_Player1[1]     
+        if not self.planner:
 
-        
-        x2 = aim_point_image_Player2[0]     
-        y2 = aim_point_image_Player2[1]     
-
-        
+          x1 = 1     
+          y1 = -1     
+          x2 = 1     
+          y2 = -1     
+          
         is_behind_1 = False
         is_behind_2 = False
         
