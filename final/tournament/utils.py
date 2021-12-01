@@ -127,11 +127,15 @@ class VideoRecorder(BaseRecorder):
             #heatmap = pystk.RenderData(team1_images[0]) 
               
             if heatmap1:
+              
+              
               heatmap1[0] = heatmap1[0] >> 24
-              heatmap1[1] = heatmap1[1] >> 24
+              print (heatmap1[0])
+              
+              #heatmap1[1] = heatmap1[1] >> 24
               #heatmap2 = heatmap2 >> 24
-              print ("\n==============heatmap shape is  ", heatmap1[0].shape)
-              print ("\n==============image shape is  ", team1_images[0].shape)
+              #print ("\n==============heatmap shape is  ", heatmap1[0].shape)
+              #print ("\n==============image shape is  ", team1_images[0].shape)
               
 
             self.collect(team1_images[0], heatmap1[0], aim_point_image)
