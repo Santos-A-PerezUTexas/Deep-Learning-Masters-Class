@@ -148,7 +148,7 @@ class Team:
         if (current_kart1_dir != y_goal):
           wrong_direction_kart1 = True
 
-        if if (current_kart1_dir != y_goal):
+        if (current_kart1_dir != y_goal):
           wrong_direction_kart1 = True
  
 
