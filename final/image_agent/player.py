@@ -131,9 +131,11 @@ class Team:
           x1 = aim_point_image_Player1[0]     
           y1 = aim_point_image_Player1[1]     
           x2 = aim_point_image_Player2[0]     
-          y2 = aim_point_image_Player2[1])
+          y2 = aim_point_image_Player2[1]
+          
+          
           self.prior_soccer_state1.append(aim_point_image_Player1)
-          self.prior_soccer_state2.append(aim_point_image_Player2
+          self.prior_soccer_state2.append(aim_point_image_Player2)
         
         self.prior_state.append(player_state)
         
