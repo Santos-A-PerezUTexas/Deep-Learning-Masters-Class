@@ -137,10 +137,10 @@ class Team:
         current_kart1_dir = -64.5
         current_kart2_dir  = -64.5
 
-        if (player_state[0]['kart']['front'] - player_state[0]['kart']['location']) > 0:
+        if (player_state[0]['kart']['front'][2] - player_state[0]['kart']['location'][2]) > 0:
           current_kart1_dir = 64.5 
         
-        if (player_state[1]['kart']['front'] - player_state[1]['kart']['location']) > 0:
+        if (player_state[1]['kart']['front'][2] - player_state[1]['kart']['location'][2]) > 0:
           current_kart2_dir = 64.5 
                 
 
