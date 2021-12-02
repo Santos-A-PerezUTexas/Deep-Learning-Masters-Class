@@ -217,6 +217,16 @@ class Team:
         print (player_state[0]['kart']['rotation'])
         print (player_state[1]['kart']['rotation'])
 
+
+        print ("\n ^^^^^^^^^^^^^^^^ PLAYER ID^^^^^^^^^^^^^^^^ \n")
+
+        print (player_state[0]['kart']['player_id'])
+        print (player_state[1]['kart']['id'])
+
+        #direction kart is facing is player_state[0]['kart']['location'][2] -
+        # minus player_state[0]['kart']['front'][2], different for both teams. 
+
+
         print ("\n ^^^^^^^^^^^^^^^ BALL  COORDS^^^^^^^^^^^^^^^^ \n")
 
 
