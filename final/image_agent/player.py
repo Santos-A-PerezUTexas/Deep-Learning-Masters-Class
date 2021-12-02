@@ -275,7 +275,7 @@ class Team:
         print ("\n Kart 2 Current Direction:  ", current_kart2_dir)
       
         if wrong_direction_kart1:
-          print (\n "DANGER ----------- Kart 1 is headed in the wrong direction!")
+          print ("\n DANGER ----------- Kart 1 is headed in the wrong direction!")
 
         if wrong_direction_kart2:
           print ("\n DANGER ----------- Kart 1 is headed in the wrong direction!")
