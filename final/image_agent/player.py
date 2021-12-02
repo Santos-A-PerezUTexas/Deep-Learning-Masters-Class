@@ -18,6 +18,7 @@ class Team:
         self.forward_next = False
 
         self.planner = True
+        
 
         if self.planner:
 
@@ -117,6 +118,17 @@ class Team:
         # TODO: Change me. I'm just cruising straight  Changed
         #print (player_state[0]['kart']['location'])
         #[dict(acceleration=1, steer=-.2, nitro=True, fire=True)] * self.num_players
+        
+        self.my_team = player_state[0]['kart']['player_id']%2
+
+        goal_post = [[-10.449999809265137, 0.07000000029802322, -64.5], 
+                     [10.449999809265137, 0.07000000029802322, -64.5]] 
+
+        if self.my_team == 0:  #RED TEAM
+          goal_post = [[10.460000038146973, 0.07000000029802322, 64.5], 
+                     [-10.510000228881836, 0.07000000029802322, 64.5]] 
+  
+
         print ("                   ENTERING ACT()    NOV 28 2021                  ")
         
       
@@ -218,10 +230,10 @@ class Team:
         print (player_state[1]['kart']['rotation'])
 
 
-        print ("\n ^^^^^^^^^^^^^^^^ PLAYER ID^^^^^^^^^^^^^^^^ \n")
+        print ("\n ^^^^^^^^^^^^^^^^ PLAYER ID, TEAM^^^^^^^^^^^^^^^^ \n")
 
-        print (player_state[0]['kart']['player_id'])
-        print (player_state[1]['kart']['id'])
+        print (player_state[0]['kart']['player_id'], self.my_team)
+        print (player_state[1]['kart']['id'], self.my_team)
 
         #direction kart is facing is player_state[0]['kart']['location'][2] -
         # minus player_state[0]['kart']['front'][2], different for both teams. 
