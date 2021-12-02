@@ -274,6 +274,13 @@ class Team:
         print ("\n Kart 1 Current Direction:  ", current_kart1_dir)
         print ("\n Kart 2 Current Direction:  ", current_kart2_dir)
       
+        if wrong_direction_kart1:
+          print (\n "DANGER ----------- Kart 1 is headed in the wrong direction!")
+
+        if wrong_direction_kart2:
+          print ("\n DANGER ----------- Kart 1 is headed in the wrong direction!")
+
+
 
         if player_state[0]['kart']['velocity'][2] > 5:
           output1 = backward_aimpoint_1
