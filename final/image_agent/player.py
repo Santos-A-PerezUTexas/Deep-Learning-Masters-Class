@@ -212,7 +212,7 @@ class Team:
         print (player_state[0]['kart']['location'])
         print (player_state[1]['kart']['location'])
 
-        print ("\n ^^^^^^^^^^^^^^^ KART ROTATION^^^^^^^^^^^^^^^^ \n")
+        print ("\n ^^^^^^^^^^^^^^^^ KART ROTATION^^^^^^^^^^^^^^^^ \n")
 
         print (player_state[0]['kart']['rotation'])
         print (player_state[1]['kart']['rotation'])
