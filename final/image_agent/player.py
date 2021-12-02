@@ -280,6 +280,14 @@ class Team:
         if wrong_direction_kart2:
           print ("\n DANGER ----------- Kart 2 is headed in the wrong direction!")
 
+      #Case 1, right direction, puck in frame
+      #Case 2, right direction, puck not in frame
+      #Case 3, wrong direction, puck in frame
+      #Case 4, wrong direction, puck not in frame
+      #Sub Cases:  Puck behind, to the left, or to the right, how to know?
+
+
+
 
 
         if player_state[0]['kart']['velocity'][2] > 5:
