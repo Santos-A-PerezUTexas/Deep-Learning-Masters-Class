@@ -133,7 +133,6 @@ class Team:
                      [-10.510000228881836, 0.07000000029802322, 64.5]] 
           y_goal = 64.5
 
-        
         current_kart1_dir = -64.5
         current_kart2_dir  = -64.5
 
@@ -143,6 +142,19 @@ class Team:
         if (player_state[1]['kart']['front'][2] - player_state[1]['kart']['location'][2]) > 0:
           current_kart2_dir = 64.5 
                 
+        wrong_direction_kart1 = False
+        wrong_direction_kart1 = False
+
+        if (current_kart1_dir != y_goal):
+          wrong_direction_kart1 = True
+
+        if if (current_kart1_dir != y_goal):
+          wrong_direction_kart1 = True
+ 
+
+
+
+
 
         print ("                   ENTERING ACT()    NOV 28 2021                  ")
         
@@ -219,6 +231,8 @@ class Team:
         backward_aimpoint_1 = dict(acceleration=0, steer=x1, brake = True)
         forward_aimpoint_2 = dict(acceleration=1, steer=x2, brake = False, drift=True)
         backward_aimpoint_2 = dict(acceleration=0, steer=x2, brake = True)
+
+        goal_aim_point = dict(acceleration=0, steer=x2, brake = True)
       
         msg =  "                   PUCK IS IN FRONT <----------------------" 
 
