@@ -134,6 +134,15 @@ class Team:
           y_goal = 64.5
 
         
+        current_kart1_dir = -64.5
+        current_kart2_dir  = -64.5
+
+        if (player_state[0]['kart']['front'] - player_state[0]['kart']['location']) > 0:
+          current_kart1_dir = 64.5 
+        
+        if (player_state[1]['kart']['front'] - player_state[1]['kart']['location']) > 0:
+          current_kart2_dir = 64.5 
+                
 
         print ("                   ENTERING ACT()    NOV 28 2021                  ")
         
@@ -229,13 +238,6 @@ class Team:
 
         print (player_state[0]['kart']['location'])
         print (player_state[1]['kart']['location'])
-
-        current_kart1_dir = 
-        current_kart2_dir
-
-        if (player_state[0]['kart']['front'] - player_state[0]['kart']['location']) > 0:
-          current_kart1_dir = 64.5. 
-        
 
 
         print ("\n ^^^^^^^^^^^^^^^^ KART ROTATION^^^^^^^^^^^^^^^^ \n")
