@@ -196,6 +196,12 @@ class VideoRecorder(BaseRecorder):
 
         aimpoint = np.array([x, y])
 
+        """
+
+        If out_of_frame is true, then if abs(x) direction is less than 1, and y direction==1, puck is behind?
+         
+        """
+
         clipped_aim_point = np.clip(aimpoint, -1, 1) 
         
         #print (f'......................and p, result of matrix matmul, (in _to_image) is {p}')
