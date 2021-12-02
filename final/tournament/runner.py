@@ -68,7 +68,9 @@ class TeamRunner:
                 self._team = assignment.Team()
         except Exception as e:
             self._error = 'Failed to load submission: {}'.format(str(e))
+        print ( self._error)
         self.agent_type = self._team.agent_type
+
 
     def new_match(self, team: int, num_players: int) -> list:
         self._total_act_time = 0
@@ -270,6 +272,11 @@ class Match:
 
 
 if __name__ == '__main__':
+    
+    
+    
+    print ("starting match")
+    
     from argparse import ArgumentParser
     from pathlib import Path
     from os import environ
@@ -292,6 +299,7 @@ if __name__ == '__main__':
 
     if args.parallel is None or remote.ray is None:
         # Create the teams
+        
         team1 = AIRunner() if args.team1 == 'AI' else TeamRunner(args.team1)
         team2 = AIRunner() if args.team2 == 'AI' else TeamRunner(args.team2)
 
@@ -305,6 +313,8 @@ if __name__ == '__main__':
 
         # Start the match
         #match = Match(use_graphics=team1.agent_type == 'image' or team2.agent_type == 'image')
+
+       
         #Hack to generate AI v AI match and 3D images...
         match = Match(use_graphics=True)
 
