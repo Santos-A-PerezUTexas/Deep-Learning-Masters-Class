@@ -125,12 +125,13 @@ class Team:
                      [10.449999809265137, 0.07000000029802322, -64.5]] 
 
         goal_width = goal_post[1][0]-goal_post[0][0]  
-        print ("GOAL WIDTH", goal_width)
+        y_goal = -64.5
+
 
         if self.my_team == 0:  #RED TEAM
           goal_post = [[10.460000038146973, 0.07000000029802322, 64.5], 
                      [-10.510000228881836, 0.07000000029802322, 64.5]] 
-  
+          y_goal = 64.5
 
         
 
