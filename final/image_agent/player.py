@@ -24,8 +24,9 @@ class Team:
           self.Planner = load_model()
           self.Planner.eval()
 
-
-
+        self.prior_state = []
+        self.prior_soccer_state1 = []
+        self.prior_soccer_state2 = []
 
 
     def new_match(self, team: int, num_players: int) -> list:
@@ -75,7 +76,7 @@ class Team:
 
 
 
-    def act(self, player_state, player_image, soccer_state = None):
+    def act(self, player_state, player_image, soccer_state = None):  #REMOVE SOCCER STATE!!!!!!!!
         """
         This function is called once per timestep. You're given a list of player_states and images.
 
@@ -130,8 +131,12 @@ class Team:
           x1 = aim_point_image_Player1[0]     
           y1 = aim_point_image_Player1[1]     
           x2 = aim_point_image_Player2[0]     
-          y2 = aim_point_image_Player2[1]     
-
+          y2 = aim_point_image_Player2[1])
+          self.prior_soccer_state1.append(aim_point_image_Player1)
+          self.prior_soccer_state2.append(aim_point_image_Player2
+        
+        self.prior_state.append(player_state)
+        
         if not self.planner:
 
           x1 = 1     
