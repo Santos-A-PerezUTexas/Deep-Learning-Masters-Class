@@ -164,8 +164,8 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         #output = output.diag()
         #print (f'3.......in predict all output shape is {output.shape}')
         #return (output)
-        
-        return(output.log())
+
+        return(output)
 
         
         
