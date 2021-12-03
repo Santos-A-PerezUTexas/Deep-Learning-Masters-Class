@@ -12,27 +12,13 @@ class LanguageModel(object):
     
     def predict_all(self, some_text):
         """
-        The main task of the character-level language model is to predict the next character 
-        given all previous characters in a sequence of data, i.e. generates text character by character.
-        
-        https://towardsdatascience.com/character-level-language-model-1439f5dd87fe
-        
-        https://machinelearningmastery.com/develop-character-based-neural-language-model-keras/
-        
-        Given some_text, predict the likelihoods of the next character for each substring from 0..i
-        The resulting tensor is one element longer than the input, as it contains probabilities for all sub-strings
-        including the first empty string (probability of the first character)
-
+      
         :param some_text: A string containing characters in utils.vocab, may be an empty string!
         :return: torch.Tensor((len(utils.vocab), len(some_text)+1)) of log-probabilities
         """
         
     def predict_next(self, some_text):
         """
-        NOT PART OF EXTRA CREDIT, SEPT 21
-        
-        Given some_text, predict the likelihood of the next character
-
         :param some_text: A string containing characters in utils.vocab, may be an empty string!
         :return: a Tensor (len(utils.vocab)) of log-probabilities
         """
@@ -40,16 +26,7 @@ class LanguageModel(object):
 
 
 class Bigram(LanguageModel):
-    """
-    
-    IMPLEMENTED BELOW IN TH FILE. SEPT 21
-    
-    Implements a simple Bigram model. You can use this to compare your TCN to.
-    The bigram, simply counts the occurrence of consecutive characters in transition, and chooses more frequent
-    transitions more often. See https://en.wikipedia.org/wiki/Bigram .
-    Use this to debug your `language.py` functions.
-    """
-
+ 
     def __init__(self):
         from os import path
         self.first, self.transition = torch.load(path.join(path.dirname(path.abspath(__file__)), 'bigram.th'))
@@ -62,12 +39,7 @@ class Bigram(LanguageModel):
 
 
 class AdjacentLanguageModel(LanguageModel):
-    """
-    A simple language model that favours adjacent characters.
-    The first character is chosen uniformly at random.
-    Use this to debug your `language.py` functions.
-    """
-
+ 
     def predict_all(self, some_text):
         prob = 1e-3*torch.ones(len(utils.vocab), len(some_text)+1)
         if len(some_text):
@@ -103,63 +75,12 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
 
     def __init__(self, layers=[28,16,8], char_set="string"):   #<---------------------------added char_set 11/16/2021
         
-        """
-       
-        Your TCN model will use a CausalConv1dBlock. This block combines causal 1D convolution with a non-linearity (e.g. ReLU).
-        The main TCN then stacks multiple dilated CausalConv1dBlock’s to build a complete model. Use a 1x1 convolution to produce the output.
-        TCN.predict_all should use TCN.forward to compute the log-probability from a single sentence.
-
-        Hint: Make sure TCN.forward uses batches of data.  <---------------------------*******
-
-        Hint: Make sure TCN.predict_all returns log-probabilities, not logits.
-
-        ***Hint: Store the distribution of the first character as a parameter of the 
-        model torch.nn.Parameter
-
-        Hint: Try to keep your model manageable and small. The master solution trains
-         in 15 min on a GPU.
-
-
-        http://www.philkr.net/dl_class/lectures/sequence_modeling/07.html
-        
-        Hint: Try to use many layers small (channels <=50) layers instead of a few very large ones
-        
-        
-        ***-->Hint: The probability of the first character should be a parameter
-        use torch.nn.Parameter to explicitly create it.
-        
-        torch.nn.Parameter
-        torch.nn.functional.log_softmax
-        torch.nn.ConstantPad1d
-        
-        
-        https://stackoverflow.com/questions/50935345/understanding-torch-nn-parameter
-        
-        class NN_Network(nn.Module):
-            def __init__(self,in_dim,hid,out_dim):
-                 super(NN_Network, self).__init__()
-                 self.linear1 = nn.Linear(in_dim,hid)
-                 self.linear2 = nn.Linear(hid,out_dim)
-                 self.linear1.weight = torch.nn.Parameter(torch.zeros(in_dim,hid))
-                 self.linear1.bias = torch.nn.Parameter(torch.ones(hid))
-                 self.linear2.weight = torch.nn.Parameter(torch.zeros(in_dim,hid))
-                 self.linear2.bias = torch.nn.Parameter(torch.ones(hid))
-    
-        """
-        
+               
         super().__init__()
         
-        #ADD PROBABILITY AS PARAMETER HERE<------------------
-        
-        #self.conv.weight = torch.nn.Parameter(weight)
-        
-        prob = torch.nn.Parameter(torch.zeros(32, 28))
-        #print (f'shape of prob is {prob.shape}')
-
+       
         c = 28 
-
-        print(f'------------->length of char set is {c}')
-
+        
         L = []
         total_dilation = 1 # starting dilation at 2, not 1?????
         for l in layers:
@@ -170,12 +91,7 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
             c = l
         self.network = torch.nn.Sequential(*L)
         self.classifier = torch.nn.Conv1d(c, 28, 1)
-        #https://piazza.com/class/ksjhagmd59d6sg?cid=1233
-        #Nov 28, 2021
         
-
-    #--------------------------TCN FORWARD()
-    #--------------------------TCN FORWARD()
     #--------------------------TCN FORWARD()
     
     def forward(self, x):  #x is a sequence of any length
@@ -186,18 +102,7 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         @x: torch.Tensor((B, vocab_size, L)) a batch of one-hot encodings, (32,28, L)
         @return torch.Tensor((B, vocab_size, L+1)) a batch of log-likelihoods or logits
 
-        Crash "Given groups=1, weight of size [8, 6, 3], expected input[1, 28, 102] to have 6 channels,
-         but got 28 channels instead
-
         """
-        
-        #print("-----------------------------------------------------------------")
-        #print ("In FORWARD()")
-        #print("-----------------------------------------------------------------")
-        
-        #print(f'Nov 19, shape of x is {x.shape}')
-
-        #self.param = torch.nn.Parameter(torch.rand(x.shape[0], x.shape[1], 1))
         first_char_distribution = torch.nn.Parameter(torch.rand(x.shape[0], x.shape[1], 1))
 
         #this EXPLAINS IT ALL!!!!!!!!!!!!!!:  NOV 28 2021
@@ -206,24 +111,14 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
         #Then concatenate it with the output of TCN.
         #Then concatenate it with the output of TCN.
         #The P( next | “”) is the parameter you defined, and will learn from the data later.
-
-
-       
-        
         #x = torch.cat((x,self.param),dim=2)
-
         #print(f'Nov 21, the NEW shape of x is {x.shape}')   #([32, 28, 1])
 
-        
-        #print(f'                     the self.param shape is {self.param.shape}')
-        output = self.network(x)
-
+        output = self.network(x)  #x is  [32,28, L]
         output = self.classifier(output)
 
-        #print(f'Nov 28, shape of CLASSIFIER output is {output.shape}')
-        #print (f"The SHAPE OF PARAM --- {self.param.shape}")
-        
-        output = torch.cat((first_char_distribution, output),dim=2)
+        output = torch.cat((first_char_distribution, output),dim=2) 
+        #first_char_distribution is [32, 28, 1]
         
         #print(f'Nov 19, shape of CLASSIFICATION is {output.shape}')
         #print ("END FORWARD()")
@@ -255,8 +150,8 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
 
         one_hotx = one_hot(some_text)
 
-        print (f'in predict_all, sometext is {some_text}')
-        print (f'in predict all one_hotx shape is {one_hotx.shape}')
+        print (f'Dec 2 in predict_all, sometext is {some_text}')
+        print (f'Dec 2 in predict all one_hotx shape is {one_hotx.shape}')
 
         output = self.forward(one_hotx)
 
