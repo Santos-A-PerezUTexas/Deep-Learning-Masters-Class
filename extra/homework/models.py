@@ -150,14 +150,14 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
 
         one_hotx = one_hot(some_text)[None]
 
-        print (f'Dec 2 in predict_all, sometext is {some_text}')
-        print (f'Dec 2 in predict all one_hotx shape is {one_hotx.shape}')
+        #print (f'Dec 2 in predict_all, sometext is {some_text}')
+        #print (f'Dec 2 in predict all one_hotx shape is {one_hotx.shape}')
 
         output = self.forward(one_hotx)
 
         output = output[0, :, :]
 
-        print (f'in predict all output shape is {output.shape}')
+        #print (f'in predict all output shape is {output.shape}')
         
         return(output.log())
 
