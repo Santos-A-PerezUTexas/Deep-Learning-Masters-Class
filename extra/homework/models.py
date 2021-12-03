@@ -155,6 +155,8 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
 
         output = self.forward(one_hotx)
 
+        output = output[0, :, :]
+
         print (f'in predict all output shape is {output.shape}')
         
         return(output.log())
