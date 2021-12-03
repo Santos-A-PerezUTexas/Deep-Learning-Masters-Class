@@ -112,35 +112,44 @@ def beam_search(model: LanguageModel,
     visited = set()
 
     # initialize heap
-    likelihoods = model.predict_next("")
-    for i, l in enumerate(likelihoods):
-        visited.add(utils.vocab[i])
+    prediction = model.predict_next("")  #shape [28]
+
+    for i, likelihood in enumerate(prediction):  #i=0 to 27, and likelihood[i]
+        
+        visited.add(utils.vocab[i])  #iterate through all letters a to z and . (period)
+
         if utils.vocab[i] == '.':
-            term_heap.add(( l, utils.vocab[i]) )
+            #print ("\n the Period corresponds to likelihood ---- ", l)
+            term_heap.add(( likelihood, utils.vocab[i]) )
         else:
-            heap.add( (l, utils.vocab[i]) )
+            #print ("\n this letter corresponds to likelihood that follows ---- ",  utils.vocab[i], l)
+            heap.add( (likelihood, utils.vocab[i]) )
 
-    iters = 0
-    while iters < 50:
+    m = 0
 
-        for curr_l, curr_s in heap.elements:
-            likelihoods = model.predict_next(curr_s)
+    while m < 40:
 
-            for i, l in enumerate(likelihoods):
+        for curr_likelihood, curr_s in heap.elements:
+
+            prediction = model.predict_next(curr_s)
+
+            for i, likelihood in enumerate(prediction):
+                
                 new_s = curr_s + utils.vocab[i]
+                
                 if average_log_likelihood:
-                    new_l = log_likelihood(model, new_s) / len(new_s)
+                    new_likelihood = log_likelihood(model, new_s) / len(new_s)
                 else:
-                    new_l = curr_l + l
+                    new_likelihood = curr_likelihood + likelihood
 
                 if new_s not in visited:
                     visited.add(new_s)
                     # add to terminated heap
                     if new_s[-1] == '.' or len(new_s) > max_length:
-                        term_heap.add( (new_l, new_s) )
+                        term_heap.add( (new_likelihood, new_s) )
                     else:
-                        heap.add( (new_l, new_s) )
-        iters += 1
+                        heap.add( (new_likelihood, new_s) )
+        m += 1
 
     # sort and return
     sort_list = []
@@ -154,6 +163,10 @@ def beam_search(model: LanguageModel,
         return_list.append(s)
     print(return_list)
     return return_list
+
+
+
+
 if __name__ == "__main__":
     """
       Some test code.
