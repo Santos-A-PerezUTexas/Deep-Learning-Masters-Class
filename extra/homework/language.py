@@ -9,7 +9,7 @@ from .utils import one_hot
 def log_likelihood(model: LanguageModel, 
                    some_text: str):
    
-    text = utils.one_hot(some_text)
+    onehot_text = utils.one_hot(some_text)
     
 
     #how probable is the string some_text under this model?
@@ -19,7 +19,7 @@ def log_likelihood(model: LanguageModel,
     all_predictions = all_predictions[:, :-1]  #remove last character prediction 
     #print ("\n New Size of all_predictions is", all_predictions.shape) #torch.Size([28, 6])
         
-    likelihoods = all_predictions.t() @ text #multiply  one hot encoded text matrix by predictions matrix
+    likelihoods = all_predictions.t() @ onehot_text #multiply  one hot encoded text matrix by predictions matrix
 
     #this obtains the likelihood of the specific character at a specidic position
     #shape is len(some_text) x len(some_text) (e.g 6x6) 
