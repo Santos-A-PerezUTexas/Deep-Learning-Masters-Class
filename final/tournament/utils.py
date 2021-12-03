@@ -213,18 +213,22 @@ class VideoRecorder(BaseRecorder):
         from PIL import Image
         from os import path
         #global n  #global n
+        x = np.random.rand(3)
         global file_no 
         #print ("\n Collect() has been called to generate images \n ")
         id = file_no #if n < images_per_track else np.random.randint(0, n + 1)
         fn = path.join('/content/cs342/final/data/', 'ice_hockey' + '_%05d' % id)
         Image.fromarray(im).save(fn + '.png')
         #Image.fromarray(heatmap).save(fn + '_heatmap.png')
+        x[0] = pt[0]
+        x[1] = pt[1]
+        x[2] = puck_flag
         
         #print(f'image size is {Image.fromarray(im).size} ')
         with open(fn + '.csv', 'w') as f: 
-          f.write('%0.1f,%0.1f' % tuple(pt))
-        with open(fn + 'puck_flag.csv', 'w') as f: 
-          f.write('%0.1f' % puck_flag)
+          f.write('%0.1f,%0.1f,%0.1f' % tuple(x))
+        #with open(fn + 'puck_flag.csv', 'w') as f: 
+          #f.write('%0.1f' % puck_flag)
         file_no += 1
 
 
