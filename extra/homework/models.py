@@ -157,9 +157,20 @@ class TCN(torch.nn.Module, LanguageModel):     #MY WARNING:  TCN in example DOES
 
         output = output[0, :, :]
 
-        #print (f'in predict all output shape is {output.shape}')
+        print (f'1.......in predict all output shape is {output.shape}')
+        print (f'1.......in predict all ONEHOT shape is {one_hotx.shape}')
         
-        return(output.log())
+        output = output.t() @ one_hotx
+      
+        print (f'2.......in predict all output shape is {output.shape}')
+
+
+        output = output.diag()
+        
+        print (f'3.......in predict all output shape is {output.shape}')
+
+        return (output)
+        #return(output.log())
 
         
         

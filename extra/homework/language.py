@@ -30,9 +30,9 @@ def log_likelihood(model: LanguageModel,
     #print ("\n  Size of likelihoods  is",likelihoods.shape) #([6, 6])
     
     
+    output = likelihoods.diag()
 
-
-    output = sum(likelihoods.diag()) #The log-likelihood is the sum of all individual likelihoods, not the average
+    output = sum(output) #The log-likelihood is the sum of all individual likelihoods, not the average
 
     return  output
 
