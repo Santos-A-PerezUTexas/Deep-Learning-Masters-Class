@@ -20,6 +20,8 @@ def train(args):
     """
 
     train_data = load_data('data/train.txt',  transform=one_hot)
+    label_data = load_data('data/train.txt')
+    
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, weight_decay=1e-5)
     
     
