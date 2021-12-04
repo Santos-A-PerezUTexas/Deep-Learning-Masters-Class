@@ -263,7 +263,6 @@ class Team:
           self.total_loss_No_puck += loss_v 
           self.total_loss_No_puck_count += 1
           print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS NO PUCK", self.total_loss_No_puck/self.total_loss_No_puck_count)
-        
 
 
         use_actual_coords = False    #OMIT THIS DEC 1 2021
@@ -356,5 +355,11 @@ class Team:
           output2 = backward_aimpoint_2
 
         self.frame += 1
+
+        if self.frame > 100:
+          print ("\n\n STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS ")
+          print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS NO PUCK", self.total_loss_No_puck/self.total_loss_No_puck_count)
+          print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS FOR PUCK *IN IMAGE*", self.total_loss_puck/self.total_loss_puck_count)
+          print ("-----------------------------------------------------------------------------------")
        
         return [output1, output2]
