@@ -147,7 +147,7 @@ def beam_search(model: LanguageModel,
 
                 if new_s not in visited:
                     visited.add(new_s)
-                    # add to terminated heap
+                    #print(new_s)
                     if new_s[-1] == '.' or len(new_s) > max_length:
                         heap2.add( (new_likelihood, new_s) )
                     else:
