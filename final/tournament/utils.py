@@ -2,6 +2,7 @@ import numpy as np
 from enum import IntEnum
 import pystk 
 #TOURNAMENT UTILS
+#Edit this to generate labels
 
 file_no = 1 
 
@@ -154,14 +155,7 @@ class VideoRecorder(BaseRecorder):
 
             self.collect(team1_images[0], puck_flag, aim_point_image)
             #self.collect(team1_images[0], xz)  #updated to above on 11/27/2021 to normalize xz in range -1...1
-            #print (len(team1_images[0])) #300
-            #print (len(team1_images[0][0])) #400
-            #print (len(team1_images[0][0][0])) #3
             
-            #x_kart = team2_state[0]['kart']['location'][0]
-            #y_kart = team2_state[0]['kart']['location'][2]
-            #x=x_kart
-            #y=y_kart
         
             self._writer.append_data(np.array(video_grid(team1_images, team2_images,
                                                         'X1 Ball  Location: %f' % aim_point_image[0],
@@ -176,58 +170,46 @@ class VideoRecorder(BaseRecorder):
         if hasattr(self, '_writer'):
             self._writer.close() #
     
+
+
     def _to_image(self, x, proj, view):
 
         out_of_frame = False
         op = np.array(list(x) + [1])
         #print (f' the shapes proj, view, op:  {proj.shape}, {view.shape}, {op.shape}')
         p = proj @ view @ op
-
         x = p[0] / p[-1]   #p is [float, float, float, float]
         y = -p[1] / p[-1]
 
-        #print(f'          NOV 28:   x is {x}, y is {y}, p[-1] is {p[-1]}')
-
         if abs(x) > 1:
-          print ("NOTE-------------------------------------------------------->We got a coordinate > 1!!!")
+          print ("NOTE-------------------------------------------------------->We got a coordinate > 1, OUT_OF_FRAME TRUE")
           out_of_frame = True 
           print (x)
-          #quit()
-          
-
+         
         aimpoint = np.array([x, y])
 
-        """
-
-        If out_of_frame is true, then if abs(x) direction is less than 1, and y direction==1, puck is behind?
-         
-        """
-
-        clipped_aim_point = np.clip(aimpoint, -1, 1) 
-        
-        #print (f'......................and p, result of matrix matmul, (in _to_image) is {p}')
-        #[-27.2785505  -18.0448781  -82.57477566 -81.49220145]
-
+            clipped_aim_point = np.clip(aimpoint, -1, 1) 
+       
         return clipped_aim_point, out_of_frame
     
+
+
+
     def collect(_, im, puck_flag, pt):
         from PIL import Image
         from os import path
-        #global n  #global n
         x = np.random.rand(3)
         global file_no 
-        #print ("\n Collect() has been called to generate images \n ")
-        id = file_no #if n < images_per_track else np.random.randint(0, n + 1)
+        id = file_no 
         fn = path.join('/content/cs342/final/data/', 'ice_hockey' + '_%05d' % id)
         Image.fromarray(im).save(fn + '.png')
         #Image.fromarray(heatmap).save(fn + '_heatmap.png')
         x[0] = pt[0]
         x[1] = pt[1]
         x[2] = puck_flag
-        
-        #print(f'image size is {Image.fromarray(im).size} ')
+                
         with open(fn + '.csv', 'w') as f: 
-          #f.write('%0.1f,%0.1f,%0.1f' % tuple(x))
+          #f.write('%0.1f,%0.1f,%0.1f' % tuple(x))  #with puck flag
           f.write('%0.1f,%0.1f' % tuple(pt))
         #with open(fn + 'puck_flag.csv', 'w') as f: 
           #f.write('%0.1f' % puck_flag)
