@@ -188,7 +188,7 @@ class VideoRecorder(BaseRecorder):
          
         aimpoint = np.array([x, y])
 
-            clipped_aim_point = np.clip(aimpoint, -1, 1) 
+        clipped_aim_point = np.clip(aimpoint, -1, 1) 
        
         return clipped_aim_point, out_of_frame
     
