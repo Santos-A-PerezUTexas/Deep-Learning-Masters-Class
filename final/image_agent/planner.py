@@ -19,14 +19,16 @@ class Planner(torch.nn.Module):
 
         conv_block = lambda c, h: [torch.nn.BatchNorm2d(h), torch.nn.Conv2d(h, c, 5, 2, 2), torch.nn.ReLU(True)]
 
-        h, _conv = 3, []
+        h, conv_layers = 3, []
+
         for c in channels:
-            _conv += conv_block(c, h)
+            conv_layers += conv_block(c, h)
             h = c
 
-        self._conv = torch.nn.Sequential(*_conv, torch.nn.Conv2d(h, 1, 1))
-        # self.classifier = torch.nn.Linear(h, 2)
-        # self.classifier = torch.nn.Conv2d(h, 1, 1)
+        self.conv_layers = torch.nn.Sequential(*conv_layers)
+        
+        self.linear_classifier = torch.nn.Linear(475, 1)
+        self.classifier = torch.nn.Conv2d(h, 1, 1)
 
     def forward(self, img):
         """
@@ -35,9 +37,29 @@ class Planner(torch.nn.Module):
         @img: (B,3,96,128)
         return (B,2)
         """
-        x = self._conv(img)
-        return spatial_argmax(x[:, 0])
-        # return self.classifier(x.mean(dim=[-2, -1]))
+        
+        #print ("\n\n coordinates[0,:,:,:] view -1 shape is ", coordinates[0,:,:,:].view(-1).shape) 
+        #print ("\n\n coordinates[0,:,:,:]  shape is ", coordinates[0,:,:,:].shape)
+
+        #flag = self.classifier(coordinates.mean(dim=[-2, -1]))  #added Dec 3, 2021
+        #print ("\n\n flag shape is ", flag.shape)
+
+        coordinates = self.conv_layers(img)
+
+        print ("\n\n 0- coordinates  shape after network is ", coordinates.shape)
+
+        coordinates = self.classifier(coordinates)
+        print ("\n\n 1 coordinates  shape after classifier is ", coordinates.shape)
+
+        coordinates = spatial_argmax(coordinates[:, 0])
+        print ("\n\n 2 coordinates  after argmax shape is ", coordinates.shape)
+
+
+        return coordinates, 1  #added Dec 3, 2021
+
+        #return output  #deleted dec 3
+        
+        # return self.classifier(coordinates.mean(dim=[-2, -1]))
 
 
 def save_model(model):

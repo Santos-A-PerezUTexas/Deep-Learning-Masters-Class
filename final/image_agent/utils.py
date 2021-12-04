@@ -18,6 +18,7 @@ class SuperTuxDataset(Dataset):
         self.data = []
         for f in glob(path.join(dataset_path, '*.csv')):
             i = Image.open(f.replace('.csv', '.png'))
+            #print ("\n\n JUST LOADED IMAGE")
             i.load()
             self.data.append((i, np.loadtxt(f, dtype=np.float32, delimiter=',')))
         self.transform = transform
@@ -26,6 +27,8 @@ class SuperTuxDataset(Dataset):
         return len(self.data)
 
     def __getitem__(self, idx):
+        #print ("FETCHING DATA")
+        #print(self.data[idx])
         data = self.data[idx]
         data = self.transform(*data)
         return data
