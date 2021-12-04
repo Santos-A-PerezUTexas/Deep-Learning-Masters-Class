@@ -2,6 +2,7 @@ import math
 from .planner import Planner, load_model
 import torchvision.transforms.functional as TF 
 import numpy as np
+import torch
 
 
 class Team:
@@ -18,6 +19,12 @@ class Team:
         self.forward_next = False
 
         self.planner = True
+        self.MSEloss = torch.nn.MSELoss()
+        self.total_loss_puck = 0
+        self.total_loss_No_puck = 0
+        self.total_loss_puck_count = 0
+        self.total_loss_No_puck_count = 0
+         
         
 
         if self.planner:
@@ -80,7 +87,7 @@ class Team:
 
 
 
-    def act(self, player_state, player_image, soccer_state = None):  #REMOVE SOCCER STATE!!!!!!!!
+    def act(self, player_state, player_image, soccer_state = None, heatmap1=None, heatmap2=None):  #REMOVE SOCCER STATE!!!!!!!!
         """
         This function is called once per timestep. You're given a list of player_states and images.
 
@@ -170,8 +177,11 @@ class Team:
 
           image1 = TF.to_tensor(player_image[0])[None]
           image2 = TF.to_tensor(player_image[1])[None]
-          aim_point_image_Player1, _ = self.Planner(image1)
-          aim_point_image_Player2, _ = self.Planner(image2)
+          #aim_point_image_Player1, _ = self.Planner(image1)
+          #aim_point_image_Player2, _ = self.Planner(image2)
+          aim_point_image_Player1 = self.Planner(image1)
+          aim_point_image_Player2 = self.Planner(image2)
+
 
           aim_point_image_Player1 = aim_point_image_Player1.squeeze(0)
           aim_point_image_Player2 = aim_point_image_Player2.squeeze(0)
@@ -219,6 +229,43 @@ class Team:
         print("\n\n Player 1~~~~~~~~~~~ aimpoint predicted, aimpoint actual:", aim_point_image_Player1, 
                aim_point_image_actual_1)
 
+        #print("\n~~~~~~~~~~~ LOSS:", self.MSEloss())
+
+        #x = aim_point_image_Player1.detach()
+
+        #loss_v = self.MSEloss(x, aim_point_image_actual_1)
+     
+        puck_flag = 0
+
+
+        if heatmap1:
+          heatmap1[0] = heatmap1[0] >> 24
+          for i in range (300):
+            for j in range (400):
+              if heatmap1[0][i][j]  == 8:
+                puck_flag = 1
+
+        loss_v = abs(aim_point_image_Player1.detach()-aim_point_image_actual_1).mean()
+
+        print("\nPlayer 1~~~~~~~~~~~ CURRENT LOSS, and frame", loss_v, self.frame)
+
+        if puck_flag:
+          print("\n    *******THERE IS A PUCK IN THE IMAGE!!!!!!!!!!!!!!!!! <-------------")
+         
+          self.total_loss_puck += loss_v          
+          self.total_loss_puck_count += 1
+          print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS FOR PUCK *IN IMAGE*", self.total_loss_puck/self.total_loss_puck_count)
+         
+
+
+        if puck_flag==0:
+          print ("\n   WARNING:   NO PUCK IN IMAGE...................................]]]]]]]]]]")
+          self.total_loss_No_puck += loss_v 
+          self.total_loss_No_puck_count += 1
+          print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS NO PUCK", self.total_loss_No_puck/self.total_loss_No_puck_count)
+        
+
+
         use_actual_coords = False    #OMIT THIS DEC 1 2021
 
         if use_actual_coords:
@@ -247,6 +294,8 @@ class Team:
 
         output1 = forward_aimpoint_1
         output2 = forward_aimpoint_2
+
+
 
         print ("\n ^^^^^^^^^^^^^^^ VELOCITIES^^^^^^^^^^^^^^^^ \n")
         print (player_state[0]['kart']['velocity'])
@@ -306,6 +355,6 @@ class Team:
         if player_state[0]['kart']['velocity'][2] > 3:
           output2 = backward_aimpoint_2
 
-         
+        self.frame += 1
        
         return [output1, output2]

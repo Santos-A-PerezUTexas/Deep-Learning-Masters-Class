@@ -23,8 +23,8 @@ def train(args):
     if args.continue_training:
         model.load_state_dict(torch.load(path.join(path.dirname(path.abspath(__file__)), 'planner.th')))
 
-    #loss = torch.nn.L1Loss()
-    loss = torch.nn.MSELoss()
+    loss = torch.nn.L1Loss()
+    #loss = torch.nn.MSELoss()
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
     
@@ -47,7 +47,9 @@ def train(args):
             h, w = img.size()[2], img.size()[3]
 
 
-            pred, flag = model(img)
+            #pred, flag = model(img) Dec 4
+            pred  = model(img)
+
             x,y = label.chunk(2, dim=1)
 
             xy = torch.cat((x, y),  dim=1)

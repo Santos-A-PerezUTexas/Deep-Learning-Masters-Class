@@ -25,11 +25,12 @@ class Planner(torch.nn.Module):
             conv_layers += conv_block(c, h)
             h = c
 
-        self.conv_layers = torch.nn.Sequential(*conv_layers)
+        self.conv_layers = torch.nn.Sequential(*conv_layers, torch.nn.Conv2d(h, 1, 1))
         
         #self.linear_classifier = torch.nn.Linear(475, 1)
-        self.aimpoint_classifier = torch.nn.Conv2d(h, 1, 1)
-        self.flag = torch.nn.Conv2d(h, 1, 1)
+        
+        #self.aimpoint_classifier = torch.nn.Conv2d(h, 1, 1)
+        #self.flag = torch.nn.Conv2d(h, 1, 1)
 
     def forward(self, img):
         """
@@ -40,14 +41,14 @@ class Planner(torch.nn.Module):
         """
         coordinates = self.conv_layers(img)
 
-        flag = self.flag(coordinates)
-        coordinates = self.aimpoint_classifier(coordinates)
+        #flag = self.flag(coordinates)
+        #coordinates = self.aimpoint_classifier(coordinates)
 
         
         coordinates = spatial_argmax(coordinates[:, 0])
                
 
-        return coordinates, self.flag  #added Dec 3, 2021
+        return coordinates #, self.flag  #added Dec 3, 2021
         # return self.classifier(coordinates.mean(dim=[-2, -1]))
 
 
