@@ -167,9 +167,15 @@ class Team:
         if self.planner:
           
           print ("USING PLANNER USING PLANNER USING PLANNER USING PLANNER ")
-          aim_point_image_Player1 = self.Planner(TF.to_tensor(player_image[0])[None]).squeeze(0)
-          aim_point_image_Player2 = self.Planner(TF.to_tensor(player_image[1])[None]).squeeze(0)
 
+          image1 = TF.to_tensor(player_image[0])[None]
+          image2 = TF.to_tensor(player_image[1])[None]
+          aim_point_image_Player1, _ = self.Planner(image1)
+          aim_point_image_Player2, _ = self.Planner(image2)
+
+          aim_point_image_Player1 = aim_point_image_Player1.squeeze(0)
+          aim_point_image_Player2 = aim_point_image_Player2.squeeze(0)
+          
           x1 = aim_point_image_Player1[0]     
           y1 = aim_point_image_Player1[1]     
           x2 = aim_point_image_Player2[0]     
