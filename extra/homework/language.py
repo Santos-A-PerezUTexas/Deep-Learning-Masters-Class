@@ -108,7 +108,7 @@ def beam_search(model: LanguageModel,
    
 # heap will sort by first element in tuple
     heap = TopNHeap(beam_size)
-    term_heap = TopNHeap(n_results)
+    heap2 = TopNHeap(n_results)
     visited = set()
     term_list = []
     strings_only = []
@@ -123,7 +123,7 @@ def beam_search(model: LanguageModel,
 
         if utils.vocab[i] == '.':
             #print ("\n the Period corresponds to likelihood ---- ", l)
-            term_heap.add(( likelihood, utils.vocab[i]) )
+            heap2.add(( likelihood, utils.vocab[i]) )
         else:
             #print ("\n this letter corresponds to likelihood that follows ---- ",  utils.vocab[i], l)
             heap.add( (likelihood, utils.vocab[i]) )
@@ -149,15 +149,15 @@ def beam_search(model: LanguageModel,
                     visited.add(new_s)
                     # add to terminated heap
                     if new_s[-1] == '.' or len(new_s) > max_length:
-                        term_heap.add( (new_likelihood, new_s) )
+                        heap2.add( (new_likelihood, new_s) )
                     else:
                         heap.add( (new_likelihood, new_s) )
         m += 1
 
     
     
-    for i in range(len(term_heap.elements)):
-        term_list.append(term_heap.elements[i])
+    for i in range(len(heap2.elements)):
+        term_list.append(heap2.elements[i])
     
     term_list.sort()
 
@@ -166,7 +166,7 @@ def beam_search(model: LanguageModel,
     
     for likelihood, string in term_list:
         strings_only.append(string)
-        print ("\nThis string being extracted from beam_search", string) 
+        #print ("\nThis string being extracted from beam_search", string) 
     
     return strings_only
 
