@@ -19,7 +19,7 @@ def train(args):
     model = model.to(device)
 
     print(model)
-    
+
     if args.continue_training:
         model.load_state_dict(torch.load(path.join(path.dirname(path.abspath(__file__)), 'planner.th')))
 
@@ -39,7 +39,7 @@ def train(args):
         
         for img, label in train_data:
             
-            print ("INSIDE LOOP")
+            #print ("INSIDE LOOP")
             img, label = img.to(device), label.to(device)
 
             #print (label[0])
