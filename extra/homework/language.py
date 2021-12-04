@@ -134,6 +134,7 @@ def beam_search(model: LanguageModel,
 
         for curr_likelihood, curr_s in heap.elements:
 
+            #get the next prediction
             prediction = model.predict_next(curr_s)
 
             for i, likelihood in enumerate(prediction):
