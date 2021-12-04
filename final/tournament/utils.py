@@ -4,7 +4,7 @@ import pystk
 #TOURNAMENT UTILS
 #Edit this to generate labels
 
-file_no = 1 
+file_no = 1001 
 
 class Team(IntEnum):   #Two methods, video_grid() and map_image() (as well as map_image()-->_to_coord(x) 
     
@@ -144,8 +144,12 @@ class VideoRecorder(BaseRecorder):
               
 
             if not puck_flag:
-              
-              print ("\n You're out of Puck")
+               print ("\n You're out of Puck")
+
+            if puck_flag != out_of_frame:
+              print ("\n WARNING -   puck_flag bit shift does not coincide with  out of frame coord flag")
+              print ("\n WARNING -   puck_flag bit shift does not coincide with  out of frame coord flag")
+
 
               #heatmap1[1] = heatmap1[1] >> 24
               #heatmap2 = heatmap2 >> 24
