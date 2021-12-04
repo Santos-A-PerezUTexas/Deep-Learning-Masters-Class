@@ -110,6 +110,9 @@ def beam_search(model: LanguageModel,
     heap = TopNHeap(beam_size)
     term_heap = TopNHeap(n_results)
     visited = set()
+    term_list = []
+    strings_only = []
+    
 
     # initialize heap
     prediction = model.predict_next("")  #shape [28]
@@ -151,18 +154,21 @@ def beam_search(model: LanguageModel,
                         heap.add( (new_likelihood, new_s) )
         m += 1
 
-    # sort and return
-    sort_list = []
+    
+    
     for i in range(len(term_heap.elements)):
-        sort_list.append(term_heap.elements[i])
-    #sort_list.sort(reverse=True)
-    sort_list.sort()
+        term_list.append(term_heap.elements[i])
+    
+    term_list.sort()
 
-    return_list = []
-    for l, s in sort_list:
-        return_list.append(s)
-    print(return_list)
-    return return_list
+    
+    #extract strings
+    
+    for likelihood, string in term_list:
+        strings_only.append(string)
+        print ("\nThis string being extracted from beam_search", string) 
+    
+    return strings_only
 
 
 
