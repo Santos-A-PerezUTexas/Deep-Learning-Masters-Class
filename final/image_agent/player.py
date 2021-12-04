@@ -22,8 +22,11 @@ class Team:
 
         if self.planner:
 
+          print ("IN CONDITIONAL")
           self.Planner = load_model()
+          print ("LOADED PLANNER")
           self.Planner.eval()
+          print ("LOADED PLANNER EVAL")
 
         self.prior_state = []
         self.prior_soccer_state1 = []

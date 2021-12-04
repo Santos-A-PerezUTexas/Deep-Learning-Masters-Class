@@ -45,8 +45,8 @@ class Planner(torch.nn.Module):
 
         
         coordinates = spatial_argmax(coordinates[:, 0])
-        
-        
+               
+
         return coordinates, self.flag  #added Dec 3, 2021
         # return self.classifier(coordinates.mean(dim=[-2, -1]))
 
