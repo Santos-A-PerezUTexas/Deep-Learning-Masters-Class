@@ -35,8 +35,7 @@ def train(args):
     for epoch in range(args.num_epoch):
         model.train()
         losses = []
-        print("\n\n GOING TO ITERATE THROUGH DATA.....................")
-        
+               
         for img, label in train_data:
             
             #print ("INSIDE LOOP")

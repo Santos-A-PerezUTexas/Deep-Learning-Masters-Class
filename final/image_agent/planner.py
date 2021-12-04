@@ -29,6 +29,7 @@ class Planner(torch.nn.Module):
         
         #self.linear_classifier = torch.nn.Linear(475, 1)
         self.aimpoint_classifier = torch.nn.Conv2d(h, 1, 1)
+        self.flag = torch.nn.Conv2d(h, 1, 1)
 
     def forward(self, img):
         """
@@ -37,28 +38,16 @@ class Planner(torch.nn.Module):
         @img: (B,3,96,128)
         return (B,2)
         """
-        
-        #print ("\n\n coordinates[0,:,:,:] view -1 shape is ", coordinates[0,:,:,:].view(-1).shape) 
-        #print ("\n\n coordinates[0,:,:,:]  shape is ", coordinates[0,:,:,:].shape)
-
-        #flag = self.classifier(coordinates.mean(dim=[-2, -1]))  #added Dec 3, 2021
-        #print ("\n\n flag shape is ", flag.shape)
-
         coordinates = self.conv_layers(img)
 
-        #print ("\n\n 0- coordinates  shape after network is ", coordinates.shape)
-
+        flag = self.flag(coordinates)
         coordinates = self.aimpoint_classifier(coordinates)
-        #print ("\n\n 1 coordinates  shape after classifier is ", coordinates.shape)
 
-        coordinates = spatial_argmax(coordinates[:, 0])
-        #print ("\n\n 2 coordinates  after argmax shape is ", coordinates.shape)
-
-
-        return coordinates, 1  #added Dec 3, 2021
-
-        #return output  #deleted dec 3
         
+        coordinates = spatial_argmax(coordinates[:, 0])
+        
+        
+        return coordinates, self.flag  #added Dec 3, 2021
         # return self.classifier(coordinates.mean(dim=[-2, -1]))
 
 
