@@ -1,6 +1,7 @@
 import numpy as np
 from enum import IntEnum
 import pystk 
+#TOURNAMENT UTILS
 
 file_no = 1 
 
@@ -226,7 +227,8 @@ class VideoRecorder(BaseRecorder):
         
         #print(f'image size is {Image.fromarray(im).size} ')
         with open(fn + '.csv', 'w') as f: 
-          f.write('%0.1f,%0.1f,%0.1f' % tuple(x))
+          #f.write('%0.1f,%0.1f,%0.1f' % tuple(x))
+          f.write('%0.1f,%0.1f' % tuple(pt))
         #with open(fn + 'puck_flag.csv', 'w') as f: 
           #f.write('%0.1f' % puck_flag)
         file_no += 1
