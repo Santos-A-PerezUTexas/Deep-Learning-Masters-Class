@@ -162,18 +162,12 @@ class Team:
           wrong_direction_kart2 = True
  
 
-
-
-
-
-        print ("                   ENTERING ACT()    NOV 28 2021                  ")
-        
-      
-        print ("---------------------------ACT() BLOCK BEGIN---------------------")
+    
+        print ("\n---------------------------ACT() BLOCK BEGIN---------------------")
               
         if self.planner:
           
-          print ("USING PLANNER USING PLANNER USING PLANNER USING PLANNER ")
+          print ("\nUSING PLANNER USING PLANNER USING PLANNER USING PLANNER ")
 
           image1 = TF.to_tensor(player_image[0])[None]
           image2 = TF.to_tensor(player_image[1])[None]
@@ -296,46 +290,46 @@ class Team:
 
 
 
-        print ("\n ^^^^^^^^^^^^^^^ VELOCITIES^^^^^^^^^^^^^^^^ \n")
-        print (player_state[0]['kart']['velocity'])
-        print (player_state[1]['kart']['velocity'])
+        #print ("\n ^^^^^^^^^^^^^^^ VELOCITIES^^^^^^^^^^^^^^^^ \n")
+        #print (player_state[0]['kart']['velocity'])
+        #print (player_state[1]['kart']['velocity'])
 
-        print ("\n ^^^^^^^^^^^^^^^ KART FRONT COORDS^^^^^^^^^^^^^^^^ \n")
-        print (player_state[0]['kart']['front'])
-        print (player_state[1]['kart']['front'])
-
-
-        print ("\n ^^^^^^^^^^^^^^^ KART COORDS^^^^^^^^^^^^^^^^ \n")
-
-        print (player_state[0]['kart']['location'])
-        print (player_state[1]['kart']['location'])
+        #print ("\n ^^^^^^^^^^^^^^^ KART FRONT COORDS^^^^^^^^^^^^^^^^ \n")
+        #print (player_state[0]['kart']['front'])
+        #print (player_state[1]['kart']['front'])
 
 
-        print ("\n ^^^^^^^^^^^^^^^^ KART ROTATION^^^^^^^^^^^^^^^^ \n")
+        #print ("\n ^^^^^^^^^^^^^^^ KART COORDS^^^^^^^^^^^^^^^^ \n")
 
-        print (player_state[0]['kart']['rotation'])
-        print (player_state[1]['kart']['rotation'])
+        #print (player_state[0]['kart']['location'])
+        #print (player_state[1]['kart']['location'])
 
 
-        print ("\n ^^^^^^^^^^^^^^^^ PLAYER ID, TEAM^^^^^^^^^^^^^^^^ \n")
+        #print ("\n ^^^^^^^^^^^^^^^^ KART ROTATION^^^^^^^^^^^^^^^^ \n")
 
-        print (player_state[0]['kart']['player_id'], self.my_team)
-        print (player_state[1]['kart']['id'], self.my_team)
+        #print (player_state[0]['kart']['rotation'])
+        #print (player_state[1]['kart']['rotation'])
+
+
+        #print ("\n ^^^^^^^^^^^^^^^^ PLAYER ID, TEAM^^^^^^^^^^^^^^^^ \n")
+
+        #print (player_state[0]['kart']['player_id'], self.my_team)
+        #print (player_state[1]['kart']['id'], self.my_team)
 
         #direction kart is facing is player_state[0]['kart']['location'][2] -
         # minus player_state[0]['kart']['front'][2], different for both teams. 
 
 
-        print ("\n ^^^^^^^^^^^^^^^ CURRENT KART DIRECTIONS^^^^^^^^^^^^^^^^ \n")
+        #print ("\n ^^^^^^^^^^^^^^^ CURRENT KART DIRECTIONS^^^^^^^^^^^^^^^^ \n")
 
-        print ("\n Kart 1 Current Direction:  ", current_kart1_dir)
-        print ("\n Kart 2 Current Direction:  ", current_kart2_dir)
+        #print ("\n Kart 1 Current Direction:  ", current_kart1_dir)
+        #print ("\n Kart 2 Current Direction:  ", current_kart2_dir)
       
-        if wrong_direction_kart1:
-          print ("\n DANGER ----------- Kart 1 is headed in the wrong direction!")
+        #if wrong_direction_kart1:
+         # print ("\n DANGER ----------- Kart 1 is headed in the wrong direction!")
 
-        if wrong_direction_kart2:
-          print ("\n DANGER ----------- Kart 2 is headed in the wrong direction!")
+        #if wrong_direction_kart2:
+          #print ("\n DANGER ----------- Kart 2 is headed in the wrong direction!")
 
       #Case 1, right direction, puck in frame
       #Case 2, right direction, puck not in frame
