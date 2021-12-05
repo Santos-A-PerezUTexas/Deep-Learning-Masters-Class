@@ -260,6 +260,7 @@ class Match:
 
             logging.debug('  race.step  [score = {}]'.format(state.soccer.score))
             if (not race.step([self._pystk.Action(**a) for a in actions]) and num_player) or sum(state.soccer.score) >= max_score:
+                print ("BREAKING")
                 break
 
         race.stop()
