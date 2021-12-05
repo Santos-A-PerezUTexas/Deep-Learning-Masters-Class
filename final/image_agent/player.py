@@ -38,6 +38,7 @@ class Team:
         self.prior_state = []
         self.prior_soccer_state1 = []
         self.prior_soccer_state2 = []
+        self.DEBUG = True
 
 
     def new_match(self, team: int, num_players: int) -> list:
@@ -171,12 +172,13 @@ class Team:
 
           image1 = TF.to_tensor(player_image[0])[None]
           image2 = TF.to_tensor(player_image[1])[None]
+          print ("LINE 175")
           #aim_point_image_Player1, _ = self.Planner(image1)
           #aim_point_image_Player2, _ = self.Planner(image2)
           aim_point_image_Player1 = self.Planner(image1)
           aim_point_image_Player2 = self.Planner(image2)
 
-
+          print ("LINE 180")
           aim_point_image_Player1 = aim_point_image_Player1.squeeze(0)
           aim_point_image_Player2 = aim_point_image_Player2.squeeze(0)
           
@@ -188,6 +190,7 @@ class Team:
           
           self.prior_soccer_state1.append(aim_point_image_Player1)
           self.prior_soccer_state2.append(aim_point_image_Player2)
+          print ("LINE 192")
         
         self.prior_state.append(player_state)
         
@@ -232,34 +235,34 @@ class Team:
         puck_flag = 0
 
 
-        if heatmap1:
+        if heatmap1 and self.DEBUG:
           heatmap1[0] = heatmap1[0] >> 24
           for i in range (300):
             for j in range (400):
               if heatmap1[0][i][j]  == 8:
                 puck_flag = 1
 
-        loss_v = abs(aim_point_image_Player1.detach()-aim_point_image_actual_1).mean()
+          loss_v = abs(aim_point_image_Player1.detach()-aim_point_image_actual_1).mean()
 
-        print("\nPlayer 1~~~~~~~~~~~ CURRENT LOSS, and frame", loss_v, self.frame)
+          print("\nPlayer 1~~~~~~~~~~~ CURRENT LOSS, and frame", loss_v, self.frame)
 
-        if puck_flag:
-          print("\n    *******THERE IS A PUCK IN THE IMAGE!!!!!!!!!!!!!!!!! <-------------")
+          if puck_flag:
+            print("\n    *******THERE IS A PUCK IN THE IMAGE!!!!!!!!!!!!!!!!! <-------------")
          
-          self.total_loss_puck += loss_v          
-          self.total_loss_puck_count += 1
-          print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS FOR PUCK *IN IMAGE*", self.total_loss_puck/self.total_loss_puck_count)
-          if self.total_loss_No_puck_count > 0:
-            print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS NO PUCK", self.total_loss_No_puck/self.total_loss_No_puck_count)
-
-
-        if puck_flag==0:
-          print ("\n   WARNING:   NO PUCK IN IMAGE...................................]]]]]]]]]]")
-          self.total_loss_No_puck += loss_v 
-          self.total_loss_No_puck_count += 1
-          print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS NO PUCK", self.total_loss_No_puck/self.total_loss_No_puck_count)
-          if self.total_loss_puck_count >0:
+            self.total_loss_puck += loss_v          
+            self.total_loss_puck_count += 1
             print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS FOR PUCK *IN IMAGE*", self.total_loss_puck/self.total_loss_puck_count)
+            if self.total_loss_No_puck_count > 0:
+              print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS NO PUCK", self.total_loss_No_puck/self.total_loss_No_puck_count)
+
+
+          if puck_flag==0:
+            print ("\n   WARNING:   NO PUCK IN IMAGE...................................]]]]]]]]]]")
+            self.total_loss_No_puck += loss_v 
+            self.total_loss_No_puck_count += 1
+            print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS NO PUCK", self.total_loss_No_puck/self.total_loss_No_puck_count)  
+            if self.total_loss_puck_count >0:
+              print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS FOR PUCK *IN IMAGE*", self.total_loss_puck/self.total_loss_puck_count)
 
         use_actual_coords = False    #OMIT THIS DEC 1 2021
 
@@ -285,8 +288,7 @@ class Team:
 
         goal_aim_point = dict(acceleration=0, steer=x2, brake = True)
       
-        msg =  "                   PUCK IS IN FRONT <----------------------" 
-
+        
         output1 = forward_aimpoint_1
         output2 = forward_aimpoint_2
 
@@ -352,7 +354,7 @@ class Team:
 
         self.frame += 1
 
-        if self.frame > 150:
+        if self.frame > 150 and self.DEBUG:
           print ("\n\n STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS ")
           print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS NO PUCK", self.total_loss_No_puck/self.total_loss_No_puck_count)
           print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS FOR PUCK *IN IMAGE*", self.total_loss_puck/self.total_loss_puck_count)
