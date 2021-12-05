@@ -19,13 +19,13 @@ class Planner(torch.nn.Module):
 
         conv_block = lambda c, h: [torch.nn.BatchNorm2d(h), torch.nn.Conv2d(h, c, 5, 2, 2), torch.nn.ReLU(True)]
 
-        h, conv_layers = 3, []
+        h, _conv = 3, []
 
         for c in channels:
-            conv_layers += conv_block(c, h)
+            _conv += conv_block(c, h)
             h = c
 
-        self.conv_layers = torch.nn.Sequential(*conv_layers, torch.nn.Conv2d(h, 1, 1))
+        self._conv = torch.nn.Sequential(*_conv, torch.nn.Conv2d(h, 1, 1))
         
         #self.linear_classifier = torch.nn.Linear(475, 1)
         
@@ -39,16 +39,16 @@ class Planner(torch.nn.Module):
         @img: (B,3,96,128)
         return (B,2)
         """
-        coordinates = self.conv_layers(img)
+        x = self._conv(img)
 
         #flag = self.flag(coordinates)
         #coordinates = self.aimpoint_classifier(coordinates)
 
         
-        coordinates = spatial_argmax(coordinates[:, 0])
+        #x = spatial_argmax(x[:, 0])
                
-
-        return coordinates #, self.flag  #added Dec 3, 2021
+        return (spatial_argmax(x[:, 0]))
+        #return x #, self.flag  #added Dec 3, 2021
         # return self.classifier(coordinates.mean(dim=[-2, -1]))
 
 
