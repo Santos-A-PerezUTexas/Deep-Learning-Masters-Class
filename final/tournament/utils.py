@@ -205,8 +205,15 @@ class VideoRecorder(BaseRecorder):
         x = np.random.rand(3)
         global file_no 
         id = file_no 
-        fn = path.join('/content/cs342/final/data/', 'ice_hockey' + '_%05d' % id)
+        
+        
+        if puck_flag:
+          fn = path.join('/content/cs342/final/data_YesPuck/', 'ice_hockey' + '_%05d' % id)
+        if puck_flag == 0:
+          fn = path.join('/content/cs342/final/data_YesPuck/', 'ice_hockey' + '_%05d' % id)
+
         Image.fromarray(im).save(fn + '.png')
+        
         #Image.fromarray(heatmap).save(fn + '_heatmap.png')
         x[0] = pt[0]
         x[1] = pt[1]
