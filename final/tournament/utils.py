@@ -4,7 +4,7 @@ import pystk
 #TOURNAMENT UTILS
 #Edit this to generate labels
 
-file_no = 2001 
+file_no = 1001 
 
 class Team(IntEnum):   #Two methods, video_grid() and map_image() (as well as map_image()-->_to_coord(x) 
     
@@ -205,7 +205,8 @@ class VideoRecorder(BaseRecorder):
 
         clipped_aim_point = np.clip(aimpoint, -1, 1) 
        
-        return clipped_aim_point, out_of_frame
+        return aimpoint, out_of_frame
+        #return clipped_aim_point, out_of_frame
     
 
 
