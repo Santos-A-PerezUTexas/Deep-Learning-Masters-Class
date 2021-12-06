@@ -76,6 +76,10 @@ class Team:
         
         use_soccer_world_coords = True  #USES SOCCER COORDS
         use_actual_coords = False    #USES ACTUAL COORDS FOR SOCCER BALL ACTION
+        use_image_coords = True
+
+        if use_soccer_world_coords:
+          use_image_coords = False
 
         self.my_team = player_state[0]['kart']['player_id']%2
 
@@ -159,22 +163,28 @@ class Team:
 
         #ERASE BEGIN DEC 1, 2021-----------------------------------------
 
-        x=soccer_state['ball']['location'][0]
-        y = soccer_state['ball']['location'][1] 
-        z=soccer_state['ball']['location'][2]
+        x =soccer_state['ball']['location'][0]
+        y =soccer_state['ball']['location'][1] 
+        z =soccer_state['ball']['location'][2]
+        
         xyz = np.random.rand(3)
         xz =  np.random.rand(2)
+        
         xz[0] = x
         xz[1] = z
+        
         xyz[0] = x
         xyz[1] = y
         xyz[2] = z
+        
         proj = np.array(player_state[0]['camera']['projection']).T
         view = np.array(player_state[0]['camera']['view']).T
-        
-        if use_soccer_world_coords == False:
+
+        if use_image_coords:
+          print ("USING IMAGE COORDS FOR PUCK ACTUAL")
           aim_point_image_actual_1 = self._to_image(xyz, proj, view) 
         if use_soccer_world_coords:
+          print("USING WORLD COORDS FOR PUCK ACTUAL")
           aim_point_image_actual_1 = xz
 
         print("\n\n Player 1~~~~~~~~~~~ aimpoint predicted, aimpoint actual:", aim_point_image_Player1, 
