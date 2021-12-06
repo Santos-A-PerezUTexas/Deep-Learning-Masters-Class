@@ -23,8 +23,8 @@ def train(args):
     if args.continue_training:
         model.load_state_dict(torch.load(path.join(path.dirname(path.abspath(__file__)), 'planner.th')))
 
-    loss = torch.nn.L1Loss()
-    #loss = torch.nn.MSELoss()
+    loss = torch.nn.L1Loss(reduce='mean')   #remove mean?
+    #loss = torch.nn.MSELoss(reduce='mean')
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
     

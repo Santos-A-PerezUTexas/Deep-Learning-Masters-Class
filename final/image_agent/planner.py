@@ -12,7 +12,6 @@ def spatial_argmax(logit):
     return torch.stack(((weights.sum(1) * torch.linspace(-1, 1, logit.size(2)).to(logit.device)[None]).sum(1),
                         (weights.sum(2) * torch.linspace(-1, 1, logit.size(1)).to(logit.device)[None]).sum(1)), 1)
 
-
 class Planner(torch.nn.Module):
     class Block(torch.nn.Module):
         def __init__(self, n_input, n_output, kernel_size=3, stride=2):
@@ -74,6 +73,8 @@ class Planner(torch.nn.Module):
            and detect for detection
         """
         z = (x - self.input_mean[None, :, None, None].to(x.device)) / self.input_std[None, :, None, None].to(x.device)
+        x=z
+
         up_activation = []
         for i in range(self.n_conv):
             # Add all the information required for skip connections
@@ -88,13 +89,16 @@ class Planner(torch.nn.Module):
             if self.use_skip:
                 z = torch.cat([z, up_activation[i]], dim=1)
 
+        
         z = self.aimpoint_classifier(z)
 
-        z = self.linearL(z.view(-1))
-
+        z = self.linearL(z.view(z.size(0), -1))
+        #z = spatial_argmax(z[:, 0])
+        print (z[0])
+        #return z
         return z
-        #return spatial_argmax(z[:, 0])
-
+        #return (1 + spatial_argmax(z.squeeze(1))) * torch.as_tensor([x.size(3) - 1, x.size(2) - 1]).float().to(
+           # x.device)
 
 def save_model(model):
     from torch import save
