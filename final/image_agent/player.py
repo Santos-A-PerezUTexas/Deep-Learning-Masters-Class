@@ -130,6 +130,8 @@ class Team:
         #print (player_state[0]['kart']['location'])
         #[dict(acceleration=1, steer=-.2, nitro=True, fire=True)] * self.num_players
         
+        use_soccer_world_coords = True
+
         self.my_team = player_state[0]['kart']['player_id']%2
 
         goal_post = [[-10.449999809265137, 0.07000000029802322, -64.5], 
@@ -188,11 +190,11 @@ class Team:
           y2 = aim_point_image_Player2[1]
           
           
-          self.prior_soccer_state1.append(aim_point_image_Player1)
-          self.prior_soccer_state2.append(aim_point_image_Player2)
+          #self.prior_soccer_state1.append(aim_point_image_Player1)
+          #self.prior_soccer_state2.append(aim_point_image_Player2)
           print ("LINE 192")
         
-        self.prior_state.append(player_state)
+        #self.prior_state.append(player_state)
         
         if not self.planner:
 
@@ -216,12 +218,18 @@ class Team:
         y = soccer_state['ball']['location'][1] 
         z=soccer_state['ball']['location'][2]
         xyz = np.random.rand(3)
+        xz =  np.random.rand(2)
+        xz[0] = x
+        xz[1] = z
         xyz[0] = x
         xyz[1] = y
         xyz[2] = z
         proj = np.array(player_state[0]['camera']['projection']).T
         view = np.array(player_state[0]['camera']['view']).T
-        aim_point_image_actual_1 = self._to_image(xyz, proj, view) 
+        if use_soccer_world_coords == False:
+          aim_point_image_actual_1 = self._to_image(xyz, proj, view) 
+        if use_soccer_world_coords:
+          aim_point_image_actual_1 = xz
 
         print("\n\n Player 1~~~~~~~~~~~ aimpoint predicted, aimpoint actual:", aim_point_image_Player1, 
                aim_point_image_actual_1)
