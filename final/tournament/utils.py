@@ -218,31 +218,33 @@ class VideoRecorder(BaseRecorder):
         global file_no 
         id = file_no 
         divide_data = False
+        save_data = False
         
-        
-        if puck_flag:
-          if divide_data:
-            fn = path.join('/content/cs342/final/data_YesPuck/', 'ice_hockey' + '_%05d' % id)
-          if divide_data == False:
-            fn = path.join('/content/cs342/final/data/', 'ice_hockey' + '_%05d' % id)
-        if puck_flag == 0:
-          if divide_data:
-            fn = path.join('/content/cs342/final/data_NoPuck/', 'ice_hockey' + '_%05d' % id)
-          if divide_data == False:
-            fn = path.join('/content/cs342/final/data/', 'ice_hockey' + '_%05d' % id)
-        Image.fromarray(im).save(fn + '.png')
+        if save_data:
 
-        #Image.fromarray(heatmap).save(fn + '_heatmap.png')
-        x[0] = pt[0]
-        x[1] = pt[1]
-        x[2] = puck_flag
+          if puck_flag:
+            if divide_data:
+              fn = path.join('/content/cs342/final/data_YesPuck/', 'ice_hockey' + '_%05d' % id)
+            if divide_data == False:
+              fn = path.join('/content/cs342/final/data/', 'ice_hockey' + '_%05d' % id)
+          if puck_flag == 0:
+            if divide_data:
+              fn = path.join('/content/cs342/final/data_NoPuck/', 'ice_hockey' + '_%05d' % id)
+            if divide_data == False:
+              fn = path.join('/content/cs342/final/data/', 'ice_hockey' + '_%05d' % id)
+          Image.fromarray(im).save(fn + '.png')
+
+          #Image.fromarray(heatmap).save(fn + '_heatmap.png')
+          x[0] = pt[0]
+          x[1] = pt[1]
+          x[2] = puck_flag
                 
-        with open(fn + '.csv', 'w') as f: 
+          with open(fn + '.csv', 'w') as f: 
           #f.write('%0.1f,%0.1f,%0.1f' % tuple(x))  #with puck flag
-          f.write('%0.1f,%0.1f' % tuple(pt))
-        #with open(fn + 'puck_flag.csv', 'w') as f: 
-          #f.write('%0.1f' % puck_flag)
-        file_no += 1
+            f.write('%0.1f,%0.1f' % tuple(pt))
+          #with open(fn + 'puck_flag.csv', 'w') as f: 
+            #f.write('%0.1f' % puck_flag)
+          file_no += 1
 
 
 #test
