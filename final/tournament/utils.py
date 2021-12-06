@@ -91,6 +91,7 @@ class VideoRecorder(BaseRecorder):
     def __init__(self, video_file):
         import imageio
         self._writer = imageio.get_writer(video_file, fps=20)
+        self.divide_data = False
 
     def __call__(self, team1_state, team2_state, soccer_state, actions,
                  team1_images=None, team2_images=None, heatmap1=None, heatmap2=None):
@@ -99,6 +100,8 @@ class VideoRecorder(BaseRecorder):
             
             out_of_frame = False
             is_behind = False
+            use_world = True
+            
 
             #print ("\n VideoRecorder() in utils.py ----- Putting Images in Grid, ball location: \n")
             #print(tuple(soccer_state['ball']['location']))
@@ -108,6 +111,9 @@ class VideoRecorder(BaseRecorder):
             y = soccer_state['ball']['location'][1] 
             z=soccer_state['ball']['location'][2]
             xyz = np.random.rand(3)
+            xz=np.random.rand(2)
+            xz[0] = x
+            xz[1] = z
             xyz[0] = x
             xyz[1] = y
             xyz[2] = z
@@ -157,7 +163,12 @@ class VideoRecorder(BaseRecorder):
               #print ("\n==============image shape is  ", team1_images[0].shape)
               
 
-            self.collect(team1_images[0], puck_flag, aim_point_image)
+            if use_world == False:
+              self.collect(team1_images[0], puck_flag, aim_point_image)
+            
+            if use_world:
+              self.collect(team1_images[0], puck_flag, xz)
+
             #self.collect(team1_images[0], xz)  #updated to above on 11/27/2021 to normalize xz in range -1...1
             
         
@@ -205,13 +216,19 @@ class VideoRecorder(BaseRecorder):
         x = np.random.rand(3)
         global file_no 
         id = file_no 
+        divide_data = False
         
         
         if puck_flag:
-          fn = path.join('/content/cs342/final/data_YesPuck/', 'ice_hockey' + '_%05d' % id)
+          if divide_data:
+            fn = path.join('/content/cs342/final/data_YesPuck/', 'ice_hockey' + '_%05d' % id)
+          if divide_data == False:
+            fn = path.join('/content/cs342/final/data/', 'ice_hockey' + '_%05d' % id)
         if puck_flag == 0:
-          fn = path.join('/content/cs342/final/data_NoPuck/', 'ice_hockey' + '_%05d' % id)
-
+          if divide_data:
+            fn = path.join('/content/cs342/final/data_NoPuck/', 'ice_hockey' + '_%05d' % id)
+          if divide_data == False:
+            fn = path.join('/content/cs342/final/data/', 'ice_hockey' + '_%05d' % id)
         Image.fromarray(im).save(fn + '.png')
 
         #Image.fromarray(heatmap).save(fn + '_heatmap.png')
