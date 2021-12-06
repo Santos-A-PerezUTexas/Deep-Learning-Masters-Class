@@ -63,7 +63,9 @@ class Planner(torch.nn.Module):
         
         #self.classifier = torch.nn.Conv2d(c, n_class, 1)
         #self.size = torch.nn.Conv2d(c, 2, 1)
+
         self.aimpoint_classifier = torch.nn.Conv2d(c, 1, 1)
+        self.linearL = torch.nn.Linear(400*300,2)
 
     def forward(self, x):
         """
@@ -88,7 +90,10 @@ class Planner(torch.nn.Module):
 
         z = self.aimpoint_classifier(z)
 
-        return spatial_argmax(z[:, 0])
+        z = self.linearL(z.view(-1))
+
+        return z
+        #return spatial_argmax(z[:, 0])
 
 
 def save_model(model):
