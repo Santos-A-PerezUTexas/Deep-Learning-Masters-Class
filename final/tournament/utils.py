@@ -190,6 +190,8 @@ class VideoRecorder(BaseRecorder):
     def _to_image(self, x, proj, view):
 
         out_of_frame = False
+        normalization = False
+
         op = np.array(list(x) + [1])
         #print (f' the shapes proj, view, op:  {proj.shape}, {view.shape}, {op.shape}')
         p = proj @ view @ op
@@ -200,10 +202,10 @@ class VideoRecorder(BaseRecorder):
           print ("NOTE-------------------------------------------------------->We got a coordinate > 1, OUT_OF_FRAME TRUE")
           out_of_frame = True 
           print (x)
-         
-        aimpoint = np.array([x, y])
+        if normalization: 
+          aimpoint = np.array([x, y])
 
-        clipped_aim_point = np.clip(aimpoint, -1, 1) 
+        aimpoint = np.clip(aimpoint, -1, 1) 
        
         return aimpoint, out_of_frame
         #return clipped_aim_point, out_of_frame
