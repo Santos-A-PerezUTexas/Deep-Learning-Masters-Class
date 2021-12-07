@@ -134,7 +134,7 @@ class Team:
               
         if self.planner:
           
-          print ("\nUSING PLANNER USING PLANNER USING PLANNER USING PLANNER ")
+          print ("\n\n\n USING PLANNER USING PLANNER USING PLANNER USING PLANNER \n\n\n")
 
           image1 = TF.to_tensor(player_image[0])[None]
           image2 = TF.to_tensor(player_image[1])[None]
@@ -183,7 +183,7 @@ class Team:
         x = 1
         y = 1
         z = 1
-        
+
         if self.DEBUG:
           x =soccer_state['ball']['location'][0]
           y =soccer_state['ball']['location'][1] 
@@ -226,6 +226,7 @@ class Team:
 
 
         if heatmap1 and self.DEBUG:
+          print ("\n\n\ DOING BITSHIFT ON INSTANCE \n\n")
           heatmap1[0] = heatmap1[0] >> 24
           for i in range (300):
             for j in range (400):
