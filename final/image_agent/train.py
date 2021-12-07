@@ -23,7 +23,7 @@ def train(args):
     if args.continue_training:
         model.load_state_dict(torch.load(path.join(path.dirname(path.abspath(__file__)), 'planner.th')))
 
-    loss = torch.nn.L1Loss(reduce='mean')   #remove mean?
+    loss = torch.nn.L1Loss()   #remove mean?
     #loss = torch.nn.MSELoss(reduce='mean')
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
@@ -52,7 +52,9 @@ def train(args):
 
             x,y = label.chunk(2, dim=1)
 
-            xy = torch.cat((x, y),  dim=1)
+            #xy = torch.cat((x, y),  dim=1)
+            xy = torch.cat((x.clamp(min=0.0,max=w),y.clamp(min=0.0,max=h)),dim=1)
+
             xy = xy.to(device)
 
             loss_val = loss(pred, xy)
