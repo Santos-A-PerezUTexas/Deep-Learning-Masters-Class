@@ -1,6 +1,7 @@
 import logging
 import numpy as np
 from collections import namedtuple
+#TOURNAMENT-->RUNNER
 
 TRACK_NAME = 'icy_soccer_field'
 MAX_FRAMES = 2000
@@ -298,10 +299,13 @@ if __name__ == '__main__':
 
     logging.basicConfig(level=environ.get('LOGLEVEL', 'WARNING').upper())
 
+    
+
     if args.parallel is None or remote.ray is None:
         # Create the teams
         
         team1 = AIRunner() if args.team1 == 'AI' else TeamRunner(args.team1)
+        print ("LINE 322")
         team2 = AIRunner() if args.team2 == 'AI' else TeamRunner(args.team2)
 
         # What should we record?
@@ -312,12 +316,16 @@ if __name__ == '__main__':
         if args.record_state:
             recorder = recorder & utils.StateRecorder(args.record_state)
 
+        
+
         # Start the match
         #match = Match(use_graphics=team1.agent_type == 'image' or team2.agent_type == 'image')
 
        
         #Hack to generate AI v AI match and 3D images...
         match = Match(use_graphics=True)
+
+        
 
         try:
             result = match.run(team1, team2, args.num_players, args.num_frames, max_score=args.max_score,
