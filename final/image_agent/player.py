@@ -26,12 +26,10 @@ class Team:
 
         if self.planner:
 
-          print ("IN CONDITIONAL (message from player.py-newmatch()")
+          print ("\n\n     Player (TEAM) INIT: USING PLANNER \n\n")
           self.Planner = load_model()
-          print ("LOADED PLANNER (message from player.py-newmatch()")
           self.Planner.eval()
-          print ("LOADED PLANNER EVAL (message from player.py-newmatch()")
-
+          
         self.prior_state = []
         self.prior_soccer_state1 = []
         self.prior_soccer_state2 = []
@@ -128,23 +126,17 @@ class Team:
         if (current_kart2_dir != y_goal):
           wrong_direction_kart2 = True
  
-
-    
-        print ("\n---------------------------ACT() BLOCK BEGIN---------------------")
               
         if self.planner:
           
-          print ("\n\n\n USING PLANNER USING PLANNER USING PLANNER USING PLANNER \n\n\n")
-
           image1 = TF.to_tensor(player_image[0])[None]
           image2 = TF.to_tensor(player_image[1])[None]
-          print ("LINE 175")
+          
           #aim_point_image_Player1, _ = self.Planner(image1)
           #aim_point_image_Player2, _ = self.Planner(image2)
           aim_point_image_Player1 = self.Planner(image1)
           aim_point_image_Player2 = self.Planner(image2)
 
-          print ("LINE 142 PLAYER.PY")
           aim_point_image_Player1 = aim_point_image_Player1.squeeze(0)
           aim_point_image_Player2 = aim_point_image_Player2.squeeze(0)
           
@@ -156,7 +148,6 @@ class Team:
           
           #self.prior_soccer_state1.append(aim_point_image_Player1)
           #self.prior_soccer_state2.append(aim_point_image_Player2)
-          print ("LINE 154 PLAYER.PY")
         
         #self.prior_state.append(player_state)
         
@@ -176,8 +167,7 @@ class Team:
         if y2 >= 1:
           is_behind_2 = True
 
-        print ("LINE 174 PLAYER.PY")
-
+        
         #ERASE BEGIN DEC 1, 2021-----------------------------------------
 
         x = 1
@@ -189,7 +179,7 @@ class Team:
           y =soccer_state['ball']['location'][1] 
           z =soccer_state['ball']['location'][2]
         
-        print ("LINE 182 PLAYER.PY")
+        
 
         xyz = np.random.rand(3)
         xz =  np.random.rand(2)
@@ -204,24 +194,21 @@ class Team:
         proj = np.array(player_state[0]['camera']['projection']).T
         view = np.array(player_state[0]['camera']['view']).T
 
-        if use_image_coords:
+        if use_image_coords and self.DEBUG:
           print ("USING NORMALIZED IMAGE COORDS FOR PUCK ACTUAL")
           aim_point_image_actual_1 = self._to_image(xyz, proj, view, normalization=True) 
-        if use_soccer_world_coords:
+        if use_soccer_world_coords and self.DEBUG:
           print("USING UNNORMALED IMAGE COORDS FOR PUCK ACTUAL")
           aim_point_image_actual_1 = self._to_image(xyz, proj, view, normalization=False)
 
-        print("\n\n Player 1~~~~~~~~~~~ aimpoint predicted, aimpoint actual:", aim_point_image_Player1, 
+        if self.DEBUG:
+          print("\n\n Player 1~~~~~~~~~~~ aimpoint predicted, aimpoint actual:", aim_point_image_Player1, 
                aim_point_image_actual_1)
         
-        print("\nThe pure world socccer coords are:  ", xz)
+        if self.DEBUG:
+          print("\nThe pure world socccer coords are:  ", xz)
 
-        #print("\n~~~~~~~~~~~ LOSS:", self.MSEloss())
-
-        #x = aim_point_image_Player1.detach()
-
-        #loss_v = self.MSEloss(x, aim_point_image_actual_1)
-     
+        
         puck_flag = 0
 
 
@@ -234,22 +221,24 @@ class Team:
                 puck_flag = 1
 
           loss_v_image = abs(aim_point_image_Player1.detach()-xz).mean()
-          print("\nPlayer 1~~~~~~~~~~~ CURRENT LOSS predicted/image coords and frame is", loss_v_image, self.frame)
+          
+          if self.DEBUG:
+            print("\nPlayer 1~~~~~~~~~~~ CURRENT LOSS predicted/image coords and frame is", loss_v_image, self.frame)
 
-          loss_v_world = abs(aim_point_image_Player1.detach()-xz).mean()
-          print("\nPlayer 1~~~~~~~~~~~ CURRENT LOSS predicted/world, and frame is", loss_v_world, self.frame)
+            loss_v_world = abs(aim_point_image_Player1.detach()-xz).mean()
+            print("\nPlayer 1~~~~~~~~~~~ CURRENT LOSS predicted/world, and frame is", loss_v_world, self.frame)
 
-          if puck_flag:
-            print("\n    *******THERE IS A PUCK IN THE IMAGE!!!!!!!!!!!!!!!!! <-------------")
+            if puck_flag:
+              print("\n    *******THERE IS A PUCK IN THE IMAGE!!!!!!!!!!!!!!!!! <-------------")
          
-            self.total_loss_puck += loss_v_world          
-            self.total_loss_puck_count += 1
-            print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS (WORLD COORDS) FOR PUCK *IN IMAGE*", self.total_loss_puck/self.total_loss_puck_count)
-            if self.total_loss_No_puck_count > 0:
-              print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS (WORLD COORDS)  NO PUCK", self.total_loss_No_puck/self.total_loss_No_puck_count)
+              self.total_loss_puck += loss_v_world          
+              self.total_loss_puck_count += 1
+              print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS (WORLD COORDS) FOR PUCK *IN IMAGE*", self.total_loss_puck/self.total_loss_puck_count)
+              if self.total_loss_No_puck_count > 0:
+                print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS (WORLD COORDS)  NO PUCK", self.total_loss_No_puck/self.total_loss_No_puck_count)
 
 
-          if puck_flag==0:
+          if puck_flag==0 and self.DEBUG:
             print ("\n   WARNING:   NO PUCK IN IMAGE...................................]]]]]]]]]]")
             self.total_loss_No_puck += loss_v_world 
             self.total_loss_No_puck_count += 1
@@ -284,9 +273,6 @@ class Team:
         
         output1 = forward_aimpoint_1
         output2 = forward_aimpoint_2
-
-
-
 
 
         if player_state[0]['kart']['velocity'][2] > 5:
