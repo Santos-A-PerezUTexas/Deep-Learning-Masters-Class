@@ -196,7 +196,7 @@ class VideoRecorder(BaseRecorder):
     def _to_image(self, x, proj, view):
 
         out_of_frame = False
-        normalization = False
+        normalization = True
 
         op = np.array(list(x) + [1])
         #print (f' the shapes proj, view, op:  {proj.shape}, {view.shape}, {op.shape}')
