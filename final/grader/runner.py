@@ -52,6 +52,8 @@ class TeamRunner:
 
     def __init__(self, team_or_dir):
         from pathlib import Path
+
+        print ("IN TEAM RUNNER")
         try:
             from grader import grader
         except ImportError:
@@ -75,6 +77,7 @@ class TeamRunner:
             self._error = 'Failed to load submission: {}'.format(str(e))
         if hasattr(self, '_team') and self._team is not None:
             self.agent_type = self._team.agent_type
+        print ("IN TEAM RUNNER")
 
     def new_match(self, team: int, num_players: int) -> list:
         self._total_act_time = 0
@@ -174,6 +177,7 @@ class Match:
 
         logging.info('Creating teams')
 
+        print ("LIINE 177 Match.RUN in GRADER->RUNNER.PY")
         # Start a new match
         t1_cars = self._g(self._r(team1.new_match)(0, num_player)) or ['tux']
         t2_cars = self._g(self._r(team2.new_match)(1, num_player)) or ['tux']
@@ -189,7 +193,7 @@ class Match:
 
         # Setup the race config
         logging.info('Setting up race')
-
+        print ("LINE 193 GRADER->RUNNER.PY")
         race_config = RaceConfig(track=TRACK_NAME, mode=RaceConfig.RaceMode.SOCCER, num_kart=2 * num_player)
         race_config.players.pop()
         for i in range(num_player):
@@ -308,7 +312,7 @@ if __name__ == '__main__':
 
         if args.record_state:
             recorder = recorder & utils.StateRecorder(args.record_state)
-
+        print ("LINE 311 GRADER->RUNNER.PY")
         # Start the match
         match = Match(use_graphics=team1.agent_type == 'image' or team2.agent_type == 'image')
         try:
@@ -335,7 +339,7 @@ if __name__ == '__main__':
 
         # What should we record?
         assert args.record_state is None or args.record_video is None, "Cannot record both video and state in parallel mode"
-
+        print ("LINE 338 GRADER->RUNNER.PY")
         # Start the match
         results = []
         for i in range(args.parallel):
@@ -354,7 +358,7 @@ if __name__ == '__main__':
                                       initial_ball_velocity=args.ball_velocity,
                                       record_fn=recorder)
             results.append(result)
-
+        print ("LINE 357 GRADER->RUNNER.PY")
         for result in results:
             try:
                 result = remote.get(result)
