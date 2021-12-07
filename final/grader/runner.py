@@ -178,6 +178,7 @@ class Match:
         logging.info('Creating teams')
 
         print ("LIINE 177 Match.RUN in GRADER->RUNNER.PY")
+
         # Start a new match
         t1_cars = self._g(self._r(team1.new_match)(0, num_player)) or ['tux']
         t2_cars = self._g(self._r(team2.new_match)(1, num_player)) or ['tux']
