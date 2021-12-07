@@ -55,14 +55,14 @@ class TeamRunner:
 
     def __init__(self, agent_dir):
         try:
-            import grader
+            import grader2
         except ImportError:
-            from . import grader
+            from . import grader2
 
         self._error = None
 
         try:
-            assignment = grader.load_assignment(agent_dir)
+            assignment = grader2.load_assignment(agent_dir)
             if assignment is None:
                 self._error = 'Failed to load submission.'
             else:
@@ -277,7 +277,7 @@ if __name__ == '__main__':
     
     
     
-    print ("starting match")
+    print ("FROM TOURNAMENT RUNNER starting match")
     
     from argparse import ArgumentParser
     from pathlib import Path
@@ -299,7 +299,7 @@ if __name__ == '__main__':
 
     logging.basicConfig(level=environ.get('LOGLEVEL', 'WARNING').upper())
 
-    
+    print ("IN TOURNAMENT RUNNER")
 
     if args.parallel is None or remote.ray is None:
         # Create the teams
@@ -316,7 +316,7 @@ if __name__ == '__main__':
         if args.record_state:
             recorder = recorder & utils.StateRecorder(args.record_state)
 
-        
+        print ("IN TOURNAMENT RUNNER")
 
         # Start the match
         #match = Match(use_graphics=team1.agent_type == 'image' or team2.agent_type == 'image')
