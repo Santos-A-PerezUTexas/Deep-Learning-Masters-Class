@@ -26,11 +26,11 @@ class Team:
 
         if self.planner:
 
-          print ("IN CONDITIONAL")
+          print ("IN CONDITIONAL (message from player.py-newmatch()")
           self.Planner = load_model()
-          print ("LOADED PLANNER")
+          print ("LOADED PLANNER (message from player.py-newmatch()")
           self.Planner.eval()
-          print ("LOADED PLANNER EVAL")
+          print ("LOADED PLANNER EVAL (message from player.py-newmatch()")
 
         self.prior_state = []
         self.prior_soccer_state1 = []
@@ -42,6 +42,7 @@ class Team:
 
         self.team, self.num_players = team, num_players
 
+        print ("STARTING NEW MATCH (message from player.py-newmatch()")
         #print (['tux']* num_players)
 
         return ['tux', 'tux']
