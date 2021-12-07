@@ -1,6 +1,7 @@
 import logging
 import numpy as np
 from collections import namedtuple
+#GRADER ---> RUNNER
 
 TRACK_NAME = 'icy_soccer_field'
 MAX_FRAMES = 1000
@@ -275,6 +276,9 @@ if __name__ == '__main__':
     from os import environ
     from . import remote, utils
 
+
+    print ("GRADER--->RUNNER.PY, LINE 280")
+
     parser = ArgumentParser(description="Play some Ice Hockey. List any number of players, odd players are in team 1, even players team 2.")
     parser.add_argument('-r', '--record_video', help="Do you want to record a video?")
     parser.add_argument('-s', '--record_state', help="Do you want to pickle the state?")
@@ -292,8 +296,10 @@ if __name__ == '__main__':
 
     if args.parallel is None or remote.ray is None:
         # Create the teams
+        print ("LINE 299 GRADER->RUNNER.PY")
         team1 = AIRunner() if args.team1 == 'AI' else TeamRunner(args.team1)
         team2 = AIRunner() if args.team2 == 'AI' else TeamRunner(args.team2)
+        print ("LINE 302 GRADER->RUNNER.PY")
 
         # What should we record?
         recorder = None
