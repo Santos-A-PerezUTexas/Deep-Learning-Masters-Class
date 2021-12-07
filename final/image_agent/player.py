@@ -180,7 +180,10 @@ class Team:
 
         #ERASE BEGIN DEC 1, 2021-----------------------------------------
 
-       
+        x = 1
+        y = 1
+        z = 1
+        
         if self.DEBUG:
           x =soccer_state['ball']['location'][0]
           y =soccer_state['ball']['location'][1] 
