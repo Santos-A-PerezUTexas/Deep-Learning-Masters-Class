@@ -92,8 +92,9 @@ class Planner(torch.nn.Module):
         
         z = self.aimpoint_classifier(z)
 
-        z = self.linearL(z.view(z.size(0), -1))
-        #z = spatial_argmax(z[:, 0])
+        #z = self.linearL(z.view(z.size(0), -1))
+        z = spatial_argmax(z[:, 0])
+
         #print (z[0])
         #return z
         return z
