@@ -139,7 +139,7 @@ class Team:
           aim_point_image_Player1 = self.Planner(image1)
           aim_point_image_Player2 = self.Planner(image2)
 
-          print ("LINE 180")
+          print ("LINE 142 PLAYER.PY")
           aim_point_image_Player1 = aim_point_image_Player1.squeeze(0)
           aim_point_image_Player2 = aim_point_image_Player2.squeeze(0)
           
@@ -151,7 +151,7 @@ class Team:
           
           #self.prior_soccer_state1.append(aim_point_image_Player1)
           #self.prior_soccer_state2.append(aim_point_image_Player2)
-          print ("LINE 192")
+          print ("LINE 154 PLAYER.PY")
         
         #self.prior_state.append(player_state)
         
@@ -171,12 +171,17 @@ class Team:
         if y2 >= 1:
           is_behind_2 = True
 
+        print ("LINE 174 PLAYER.PY")
+
         #ERASE BEGIN DEC 1, 2021-----------------------------------------
 
+       
         x =soccer_state['ball']['location'][0]
         y =soccer_state['ball']['location'][1] 
         z =soccer_state['ball']['location'][2]
         
+        print ("LINE 182 PLAYER.PY")
+
         xyz = np.random.rand(3)
         xz =  np.random.rand(2)
         
