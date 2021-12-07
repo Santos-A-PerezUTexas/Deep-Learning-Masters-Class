@@ -91,6 +91,13 @@ class Team:
         use_actual_coords = False    #USES ACTUAL COORDS FOR SOCCER BALL ACTION
         use_image_coords = True
 
+        #Dec 7 2021:
+        action_P1 = {'acceleration': 1, 'brake': False, 'drift': False, 'nitro': False, 'rescue': False, 'steer': 0}
+        action_P2 = {'acceleration': 1, 'brake': False, 'drift': False, 'nitro': False, 'rescue': False, 'steer': 0}
+
+
+
+
         if use_soccer_world_coords:
           use_image_coords = False
 
