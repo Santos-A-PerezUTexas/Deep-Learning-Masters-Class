@@ -4,7 +4,7 @@ import pystk
 #TOURNAMENT UTILS
 #Edit this to generate labels
 
-file_no = 1001 
+file_no = 1 
 
 class Team(IntEnum):   #Two methods, video_grid() and map_image() (as well as map_image()-->_to_coord(x) 
     
