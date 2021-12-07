@@ -47,7 +47,7 @@ class Team:
         return ['tux', 'tux']
 
     
-    def _to_image(self, x, proj, view):  #DEC 1, 2021: ERASE THIS..................
+    def _to_image(self, x, proj, view, normalization=True):  #DEC 1, 2021: ERASE THIS..................
 
         out_of_frame = False
         op = np.array(list(x) + [1])
@@ -57,10 +57,11 @@ class Team:
         
         aimpoint = np.array([x, y])
 
-        clipped_aim_point = np.clip(aimpoint, -1, 1) 
+        if normalization:
+          aimpoint = np.clip(aimpoint, -1, 1) 
         
         
-        return clipped_aim_point
+        return aimpoint
             
     def front_flag(self, puck_loc, threshold=2.0):
         #puck_loc => puck_loc -- model output
@@ -181,11 +182,11 @@ class Team:
         view = np.array(player_state[0]['camera']['view']).T
 
         if use_image_coords:
-          print ("USING IMAGE COORDS FOR PUCK ACTUAL")
-          aim_point_image_actual_1 = self._to_image(xyz, proj, view) 
+          print ("USING NORMALIZED IMAGE COORDS FOR PUCK ACTUAL")
+          aim_point_image_actual_1 = self._to_image(xyz, proj, view, normalization=True) 
         if use_soccer_world_coords:
-          print("USING WORLD COORDS FOR PUCK ACTUAL")
-          aim_point_image_actual_1 = xz
+          print("USING UNNORMALED IMAGE COORDS FOR PUCK ACTUAL")
+          aim_point_image_actual_1 = self._to_image(xyz, proj, view, normalization=False)
 
         print("\n\n Player 1~~~~~~~~~~~ aimpoint predicted, aimpoint actual:", aim_point_image_Player1, 
                aim_point_image_actual_1)
