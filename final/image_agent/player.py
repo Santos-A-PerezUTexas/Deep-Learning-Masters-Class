@@ -57,6 +57,10 @@ class Team:
         
         aimpoint = np.array([x, y])
 
+        if abs(x) > 1 or abs(y)>1:
+          print ("NOTE-------------------------------------------------------->We got a coordinate > 1, OUT_OF_FRAME TRUE")
+          print (x,y)
+
         if normalization:
           print("NORMALIZING -1...1...........................NORMALIZING")
           aimpoint = np.clip(aimpoint, -1, 1) 
@@ -194,6 +198,8 @@ class Team:
 
         print("\n\n Player 1~~~~~~~~~~~ aimpoint predicted, aimpoint actual:", aim_point_image_Player1, 
                aim_point_image_actual_1)
+        
+        print("\nThe pure world socccer coords are:  ", xz)
 
         #print("\n~~~~~~~~~~~ LOSS:", self.MSEloss())
 
@@ -211,27 +217,29 @@ class Team:
               if heatmap1[0][i][j]  == 8:
                 puck_flag = 1
 
-          loss_v = abs(aim_point_image_Player1.detach()-aim_point_image_actual_1).mean()
+          loss_v_image = abs(aim_point_image_Player1.detach()-xz).mean()
+          print("\nPlayer 1~~~~~~~~~~~ CURRENT LOSS predicted/image coords and frame is", loss_v_image, self.frame)
 
-          print("\nPlayer 1~~~~~~~~~~~ CURRENT LOSS, and frame", loss_v, self.frame)
+          loss_v_world = abs(aim_point_image_Player1.detach()-xz).mean()
+          print("\nPlayer 1~~~~~~~~~~~ CURRENT LOSS predicted/world, and frame is", loss_v_world, self.frame)
 
           if puck_flag:
             print("\n    *******THERE IS A PUCK IN THE IMAGE!!!!!!!!!!!!!!!!! <-------------")
          
-            self.total_loss_puck += loss_v          
+            self.total_loss_puck += loss_v_world          
             self.total_loss_puck_count += 1
-            print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS FOR PUCK *IN IMAGE*", self.total_loss_puck/self.total_loss_puck_count)
+            print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS (WORLD COORDS) FOR PUCK *IN IMAGE*", self.total_loss_puck/self.total_loss_puck_count)
             if self.total_loss_No_puck_count > 0:
-              print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS NO PUCK", self.total_loss_No_puck/self.total_loss_No_puck_count)
+              print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS (WORLD COORDS)  NO PUCK", self.total_loss_No_puck/self.total_loss_No_puck_count)
 
 
           if puck_flag==0:
             print ("\n   WARNING:   NO PUCK IN IMAGE...................................]]]]]]]]]]")
-            self.total_loss_No_puck += loss_v 
+            self.total_loss_No_puck += loss_v_world 
             self.total_loss_No_puck_count += 1
-            print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS NO PUCK", self.total_loss_No_puck/self.total_loss_No_puck_count)  
+            print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS (WORLD) NO PUCK", self.total_loss_No_puck/self.total_loss_No_puck_count)  
             if self.total_loss_puck_count >0:
-              print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS FOR PUCK *IN IMAGE*", self.total_loss_puck/self.total_loss_puck_count)
+              print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS (WORLD) FOR PUCK *IN IMAGE*", self.total_loss_puck/self.total_loss_puck_count)
 
         
 
