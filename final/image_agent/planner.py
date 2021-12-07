@@ -94,7 +94,7 @@ class Planner(torch.nn.Module):
 
         z = self.linearL(z.view(z.size(0), -1))
         #z = spatial_argmax(z[:, 0])
-        print (z[0])
+        #print (z[0])
         #return z
         return z
         #return (1 + spatial_argmax(z.squeeze(1))) * torch.as_tensor([x.size(3) - 1, x.size(2) - 1]).float().to(
