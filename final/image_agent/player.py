@@ -58,7 +58,11 @@ class Team:
         aimpoint = np.array([x, y])
 
         if normalization:
+          print("NORMALIZING -1...1...........................NORMALIZING")
           aimpoint = np.clip(aimpoint, -1, 1) 
+
+        if normalization == False:
+          print ("NO -1...1 NORMALIZATION!!!!!!!!!!!!")
         
         
         return aimpoint
