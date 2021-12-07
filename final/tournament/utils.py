@@ -100,7 +100,11 @@ class VideoRecorder(BaseRecorder):
             
             out_of_frame = False
             is_behind = False
-            use_world = True
+            use_world = False   #only set this one
+            use_image_coords = True
+
+            if use_world:
+              use_image_coords = False
             
 
             #print ("\n VideoRecorder() in utils.py ----- Putting Images in Grid, ball location: \n")
@@ -165,7 +169,7 @@ class VideoRecorder(BaseRecorder):
               #print ("\n==============image shape is  ", team1_images[0].shape)
               
 
-            if use_world == False:
+            if use_image_coords:
               self.collect(team1_images[0], puck_flag, aim_point_image)
             
             if use_world:
