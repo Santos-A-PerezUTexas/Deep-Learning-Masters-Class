@@ -35,14 +35,19 @@ class Team:
         self.prior_state = []
         self.prior_soccer_state1 = []
         self.prior_soccer_state2 = []
-        self.DEBUG = True
+        self.DEBUG = False
+        
+        if self.DEBUG:
+          print ("\n\n DEBUG MODE IS ON \n\n")
 
+        if self.DEBUG==False:
+          print ("\n\n DEBUG MODE IS OFF \n\n")
 
     def new_match(self, team: int, num_players: int) -> list:
 
         self.team, self.num_players = team, num_players
 
-        print ("STARTING NEW MATCH (message from player.py-newmatch()")
+        print ("\n\n new-match() was called STARTING NEW MATCH (message from player.py-newmatch() \n\n")
         #print (['tux']* num_players)
 
         return ['tux', 'tux']
@@ -176,9 +181,10 @@ class Team:
         #ERASE BEGIN DEC 1, 2021-----------------------------------------
 
        
-        x =soccer_state['ball']['location'][0]
-        y =soccer_state['ball']['location'][1] 
-        z =soccer_state['ball']['location'][2]
+        if self.DEBUG:
+          x =soccer_state['ball']['location'][0]
+          y =soccer_state['ball']['location'][1] 
+          z =soccer_state['ball']['location'][2]
         
         print ("LINE 182 PLAYER.PY")
 
