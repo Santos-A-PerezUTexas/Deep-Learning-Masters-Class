@@ -125,6 +125,8 @@ class VideoRecorder(BaseRecorder):
             #print (f'the view is {view.shape}, the proj is {proj.shape}')
                         
             aim_point_image, out_of_frame = self._to_image(xyz, proj, view)  #normalize xz in range -1...1
+            
+            
             #print (f'the aim_point_image is {aim_point_image}')
             
             #NOTE:  TEST FOR THE CASE WHERE PUCK IS OFF FRAME!  WHAT LABEL???
@@ -202,10 +204,12 @@ class VideoRecorder(BaseRecorder):
           print ("NOTE-------------------------------------------------------->We got a coordinate > 1, OUT_OF_FRAME TRUE")
           out_of_frame = True 
           print (x)
-        if normalization: 
-          aimpoint = np.array([x, y])
 
-        aimpoint = np.clip(aimpoint, -1, 1) 
+         
+        aimpoint = np.array([x, y])
+        
+        if normalization:
+          aimpoint = np.clip(aimpoint, -1, 1) 
        
         return aimpoint, out_of_frame
         #return clipped_aim_point, out_of_frame
