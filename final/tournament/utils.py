@@ -102,6 +102,7 @@ class VideoRecorder(BaseRecorder):
             is_behind = False
             use_world = False   #only set this one
             use_image_coords = True
+            use_300_400 = True
 
             if use_world:
               use_image_coords = False
@@ -130,6 +131,7 @@ class VideoRecorder(BaseRecorder):
                         
             aim_point_image, out_of_frame = self._to_image(xyz, proj, view)  #normalize xz in range -1...1
             
+            aim_point_300_400 = self._to_image300_400(xyz, proj, view)
             
             #print (f'the aim_point_image is {aim_point_image}')
             
@@ -169,8 +171,11 @@ class VideoRecorder(BaseRecorder):
               #print ("\n==============image shape is  ", team1_images[0].shape)
               
 
-            if use_image_coords:
+            if use_image_coords and not use_300_400:
               self.collect(team1_images[0], puck_flag, aim_point_image)
+            
+            if use_image_coords and use_300_400:
+              self.collect(team1_images[0], puck_flag, aim_point_300_400)
             
             if use_world:
               self.collect(team1_images[0], puck_flag, xz)
@@ -192,6 +197,10 @@ class VideoRecorder(BaseRecorder):
             self._writer.close() #
     
 
+    def _to_image300_400(self, x, proj, view):
+        W, H = 400, 300
+        p = proj @ view @ np.array(list(x) + [1])
+        return np.array([W / 2 * (p[0] / p[-1] + 1), H / 2 * (1 - p[1] / p[-1])])
 
     def _to_image(self, x, proj, view):
 
@@ -227,8 +236,8 @@ class VideoRecorder(BaseRecorder):
         x = np.random.rand(3)
         global file_no 
         id = file_no 
-        divide_data = False
-        save_data = False
+        divide_data = True
+        save_data = True
         
         if save_data:
 
