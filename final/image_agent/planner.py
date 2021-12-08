@@ -28,11 +28,11 @@ class Planner(torch.nn.Module):
         def forward(self, x):
           
             output = F.relu(self.b1(self.c1(x))) 
-            output = F.relu(self.b2(self.c2(output)))
+            #output = F.relu(self.b2(self.c2(output)))
             output = self.b3(self.c3(output))
-            output = F.relu(output + self.skip(x)) 
+            #output = F.relu(output + self.skip(x)) 
 
-            return output
+            return F.relu(output)  #remove Relu if use skip!
 
     class UpBlock(torch.nn.Module):
         def __init__(self, n_input, n_output, kernel_size=3, stride=2):
@@ -43,7 +43,7 @@ class Planner(torch.nn.Module):
         def forward(self, x):
             return F.relu(self.c1(x))
 
-    def __init__(self, layers=[16, 32, 64], n_class=3, kernel_size=3, use_skip=True):
+    def __init__(self, layers=[16, 32, 32], n_class=3, kernel_size=3, use_skip=False):
         """
            Your code here.
            Setup your detection network
