@@ -26,6 +26,10 @@ class Team:
         self.total_loss_No_puck = 0
         self.total_loss_puck_count = 0
         self.total_loss_No_puck_count = 0
+        self.max_x = 0   #temporary attribute DEBUGGING
+        self.min_x = 0  #temporary attribute DEBUGING
+        self.max_y = 0   #temporary attribute DEBUGING
+        self.min_y = 0  #temporary attribute DEBUGING
          
         
         if not self.planner:
@@ -94,13 +98,10 @@ class Team:
 
     def act(self, player_state, player_image, soccer_state = None, heatmap1=None, heatmap2=None):  #REMOVE SOCCER STATE!!!!!!!!
         
-        use_soccer_world_coords = True  #USES SOCCER COORDS
+        use_soccer_world_coords = False  #USES SOCCER COORDS
         use_actual_coords = False    #USES ACTUAL COORDS FOR SOCCER BALL *ACTION*
         use_image_coords = True
-        max_x = 10   #temporary attribute DEBUGGING
-        min_x = -10  #temporary attribute DEBUGING
-        max_y = 10   #temporary attribute DEBUGING
-        min_y = -10  #temporary attribute DEBUGING
+       
         
         #Dec 7 2021:
         action_P1 = {'acceleration': 1, 'brake': False, 'drift': False, 'nitro': False, 'rescue': False, 'steer': 0}
@@ -214,10 +215,10 @@ class Team:
         view = np.array(player_state[0]['camera']['view']).T
 
         if use_image_coords and self.DEBUG:
-          print ("USING NORMALIZED IMAGE COORDS FOR PUCK ACTUAL")
+          print ("USING NORMALIZED IMAGE COORDS FOR PUCK ACTUAL  HACK")
           aim_point_image_actual_1 = self._to_image(xyz, proj, view, normalization=True) 
         if use_soccer_world_coords and self.DEBUG:
-          print("USING UNNORMALED IMAGE COORDS FOR PUCK ACTUAL")
+          print("USING UNNORMALIZED IMAGE COORDS FOR PUCK ACTUA HACK")
           aim_point_image_actual_1 = self._to_image(xyz, proj, view, normalization=False)
 
         if self.DEBUG:
@@ -227,18 +228,18 @@ class Team:
         if self.DEBUG:
           print("\nThe pure world socccer coords are:  ", xz)
           if x > 0:
-            if x > max_x:
-              max_x = x
+            if x > self.max_x:            
+              self.max_x = x
           if x < 0:
-            if x < min_x:
-              min_x = x
+            if x < self.min_x:
+              self.min_x = x
           
           if z > 0:
-            if z > max_y:
-              max_y = z
+            if z > self.max_y:
+              self.max_y = z
           if z < 0:
-            if z < min_y:
-              min_y = z
+            if z < self.min_y:
+              self.min_y = z
 
               
 
@@ -319,11 +320,11 @@ class Team:
 
         self.frame += 1
 
-        if self.frame > 900 and self.DEBUG:
+        if self.frame > 500 and self.DEBUG:
           print ("\n\n STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS ")
           print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS NO PUCK", self.total_loss_No_puck/self.total_loss_No_puck_count)
           print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS FOR PUCK *IN IMAGE*", self.total_loss_puck/self.total_loss_puck_count)
-          print ("\n\n THESE ARE THE MINX, MAXX, MINY, MAXY:", min_x, max_x, min_y, max_y)
+          print ("\n\n THESE ARE THE MINX, MAXX, MINY, MAXY:", self.min_x, self.max_x, self.min_y, self.max_y)
           print ("-----------------------------------------------------------------------------------")
        
         return [output1, output2]
