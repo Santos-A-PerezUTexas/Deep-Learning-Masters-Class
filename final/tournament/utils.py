@@ -236,7 +236,7 @@ class VideoRecorder(BaseRecorder):
         x = np.random.rand(3)
         global file_no 
         id = file_no 
-        divide_data = True
+        divide_data = False
         save_data = True
         
         if save_data:
