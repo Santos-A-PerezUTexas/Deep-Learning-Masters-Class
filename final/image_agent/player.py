@@ -137,7 +137,111 @@ class Team:
         x = puck_loc[0]  # 0-400
         y = puck_loc[1]  # 0-300
 
+        # clipping x and y values
+        if x < 0:
+            x = 0
+        if x > 400:
+            x = 400
+
+        if y < 0:
+            y = 0
+        if y > 300:
+            y = 300
+
+        if self.current_team == 'not_sure':
+            if -58 < pos_me[1] < -50:
+                self.current_team = 'red'
+            else:
+                self.current_team = 'blue'
+            print('Current Team:', self.current_team)
+
+        x_intersect, facing_up_grid = self.x_intersect(pos_me, front_me)
         
+        lean_val = 2
+        if -10 < pos_me[0] < 10:
+            lean_val = 0
+        if facing_up_grid and 9 < x_intersect < 40:
+            # if red team
+            if self.current_team == 'red':
+                x += lean_val
+            else:
+                x -= lean_val
+        if facing_up_grid and -40 < x_intersect < -9:
+            # if red team
+            if self.current_team == 'red':
+                x -= lean_val
+            else:
+                x += lean_val
+
+        # facing inside goal
+        if (not facing_up_grid) and 0 < x_intersect < 10:
+            # if red team
+            if self.current_team == 'red':
+                x += lean_val
+            else:
+                x -= lean_val
+        if (not facing_up_grid) and -10 < x_intersect < 0:
+            # if red team
+            if self.current_team == 'red':
+                x -= lean_val
+            else:
+                x += lean_val
+
+        if velocity_mag > 20:
+            action['acceleration'] = 0.2
+
+        if x < 200:
+            action['steer'] = -1
+        elif x > 200:
+            action['steer'] = 1
+        else:
+            action['steer'] = 0
+
+        if x < 50 or x > 350:
+            action['drift'] = True
+            action['acceleration'] = 0.2
+        else:
+            action['drift'] = False
+
+        if x < 100 or x > 300:
+            action['acceleration'] = 0.5
+
+        if self.recovery[index] == True:
+            action['steer'] = self.rescue_steer[index]
+            action['acceleration'] = 0
+            action['brake'] = True
+            self.rescue_count[index] -= 2
+            # print('rescue_count',self.rescue_count)
+            # no rescue if initial condition
+            if self.rescue_count[index] < 1 or ((-57 < pos_me[1] < 57 and -7 < pos_me[0] < 1) and velocity_mag < 5):
+                self.rescue_count[index] = 0
+                self.recovery[index] = False
+        else:
+            if self.prev_loc[index][0] == np.int32(pos_me)[0] and self.prev_loc[index][1] == np.int32(pos_me)[1]:
+                self.rescue_count[index] += 5
+            else:
+                if self.recovery[index] == False:
+                    self.rescue_count[index] = 0
+
+            if self.rescue_count[index] < 2:
+                if x < 200:
+                    self.rescue_steer[index] = 1
+                else:
+                    self.rescue_steer[index] = -1
+            if self.rescue_count[index] > 30 or (y > 200):
+                # case of puck near bottom left/right
+                if velocity_mag > 10:
+                    self.rescue_count[index] = 30
+                    self.rescue_steer[index] = 0
+                else:
+                    self.rescue_count[index] = 20
+                self.recovery[index] = True
+
+        self.prev_loc[index] = np.int32(pos_me)
+
+        return action
+
+
 
 
     def act(self, player_state, player_image, soccer_state = None, heatmap1=None, heatmap2=None):  #REMOVE SOCCER STATE!!!!!!!!
