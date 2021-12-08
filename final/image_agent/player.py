@@ -44,7 +44,7 @@ class Team:
         self.prior_state = []
         self.prior_soccer_state1 = []
         self.prior_soccer_state2 = []
-        self.DEBUG = True
+        self.DEBUG = False
         
         if self.DEBUG:
           print ("\n\n DEBUG MODE IS ON \n\n")
@@ -258,7 +258,7 @@ class Team:
 
           #xz is the predicted point -1..1
           #aim_point_image_Player1  is Predicted from planner
-          
+
           loss_v_image = abs(aim_point_image_Player1.detach()-xz).mean()
           
           if self.DEBUG:
