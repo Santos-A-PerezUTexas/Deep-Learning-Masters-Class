@@ -256,6 +256,9 @@ class Team:
               if heatmap1[0][i][j]  == 8:
                 puck_flag = 1
 
+          #xz is the predicted point -1..1
+          #aim_point_image_Player1  is Predicted from planner
+          
           loss_v_image = abs(aim_point_image_Player1.detach()-xz).mean()
           
           if self.DEBUG:
