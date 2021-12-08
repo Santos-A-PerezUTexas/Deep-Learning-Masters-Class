@@ -27,7 +27,8 @@ class Planner(torch.nn.Module):
 
         def forward(self, x):
           
-            output = F.relu(self.b1(self.c1(x))) 
+            output = self.b1(self.c1(x))
+            #output = F.relu(output) 
             #output = F.relu(self.b2(self.c2(output)))
             output = self.b3(self.c3(output))
             #output = F.relu(output + self.skip(x)) 
