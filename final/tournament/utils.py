@@ -228,7 +228,7 @@ class VideoRecorder(BaseRecorder):
         global file_no 
         id = file_no 
         divide_data = False
-        save_data = True
+        save_data = False
         
         if save_data:
 
