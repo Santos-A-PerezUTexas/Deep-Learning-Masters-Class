@@ -231,14 +231,14 @@ class Team:
               max_x = x
           if x < 0:
             if x < min_x:
-              min_x = x1
+              min_x = x
           
-          if y > 0:
-            if y > max_y:
-              max_y = y
-          if y < 0:
-            if y < min_y:
-              min_y = y1
+          if z > 0:
+            if z > max_y:
+              max_y = z
+          if z < 0:
+            if z < min_y:
+              min_y = z
 
               
 
