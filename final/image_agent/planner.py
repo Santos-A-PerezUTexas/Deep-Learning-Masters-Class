@@ -26,7 +26,13 @@ class Planner(torch.nn.Module):
             self.skip = torch.nn.Conv2d(n_input, n_output, kernel_size=1, stride=stride)
 
         def forward(self, x):
-            return F.relu(self.b3(self.c3(F.relu(self.b2(self.c2(F.relu(self.b1(self.c1(x)))))))) + self.skip(x))
+          
+            output = F.relu(self.b1(self.c1(x))) 
+            output = F.relu(self.b2(self.c2(output)))
+            output = self.b3(self.c3(output))
+            output = F.relu(output + self.skip(x)) 
+
+            return output
 
     class UpBlock(torch.nn.Module):
         def __init__(self, n_input, n_output, kernel_size=3, stride=2):
