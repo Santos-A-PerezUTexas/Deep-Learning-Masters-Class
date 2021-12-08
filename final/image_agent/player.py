@@ -21,7 +21,7 @@ class Team:
         self.forward_next = False
 
         self.planner = True     #set to true to use the planner, debugging purposes
-        self.DEBUG = False      #SET TO TRUE TO DEBUG
+        self.DEBUG = True      #SET TO TRUE TO DEBUG
 
 
         self.MSEloss = torch.nn.MSELoss()
@@ -478,4 +478,26 @@ class Team:
           print ("\n\n THESE ARE THE MINX, MAXX, MINY, MAXY:", self.min_x, self.max_x, self.min_y, self.max_y)
           print ("-----------------------------------------------------------------------------------")
        
-        return [output1, output2]
+        Kart_A_front = player_state[0]['kart']['front']
+        Kart_A_location = player_state[0]['kart']['location']
+        Kart_A_vel = player_state[0]['kart']['velocity']
+        pos_A = self.to_numpy(Kart_A_location)
+        front_A =self.to_numpy(Kart_A_front)
+        
+        Kart_B_front = player_state[1]['kart']['front']
+        Kart_B_location = player_state[1]['kart']['location']
+        Kart_B_vel = player_state[0]['kart']['velocity']
+        pos_B = self.to_numpy(Kart_B_location)
+        front_B = self.to_numpy(Kart_B_front)
+
+        action_A = self.model_controller(aim_point_image_Player1,pos_A,front_A,Kart_A_vel,0)
+        action_B = self.model_controller(aim_point_image_Player2,pos_B,front_B,Kart_B_vel,1)
+
+        #action_A = self.model_controller(np.float32([0,0]),pos_A,front_A,Kart_A_vel,0)
+        #action_B = self.model_controller(np.float32([0,0]),pos_B,front_B,Kart_B_vel,1)
+
+
+
+        ret = [action_A,action_B]
+
+        return ret
