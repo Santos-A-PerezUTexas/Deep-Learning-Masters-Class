@@ -97,10 +97,10 @@ class Team:
         use_soccer_world_coords = True  #USES SOCCER COORDS
         use_actual_coords = False    #USES ACTUAL COORDS FOR SOCCER BALL *ACTION*
         use_image_coords = True
-        max_x = 10
-        min_x = -10
-        max_y = 10
-        min_y = -10
+        max_x = 10   #temporary attribute DEBUGGING
+        min_x = -10  #temporary attribute DEBUGING
+        max_y = 10   #temporary attribute DEBUGING
+        min_y = -10  #temporary attribute DEBUGING
         
         #Dec 7 2021:
         action_P1 = {'acceleration': 1, 'brake': False, 'drift': False, 'nitro': False, 'rescue': False, 'steer': 0}
@@ -226,6 +226,22 @@ class Team:
         
         if self.DEBUG:
           print("\nThe pure world socccer coords are:  ", xz)
+          if x > 0:
+            if x > max_x:
+              max_x = x
+          if x < 0:
+            if x < min_x:
+              min_x = x1
+          
+          if y > 0:
+            if y > max_y:
+              max_y = y
+          if y < 0:
+            if y < min_y:
+              min_y = y1
+
+              
+
 
         
         puck_flag = 0
@@ -303,10 +319,11 @@ class Team:
 
         self.frame += 1
 
-        if self.frame > 150 and self.DEBUG:
+        if self.frame > 900 and self.DEBUG:
           print ("\n\n STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS ")
           print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS NO PUCK", self.total_loss_No_puck/self.total_loss_No_puck_count)
           print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS FOR PUCK *IN IMAGE*", self.total_loss_puck/self.total_loss_puck_count)
+          print ("\n\n THESE ARE THE MINX, MAXX, MINY, MAXY:", min_x, max_x, min_y, max_y)
           print ("-----------------------------------------------------------------------------------")
        
         return [output1, output2]
