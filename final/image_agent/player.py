@@ -3,6 +3,11 @@ from .planner import Planner, load_model
 import torchvision.transforms.functional as TF 
 import numpy as np
 import torch
+#aim_point_image_Player1  is Predicted from planner
+#aim_point_image_Player2  is Predicted from planner
+#aim_point_image_actual_1  is the *image* coord for *actual* soccer coords, temporary hack just for player 1
+#xyz and xz  contains  actual soccer coords, hack
+#x,y,z contain actual soccer coords as well
 
 
 class Team:
@@ -35,7 +40,7 @@ class Team:
         self.prior_state = []
         self.prior_soccer_state1 = []
         self.prior_soccer_state2 = []
-        self.DEBUG = False
+        self.DEBUG = True
         
         if self.DEBUG:
           print ("\n\n DEBUG MODE IS ON \n\n")
@@ -90,9 +95,13 @@ class Team:
     def act(self, player_state, player_image, soccer_state = None, heatmap1=None, heatmap2=None):  #REMOVE SOCCER STATE!!!!!!!!
         
         use_soccer_world_coords = True  #USES SOCCER COORDS
-        use_actual_coords = False    #USES ACTUAL COORDS FOR SOCCER BALL ACTION
+        use_actual_coords = False    #USES ACTUAL COORDS FOR SOCCER BALL *ACTION*
         use_image_coords = True
-
+        max_x = 10
+        min_x = -10
+        max_y = 10
+        min_y = -10
+        
         #Dec 7 2021:
         action_P1 = {'acceleration': 1, 'brake': False, 'drift': False, 'nitro': False, 'rescue': False, 'steer': 0}
         action_P2 = {'acceleration': 1, 'brake': False, 'drift': False, 'nitro': False, 'rescue': False, 'steer': 0}
