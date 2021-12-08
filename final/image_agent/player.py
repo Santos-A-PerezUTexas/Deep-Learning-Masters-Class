@@ -21,14 +21,14 @@ class Team:
         self.forward_next = False
 
         self.planner = True     #set to true to use the planner, debugging purposes
-        self.DEBUG = True      #SET TO TRUE TO DEBUG
+        self.DEBUG = False      #SET TO TRUE TO DEBUG
 
 
-        self.MSEloss = torch.nn.MSELoss()
-        self.total_loss_puck = 0
-        self.total_loss_No_puck = 0
-        self.total_loss_puck_count = 0
-        self.total_loss_No_puck_count = 0
+        self.MSEloss = torch.nn.MSELoss()  #for DEBUGGING 
+        self.total_loss_puck = 0           #for DEBUGGING
+        self.total_loss_No_puck = 0        #for DEBUGGING
+        self.total_loss_puck_count = 0     #for DEBUGGING
+        self.total_loss_No_puck_count = 0  #for DEBUGGING
         self.max_x = 0   #temporary attribute DEBUGGING
         self.min_x = 0  #temporary attribute DEBUGING
         self.max_y = 0   #temporary attribute DEBUGING
