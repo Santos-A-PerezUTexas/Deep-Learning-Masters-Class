@@ -20,7 +20,10 @@ class Team:
         self.frame = 1
         self.forward_next = False
 
-        self.planner = True
+        self.planner = True     #set to true to use the planner, debugging purposes
+        self.DEBUG = False      #SET TO TRUE TO DEBUG
+
+
         self.MSEloss = torch.nn.MSELoss()
         self.total_loss_puck = 0
         self.total_loss_No_puck = 0
@@ -30,7 +33,19 @@ class Team:
         self.min_x = 0  #temporary attribute DEBUGING
         self.max_y = 0   #temporary attribute DEBUGING
         self.min_y = 0  #temporary attribute DEBUGING
-         
+
+        #Dec 8, 2021
+
+        self.team = None
+        self.num_players = None
+        self.current_team = 'not_sure'
+        self.rescue_count = [0,0]
+        self.rescue_steer = [1,1]
+        self.recovery = [False,False]
+        self.prev_loc = [[0,0],[0,0]]
+
+        #Dec 8, 2021 (END)
+
         
         if not self.planner:
           print ("\n\n NOT USING PLANNER \n\n")
@@ -38,19 +53,21 @@ class Team:
         if self.planner:
 
           print ("\n\n     Player (TEAM) INIT: USING PLANNER \n\n")
+          self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
           self.Planner = load_model()
           self.Planner.eval()
           
-        self.prior_state = []
-        self.prior_soccer_state1 = []
-        self.prior_soccer_state2 = []
-        self.DEBUG = False
+        #self.prior_state = [] 
+        #self.prior_soccer_state1 = []
+        #self.prior_soccer_state2 = []
         
         if self.DEBUG:
           print ("\n\n DEBUG MODE IS ON \n\n")
 
         if self.DEBUG==False:
           print ("\n\n DEBUG MODE IS OFF \n\n")
+
+
 
     def new_match(self, team: int, num_players: int) -> list:
 
@@ -62,18 +79,20 @@ class Team:
         return ['tux', 'tux']
 
     
-    def _to_image(self, x, proj, view, normalization=True):  #DEC 1, 2021: ERASE THIS..................
+    def to_numpy(self, location):
+        return np.float32([location[0], location[2]])
+
+    def _to_image(self, x, proj, view, normalization=True):  #FOR DEBUGGING
 
         out_of_frame = False
         op = np.array(list(x) + [1])
         p = proj @ view @ op
         x = p[0] / p[-1]   #p is [float, float, float, float]
         y = -p[1] / p[-1]
-        
         aimpoint = np.array([x, y])
 
         if abs(x) > 1 or abs(y)>1:
-          print ("NOTE-------------------------------------------------------->We got a coordinate > 1, OUT_OF_FRAME TRUE")
+          print ("Coordinate > 1, POSSIBLE PUCK NOT IN IMAGE")
           print (x,y)
 
         if normalization:
@@ -83,9 +102,22 @@ class Team:
         if normalization == False:
           print ("NO -1...1 NORMALIZATION!!!!!!!!!!!!")
         
-        
         return aimpoint
-            
+
+    def x_intersect(self, kart_loc, kart_front):
+        slope = (kart_loc[1] - kart_front[1])/(kart_loc[0] - kart_front[0])
+        intersect = kart_loc[1] - (slope*kart_loc[0])
+        facing_up_grid = kart_front[1] > kart_loc[1]
+        if slope == 0:
+            x_intersect = kart_loc[1]
+        else:
+            if facing_up_grid:
+                x_intersect = (65-intersect)/slope
+            else:
+                x_intersect = (-65-intersect)/slope
+        return (x_intersect, facing_up_grid)
+
+
     def front_flag(self, puck_loc, threshold=2.0):
         #puck_loc => puck_loc -- model output
 
@@ -93,7 +125,19 @@ class Team:
         return (x>(200-threshold)) and (x<(200+threshold))
 
 
+    def model_controller(self, puck_loc, location,front,velocity,index):
 
+        action = {'acceleration': 1, 'brake': False, 'drift': False, 'nitro': False, 'rescue': False, 'steer': 0}
+
+        pos_me = location
+        front_me = front
+        kart_velocity = velocity
+        velocity_mag = np.sqrt(kart_velocity[0] ** 2 + kart_velocity[2] ** 2)
+
+        x = puck_loc[0]  # 0-400
+        y = puck_loc[1]  # 0-300
+
+        
 
 
     def act(self, player_state, player_image, soccer_state = None, heatmap1=None, heatmap2=None):  #REMOVE SOCCER STATE!!!!!!!!
