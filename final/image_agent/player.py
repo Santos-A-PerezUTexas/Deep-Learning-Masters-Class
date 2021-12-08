@@ -56,6 +56,7 @@ class Team:
           self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
           self.Planner = load_model()
           self.Planner.eval()
+          print (self.Planner)
           
         #self.prior_state = [] 
         #self.prior_soccer_state1 = []
