@@ -15,7 +15,7 @@ class Team:
         self.frame = 1
         self.forward_next = False
 
-        self.planner = False
+        self.planner = True
         self.MSEloss = torch.nn.MSELoss()
         self.total_loss_puck = 0
         self.total_loss_No_puck = 0
@@ -25,7 +25,7 @@ class Team:
         
         if not self.planner:
           print ("\n\n NOT USING PLANNER \n\n")
-          
+
         if self.planner:
 
           print ("\n\n     Player (TEAM) INIT: USING PLANNER \n\n")
