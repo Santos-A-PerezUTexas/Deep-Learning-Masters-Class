@@ -276,8 +276,11 @@ class VideoRecorder(BaseRecorder):
               #f.write('%0.1f' % puck_flag)
           
           if instance_data:
-            Image.fromarray(instance).save(fn + '_instance' + '.png')
-            torch.save(instance, fn + '_instance' + '_tensor.pt')
+            #Image.fromarray(instance).save(fn + '_instance' + '.png')
+            #torch.save(instance, fn + '_instance' + '_tensor.pt')
+            with open(fn + '.ins', 'w') as f:
+              np.save(f, np.array(instance))
+
           file_no += 1
 
 
