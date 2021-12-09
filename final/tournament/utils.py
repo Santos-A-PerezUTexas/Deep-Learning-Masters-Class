@@ -4,7 +4,7 @@ import pystk
 #TOURNAMENT UTILS
 #Edit this to generate labels
 
-file_no = 2001 
+file_no = 1 
 
 class Team(IntEnum):   #Two methods, video_grid() and map_image() (as well as map_image()-->_to_coord(x) 
     
@@ -230,7 +230,7 @@ class VideoRecorder(BaseRecorder):
 
 
 
-    def collect(_, im, puck_flag, pt):
+    def collect(_, im, puck_flag, pt, instance=None):
         from PIL import Image
         from os import path
         x = np.random.rand(3)
@@ -238,6 +238,7 @@ class VideoRecorder(BaseRecorder):
         id = file_no 
         divide_data = False
         save_data = True
+        instance_data = False
         
         if save_data:
 
@@ -245,24 +246,34 @@ class VideoRecorder(BaseRecorder):
             if divide_data:
               fn = path.join('/content/cs342/final/data_YesPuck/', 'ice_hockey' + '_%05d' % id)
             if divide_data == False:
-              fn = path.join('/content/cs342/final/data/', 'ice_hockey' + '_%05d' % id)
+              if instance_data == False:
+                fn = path.join('/content/cs342/final/data/', 'ice_hockey' + '_%05d' % id)
+              if instance_data:
+                fn = path.join('/content/cs342/final/data_instance/', 'ice_hockey' + '_%05d' % id)
+          
           if puck_flag == 0:
             if divide_data:
               fn = path.join('/content/cs342/final/data_NoPuck/', 'ice_hockey' + '_%05d' % id)
             if divide_data == False:
-              fn = path.join('/content/cs342/final/data/', 'ice_hockey' + '_%05d' % id)
+              if instance_data == False:
+                fn = path.join('/content/cs342/final/data/', 'ice_hockey' + '_%05d' % id)
+              if instance_data:
+                fn = path.join('/content/cs342/final/data_instance/', 'ice_hockey' + '_%05d' % id)
+            
           Image.fromarray(im).save(fn + '.png')
 
           #Image.fromarray(heatmap).save(fn + '_heatmap.png')
           x[0] = pt[0]
           x[1] = pt[1]
           x[2] = puck_flag
-                
-          with open(fn + '.csv', 'w') as f: 
-          #f.write('%0.1f,%0.1f,%0.1f' % tuple(x))  #with puck flag
-            f.write('%0.1f,%0.1f' % tuple(pt))
-          #with open(fn + 'puck_flag.csv', 'w') as f: 
-            #f.write('%0.1f' % puck_flag)
+
+          if instance_data == False:      
+            with open(fn + '.csv', 'w') as f: 
+              #f.write('%0.1f,%0.1f,%0.1f' % tuple(x))  #with puck flag
+              f.write('%0.1f,%0.1f' % tuple(pt))
+            #with open(fn + 'puck_flag.csv', 'w') as f: 
+              #f.write('%0.1f' % puck_flag)
+          
           file_no += 1
 
 
