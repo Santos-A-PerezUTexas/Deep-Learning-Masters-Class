@@ -275,7 +275,7 @@ class VideoRecorder(BaseRecorder):
               #f.write('%0.1f' % puck_flag)
           
           if instance_data:
-            Image.fromarray(instance).save(fn + '.png')
+            Image.fromarray(instance).save(fn + '.instance')
           file_no += 1
 
 
