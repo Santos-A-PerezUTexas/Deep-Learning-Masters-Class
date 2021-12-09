@@ -53,7 +53,7 @@ class TeamRunner:
     def __init__(self, team_or_dir):
         from pathlib import Path
 
-        print ("IN TEAM RUNNER")
+        #print ("IN TEAM RUNNER")
         try:
             from grader import grader
         except ImportError:
@@ -177,7 +177,7 @@ class Match:
 
         logging.info('Creating teams')
 
-        print ("LIINE 177 Match.RUN in GRADER->RUNNER.PY")
+        #print ("LIINE 177 Match.RUN in GRADER->RUNNER.PY")
 
         # Start a new match
         t1_cars = self._g(self._r(team1.new_match)(0, num_player)) or ['tux']
@@ -194,7 +194,7 @@ class Match:
 
         # Setup the race config
         logging.info('Setting up race')
-        print ("LINE 193 GRADER->RUNNER.PY")
+        #print ("LINE 193 GRADER->RUNNER.PY")
         race_config = RaceConfig(track=TRACK_NAME, mode=RaceConfig.RaceMode.SOCCER, num_kart=2 * num_player)
         race_config.players.pop()
         for i in range(num_player):
