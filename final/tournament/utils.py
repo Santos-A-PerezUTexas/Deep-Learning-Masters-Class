@@ -4,7 +4,7 @@ import pystk
 #TOURNAMENT UTILS
 #Edit this to generate labels
 
-file_no = 3001 
+file_no = 1 
 
 class Team(IntEnum):   #Two methods, video_grid() and map_image() (as well as map_image()-->_to_coord(x) 
     
@@ -172,13 +172,13 @@ class VideoRecorder(BaseRecorder):
               
 
             if use_image_coords and not use_300_400:
-              self.collect(team1_images[0], puck_flag, aim_point_image)
+              self.collect(team1_images[0], puck_flag, aim_point_image, heatmap1[0])
             
             if use_image_coords and use_300_400:
-              self.collect(team1_images[0], puck_flag, aim_point_300_400)
+              self.collect(team1_images[0], puck_flag, aim_point_300_400, heatmap1[0])
             
             if use_world:
-              self.collect(team1_images[0], puck_flag, xz)
+              self.collect(team1_images[0], puck_flag, xz, heatmap1[0])
 
             #self.collect(team1_images[0], xz)  #updated to above on 11/27/2021 to normalize xz in range -1...1
             
@@ -238,7 +238,7 @@ class VideoRecorder(BaseRecorder):
         id = file_no 
         divide_data = False     #Sub divide the labels no puck/puck images?
         save_data = True        #Generate Labels?
-        instance_data = False   #Do you want to generate render_data instance labels?
+        instance_data = True   #Do you want to generate render_data instance labels?
         
         if save_data:
 
@@ -274,6 +274,8 @@ class VideoRecorder(BaseRecorder):
             #with open(fn + 'puck_flag.csv', 'w') as f: 
               #f.write('%0.1f' % puck_flag)
           
+          if instance_data:
+            Image.fromarray(instance).save(fn + '.png')
           file_no += 1
 
 
