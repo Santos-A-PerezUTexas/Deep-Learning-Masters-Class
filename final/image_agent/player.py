@@ -305,8 +305,8 @@ class Team:
           aim_point_image_Player1 = self.Planner(image1)
           aim_point_image_Player2 = self.Planner(image2)
 
-          #aim_point_image_Player1 = aim_point_image_Player1.squeeze(0)
-          #aim_point_image_Player2 = aim_point_image_Player2.squeeze(0)
+          aim_point_image_Player1 = aim_point_image_Player1.squeeze(0)
+          aim_point_image_Player2 = aim_point_image_Player2.squeeze(0)
 
           aim_point_image_Player1 = aim_point_image_Player1.detach().cpu().numpy()
           aim_point_image_Player2 = aim_point_image_Player2.detach().cpu().numpy()
