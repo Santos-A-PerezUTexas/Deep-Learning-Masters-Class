@@ -9,6 +9,8 @@ RESCUE_TIMEOUT = 30
 TRACK_OFFSET = 15
 DATASET_PATH = '/content/cs342/final/data'
 
+#Dec 9, 2021
+#data2 = torch.from_numpy(data.astype(int))
 
 class SuperTuxDataset(Dataset):
     def __init__(self, dataset_path=DATASET_PATH, transform=dense_transforms.ToTensor()):
