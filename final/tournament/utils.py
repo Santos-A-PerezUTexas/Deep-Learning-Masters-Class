@@ -1,4 +1,5 @@
 import numpy as np
+import torch
 from enum import IntEnum
 import pystk 
 #TOURNAMENT UTILS
@@ -275,7 +276,8 @@ class VideoRecorder(BaseRecorder):
               #f.write('%0.1f' % puck_flag)
           
           if instance_data:
-            Image.fromarray(instance).save(fn + '.instance')
+            Image.fromarray(instance).save(fn + '_instance' + '.png')
+            torch.save(instance, fn + '_instance' + '_tensor.pt')
           file_no += 1
 
 
