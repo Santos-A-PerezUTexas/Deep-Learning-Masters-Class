@@ -6,7 +6,7 @@
 Bulding a good AI model performing a game competition has always been a task and a goal for game company and machine learning engineer to struggle with. The famous competition between  Alpha go and Ke jie  proves that machine can do better job than human in some game competition. In this project, we will need to build an agent by ourselves that could fight against the AI model in a 2v2 competition: SuperTuxIcehockey. Although we never played this game, however, when we see some of the demo of this game, we think it is similar to a soccer competition. For the first week, we divide our group into two, each group will explore the approach for this task seperately. Santos Perez is in group1 and Weizhe tang and Yilong Chen is in group2. In the middle of Second week, we hold a meeting and discuss two group's progress. We decided to work on the image based agent.
 We decided to work on a image agent
 
-## Exploration period(before the mid of second week)
+## Exploration period(before the mid of second week(10 days))
 ### Group1
 The first group decided to do an image based agent. His main idea is similar to the homework5, he wants to use the planner to predict/detect the image location of the puck, then use a controller to steer toward the puck.
 First week's main problem for Santos is collecting the data. The main difficulty he encounter is how to label the data. Problem is that how to convert the world coordinate to image coordinate. Solutions:
