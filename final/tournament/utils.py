@@ -4,7 +4,7 @@ import pystk
 #TOURNAMENT UTILS
 #Edit this to generate labels
 
-file_no = 1 
+file_no = 3001 
 
 class Team(IntEnum):   #Two methods, video_grid() and map_image() (as well as map_image()-->_to_coord(x) 
     
@@ -236,9 +236,9 @@ class VideoRecorder(BaseRecorder):
         x = np.random.rand(3)
         global file_no 
         id = file_no 
-        divide_data = False
-        save_data = True
-        instance_data = False
+        divide_data = False     #Sub divide the labels no puck/puck images?
+        save_data = True        #Generate Labels?
+        instance_data = False   #Do you want to generate render_data instance labels?
         
         if save_data:
 
