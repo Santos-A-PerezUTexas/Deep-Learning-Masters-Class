@@ -1,8 +1,8 @@
 # UT Fall 2021 Deep Learning Final Project
 
-#### Crewmember: Santos Perez | Email:           
-     Yilong Chen | Email:                  
-     Weizhe Tang | Email:wt4992@utexas.edu                
+#### Teammember: Santos Perez | Email:           
+####             Yilong Chen | Email:                  
+####             Weizhe Tang | Email:wt4992@utexas.edu                
 
 ## Introdudction 
 Bulding a good AI model performing a game competition has always been a task and a goal for game company and machine learning engineer to struggle with. The famous competition between  Alpha go and Ke jie  proves that machine can do better job than human in some game competition. In this project, we will need to build an agent by ourselves that could fight against the AI model in a 2v2 competition: SuperTuxIcehockey. Although we never played this game, however, when we see some of the demo of this game, we think it is similar to a soccer competition. For the first week, we divide our group into two, each group will explore the approach for this task seperately. Santos Perez is in group1 and Weizhe tang and Yilong Chen is in group2. In the middle of Second week, we hold a meeting and discuss two group's progress. We decided to work on the image based agent.
