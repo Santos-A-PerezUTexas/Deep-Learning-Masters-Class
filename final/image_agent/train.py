@@ -72,8 +72,9 @@ def train(args):
             #loss_val = loss(pred, xy)
             loss_val = loss(pred[:,0, :, :], label.float()).mean()
             
-            print ("\n\n SAMPLE PREDICTION, LABEL:", torch.ceil(pred[0, 0, :, :]), label[0])
-
+            print ("------------------------------------\n\n SAMPLE PREDICTION, LABEL:", torch.ceil(pred[0, 0, :, :]), label[0])
+            print ("\n\n SAMPLE MEAN DIFFERENCE", (torch.ceil(pred[0, 0, :, :])-label[0]).mean() )
+            
             #print ("\n\n\n GOT A LOSS.............", loss_val)
 
             #total_mean = torch.cat((total_mean, img.mean(dim=(2,3)).mean(dim=0)[None]))
