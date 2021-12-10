@@ -496,6 +496,23 @@ class Team:
         pos_B = self.to_numpy(Kart_B_location)
         front_B = self.to_numpy(Kart_B_front)
 
+        
+        #Dec 10, 2021:
+        
+        #Call the planner only if self.Frames > 40 or so:
+        """
+        if self.frame < 40:
+            action_A = self.model_controller(np.float32([0,0]),pos_A,front_A,Kart_A_vel,0)
+            action_B = self.model_controller(np.float32([0,0]),pos_B,front_B,Kart_B_vel,1)
+
+        if Self.frame>40:
+            aim_point_image_Player1 = self.Planner(image1)
+            aim_point_image_Player2 = self.Planner(image2)
+            action_A = self.model_controller(aim_point_image_Player1,pos_A,front_A,Kart_A_vel,0)
+            action_B = self.model_controller(aim_point_image_Player2,pos_B,front_B,Kart_B_vel,1)
+        
+        """
+        
         action_A = self.model_controller(aim_point_image_Player1,pos_A,front_A,Kart_A_vel,0)
         action_B = self.model_controller(aim_point_image_Player2,pos_B,front_B,Kart_B_vel,1)
 
