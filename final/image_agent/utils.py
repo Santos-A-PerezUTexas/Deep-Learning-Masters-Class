@@ -23,17 +23,18 @@ class SuperTuxDataset(Dataset):
         self.data = []
         
         #for f in glob(path.join(dataset_path, '*.csv')):
-        for f in glob(path.join(dataset_path, '*.npy')):   #npy or csv
-            data_image = Image.open(f.replace('.npy', '.png'))   #npy or csv
+        for f in glob(path.join(dataset_path, '*.csv')):   #npy or csv
+            data_image = Image.open(f.replace('.csv', '.png'))   #npy or csv
             data_image.load()
-            data_instance = torch.from_numpy(np.load(f).astype(int))
-            #self.data.append((     data_image,    np.loadtxt(f, dtype=np.float32, delimiter=',')  ))
-            self.data.append((     data_image,    data_instance  ))
+            #data_instance = torch.from_numpy(np.load(f).astype(int))
+            self.data.append((     data_image,    np.loadtxt(f, dtype=np.float32, delimiter=',')  ))
+            #self.data.append((     data_image,    data_instance  ))
             
-        print ("\n\n FROM SUPERTUX CLASS: LOADED ENTIRE DATA SET, THIS IS DATA[0]", self.data[0])
+        #print ("\n\n FROM SUPERTUX CLASS: LOADED ENTIRE DATA SET, THIS IS DATA[0]", self.data[0])
         
         self.transform = transform
-        self.totensor = dense_transforms.ToTensor()
+        #self.totensor = dense_transforms.ToTensor()
+    
     def __len__(self):
         return len(self.data)
 
@@ -41,18 +42,17 @@ class SuperTuxDataset(Dataset):
        
         data = self.data[idx]
        
-        im = data[0]
-        label = data[1]
+        #im = data[0]
+        #label = data[1]
         #im = self.transform(im)
-        im = self.totensor(im)
+        #im = self.totensor(im)
         #data = self.transform(*data)
-
         #print ("\n\n\ In get item, this is shape of label", label.shape) 
         #print ("\n\n\ In get item, this is shape of im[0]", im[0].shape) 
       
-        
-        return im[0], label
-        #return data
+        #return im[0], label
+      
+        return data
 
 
 def load_data(dataset_path=DATASET_PATH, transform=dense_transforms.ToTensor(), num_workers=0, batch_size=128):
