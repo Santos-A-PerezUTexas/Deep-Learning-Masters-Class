@@ -25,8 +25,8 @@ def train(args):
 
     #loss = torch.nn.L1Loss()   #remove mean?
     #loss = torch.nn.MSELoss(reduce='mean')
-    loss= torch.nn.CrossEntropyLoss()
-
+    #loss= torch.nn.CrossEntropyLoss()
+    loss = torch.nn.BCEWithLogitsLoss(reduction='none')
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
     
@@ -57,6 +57,9 @@ def train(args):
             #pred, flag = model(img) Dec 4
             pred  = model(img)
 
+            print ("\n\n\n GOT A PREDICTION............., size", pred.shape)
+
+
             #x,y = label.chunk(2, dim=1)
 
             #xy = torch.cat((x, y),  dim=1)  #for -1...1
@@ -65,8 +68,10 @@ def train(args):
             #xy = xy.to(device)
 
             #loss_val = loss(pred, xy)
-            loss_val = loss(pred, label)
+            loss_val = loss(pred[:,0, :, :], label.float()).mean()
             
+            print ("\n\n\n GOT A LOSS.............", loss_val)
+
             #total_mean = torch.cat((total_mean, img.mean(dim=(2,3)).mean(dim=0)[None]))
             #total_std = torch.cat((total_std, img.std(dim=(2,3)).std(dim=0)[None]))
 
