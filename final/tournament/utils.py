@@ -134,6 +134,16 @@ class VideoRecorder(BaseRecorder):
             
             aim_point_300_400 = self._to_image300_400(xyz, proj, view)
             
+            if aim_point_300_400[0] < 0:
+              aim_point_300_400[0] = 0
+            if aim_point_300_400[0] > 400:
+              aim_point_300_400[0] = 400
+              
+            if aim_point_300_400[1] < 0:
+              aim_point_300_400[1] = 0
+            if aim_point_300_400[1] > 300:
+              aim_point_300_400[1] = 300
+            
             #print (f'the aim_point_image is {aim_point_image}')
             
             #NOTE:  TEST FOR THE CASE WHERE PUCK IS OFF FRAME!  WHAT LABEL???
