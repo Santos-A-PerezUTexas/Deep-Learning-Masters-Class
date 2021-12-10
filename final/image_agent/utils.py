@@ -1,5 +1,6 @@
 import numpy as np
 import pystk
+import torch
 
 from torch.utils.data import Dataset, DataLoader
 import torchvision.transforms.functional as TF
@@ -29,19 +30,25 @@ class SuperTuxDataset(Dataset):
             #self.data.append((     data_image,    np.loadtxt(f, dtype=np.float32, delimiter=',')  ))
             self.data.append((     data_image,    data_instance  ))
             
-        print ("\n\n FROM SUPERTUX CLASS: LOADED ENTIRE DATA SET, THIS IS DATA[0]", self.DATA[0])
+        print ("\n\n FROM SUPERTUX CLASS: LOADED ENTIRE DATA SET, THIS IS DATA[0]", self.data[0])
         
         self.transform = transform
-
+        self.totensor = dense_transforms.ToTensor()
     def __len__(self):
         return len(self.data)
 
     def __getitem__(self, idx):
-        #print ("FETCHING DATA")
-        #print(self.data[idx])
+       
         data = self.data[idx]
-        data = self.transform(*data)
-        return data
+       
+        im = data[0]
+        label = data[1]
+        im = self.transform(im)
+        #data = self.transform(*data)
+        
+        #data[0] = self.totensor(data[0])
+        
+        return im, label
 
 
 def load_data(dataset_path=DATASET_PATH, transform=dense_transforms.ToTensor(), num_workers=0, batch_size=128):

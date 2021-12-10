@@ -40,9 +40,10 @@ class Planner(torch.nn.Module):
         img = (img - self._mean[None, :, None, None].to(img.device)) / self._std[None, :, None, None].to(img.device)
         h = self._conv(img)
         x = self._upconv(h)
-        return (1 + spatial_argmax(x.squeeze(1))) * torch.as_tensor([img.size(3) - 1, img.size(2) - 1]).float().to(
-            img.device)
+        #return (1 + spatial_argmax(x.squeeze(1))) * torch.as_tensor([img.size(3) - 1, img.size(2) - 1]).float().to(
+         #   img.device)
 
+        return(x)
 
 def save_model(model):
     from torch import save
