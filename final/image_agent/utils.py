@@ -8,8 +8,8 @@ from . import dense_transforms
 
 RESCUE_TIMEOUT = 30
 TRACK_OFFSET = 15
-#DATASET_PATH = '/content/cs342/final/data'
-DATASET_PATH = '/content/cs342/final/data_instance' 
+DATASET_PATH = '/content/cs342/final/data'
+#DATASET_PATH = '/content/cs342/final/data_instance' 
 
 #Dec 9, 2021
 #data2 = torch.from_numpy(data.astype(int))
