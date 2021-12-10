@@ -83,9 +83,9 @@ class Team:
     def to_numpy(self, location):
         return np.float32([location[0], location[2]])
 
-    def _to_image300_400(self, x, proj, view):
+    def _to_image300_400(self, coords, proj, view):
         W, H = 400, 300
-        p = proj @ view @ np.array(list(x) + [1])
+        p = proj @ view @ np.array(list(coords) + [1])
         return np.array([W / 2 * (p[0] / p[-1] + 1), H / 2 * (1 - p[1] / p[-1])])
 
     def _to_image(self, x, proj, view, normalization=True):  #FOR DEBUGGING
@@ -308,9 +308,11 @@ class Team:
           #aim_point_image_Player1, _ = self.Planner(image1)
           #aim_point_image_Player2, _ = self.Planner(image2)
 
-          if self.frame > 60:  #call the planner
+          if self.frame >= 60:  #call the planner
+            #print ("\n\n\n  OVER 60 FRAMES, CALLING PLANNER")
             aim_point_image_Player1 = self.Planner(image1)
             aim_point_image_Player2 = self.Planner(image2)
+            #print ("\n\n\n\n  ------------CALLED PLANNER ---------------")
             aim_point_image_Player1 = aim_point_image_Player1.squeeze(0)
             aim_point_image_Player2 = aim_point_image_Player2.squeeze(0)
             aim_point_image_Player1 = aim_point_image_Player1.detach().cpu().numpy()
@@ -318,11 +320,13 @@ class Team:
 
           if self.frame < 60:   #do not call planner, soccer cord is likely [0,0]
             
+            print ("\n\n Currently at frame: ", self.frame)
             proj1 = np.array(player_state[0]['camera']['projection']).T
             view1 = np.array(player_state[0]['camera']['view']).T
             proj2 = np.array(player_state[1]['camera']['projection']).T
             view2 = np.array(player_state[1]['camera']['view']).T
-            x = np.float32([0,0]) 
+            x = np.float32([0,0,0]) 
+            print ("X is:  ", x)
             aim_point_image_Player1 = self._to_image300_400(x, proj1, view1) 
             aim_point_image_Player2 = self._to_image300_400(x, proj2, view2)
             
