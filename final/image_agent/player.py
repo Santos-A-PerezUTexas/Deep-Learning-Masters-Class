@@ -249,13 +249,20 @@ class Team:
 
 
     def get_instance_coords (instance, object=8):
-      
-
 
       x=1
       y=1
+      Flag = False
 
-      return x,y
+       for i in range (300):
+            for j in range (400):
+              if instance[i][j]  == object:
+                x = i
+                y = j
+                Flag = True
+                return Flag, x, y
+
+      return Flag, x,y
 
     def act(self, player_state, player_image, soccer_state = None, heatmap1=None, heatmap2=None):  #REMOVE SOCCER STATE!!!!!!!!
         
