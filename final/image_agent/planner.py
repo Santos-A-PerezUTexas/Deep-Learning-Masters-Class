@@ -12,62 +12,37 @@ def spatial_argmax(logit):
     
                         
 class Planner(torch.nn.Module):
+    def __init__(self, channels=[16, 32, 64, 128]):
+        super().__init__()
 
+        conv_block = lambda c, h: [torch.nn.BatchNorm2d(h), torch.nn.Conv2d(h, c, 7, 2, 3), torch.nn.ReLU(True)]
+        upconv_block = lambda c, h: [torch.nn.BatchNorm2d(h), torch.nn.ConvTranspose2d(h, c, 4, 2, 1),
+                                     torch.nn.ReLU(True)]
 
-    def __init__(self, layers=[], n_input_channels=3, kernel_size=3):
-      
-      super().__init__()
-        
-        
-      c = n_input_channels    #3 in our case
+        h, _conv, _upconv = 3, [], []
+        for c in channels:
+            _conv += conv_block(c, h)
+            h = c
 
-      self.layer1 = torch.nn.Sequential(
-      
-            torch.nn.Conv2d(c, 32, kernel_size=5, stride=2, padding=5//2), 
-            torch.nn.BatchNorm2d(32),
-            torch.nn.ReLU(),
-            
-            )    
+        for c in channels[:-3:-1]:
+            _upconv += upconv_block(c, h)
+            h = c
 
+        _upconv += [torch.nn.BatchNorm2d(h), torch.nn.Conv2d(h, 1, 1, 1, 0)]
 
-      self.layerUPCONV = torch.nn.Sequential(
-      
-            torch.nn.ConvTranspose2d(32, 16, kernel_size=5, padding=5 // 2, stride=2, output_padding=1),
-            torch.nn.BatchNorm2d(16),
-            torch.nn.ReLU(),
-            
-            )    
+        self._conv = torch.nn.Sequential(*_conv)
+        self._upconv = torch.nn.Sequential(*_upconv)   
+        self._mean = torch.FloatTensor([0.4519, 0.5590, 0.6204])
+        self._std = torch.FloatTensor([0.0012, 0.0018, 0.0020])
 
-
-      self.layer2 = torch.nn.Sequential(
-            torch.nn.Conv2d(16, 1, kernel_size=5, stride=1, padding=5//2), 
-            torch.nn.BatchNorm2d(1),
-            torch.nn.ReLU(),
-            )          
-
-
-      self.final = torch.nn.Linear(12288, 2)   #this takes 32x32 image of layer1 or 2, 32 channels
-       
-    
-            
     def forward(self, img):
-    
-     
+        
+        img = (img - self._mean[None, :, None, None].to(img.device)) / self._std[None, :, None, None].to(img.device)
+        h = self._conv(img)
+        x = self._upconv(h)
+        return (1 + spatial_argmax(x.squeeze(1))) * torch.as_tensor([img.size(3) - 1, img.size(2) - 1]).float().to(
+            img.device)
 
-      out = self.layer1(img)
-      #print(f'After Layer 1        out.shape is {out.shape}')
-      
-      out = self.layerUPCONV(out)
-      #print(f'After UPCONV        out.shape is {out.shape}')
-      
-      out = self.layer2(out)
-      #print(f'After Layer 2        out.shape is {out.shape}')
-      
-      #argm = spatial_argmax(out[:,0 ,:, :])
-      #out = out.reshape(out.size(0), -1)
-      #out = self.final(out)      
-              
-      return out
 
 def save_model(model):
     from torch import save

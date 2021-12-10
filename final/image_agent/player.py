@@ -323,8 +323,8 @@ class Team:
             proj2 = np.array(player_state[1]['camera']['projection']).T
             view2 = np.array(player_state[1]['camera']['view']).T
             x = np.float32([0,0]) 
-            aim_point_image_Player1 = self._to_image300_400(self, x, proj1, view1) 
-            aim_point_image_Player2 = self._to_image300_400(self, x, proj2, view2)
+            aim_point_image_Player1 = self._to_image300_400(x, proj1, view1) 
+            aim_point_image_Player2 = self._to_image300_400(x, proj2, view2)
             
                     
           x1 = aim_point_image_Player1[0]     
