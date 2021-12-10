@@ -28,6 +28,8 @@ class SuperTuxDataset(Dataset):
             data_instance = torch.from_numpy(np.load(f).astype(int))
             #self.data.append((     data_image,    np.loadtxt(f, dtype=np.float32, delimiter=',')  ))
             self.data.append((     data_image,    data_instance  ))
+            
+        print ("\n\n FROM SUPERTUX CLASS: LOADED ENTIRE DATA SET, THIS IS DATA[0]", self.DATA[0])
         
         self.transform = transform
 
