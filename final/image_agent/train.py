@@ -46,7 +46,7 @@ def train(args):
             
             #print ("INSIDE LOOP")
 
-            print ("\n\n IN TRAIN, this is img,  label," , img.shape, label.shape)
+            #print ("\n\n IN TRAIN, this is img,  label," , img.shape, label.shape)
 
             img, label = img.to(device), label.to(device)
 
@@ -57,7 +57,7 @@ def train(args):
             #pred, flag = model(img) Dec 4
             pred  = model(img)
 
-            print ("\n\n\n GOT A PREDICTION............., size", pred.shape)
+            #print ("\n\n\n GOT A PREDICTION............., size", pred.shape)
 
 
             #x,y = label.chunk(2, dim=1)
@@ -70,7 +70,7 @@ def train(args):
             #loss_val = loss(pred, xy)
             loss_val = loss(pred[:,0, :, :], label.float()).mean()
             
-            print ("\n\n\n GOT A LOSS.............", loss_val)
+            #print ("\n\n\n GOT A LOSS.............", loss_val)
 
             #total_mean = torch.cat((total_mean, img.mean(dim=(2,3)).mean(dim=0)[None]))
             #total_std = torch.cat((total_std, img.std(dim=(2,3)).std(dim=0)[None]))
