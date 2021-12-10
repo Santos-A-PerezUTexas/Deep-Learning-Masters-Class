@@ -83,6 +83,11 @@ class Team:
     def to_numpy(self, location):
         return np.float32([location[0], location[2]])
 
+    def _to_image300_400(self, x, proj, view):
+        W, H = 400, 300
+        p = proj @ view @ np.array(list(x) + [1])
+        return np.array([W / 2 * (p[0] / p[-1] + 1), H / 2 * (1 - p[1] / p[-1])])
+
     def _to_image(self, x, proj, view, normalization=True):  #FOR DEBUGGING
 
         out_of_frame = False
@@ -302,17 +307,26 @@ class Team:
           
           #aim_point_image_Player1, _ = self.Planner(image1)
           #aim_point_image_Player2, _ = self.Planner(image2)
-          aim_point_image_Player1 = self.Planner(image1)
-          aim_point_image_Player2 = self.Planner(image2)
 
-          aim_point_image_Player1 = aim_point_image_Player1.squeeze(0)
-          aim_point_image_Player2 = aim_point_image_Player2.squeeze(0)
+          if self.frame > 60:  #call the planner
+            aim_point_image_Player1 = self.Planner(image1)
+            aim_point_image_Player2 = self.Planner(image2)
+            aim_point_image_Player1 = aim_point_image_Player1.squeeze(0)
+            aim_point_image_Player2 = aim_point_image_Player2.squeeze(0)
+            aim_point_image_Player1 = aim_point_image_Player1.detach().cpu().numpy()
+            aim_point_image_Player2 = aim_point_image_Player2.detach().cpu().numpy()
 
-          aim_point_image_Player1 = aim_point_image_Player1.detach().cpu().numpy()
-          aim_point_image_Player2 = aim_point_image_Player2.detach().cpu().numpy()
-
-          
-          
+          if self.frame < 60:   #do not call planner, soccer cord is likely [0,0]
+            
+            proj1 = np.array(player_state[0]['camera']['projection']).T
+            view1 = np.array(player_state[0]['camera']['view']).T
+            proj2 = np.array(player_state[1]['camera']['projection']).T
+            view2 = np.array(player_state[1]['camera']['view']).T
+            x = np.float32([0,0]) 
+            aim_point_image_Player1 = self._to_image300_400(self, x, proj1, view1) 
+            aim_point_image_Player2 = self._to_image300_400(self, x, proj2, view2)
+            
+                    
           x1 = aim_point_image_Player1[0]     
           y1 = aim_point_image_Player1[1]     
           x2 = aim_point_image_Player2[0]     
@@ -367,6 +381,8 @@ class Team:
         
         proj = np.array(player_state[0]['camera']['projection']).T
         view = np.array(player_state[0]['camera']['view']).T
+        
+
 
         if use_image_coords and self.DEBUG:
           print ("USING NORMALIZED IMAGE COORDS FOR PUCK ACTUAL  HACK")
