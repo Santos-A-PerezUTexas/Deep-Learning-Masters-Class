@@ -12,7 +12,7 @@ def spatial_argmax(logit):
     
                         
 class Planner(torch.nn.Module):
-    def __init__(self, channels=[16, 32, 64, 128]):
+    def __init__(self, channels=[16, 32]):  #[16, 32, 64, 128]
         super().__init__()
 
         conv_block = lambda c, h: [torch.nn.BatchNorm2d(h), torch.nn.Conv2d(h, c, 7, 2, 3), torch.nn.ReLU(True)]
