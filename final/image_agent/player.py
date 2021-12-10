@@ -362,35 +362,26 @@ class Team:
         if y2 >= 1:
           is_behind_2 = True
 
-        
-        #ERASE BEGIN DEC 1, 2021-----------------------------------------
-
-        x = 1
-        y = 1
-        z = 1
-
-        if self.DEBUG:   #use soccer state only for debbugging 
-        
-          x =soccer_state['ball']['location'][0]
-          y =soccer_state['ball']['location'][1] 
-          z =soccer_state['ball']['location'][2]
-        
-        
-
         xyz = np.random.rand(3)
         xz =  np.random.rand(2)
         
-        xz[0] = x
-        xz[1] = z
+        xyz[0] = 1
+        xyz[1] = 1
+        xyz[2] = 1
+
+        if self.DEBUG:   #use soccer state only for debbugging 
+
+          xyz[0] =soccer_state['ball']['location'][0]
+          xyz[1] =soccer_state['ball']['location'][1] 
+          xyz[2] =soccer_state['ball']['location'][2]
         
-        xyz[0] = x
-        xyz[1] = y
-        xyz[2] = z
         
+        xz[0] = xyz[0]
+        xz[1] = xyz[2]
+                
         proj = np.array(player_state[0]['camera']['projection']).T
         view = np.array(player_state[0]['camera']['view']).T
         
-
 
         if use_image_coords and self.DEBUG:
           print ("USING NORMALIZED IMAGE COORDS FOR PUCK ACTUAL  HACK")
