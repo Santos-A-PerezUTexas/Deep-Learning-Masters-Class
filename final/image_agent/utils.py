@@ -43,7 +43,7 @@ class SuperTuxDataset(Dataset):
        
         im = data[0]
         label = data[1]
-        im = self.transform(im)
+        im = self.transform(*im)
         #data = self.transform(*data)
         
         #data[0] = self.totensor(data[0])
