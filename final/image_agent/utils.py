@@ -8,8 +8,9 @@ from . import dense_transforms
 
 RESCUE_TIMEOUT = 30
 TRACK_OFFSET = 15
-DATASET_PATH = '/content/cs342/final/data'
-#DATASET_PATH = '/content/cs342/final/data_instance' 
+
+DATASET_PATH = '/content/cs342/final/data'               
+#DATASET_PATH = '/content/cs342/final/data_instance'     #render_data instance path
 
 #Dec 9, 2021
 #data2 = torch.from_numpy(data.astype(int))
@@ -22,15 +23,16 @@ class SuperTuxDataset(Dataset):
         
         self.data = []
         
-        #for f in glob(path.join(dataset_path, '*.csv')):
-        for f in glob(path.join(dataset_path, '*.csv')):   #npy or csv
-            data_image = Image.open(f.replace('.csv', '.png'))   #npy or csv
-            data_image.load()
-            #data_instance = torch.from_numpy(np.load(f).astype(int))
-            self.data.append((     data_image,    np.loadtxt(f, dtype=np.float32, delimiter=',')  ))
-            #self.data.append((     data_image,    data_instance  ))
+        
+        for f in glob(path.join(dataset_path, '*.csv')):   #change to npy to load render_data instance
             
-        #print ("\n\n FROM SUPERTUX CLASS: LOADED ENTIRE DATA SET, THIS IS DATA[0]", self.data[0])
+            data_image = Image.open(f.replace('.csv', '.png'))   #change to npy to load render_data instance
+            data_image.load()
+            self.data.append(( data_image,    np.loadtxt(f, dtype=np.float32, delimiter=',')  ))
+            
+            #uncomment below to load render_data instance
+            #data_instance = torch.from_numpy(np.load(f).astype(int)) # render_data instance
+            #self.data.append((     data_image,    data_instance  ))
         
         self.transform = transform
         #self.totensor = dense_transforms.ToTensor()
@@ -41,15 +43,13 @@ class SuperTuxDataset(Dataset):
     def __getitem__(self, idx):
        
         data = self.data[idx]
-       
+        data = self.transform(*data)
+
+        #uncomment below to load render_data instance
         #im = data[0]
         #label = data[1]
         #im = self.transform(im)
         #im = self.totensor(im)
-        data = self.transform(*data)
-        #print ("\n\n\ In get item, this is shape of label", label.shape) 
-        #print ("\n\n\ In get item, this is shape of im[0]", im[0].shape) 
-      
         #return im[0], label
       
         return data

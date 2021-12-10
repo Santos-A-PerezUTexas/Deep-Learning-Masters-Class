@@ -248,7 +248,14 @@ class Team:
         return action
 
 
+    def get_instance_coords (instance, object=8):
+      
 
+
+      x=1
+      y=1
+
+      return x,y
 
     def act(self, player_state, player_image, soccer_state = None, heatmap1=None, heatmap2=None):  #REMOVE SOCCER STATE!!!!!!!!
         
@@ -341,11 +348,10 @@ class Team:
         
         if not self.planner:
 
-          
-          x1 = 1     
-          y1 = -1     
-          x2 = 1     
-          y2 = -1     
+          #use random points, for debugging or testing, -1...1 coordinates, not 300/400          
+          x1 = x2 =  1     
+          y1 = y2 = -1     
+               
           
         is_behind_1 = False
         is_behind_2 = False
@@ -363,7 +369,8 @@ class Team:
         y = 1
         z = 1
 
-        if self.DEBUG:
+        if self.DEBUG:   #use soccer state only for debbugging 
+        
           x =soccer_state['ball']['location'][0]
           y =soccer_state['ball']['location'][1] 
           z =soccer_state['ball']['location'][2]

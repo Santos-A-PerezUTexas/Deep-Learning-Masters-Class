@@ -23,10 +23,10 @@ def train(args):
     if args.continue_training:
         model.load_state_dict(torch.load(path.join(path.dirname(path.abspath(__file__)), 'planner.th')))
 
-    loss = torch.nn.L1Loss()   #remove mean?
+    loss = torch.nn.L1Loss()   #mean?
     #loss = torch.nn.MSELoss(reduce='mean')
-    #loss= torch.nn.CrossEntropyLoss()
-    #loss = torch.nn.BCEWithLogitsLoss(reduction='none')
+    #loss= torch.nn.CrossEntropyLoss()  #render_data instance
+    #loss = torch.nn.BCEWithLogitsLoss(reduction='none')  #render_data instance, tested
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
     
@@ -46,17 +46,15 @@ def train(args):
 
         for img, label in train_data:
             
-            #print ("INSIDE LOOP")
 
             #print ("\n\n IN TRAIN, this is img,  label," , img.shape, label.shape)
 
             img, label = img.to(device), label.to(device)
 
-            #print (label[0])
+            
             h, w = img.size()[2], img.size()[3]
 
 
-            #pred, flag = model(img) Dec 4
             pred  = model(img)
 
             #print ("\n\n\n GOT A PREDICTION............., size", pred.shape)
@@ -64,24 +62,23 @@ def train(args):
 
             x,y = label.chunk(2, dim=1)
 
-            #xy = torch.cat((x, y),  dim=1)  #for -1...1
+            #xy = torch.cat((x, y),  dim=1)  #for -1...1 coords prediction
             xy = torch.cat((x.clamp(min=0.0,max=w),y.clamp(min=0.0,max=h)),dim=1) #for 300..400
 
             xy = xy.to(device)
 
             loss_val = loss(pred, xy)
-            #loss_val = loss(pred[:,0, :, :], label.float()).mean()
-            
-            #print ("------------------------------------\n\n SAMPLE PREDICTION, LABEL:", torch.ceil(pred[0, 0, :, :]), label[0])
-            #print ("\n\n SAMPLE MEAN DIFFERENCE", (torch.ceil(pred[0, 0, :, :])-label[0]).mean() )
-            
-            #print ("\n\n\n GOT A LOSS.............", loss_val)
+           
+            #loss_val = loss(pred[:,0, :, :], label.float()).mean()   #use for render_data instance
+            #print ("\n\n SAMPLE RENDER_DATA PREDICTION, LABEL:", torch.ceil(pred[0, 0, :, :]), label[0])
+            #print ("\n\n SAMPLE RENDER_DATA MEAN DIFFERENCE", (torch.ceil(pred[0, 0, :, :])-label[0]).mean() )
+            #print ("\n\n\n LOSS VALUE.............", loss_val)
 
             total_mean = torch.cat((total_mean, img.mean(dim=(2,3)).mean(dim=0)[None]))
             total_std = torch.cat((total_std, img.std(dim=(2,3)).std(dim=0)[None]))
 
-            #print ("\n Predicted point is .....", pred[0])
-            #print ("Actual point is: ", label[0])
+            #print ("\n Sample Predicted point is .....", pred[0])
+            #print ("Sample Actual point is: ", label[0])
 
             if train_logger is not None:
                 train_logger.add_scalar('loss', loss_val, global_step)
