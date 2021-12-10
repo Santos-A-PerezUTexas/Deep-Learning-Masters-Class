@@ -46,7 +46,7 @@ class SuperTuxDataset(Dataset):
         #label = data[1]
         #im = self.transform(im)
         #im = self.totensor(im)
-        #data = self.transform(*data)
+        data = self.transform(*data)
         #print ("\n\n\ In get item, this is shape of label", label.shape) 
         #print ("\n\n\ In get item, this is shape of im[0]", im[0].shape) 
       
