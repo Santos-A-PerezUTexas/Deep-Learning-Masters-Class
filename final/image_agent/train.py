@@ -41,7 +41,9 @@ def train(args):
 
         model.train()
         losses = []
-               
+
+        print (len(train_data))
+
         for img, label in train_data:
             
             #print ("INSIDE LOOP")
@@ -70,6 +72,8 @@ def train(args):
             #loss_val = loss(pred, xy)
             loss_val = loss(pred[:,0, :, :], label.float()).mean()
             
+            print ("\n\n SAMPLE PREDICTION, LABEL:", pred[0, 0, :, :], label[0])
+
             #print ("\n\n\n GOT A LOSS.............", loss_val)
 
             #total_mean = torch.cat((total_mean, img.mean(dim=(2,3)).mean(dim=0)[None]))
