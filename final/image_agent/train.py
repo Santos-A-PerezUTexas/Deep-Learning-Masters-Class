@@ -46,7 +46,7 @@ def train(args):
             
             #print ("INSIDE LOOP")
 
-            print ("\n\n IN TRAIN, this is label,",  label.shape, img.shape)
+            print ("\n\n IN TRAIN, this is img,  label," , img.shape, label.shape)
 
             img, label = img.to(device), label.to(device)
 

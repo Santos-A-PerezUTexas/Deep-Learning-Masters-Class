@@ -43,12 +43,16 @@ class SuperTuxDataset(Dataset):
        
         im = data[0]
         label = data[1]
-        im = self.transform(*im)
+        #im = self.transform(im)
+        im = self.totensor(im)
         #data = self.transform(*data)
+
+        #print ("\n\n\ In get item, this is shape of label", label.shape) 
+        #print ("\n\n\ In get item, this is shape of im[0]", im[0].shape) 
+      
         
-        #data[0] = self.totensor(data[0])
-        
-        return im, label
+        return im[0], label
+        #return data
 
 
 def load_data(dataset_path=DATASET_PATH, transform=dense_transforms.ToTensor(), num_workers=0, batch_size=128):
