@@ -395,9 +395,19 @@ class Team:
           aim_point_image_actual_1 = self._to_image300_400(xyz, proj, view)
 
         if self.DEBUG:
+          if aim_point_image_actual_1[0] < 0:
+            aim_point_image_actual_1[0] = 0
+          if aim_point_image_actual_1[0] > 400:
+            aim_point_image_actual_1[0] = 400
+
+          if aim_point_image_actual_1[1] < 0:
+            aim_point_image_actual_1[1] = 0
+          if aim_point_image_actual_1[1] > 300:
+            aim_point_image_actual_1[1] = 300
+          
           print("\n\n Player 1~~~~~~~~~~~ aimpoint predicted, aimpoint actual:", aim_point_image_Player1, 
                aim_point_image_actual_1)
-          print("\nThe pure world socccer coords are:  ", xz)
+          print("\nThe pure world socccer coords and frame are:  ", xyz, self.frame)
           if (xz[0] == 0) and (xz[0]==1):
             print ("\n\n\n *** ZERO COORDS AT FRAME ***", self.frame)
          
@@ -422,12 +432,12 @@ class Team:
           #xz is the predicted point -1..1
           #aim_point_image_Player1  is Predicted from planner
 
-          loss_v_image = abs(aim_point_image_Player1.detach()-xz).mean()
+          loss_v_image = abs(aim_point_image_Player1-xz).mean()
           
           if self.DEBUG:
             print("\nPlayer 1~~~~~~~~~~~ CURRENT LOSS predicted/image coords and frame is", loss_v_image, self.frame)
 
-            loss_v_world = abs(aim_point_image_Player1.detach()-xz).mean()
+            loss_v_world = abs(aim_point_image_Player1-xz).mean()
             print("\nPlayer 1~~~~~~~~~~~ CURRENT LOSS predicted/world, and frame is", loss_v_world, self.frame)
 
             if puck_flag:
