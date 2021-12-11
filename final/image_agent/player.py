@@ -21,7 +21,7 @@ class Team:
         self.forward_next = False
 
         self.planner = True     #set to true to use the planner, debugging purposes
-        self.DEBUG = True      #SET TO TRUE TO DEBUG
+        self.DEBUG = False      #SET TO TRUE TO DEBUG
 
 
         self.MSEloss = torch.nn.MSELoss()  #for DEBUGGING 
