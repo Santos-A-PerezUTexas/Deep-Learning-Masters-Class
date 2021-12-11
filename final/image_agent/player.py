@@ -400,9 +400,9 @@ class Team:
         if self.DEBUG:
           print("\n\n Player 1~~~~~~~~~~~ aimpoint predicted, aimpoint actual:", aim_point_image_Player1, 
                aim_point_image_actual_1)
-           print("\nThe pure world socccer coords are:  ", xz)
-           if (xz[0] == 0) and (xz[0]==1):
-             print ("\n\n\n *** ZERO COORDS AT FRAME ***", self.frame)
+          print("\nThe pure world socccer coords are:  ", xz)
+          if (xz[0] == 0) and (xz[0]==1):
+            print ("\n\n\n *** ZERO COORDS AT FRAME ***", self.frame)
          
         
         
