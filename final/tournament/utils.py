@@ -5,7 +5,7 @@ import pystk
 #TOURNAMENT UTILS
 #Edit this to generate labels
 
-file_no = 3001 
+file_no = 3001   #changed already do not change 
 
 class Team(IntEnum):   #Two methods, video_grid() and map_image() (as well as map_image()-->_to_coord(x) 
     
@@ -138,7 +138,7 @@ class VideoRecorder(BaseRecorder):
               aim_point_300_400[0] = 0
             if aim_point_300_400[0] > 400:
               aim_point_300_400[0] = 400
-              
+
             if aim_point_300_400[1] < 0:
               aim_point_300_400[1] = 0
             if aim_point_300_400[1] > 300:
