@@ -50,9 +50,11 @@ class Team:
         if self.planner:
 
           print ("\n\n     Player (TEAM) INIT: USING PLANNER \n\n")
+          
           self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
           self.Planner = load_model()
           self.Planner.eval()
+          self.Planner = self.Planner.to(self.device)
           print (self.Planner)
           
         #self.prior_state = [] 
@@ -321,12 +323,18 @@ class Team:
 
           if self.frame >= 30:  #call the planner
             
+            image1 = image1.to(self.device)
+            image2 = image2.to(self.device)
+            
+
+            
             aim_point_image_Player1 = self.Planner(image1)
             aim_point_image_Player2 = self.Planner(image2)
             aim_point_image_Player1 = aim_point_image_Player1.squeeze(0)
             aim_point_image_Player2 = aim_point_image_Player2.squeeze(0)
-            aim_point_image_Player1 = aim_point_image_Player1.detach().cpu().numpy()
-            aim_point_image_Player2 = aim_point_image_Player2.detach().cpu().numpy()
+            
+            #aim_point_image_Player1 = aim_point_image_Player1.detach().cpu().numpy()
+            #aim_point_image_Player2 = aim_point_image_Player2.detach().cpu().numpy()
 
           if self.frame < 30:   #do not call planner, soccer cord is likely [0,0]
             
@@ -412,12 +420,6 @@ class Team:
             print ("\n\n\n *** ZERO COORDS AT FRAME ***", self.frame)
          
         
-        
-
-              
-
-
-        
         puck_flag = 0
 
 
@@ -429,15 +431,24 @@ class Team:
               if heatmap1[0][i][j]  == 8:
                 puck_flag = 1
 
-          #xz is the predicted point -1..1
+          
           #aim_point_image_Player1  is Predicted from planner
 
-          loss_v_image = abs(aim_point_image_Player1-xz).mean()
-          
-          if self.DEBUG:
+          ##xz has the actual (hacked) coords for the soccer ball. must convert to 300/400
+
+
+          if self.frame >= 30 and self.DEBUG:
+            xz_image = self._to_image300_400(xyz, proj, view) 
+            detached_p = aim_point_image_Player1.detach().cpu().numpy()
+            #loss_v_image = 0
+            loss_v_image = torch.mean(torch.abs(aim_point_image_Player1-xz_image))     #.mean()
+          if self.frame < 30 and self.DEBUG:
+            loss_v_image = abs(aim_point_image_Player1-xz).mean()
+
+          if self.DEBUG and self.frame >= 30:
             print("\nPlayer 1~~~~~~~~~~~ CURRENT LOSS predicted/image coords and frame is", loss_v_image, self.frame)
 
-            loss_v_world = abs(aim_point_image_Player1-xz).mean()
+            loss_v_world = abs(detached_p-xz_image).mean()
             print("\nPlayer 1~~~~~~~~~~~ CURRENT LOSS predicted/world, and frame is", loss_v_world, self.frame)
 
             if puck_flag:
