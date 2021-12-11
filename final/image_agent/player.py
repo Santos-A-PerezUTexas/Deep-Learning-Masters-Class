@@ -500,7 +500,7 @@ class Team:
           print ("\n\n STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS ")
           print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS NO PUCK", self.total_loss_No_puck/self.total_loss_No_puck_count)
           print("\nPlayer 1~~~~~~~~~~~RUNNING AVERAGE LOSS FOR PUCK *IN IMAGE*", self.total_loss_puck/self.total_loss_puck_count)
-          print ("\n\n THESE ARE THE MINX, MAXX, MINY, MAXY:", self.min_x, self.max_x, self.min_y, self.max_y)
+          #print ("\n\n THESE ARE THE MINX, MAXX, MINY, MAXY:", self.min_x, self.max_x, self.min_y, self.max_y)
           print ("-----------------------------------------------------------------------------------")
        
         Kart_A_front = player_state[0]['kart']['front']
