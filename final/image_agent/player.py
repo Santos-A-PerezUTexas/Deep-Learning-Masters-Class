@@ -29,10 +29,7 @@ class Team:
         self.total_loss_No_puck = 0        #for DEBUGGING
         self.total_loss_puck_count = 0     #for DEBUGGING
         self.total_loss_No_puck_count = 0  #for DEBUGGING
-        self.max_x = 0   #temporary attribute DEBUGGING
-        self.min_x = 0  #temporary attribute DEBUGING
-        self.max_y = 0   #temporary attribute DEBUGING
-        self.min_y = 0  #temporary attribute DEBUGING
+      
 
         #Dec 8, 2021
 
@@ -391,11 +388,11 @@ class Team:
         
 
         if use_image_coords and self.DEBUG:
-          print ("USING NORMALIZED IMAGE COORDS FOR PUCK ACTUAL  HACK")
-          aim_point_image_actual_1 = self._to_image(xyz, proj, view, normalization=True) 
+          print ("USING  IMAGE COORDS FOR PUCK ACTUAL COORDS  HACK")
+          aim_point_image_actual_1 = self._to_image300_400(xyz, proj, view) 
         if use_soccer_world_coords and self.DEBUG:
-          print("USING UNNORMALIZED IMAGE COORDS FOR PUCK ACTUA HACK")
-          aim_point_image_actual_1 = self._to_image(xyz, proj, view, normalization=False)
+          print("USING IMAGE COORDS FOR PUCK ACTUAL COORDS HACK")
+          aim_point_image_actual_1 = self._to_image300_400(xyz, proj, view)
 
         if self.DEBUG:
           print("\n\n Player 1~~~~~~~~~~~ aimpoint predicted, aimpoint actual:", aim_point_image_Player1, 
