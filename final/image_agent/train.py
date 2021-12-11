@@ -34,8 +34,7 @@ def train(args):
     transform = eval(args.transform, {k: v for k, v in inspect.getmembers(dense_transforms) if inspect.isclass(v)})
 
     train_data = load_data(transform=transform, num_workers=args.num_workers)
-    total_mean = torch.rand(1,3).to(device)
-    total_std = torch.rand(1,3).to(device)
+   
     global_step = 0
     for epoch in range(args.num_epoch):
 
@@ -73,10 +72,7 @@ def train(args):
             #print ("\n\n SAMPLE RENDER_DATA PREDICTION, LABEL:", torch.ceil(pred[0, 0, :, :]), label[0])
             #print ("\n\n SAMPLE RENDER_DATA MEAN DIFFERENCE", (torch.ceil(pred[0, 0, :, :])-label[0]).mean() )
             #print ("\n\n\n LOSS VALUE.............", loss_val)
-
-            total_mean = torch.cat((total_mean, img.mean(dim=(2,3)).mean(dim=0)[None]))
-            total_std = torch.cat((total_std, img.std(dim=(2,3)).std(dim=0)[None]))
-
+   
             #print ("\n Sample Predicted point is .....", pred[0])
             #print ("Sample Actual point is: ", label[0])
 

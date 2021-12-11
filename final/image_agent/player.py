@@ -400,22 +400,12 @@ class Team:
         if self.DEBUG:
           print("\n\n Player 1~~~~~~~~~~~ aimpoint predicted, aimpoint actual:", aim_point_image_Player1, 
                aim_point_image_actual_1)
+           print("\nThe pure world socccer coords are:  ", xz)
+           if (xz[0] == 0) and (xz[0]==1):
+             print ("\n\n\n *** ZERO COORDS AT FRAME ***", self.frame)
+         
         
-        if self.DEBUG:
-          print("\nThe pure world socccer coords are:  ", xz)
-          if x > 0:
-            if x > self.max_x:            
-              self.max_x = x
-          if x < 0:
-            if x < self.min_x:
-              self.min_x = x
-          
-          if z > 0:
-            if z > self.max_y:
-              self.max_y = z
-          if z < 0:
-            if z < self.min_y:
-              self.min_y = z
+        
 
               
 
