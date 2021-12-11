@@ -164,16 +164,16 @@ class VideoRecorder(BaseRecorder):
                   if heatmap1[0][i][j]  == 8:
                     puck_flag = 1
               
-            if puck_flag:
-              print ("\n Found Puck")
+            #if puck_flag:
+              #print ("\n Found Puck")
               
 
-            if not puck_flag:
-               print ("\n You're out of Puck")
+            #if not puck_flag:
+               #print ("\n You're out of Puck")
 
-            if puck_flag != out_of_frame:
-              print ("\n WARNING -   puck_flag bit shift does not coincide with  out of frame coord flag")
-              print ("\n WARNING -   puck_flag bit shift does not coincide with  out of frame coord flag")
+            #if puck_flag != out_of_frame:
+              #print ("\n WARNING -   puck_flag bit shift does not coincide with  out of frame coord flag")
+              #print ("\n WARNING -   puck_flag bit shift does not coincide with  out of frame coord flag")
 
 
               #heatmap1[1] = heatmap1[1] >> 24
