@@ -40,6 +40,4 @@ We tried QA learning, and our model followed the puck and did not score, because
 
 
 
-After first 10 days, we found that group 1's planner performs really well. The only thing left is the Controller, Since Weizhe and Yilong are doing the state agent first so they have some experience with the controller, so they try to build the Controller for this planner. Santos try to improve his planner's performance to a furthurn steps. 
-
 
