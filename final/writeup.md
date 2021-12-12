@@ -2,7 +2,7 @@
 
 #### Team Members: Santos A. Perez | Yilong Chen | Weizhe Tang           
 
-## Introdudction 
+## Introduction 
 Bulding a good AI model sucessfully playing in a game competition has always been a formidable task  for game companies and machine learning engineers. The famous competition between  Alpha Go and Ke Jie  indeed proves that a machine can do better job than humans in some game competitions. Along those lines, in this project, we are tasked with building an agent which could compete with various AI models in a 2x2 competition in the SuperTuxIcehockey game. Although we've never played this game, when we watched the demo it seemed similar to a soccer competition.  With this knowledge,  we began  by first dividing our group into two sub-groups, to explore more solutions. Mr. Santos Perez  was group1 (along with someone else who dropped course), and Mr. Weizhe Tang and Mr. Yilong Chen  in group2.  We worked together by holding weekly zoom meetings to discuss progress and exchange ideas. In the end, with this approach, we decided to solve the problem with an image based agent.
 
 
