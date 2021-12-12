@@ -5,7 +5,7 @@ import pystk
 #TOURNAMENT UTILS
 #Edit this to generate labels
 
-file_no = 9001    
+file_no = 5001    
 
 class Team(IntEnum):   #Two methods, video_grid() and map_image() (as well as map_image()-->_to_coord(x) 
     
@@ -128,12 +128,17 @@ class VideoRecorder(BaseRecorder):
             
             proj = np.array(team1_state[0]['camera']['projection']).T
             view = np.array(team1_state[0]['camera']['view']).T
+            proj2 = np.array(team2_state[0]['camera']['projection']).T
+            view2 = np.array(team2_state[0]['camera']['view']).T
+            
             #print (f'the view is {view.shape}, the proj is {proj.shape}')
                         
             aim_point_image, out_of_frame = self._to_image(xyz, proj, view)  #normalize xz in range -1...1
+            aim_point_image2, out_of_frame = self._to_image(xyz, proj2, view2)  #normalize xz in range -1...1
             
             aim_point_300_400 = self._to_image300_400(xyz, proj, view)
-            
+            aim_point_300_400_2 = self._to_image300_400(xyz, proj2, view2)
+
             if aim_point_300_400[0] < 0:
               aim_point_300_400[0] = 0
             if aim_point_300_400[0] > 400:
@@ -144,14 +149,18 @@ class VideoRecorder(BaseRecorder):
             if aim_point_300_400[1] > 300:
               aim_point_300_400[1] = 300
             
-            #print (f'the aim_point_image is {aim_point_image}')
+
+            if aim_point_300_400_2[0] < 0:
+              aim_point_300_400_2[0] = 0
+            if aim_point_300_400_2[0] > 400:
+              aim_point_300_400_2[0] = 400
+
+            if aim_point_300_400_2[1] < 0:
+              aim_point_300_400_2[1] = 0
+            if aim_point_300_400_2[1] > 300:
+              aim_point_300_400_2[1] = 300
             
-            #NOTE:  TEST FOR THE CASE WHERE PUCK IS OFF FRAME!  WHAT LABEL???
-            #NOTE:  TEST FOR THE CASE WHERE PUCK IS OFF FRAME!  WHAT LABEL???
-            #NOTE:  TEST FOR THE CASE WHERE PUCK IS OFF FRAME!  WHAT LABEL???
-            #NOTE:  TEST FOR THE CASE WHERE PUCK IS OFF FRAME!  WHAT LABEL???
-            
-            #heatmap = pystk.RenderData(team1_images[0]) 
+
               
             if heatmap1:
               
@@ -163,36 +172,16 @@ class VideoRecorder(BaseRecorder):
                 for j in range (400):
                   if heatmap1[0][i][j]  == 8:
                     puck_flag = 1
-              
-            #if puck_flag:
-              #print ("\n Found Puck")
-              
-
-            #if not puck_flag:
-               #print ("\n You're out of Puck")
-
-            #if puck_flag != out_of_frame:
-              #print ("\n WARNING -   puck_flag bit shift does not coincide with  out of frame coord flag")
-              #print ("\n WARNING -   puck_flag bit shift does not coincide with  out of frame coord flag")
-
-
-              #heatmap1[1] = heatmap1[1] >> 24
-              #heatmap2 = heatmap2 >> 24
-              #print ("\n==============heatmap shape is  ", heatmap1[0].shape)
-              #print ("\n==============image shape is  ", team1_images[0].shape)
-              
 
             if use_image_coords and not use_300_400:
               self.collect(team1_images[0], puck_flag, aim_point_image, heatmap1[0])
             
             if use_image_coords and use_300_400:
-              self.collect(team1_images[0], puck_flag, aim_point_300_400, heatmap1[0])
+              self.collect(team2_images[0], puck_flag, aim_point_300_400_2, heatmap1[0])
             
             if use_world:
               self.collect(team1_images[0], puck_flag, xz, heatmap1[0])
 
-            #self.collect(team1_images[0], xz)  #updated to above on 11/27/2021 to normalize xz in range -1...1
-            
         
             self._writer.append_data(np.array(video_grid(team1_images, team2_images,
                                                         'X1 Ball  Location: %f' % aim_point_image[0],
