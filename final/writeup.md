@@ -13,9 +13,9 @@ Bulding a good AI model sucessfully playing in a game competition has always bee
 #### 2  A class method called _to_image300_400(params) was implemented, which is the same as _to_image from HW5,  but it converts -1..1 image coordinates to 300/400 image coordinates as depicted in the project slides (x 400 range, y 300 range), with the 0,0 coordinate now at the top left.
 
 #### 3 The collect() method from HW5 was then invoked, and was called with the soccer state  and the render_data instance as params, as well as the image and proj/view for team1 or team2 images.
-###4 To balance the data set, 5000 image/labels pairs were generated for team1, and 5000 for team2.
+####4 To balance the data set, 5000 image/labels pairs were generated for team1, and 5000 for team2.
 
-###5  Labels were then generated with either the soccer/puck location, or the render_data instance (bitshifted by 24), which in the end we decide not to use.
+####5  Labels were then generated with either the soccer/puck location, or the render_data instance (bitshifted by 24), which in the end we decide not to use.
 
 ### Planner
 #### 1  The planner had to meet the timeout limitations, and a model which closely resembles HW4 was used for that purpose, and was tested and complied with time limits.  
