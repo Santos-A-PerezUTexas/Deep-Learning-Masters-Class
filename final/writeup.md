@@ -8,6 +8,21 @@ We decided to work on a image agent
 
 
 ## Originality
+### Data collection
+#### 1
+#### 2
+#### 3
+
+
+### Planner
+#### 1
+#### 2
+#### 3
+
+### Controller
+#### 1
+#### 2
+#### 3
 
 ## Exploration period(before the mid of second week(10 days))
 ### Group1
