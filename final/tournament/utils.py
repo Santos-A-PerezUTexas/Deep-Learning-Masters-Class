@@ -5,7 +5,7 @@ import pystk
 #TOURNAMENT UTILS
 #Edit this to generate labels
 
-file_no = 5001    
+file_no = 9001    
 
 class Team(IntEnum):   #Two methods, video_grid() and map_image() (as well as map_image()-->_to_coord(x) 
     
@@ -177,7 +177,7 @@ class VideoRecorder(BaseRecorder):
               self.collect(team1_images[0], puck_flag, aim_point_image, heatmap1[0])
             
             if use_image_coords and use_300_400:
-              self.collect(team2_images[0], puck_flag, aim_point_300_400_2, heatmap1[0])
+              self.collect(team1_images[0], puck_flag, aim_point_300_400, heatmap1[0])
             
             if use_world:
               self.collect(team1_images[0], puck_flag, xz, heatmap1[0])
