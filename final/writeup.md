@@ -14,6 +14,7 @@ Bulding a good AI model sucessfully playing in a game competition has always bee
 
 #### 3 The collect() method from HW5 was then invoked, and was called with the soccer state  and the render_data instance as params, as well as the image and proj/view for team1 or team2 images.
 ###4 To balance the data set, 5000 image/labels pairs were generated for team1, and 5000 for team2.
+
 ###5  Labels were then generated with either the soccer/puck location, or the render_data instance (bitshifted by 24), which in the end we decide not to use.
 
 ### Planner
