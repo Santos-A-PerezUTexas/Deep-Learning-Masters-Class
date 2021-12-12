@@ -15,7 +15,7 @@ Bulding a good AI model sucessfully playing in a game competition has always bee
 #### 3 The collect() method from HW5 was then invoked, and was called with the soccer state  and the render_data instance as params, as well as the image and proj/view for team1 or team2 images.
 #### 4 Data set consisted of  10000 image/labels pairs.
 
-#### 5  Labels were then generated with either the soccer/puck location, or the render_data instance (bitshifted by 24), which in the end we decide not to use.
+#### 5  Labels were then generated with either the soccer/puck location, or the render_data instance (bitshifted by 24), which in the end we decide not to use. The final solution uses a modified _to_image()_ to convert world coords to image coords (labels) in the 400/300 range.
 
 ### Planner
 #### 1  The planner had to meet the timeout limitations, and a model which closely resembles HW4 was used for that purpose, and was tested and complied with time limits.  
