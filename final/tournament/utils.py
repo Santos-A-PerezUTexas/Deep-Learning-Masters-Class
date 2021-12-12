@@ -211,8 +211,15 @@ class VideoRecorder(BaseRecorder):
     def _to_image300_400(self, x, proj, view):
         W, H = 400, 300
         p = proj @ view @ np.array(list(x) + [1])
-        return np.array([W / 2 * (p[0] / p[-1] + 1), H / 2 * (1 - p[1] / p[-1])])
+        x = p[0] / p[-1]
+        y = - p[1] / p[-1]
 
+        x = W / 2 * (x+1)   #400 range
+        y = H / 2 * (y+1)      #300 range
+
+        aimpoint = np.array([x, y])
+
+        return aimpoint
     def _to_image(self, x, proj, view):
 
         out_of_frame = False
