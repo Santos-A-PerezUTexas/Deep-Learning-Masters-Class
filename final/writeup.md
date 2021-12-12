@@ -8,18 +8,25 @@ Bulding a good AI model sucessfully playing in a game competition has always bee
 
 ## Originality
 ### Data collection
-#### 1 We decided to use the VideoRecorder class, since this would allow us to store both render_data instance labels, as well as soccer state.
+#### 1 
+We decided to use the VideoRecorder class, since this would allow us to store both render_data instance labels, as well as soccer state.
 
-#### 2  A class method called _to_image300_400(params) was implemented, which is the same as _to_image from HW5,  but it converts -1..1 image coordinates to 300/400 image coordinates as depicted in the project slides (x 400 range, y 300 range), with the 0,0 coordinate now at the top left.
+#### 2  
+A class method called _to_image300_400(params) was implemented, which is the same as _to_image from HW5,  but it converts -1..1 image coordinates to 300/400 image coordinates as depicted in the project slides (x 400 range, y 300 range), with the 0,0 coordinate now at the top left.
 
-#### 3 The collect() method from HW5 was then invoked, and was called with the soccer state  and the render_data instance as params, as well as the image and proj/view for team1 or team2 images.
-#### 4 Data set consisted of  10000 image/labels pairs.
+#### 3 
+The collect() method from HW5 was then invoked, and was called with the soccer state  and the render_data instance as params, as well as the image and proj/view for team1 or team2 images.
+#### 4 
+Data set consisted of  10000 image/labels pairs.
 
-#### 5  Labels were then generated with either the soccer/puck location, or the render_data instance (bitshifted by 24), which in the end we decide not to use. The final solution uses a modified _to_image()_ to convert world coords to image coords (labels) in the 400/300 range.
+#### 5  
+Labels were then generated with either the soccer/puck location, or the render_data instance (bitshifted by 24), which in the end we decide not to use. The final solution uses a modified _to_image()_ to convert world coords to image coords (labels) in the 400/300 range.
 
 ### Planner
-#### 1  The planner had to meet the timeout limitations, and a model which closely resembles HW4 was used for that purpose, and was tested and complied with time limits.  
-#### 2  The method spatial_argmax() was borrowed from HW5, but the points were normalized/converted to  300/400 range after after the call to spatial_argmax, and that normalized output was then returned by the model.  Training the model was similar to HW5 training. 
+#### 1  
+The planner had to meet the timeout limitations, and a model which closely resembles HW4 was used for that purpose, and was tested and complied with time limits.  
+#### 2  
+The method spatial_argmax() was borrowed from HW5, but the points were normalized/converted to  300/400 range after after the call to spatial_argmax, and that normalized output was then returned by the model.  Training the model was similar to HW5 training. 
 
 ### Controller
 Since we choose to use image agent, we have very limited information about the puck. We could only get x, y coordinates predicted by the model and we found that y did not influence the performance much in practice, so we just use the x coordinate in the controller.
